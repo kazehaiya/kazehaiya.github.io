@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kazehaiya.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言随着项目的增大，越来越多的插件引入项目，使得项目的构建时间越来越长，而这很影响开发的效率。因此有没有一种方法能够优化构建的内容，提前构建好不怎么改动的插件依赖，而仅仅构建我们所写的业务代码呢？webpack 早已为我们考虑到了这个问题。">
+<meta name="keywords" content="Vue,Webpack">
+<meta property="og:type" content="article">
+<meta property="og:title" content="提升项目的构建速度">
+<meta property="og:url" content="https://kazehaiya.github.io/2019/05/08/提升项目的构建速度/index.html">
+<meta property="og:site_name" content="沐光">
+<meta property="og:description" content="前言随着项目的增大，越来越多的插件引入项目，使得项目的构建时间越来越长，而这很影响开发的效率。因此有没有一种方法能够优化构建的内容，提前构建好不怎么改动的插件依赖，而仅仅构建我们所写的业务代码呢？webpack 早已为我们考虑到了这个问题。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-08-16T09:34:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="提升项目的构建速度">
+<meta name="twitter:description" content="前言随着项目的增大，越来越多的插件引入项目，使得项目的构建时间越来越长，而这很影响开发的效率。因此有没有一种方法能够优化构建的内容，提前构建好不怎么改动的插件依赖，而仅仅构建我们所写的业务代码呢？webpack 早已为我们考虑到了这个问题。">
+
+<link rel="canonical" href="https://kazehaiya.github.io/2019/05/08/提升项目的构建速度/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>提升项目的构建速度 | 沐光</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">沐光</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录在前端之路的点点滴滴</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">13</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">12</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">46</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/kazehaiya" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://kazehaiya.github.io/2019/05/08/提升项目的构建速度/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Caiyin">
+      <meta itemprop="description" content="Just do IT!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="沐光">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          提升项目的构建速度
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-05-08 10:29:11" itemprop="dateCreated datePublished" datetime="2019-05-08T10:29:11+08:00">2019-05-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-08-16 17:34:09" itemprop="dateModified" datetime="2020-08-16T17:34:09+08:00">2020-08-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/webpack/" itemprop="url" rel="index"><span itemprop="name">Webpack</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>随着项目的增大，越来越多的插件引入项目，使得项目的构建时间越来越长，而这很影响开发的效率。因此有没有一种方法能够优化构建的内容，提前构建好不怎么改动的插件依赖，而仅仅构建我们所写的业务代码呢？webpack 早已为我们考虑到了这个问题。</p>
+<a id="more"></a>
+<h3 id="DllPlugin"><a href="#DllPlugin" class="headerlink" title="DllPlugin"></a>DllPlugin</h3><h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>DllPlugin 的主要思想在于将项目内的一些不经常更改的依赖（比如 lodash）提前打包，使得项目构建时忽略这些打包文件，从而减少构建时间，提升构建速度。</p>
+<h4 id="参数与使用"><a href="#参数与使用" class="headerlink" title="参数与使用"></a>参数与使用</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> webpack.DllPlugin(options);</span><br></pre></td></tr></table></figure>
+<p>其中 options 含有如下参数：</p>
+<ul>
+<li>context (optional): manifest 文件中请求的上下文(context)(默认值为 webpack 的上下文(context))</li>
+<li>name: 暴露出的 DLL 的函数名 (TemplatePaths: [hash] &amp; [name] )</li>
+<li>path: manifest json 文件的绝对路径 (输出文件)</li>
+</ul>
+<h3 id="DllReferencePlugin"><a href="#DllReferencePlugin" class="headerlink" title="DllReferencePlugin"></a>DllReferencePlugin</h3><h4 id="简介-1"><a href="#简介-1" class="headerlink" title="简介"></a>简介</h4><p>简而言之，DllReferencePlugin 就是将 DllPlugin 打包的文件获取，在主 webpack 文件配置后，会让其在构建包时忽略掉 DllPlugin 内配置打包的文件，其依赖 DllPlugin 打包出的 manifest 文件。</p>
+<h4 id="参数与使用-1"><a href="#参数与使用-1" class="headerlink" title="参数与使用"></a>参数与使用</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> webpack.DllReferencePlugin(options);</span><br></pre></td></tr></table></figure>
+<p>其中 options 含有如下参数：</p>
+<ul>
+<li>context: (绝对路径) manifest (或者是内容属性)中请求的上下文</li>
+<li>manifest: 包含 content 和 name 的对象，或者在编译时(compilation)的一个用于加载的 JSON manifest 绝对路径</li>
+<li>content (optional): 请求到模块 id 的映射 (默认值为 manifest.content)</li>
+<li>name (optional): dll 暴露的地方的名称 (默认值为 manifest.name) (可参考 externals)</li>
+<li>scope (optional): dll 中内容的前缀</li>
+<li>sourceType (optional): dll 是如何暴露的 (libraryTarget)</li>
+</ul>
+<blockquote>
+<p>注：与 <code>output.library</code> 保持 <code>name</code> 的一致性。</p>
+</blockquote>
+<h3 id="AddAssetHtmlPlugin"><a href="#AddAssetHtmlPlugin" class="headerlink" title="AddAssetHtmlPlugin"></a>AddAssetHtmlPlugin</h3><h4 id="简介-2"><a href="#简介-2" class="headerlink" title="简介"></a>简介</h4><p>将 dll 拆分的两个 plugin 配置好后，每次构建项目，推送远端之前都需要将我们的 dll 文件的引用动态添加到生成的 html 文件内，此插件就是实现该手动插入的过程</p>
+<h4 id="参数与使用-2"><a href="#参数与使用-2" class="headerlink" title="参数与使用"></a>参数与使用</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> AddAssetHtmlPlugin = <span class="built_in">require</span>(<span class="string">'add-asset-html-webpack-plugin'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> AddAssetHtmlPlugin(options)</span><br></pre></td></tr></table></figure>
+<p>我们所关注的 options 配置：</p>
+<ul>
+<li>filepath: 文件所在的地址，此处配置 dll 构建出的 .js 文件</li>
+<li>outputPath: 在构建时，引用的文件最终打包至的位置</li>
+<li>publicPath: <code>script</code> 脚本引用该文件时的绝对位置</li>
+</ul>
+<blockquote>
+<p>注：此插件依赖 <code>html-webpack-plugin</code>，由于预构建项目内并不需要生成中间 html 文件，因此我们可以不用像示例那样配置 HtmlWebpackPlugin 来生成 .html 文件</p>
+</blockquote>
+<h3 id="配置示例"><a href="#配置示例" class="headerlink" title="配置示例"></a>配置示例</h3><h4 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h4><p>初配置好或者依赖的内容有变动（比如：版本升级）使用此命令更新预打包的依赖，否则即使升级了包，最终打包后也不会有任何变化。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn dll</span><br></pre></td></tr></table></figure></p>
+<h4 id="dllPlugins-部分配置"><a href="#dllPlugins-部分配置" class="headerlink" title="dllPlugins 部分配置"></a>dllPlugins 部分配置</h4><p>创建一个 webpack.dll.config.js 文件</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>);</span><br><span class="line"><span class="keyword">const</span> CleanWebpackPlugin = <span class="built_in">require</span>(<span class="string">'clean-webpack-plugin'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 配置公共请求路径</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">resolve</span>(<span class="params">dir</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> path.join(__dirname, dir);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// dll文件存放的目录</span></span><br><span class="line"><span class="keyword">const</span> dllPath = <span class="string">'&lt;target-file&gt;'</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  mode: <span class="string">'production'</span>,</span><br><span class="line">  <span class="comment">// 需要提取的依赖</span></span><br><span class="line">  entry: &#123;</span><br><span class="line">    vendor: [<span class="string">'lodash'</span>]</span><br><span class="line">  &#125;,</span><br><span class="line">  output: &#123;</span><br><span class="line">    path: resolve(dllPath),</span><br><span class="line">    filename: <span class="string">'[name].dll.js'</span>,</span><br><span class="line">    <span class="comment">// vendor.dll.js 中暴露出的全局变量名</span></span><br><span class="line">    <span class="comment">// 保持与 webpack.DllPlugin 中名称一致</span></span><br><span class="line">    library: <span class="string">'[name]_[hash]'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="comment">// manifest.json 描述动态链接库包含了哪些内容</span></span><br><span class="line">    <span class="keyword">new</span> webpack.DllPlugin(&#123;</span><br><span class="line">      path: path.join(__dirname, dllPath, <span class="string">'manifest.json'</span>),</span><br><span class="line">      <span class="comment">// 保持与 output.library 中名称一致</span></span><br><span class="line">      name: <span class="string">'[name]_[hash]'</span></span><br><span class="line">    &#125;),</span><br><span class="line">    <span class="comment">// 清除之前打包的 dll 文件</span></span><br><span class="line">    <span class="keyword">new</span> CleanWebpackPlugin(&#123;&#125;)</span><br><span class="line">  ]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="主-webpack-打包文件配置"><a href="#主-webpack-打包文件配置" class="headerlink" title="主 webpack 打包文件配置"></a>主 webpack 打包文件配置</h4><p>此处以 vue-cli3 来说明</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> AddAssetHtmlPlugin = <span class="built_in">require</span>(<span class="string">'add-asset-html-webpack-plugin'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  chainWebpack: <span class="function"><span class="params">config</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 设置忽略打包的 vender 文件，添加已打包文件</span></span><br><span class="line">    config.plugin(<span class="string">'dll'</span>).use(<span class="keyword">new</span> webpack.DllReferencePlugin(&#123;</span><br><span class="line">      manifest: <span class="built_in">require</span>(<span class="string">'./vendor/manifest.json'</span>)</span><br><span class="line">    &#125;));</span><br><span class="line">    <span class="comment">// 将 dll 生成的 vender 自动注入到 html 文件中</span></span><br><span class="line">    config.plugin(<span class="string">'insert'</span>).use(<span class="keyword">new</span> AddAssetHtmlPlugin(&#123;</span><br><span class="line">      <span class="comment">// dll文件位置</span></span><br><span class="line">      filepath: path.resolve(__dirname, <span class="string">'./vendor/*.js'</span>),</span><br><span class="line">      <span class="comment">// dll 引用 dist 路径</span></span><br><span class="line">      publicPath: <span class="string">'js'</span>,</span><br><span class="line">      <span class="comment">// dll最终打包到的 dist 目录位置</span></span><br><span class="line">      outputPath: <span class="string">'js'</span></span><br><span class="line">    &#125;));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="package-json-配置"><a href="#package-json-配置" class="headerlink" title="package.json 配置"></a>package.json 配置</h4><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">"scripts": &#123;</span><br><span class="line">  "dll": "webpack --progress --config webpack.dll.config.js"</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><ul>
+<li><a href="https://webpack.docschina.org/plugins/dll-plugin/" target="_blank" rel="noopener">DllPlugin</a></li>
+<li><a href="https://www.cnblogs.com/lifefriend/p/10479341.html" target="_blank" rel="noopener">vue-cli3 DllPlugin 提取公用库</a></li>
+<li><a href="https://blog.csdn.net/u011413061/article/details/51872412" target="_blank" rel="noopener">如何十倍提高你的webpack构建效率</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Caiyin
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://kazehaiya.github.io/2019/05/08/提升项目的构建速度/" title="提升项目的构建速度">https://kazehaiya.github.io/2019/05/08/提升项目的构建速度/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/vue/" rel="tag"><i class="fa fa-tag"></i> Vue</a>
+              <a href="/tags/webpack/" rel="tag"><i class="fa fa-tag"></i> Webpack</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/05/03/浅谈-BFC/" rel="prev" title="浅谈 BFC">
+      <i class="fa fa-chevron-left"></i> 浅谈 BFC
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/05/09/vue-cli3-的快速插件开发/" rel="next" title="vue-cli3 的快速插件开发">
+      vue-cli3 的快速插件开发 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DllPlugin"><span class="nav-number">2.</span> <span class="nav-text">DllPlugin</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简介"><span class="nav-number">2.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参数与使用"><span class="nav-number">2.2.</span> <span class="nav-text">参数与使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DllReferencePlugin"><span class="nav-number">3.</span> <span class="nav-text">DllReferencePlugin</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简介-1"><span class="nav-number">3.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参数与使用-1"><span class="nav-number">3.2.</span> <span class="nav-text">参数与使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AddAssetHtmlPlugin"><span class="nav-number">4.</span> <span class="nav-text">AddAssetHtmlPlugin</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简介-2"><span class="nav-number">4.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参数与使用-2"><span class="nav-number">4.2.</span> <span class="nav-text">参数与使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置示例"><span class="nav-number">5.</span> <span class="nav-text">配置示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用方法"><span class="nav-number">5.1.</span> <span class="nav-text">使用方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#dllPlugins-部分配置"><span class="nav-number">5.2.</span> <span class="nav-text">dllPlugins 部分配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#主-webpack-打包文件配置"><span class="nav-number">5.3.</span> <span class="nav-text">主 webpack 打包文件配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#package-json-配置"><span class="nav-number">5.4.</span> <span class="nav-text">package.json 配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文档"><span class="nav-number">6.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Caiyin"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Caiyin</p>
+  <div class="site-description" itemprop="description">Just do IT!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/kazehaiya" title="GitHub → https://github.com/kazehaiya" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:c763416559@163.com" title="Mail → mailto:c763416559@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/Nora_Monocy" title="Weibo → https://weibo.com/Nora_Monocy" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://liujinkai.com/" title="http://liujinkai.com/" rel="noopener" target="_blank">凯凯刘</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://weekly.75team.com/" title="https://weekly.75team.com/" rel="noopener" target="_blank">奇舞周刊</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://75.team/post/list" title="https://75.team/post/list" rel="noopener" target="_blank">奇舞团博客</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://tech.meituan.com/" title="https://tech.meituan.com/" rel="noopener" target="_blank">美团技术团队</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://tech.youzan.com/" title="https://tech.youzan.com/" rel="noopener" target="_blank">有赞技术团队</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-dragon"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Caiyin</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">74k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:07</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/gitalk/1.6.2/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('https://cdn.bootcdn.net/ajax/libs/gitalk/1.6.2/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'd41b2914b32ac3c92a9d',
+      clientSecret: '2065e40ff9986f6a8b7a21ac27b2ec109bbcf71c',
+      repo        : 'blog-commnets',
+      owner       : 'kazehaiya',
+      admin       : ['kazehaiya'],
+      id          : 'f161e124de5b1c9e7b70980d786ba55f',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

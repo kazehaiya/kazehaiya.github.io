@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kazehaiya.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言先前发过一篇对于 shimes-vue-ts 文件的思考，其中有一节写到项目 ts 迁移所遇到的问题和解决方法。因为项目才刚迁移完一部分 ts（用得到的部分），踩坑的过程还在进行中，为了更好的记录 ts 迁移过程中所遇到的问题，还是单独写一篇来做记录吧。此篇便是改进后的问题记录，以及相对详细的解决方法。该篇会持续跟新哦~">
+<meta name="keywords" content="JavaScript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="项目 ts 迁移的踩坑记录">
+<meta property="og:url" content="https://kazehaiya.github.io/2019/07/14/项目-ts-迁移的踩坑记录/index.html">
+<meta property="og:site_name" content="沐光">
+<meta property="og:description" content="前言先前发过一篇对于 shimes-vue-ts 文件的思考，其中有一节写到项目 ts 迁移所遇到的问题和解决方法。因为项目才刚迁移完一部分 ts（用得到的部分），踩坑的过程还在进行中，为了更好的记录 ts 迁移过程中所遇到的问题，还是单独写一篇来做记录吧。此篇便是改进后的问题记录，以及相对详细的解决方法。该篇会持续跟新哦~">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-08-16T09:34:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="项目 ts 迁移的踩坑记录">
+<meta name="twitter:description" content="前言先前发过一篇对于 shimes-vue-ts 文件的思考，其中有一节写到项目 ts 迁移所遇到的问题和解决方法。因为项目才刚迁移完一部分 ts（用得到的部分），踩坑的过程还在进行中，为了更好的记录 ts 迁移过程中所遇到的问题，还是单独写一篇来做记录吧。此篇便是改进后的问题记录，以及相对详细的解决方法。该篇会持续跟新哦~">
+
+<link rel="canonical" href="https://kazehaiya.github.io/2019/07/14/项目-ts-迁移的踩坑记录/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>项目 ts 迁移的踩坑记录 | 沐光</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">沐光</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录在前端之路的点点滴滴</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">13</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">12</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">46</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/kazehaiya" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://kazehaiya.github.io/2019/07/14/项目-ts-迁移的踩坑记录/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Caiyin">
+      <meta itemprop="description" content="Just do IT!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="沐光">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          项目 ts 迁移的踩坑记录
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-07-14 13:43:13" itemprop="dateCreated datePublished" datetime="2019-07-14T13:43:13+08:00">2019-07-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-08-16 17:34:09" itemprop="dateModified" datetime="2020-08-16T17:34:09+08:00">2020-08-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>先前发过一篇对于 shimes-vue-ts 文件的思考，其中有一节写到项目 ts 迁移所遇到的问题和解决方法。因为项目才刚迁移完一部分 ts（用得到的部分），踩坑的过程还在进行中，为了更好的记录 ts 迁移过程中所遇到的问题，还是单独写一篇来做记录吧。此篇便是改进后的问题记录，以及相对详细的解决方法。该篇会持续跟新哦~</p>
+<a id="more"></a>
+<h3 id="问题集锦"><a href="#问题集锦" class="headerlink" title="问题集锦"></a>问题集锦</h3><h4 id="动态引入无-ts-声明的文件"><a href="#动态引入无-ts-声明的文件" class="headerlink" title="动态引入无 ts 声明的文件"></a>动态引入无 ts 声明的文件</h4><p>项目内有动态设置 cookie 的文件，因为不同测试环境需要配置不同的 cookie，每天都需要从服务器拿取一次 cookie，目前的做法为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// cookie-set 文件夹已经移除 git 缓存跟踪</span></span><br><span class="line"><span class="keyword">if</span> (process.env.NODE_ENV === <span class="string">'development'</span>) &#123;</span><br><span class="line">  <span class="keyword">import</span>(<span class="string">'@/cookie-set'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于需要迁移 ts，对于原有的 cookie-set.js 需要进行类型声明（或者都改成 cookie-set.ts），为了兼容两种情况，这里还是做了对应类型声明，如：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在 declarations.d.ts 文件内添加</span></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> '@/cookie-set';</span><br></pre></td></tr></table></figure>
+<div class="note default">
+            <p>参考文章： <a href="https://www.tslang.cn/docs/handbook/modules.html" target="_blank" rel="noopener">模块</a>】、<a href="https://stackoverflow.com/questions/44058101/typescript-declare-third-party-modules" target="_blank" rel="noopener">typescript-declare-third-party-modules</a></p>
+          </div>
+<h4 id="引入无-typings-的-npm-包"><a href="#引入无-typings-的-npm-包" class="headerlink" title="引入无 typings 的 npm 包"></a>引入无 typings 的 npm 包</h4><p>比较全的 npm 包会包含对应的 typings 文件来支持 ts 项目，但是对于没有 typings 文件的包来说，我们需要对齐进行外部文件声明。那么为了支持 vue.use 方法，我们可以这么写对应的声明：</p>
+<p>针对默认导出的声明写法：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 此适用于 import vueClipboard from 'vue-clipboard2';</span></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> 'vue-clipboard2' &#123;</span><br><span class="line">  <span class="keyword">import</span> &#123; PluginFunction &#125; <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line">  <span class="keyword">const</span> clipboard: PluginFunction&lt;<span class="built_in">any</span>&gt;;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> clipboard;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>针对解构的写法：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 此适用于 import &#123; monitorVue &#125; from 'fe-monitor-sdk';</span></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> 'fe-monitor-sdk' &#123;</span><br><span class="line">  <span class="keyword">import</span> &#123; PluginObject &#125; <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">const</span> monitorVue: PluginObject&lt;<span class="built_in">any</span>&gt;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>export 和 export default 可参考模块部分内容</p>
+</blockquote>
+<div class="note default">
+            <p>参考文章： <a href="https://www.tslang.cn/docs/handbook/modules.html" target="_blank" rel="noopener">模块</a>、<a href="https://cn.vuejs.org/v2/guide/typescript.html#ad" target="_blank" rel="noopener">TypeScript 支持</a></p>
+          </div>
+<h4 id="vue-router-的组建引用报错"><a href="#vue-router-的组建引用报错" class="headerlink" title="vue-router 的组建引用报错"></a>vue-router 的组建引用报错</h4><p>虽然在 webpack 内我们配置了 alias，但那仅仅只是 webpack 打包时用的，ts 并不认账，它有自己的配置文件。因此，在升级至 ts 项目时，我们还得为 ts 配置一份模块路径，如：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//  tsconfig.json</span></span><br><span class="line">path: [</span><br><span class="line">  <span class="string">"@/*"</span>: [</span><br><span class="line">    <span class="string">"src/*"</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>此外，因为编辑器的原因使得无法识别 .vue 后缀，所以对于 vue 文件的引用必须添加 .vue 后缀，如：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> myComponent <span class="keyword">from</span> <span class="string">'./my-component.vue'</span>;</span><br></pre></td></tr></table></figure>
+<div class="note default">
+            <p>参考文章： <a href="https://github.com/vuejs/vue-cli/issues/1198" target="_blank" rel="noopener">Typescript: IDE reports TS2307</a>、<a href="https://www.tslang.cn/docs/handbook/module-resolution.html" target="_blank" rel="noopener">模块解析</a></p>
+          </div>
+<h4 id="vue-的-data-部分爆红"><a href="#vue-的-data-部分爆红" class="headerlink" title="vue 的 data 部分爆红"></a>vue 的 data 部分爆红</h4><p>这个问题比较隐蔽，折腾了很久才发现因为 data 为函数(主要是写惯了才难以察觉，官网文档因为类型推断所以没有写)，其内的对象为返回值，因此此部分的声明可以写（个人推荐不要用断言）：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 返回值声明写法</span></span><br><span class="line">data(): Your Interface here &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;&#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 断言写法</span></span><br><span class="line">data() &#123;</span><br><span class="line">  <span class="keyword">return</span> &lt;Your assertions here&gt; &#123;&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注: 主要是为 data 内的数组、对象声明对应类型，都为基础类型时不写后面使用也不会报错。</p>
+</blockquote>
+<h4 id="vue-的-mixins-文件写法"><a href="#vue-的-mixins-文件写法" class="headerlink" title="vue 的 mixins 文件写法"></a>vue 的 mixins 文件写法</h4><p>Vue 的 mixins 写法有两种，一种为普通的 ts 写法，另一种为装饰器的写法</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 原来的写法</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;<span class="comment">/**/</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 普通 ts 写法</span></span><br><span class="line"><span class="keyword">import</span> Vue form <span class="string">'vue'</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> Vue.extend(&#123;<span class="comment">/**/</span>&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 装饰器写法</span></span><br><span class="line"><span class="keyword">import</span> &#123; Vue, Component, Prop &#125; <span class="keyword">from</span> <span class="string">"vue-property-decorator"</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">class</span> ComponentName <span class="keyword">extends</span> Vue &#123; &#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注: 普通 ts 写法的 computed 部分需要添加范围值，可参考 vue 文档 TypeScript 支持部分。</p>
+</blockquote>
+<div class="note default">
+            <p>参考文章： <a href="https://github.com/Microsoft/TypeScript-Vue-Starter#typescript-vue-starter" target="_blank" rel="noopener">TypeScript-Vue-Starter</a>、<a href="https://cn.vuejs.org/v2/guide/typescript.html" target="_blank" rel="noopener">TypeScript 支持</a></p>
+          </div>
+<h4 id="VS-Code-experimentalDecorators-问题"><a href="#VS-Code-experimentalDecorators-问题" class="headerlink" title="VS Code experimentalDecorators 问题"></a>VS Code experimentalDecorators 问题</h4><p>因为 vue 装饰器写法为实验性特性，可能在未来的发行版中发生变化，因此需要配置此参数来删除警告。直接根据警告来做相应配置，即在 tsconfig.json 内添加属性：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"experimentalDecorators"</span>: <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<h4 id="类的静态方法"><a href="#类的静态方法" class="headerlink" title="类的静态方法"></a>类的静态方法</h4><p>关于类一般会采用 abstruct 抽象类来规范方法和属性等类的细节，但是对于“类”中 static 部分无法进行抽象规范，需要在对应<strong>静态方法</strong>部分进行单独处理，对于此部分是否有更好的处理方法存在疑问🤔（如：提取一个 interface 之类的声明）。目前想到的比较靠谱的写法有两个：</p>
+<h5 id="namespace-写法"><a href="#namespace-写法" class="headerlink" title="namespace 写法"></a>namespace 写法</h5><p>官方文档中也有说过，对于业务内的模块来说，推荐使用 namespace 来做全局命名，因此对于业务内比较通用的公共方法来说，可以使用 namespace 来处理。</p>
+<div class="note info">
+            <p>对于多层命名空间的写法，可用别名写法 <code>import NS = FirstNameSpace.SecondNameSpace</code>，然后直接通过 <code>NS.xxx</code> 来直接取对应属性即可。同时区别加载模块时使用的 <code>import someModule = require(&#39;moduleName&#39;)</code>，此处的别名仅仅只是创建一个别名而已，简化代码量。</p>
+          </div>
+<h5 id="module-文件"><a href="#module-文件" class="headerlink" title="module 文件"></a>module 文件</h5><p>另一种可用 ES6 的思想，import + export ，因为类中只有 static 方法，因此可以认为该类为一个模块，而一个模块对应一个文件，因此作为一个 ts 文件来存储对应方法，需要时在 import 引入即可。</p>
+<h4 id="eslint-迁移至-tslint-时部分校验修复失效问题"><a href="#eslint-迁移至-tslint-时部分校验修复失效问题" class="headerlink" title="eslint 迁移至 tslint 时部分校验修复失效问题"></a>eslint 迁移至 tslint 时部分校验修复失效问题</h4><h5 id="semi-无自动补全"><a href="#semi-无自动补全" class="headerlink" title="semi 无自动补全"></a>semi 无自动补全</h5><p>将原来配置的 eslint 的 semi 校验替换：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 原来的配置</span><br><span class="line">semi: [&apos;error&apos;, &apos;always&apos;]</span><br><span class="line"></span><br><span class="line">// 现在的配置</span><br><span class="line">&quot;semi&quot;: &quot;off&quot;,</span><br><span class="line">&quot;@typescript-eslint/semi&quot;: [&quot;error&quot;],</span><br></pre></td></tr></table></figure>
+<h5 id="import-引入没有使用的内容不报错"><a href="#import-引入没有使用的内容不报错" class="headerlink" title="import 引入没有使用的内容不报错"></a>import 引入没有使用的内容不报错</h5><p>因为 @vue/eslint-config-typescript 的文件内将 <code>@typescript-eslint/no-unused-vars</code> 给注释掉了，同时 <code>no-unused-vars</code> 设置为 ‘off’，使得对没有使用的变量都不校验。其对应设置的解释为：<br><a href="https://github.com/typescript-eslint/typescript-eslint/issues/46" target="_blank" rel="noopener">传送门</a></p>
+<p>解决方法（跟项目 eslint 和 typescript 版本不同而不同）：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'@typescript-eslint/no-unused-vars'</span>: [</span><br><span class="line">  <span class="string">'error'</span>,</span><br><span class="line">  &#123;</span><br><span class="line">    vars: <span class="string">'local'</span>,</span><br><span class="line">    args: <span class="string">'none'</span>,</span><br><span class="line">    ignoreRestSiblings: <span class="literal">true</span></span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<div class="note default">
+            <p>参考文档：<a href="https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin" target="_blank" rel="noopener">@typescript-eslint/eslint-plugin</a>、<a href="https://vue.docschina.org/v2/guide/typescript.html" target="_blank" rel="noopener">TypeScript 支持</a>、<a href="https://github.com/typescript-eslint/typescript-eslint/issues/46" target="_blank" rel="noopener">typescript/no-unused-vars</a></p>
+          </div>
+<h4 id="refs-引用报错问题"><a href="#refs-引用报错问题" class="headerlink" title="$refs 引用报错问题"></a>$refs 引用报错问题</h4><p>由于 Vue 对 refs 的声明为 type Vue | Element | Vue[] | Element[]，在通过 $refs 调用对应组件方法时，因为 Vue 和 Element 上没有对应方法声明，因此我么需要对其进行断言处理，如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">interface MyComponent extends Vue &#123;</span><br><span class="line">  someMethod(): void</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 普通 ts 写法</span><br><span class="line">(this.$refs.myComp as MyComponent).someMethod()</span><br><span class="line"></span><br><span class="line">// 装饰器写法</span><br><span class="line">@Component</span><br><span class="line">export default class A extends Vue &#123;</span><br><span class="line">  $refs: &#123; myComp: MyComponent &#125;</span><br><span class="line"></span><br><span class="line">  this.$refs.myComp.someMethod()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Prop-的类型问题"><a href="#Prop-的类型问题" class="headerlink" title="@Prop 的类型问题"></a>@Prop 的类型问题</h4><p>官方对于 @Prop 装饰器的写法提供了两种思路，分别为：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不带 type</span></span><br><span class="line"><span class="meta">@Prop</span>(&#123; <span class="keyword">default</span>: <span class="string">''</span> &#125;) readonly propB!: <span class="built_in">string</span></span><br><span class="line"><span class="comment">// 带 type</span></span><br><span class="line"><span class="meta">@Prop</span>(&#123; <span class="keyword">type</span>: <span class="built_in">String</span>, <span class="keyword">default</span>: <span class="string">''</span> &#125;) readonly propB!: <span class="built_in">string</span></span><br></pre></td></tr></table></figure>
+<p>带 type 的和原来的写法可以说没什么区别，但是不带 type 的会出现两种问题：</p>
+<h5 id="问题一"><a href="#问题一" class="headerlink" title="问题一"></a>问题一</h5><p>当为 Boolean 类型时，会使得属性官方 boolean 的简写方式无法生效，如：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 不写 type 时此不生效，只能显示绑定 true 值 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">blog-post</span> <span class="attr">is-published</span>&gt;</span><span class="tag">&lt;/<span class="name">blog-post</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><a href="https://cn.vuejs.org/v2/guide/components-props.html#%E4%BC%A0%E5%85%A5%E4%B8%80%E4%B8%AA%E5%B8%83%E5%B0%94%E5%80%BC" target="_blank" rel="noopener">官方例子</a></p>
+</blockquote>
+<h5 id="问题二"><a href="#问题二" class="headerlink" title="问题二"></a>问题二</h5><p>此不会触发部分的相应的 ts 类型校验，例如：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 假如对应 props 为： @Prop() likes!: number; --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 此时 likes 传入类型为 string，但是不报错 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">blog-post</span> <span class="attr">likes</span>=<span class="string">"42"</span>&gt;</span><span class="tag">&lt;/<span class="name">blog-post</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>个人建议：</strong> 除非非常确定传入的 Prop 的类型，否则尽量都加上对应的 type 声明</p>
+</blockquote>
+<h4 id="exceljs-引入报错问题"><a href="#exceljs-引入报错问题" class="headerlink" title="exceljs 引入报错问题"></a>exceljs 引入报错问题</h4><p>引入 <code>exceljs</code> 后，ts 一直报错 <code>import(&quot;stream&quot;)</code> 行因为没有找到 stream 包，因此报错。</p>
+<p>问题定位了很久，才发现 <code>stream</code> 是 Node 自带的包，而我们的 <code>tsconfig.json</code> 内却并没有将对应的 node 类型引入，因此会报错，解决方法：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"compilerOptions"</span>: &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="attr">"types"</span>: [</span><br><span class="line">      <span class="string">"webpack-env"</span>,</span><br><span class="line">      <span class="string">"node"</span> <span class="comment">// 将 node 类型加入即可</span></span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意，引入 node 后，可能会引发新的 ts 问题，比如自定义的 <code>process.env.XXX</code> 可能为 undefined，这个需要自己做兼容了。</p>
+</blockquote>
+<blockquote>
+<p>参考 <a href="https://github.com/aws-amplify/docs/issues/273" target="_blank" rel="noopener">issue</a></p>
+</blockquote>
+<h3 id="拓展内容"><a href="#拓展内容" class="headerlink" title="拓展内容"></a>拓展内容</h3><h4 id="namespace"><a href="#namespace" class="headerlink" title="namespace"></a>namespace</h4><p>TS 里的 namespace 主要是解决命名冲突的问题，会在全局生成一个对象，定义在 namespace 内部的类都要通过这个对象的属性访问。对于内部模块来说，尽量使用 namespace 替代 module，可参考 namespace 一节。例如：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> Test &#123;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">const</span> USER_NAME = <span class="string">'test name'</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">namespace</span> Polygons &#123;</span><br><span class="line">    <span class="keyword">export</span> <span class="keyword">class</span> Triangle &#123; &#125;</span><br><span class="line">    <span class="keyword">export</span> <span class="keyword">class</span> Square &#123; &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 取别名</span></span><br><span class="line"><span class="keyword">import</span> polygons = Test.Polygons;</span><br><span class="line"><span class="keyword">const</span> username = Test.username</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注：import xx = require(‘xx’) 为加载模块的写法，不要与取别名的写法混淆。默认全局环境的 namespace 为 global</p>
+</blockquote>
+<div class="note default">
+            <p>参考文档：<a href="https://www.tslang.cn/docs/handbook/namespaces.html" target="_blank" rel="noopener">namespace</a></p>
+          </div>
+<h4 id="module"><a href="#module" class="headerlink" title="module"></a>module</h4><p>模块可理解成 Vue 中的单个 vue 文件，它是以功能为单位进行划分的，一个模块负责一个功能。其与 namespace 的最大区别在于：<strong>namespace 是跨文件的，module 是以文件为单位的，一个文件对应一个 module</strong>。类比 Java，namespace 就好比 Java 中的包，而 module 则相当于文件。</p>
+<blockquote><p>如果你的模块需要将新的名称引入全局命名空间，那么就应该使用全局声明。如果你的模块无需将新的名称引入全局命名空间，那么就应该使用模块导出声明。</p>
+<footer><strong>From</strong><cite>DefinitelyTyped</cite></footer></blockquote>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Caiyin
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://kazehaiya.github.io/2019/07/14/项目-ts-迁移的踩坑记录/" title="项目 ts 迁移的踩坑记录">https://kazehaiya.github.io/2019/07/14/项目-ts-迁移的踩坑记录/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/javascript/" rel="tag"><i class="fa fa-tag"></i> JavaScript</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/07/11/使用-vue-cli-发布一个完善的包/" rel="prev" title="使用 vue-cli 发布一个完善的包">
+      <i class="fa fa-chevron-left"></i> 使用 vue-cli 发布一个完善的包
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/07/16/记-JS-的类型转换/" rel="next" title="记 JS 的类型转换">
+      记 JS 的类型转换 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题集锦"><span class="nav-number">2.</span> <span class="nav-text">问题集锦</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#动态引入无-ts-声明的文件"><span class="nav-number">2.1.</span> <span class="nav-text">动态引入无 ts 声明的文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#引入无-typings-的-npm-包"><span class="nav-number">2.2.</span> <span class="nav-text">引入无 typings 的 npm 包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vue-router-的组建引用报错"><span class="nav-number">2.3.</span> <span class="nav-text">vue-router 的组建引用报错</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vue-的-data-部分爆红"><span class="nav-number">2.4.</span> <span class="nav-text">vue 的 data 部分爆红</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vue-的-mixins-文件写法"><span class="nav-number">2.5.</span> <span class="nav-text">vue 的 mixins 文件写法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#VS-Code-experimentalDecorators-问题"><span class="nav-number">2.6.</span> <span class="nav-text">VS Code experimentalDecorators 问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#类的静态方法"><span class="nav-number">2.7.</span> <span class="nav-text">类的静态方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#namespace-写法"><span class="nav-number">2.7.1.</span> <span class="nav-text">namespace 写法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#module-文件"><span class="nav-number">2.7.2.</span> <span class="nav-text">module 文件</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#eslint-迁移至-tslint-时部分校验修复失效问题"><span class="nav-number">2.8.</span> <span class="nav-text">eslint 迁移至 tslint 时部分校验修复失效问题</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#semi-无自动补全"><span class="nav-number">2.8.1.</span> <span class="nav-text">semi 无自动补全</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#import-引入没有使用的内容不报错"><span class="nav-number">2.8.2.</span> <span class="nav-text">import 引入没有使用的内容不报错</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#refs-引用报错问题"><span class="nav-number">2.9.</span> <span class="nav-text">$refs 引用报错问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Prop-的类型问题"><span class="nav-number">2.10.</span> <span class="nav-text">@Prop 的类型问题</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#问题一"><span class="nav-number">2.10.1.</span> <span class="nav-text">问题一</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#问题二"><span class="nav-number">2.10.2.</span> <span class="nav-text">问题二</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#exceljs-引入报错问题"><span class="nav-number">2.11.</span> <span class="nav-text">exceljs 引入报错问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拓展内容"><span class="nav-number">3.</span> <span class="nav-text">拓展内容</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#namespace"><span class="nav-number">3.1.</span> <span class="nav-text">namespace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#module"><span class="nav-number">3.2.</span> <span class="nav-text">module</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Caiyin"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Caiyin</p>
+  <div class="site-description" itemprop="description">Just do IT!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/kazehaiya" title="GitHub → https://github.com/kazehaiya" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:c763416559@163.com" title="Mail → mailto:c763416559@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/Nora_Monocy" title="Weibo → https://weibo.com/Nora_Monocy" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://liujinkai.com/" title="http://liujinkai.com/" rel="noopener" target="_blank">凯凯刘</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://weekly.75team.com/" title="https://weekly.75team.com/" rel="noopener" target="_blank">奇舞周刊</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://75.team/post/list" title="https://75.team/post/list" rel="noopener" target="_blank">奇舞团博客</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://tech.meituan.com/" title="https://tech.meituan.com/" rel="noopener" target="_blank">美团技术团队</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://tech.youzan.com/" title="https://tech.youzan.com/" rel="noopener" target="_blank">有赞技术团队</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-dragon"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Caiyin</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">74k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:07</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/gitalk/1.6.2/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('https://cdn.bootcdn.net/ajax/libs/gitalk/1.6.2/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'd41b2914b32ac3c92a9d',
+      clientSecret: '2065e40ff9986f6a8b7a21ac27b2ec109bbcf71c',
+      repo        : 'blog-commnets',
+      owner       : 'kazehaiya',
+      admin       : ['kazehaiya'],
+      id          : '3a9e5b6e2ee00d0986ae1d9e089ef2dc',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

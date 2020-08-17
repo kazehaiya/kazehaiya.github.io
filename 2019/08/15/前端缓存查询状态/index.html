@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kazehaiya.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言为了提升用户的使用体验，多数场合我们都会对表单场景做一些缓存。当然最简单的情况是弹框处理下钻页面，这样基本上不用考虑换页返回时的状态缓存问题了，然而并不是所有的需求都满足这种场景，此处我就记录一下这次做缓存时的一些策略选择和遇到的问题。">
+<meta name="keywords" content="Vue">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端缓存查询状态">
+<meta property="og:url" content="https://kazehaiya.github.io/2019/08/15/前端缓存查询状态/index.html">
+<meta property="og:site_name" content="沐光">
+<meta property="og:description" content="前言为了提升用户的使用体验，多数场合我们都会对表单场景做一些缓存。当然最简单的情况是弹框处理下钻页面，这样基本上不用考虑换页返回时的状态缓存问题了，然而并不是所有的需求都满足这种场景，此处我就记录一下这次做缓存时的一些策略选择和遇到的问题。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-08-16T09:34:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="前端缓存查询状态">
+<meta name="twitter:description" content="前言为了提升用户的使用体验，多数场合我们都会对表单场景做一些缓存。当然最简单的情况是弹框处理下钻页面，这样基本上不用考虑换页返回时的状态缓存问题了，然而并不是所有的需求都满足这种场景，此处我就记录一下这次做缓存时的一些策略选择和遇到的问题。">
+
+<link rel="canonical" href="https://kazehaiya.github.io/2019/08/15/前端缓存查询状态/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>前端缓存查询状态 | 沐光</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">沐光</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录在前端之路的点点滴滴</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">13</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">12</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">46</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/kazehaiya" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://kazehaiya.github.io/2019/08/15/前端缓存查询状态/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Caiyin">
+      <meta itemprop="description" content="Just do IT!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="沐光">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          前端缓存查询状态
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-08-15 16:38:59" itemprop="dateCreated datePublished" datetime="2019-08-15T16:38:59+08:00">2019-08-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-08-16 17:34:09" itemprop="dateModified" datetime="2020-08-16T17:34:09+08:00">2020-08-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/vue/" itemprop="url" rel="index"><span itemprop="name">Vue</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>为了提升用户的使用体验，多数场合我们都会对表单场景做一些缓存。当然最简单的情况是弹框处理下钻页面，这样基本上不用考虑换页返回时的状态缓存问题了，然而并不是所有的需求都满足这种场景，此处我就记录一下这次做缓存时的一些策略选择和遇到的问题。</p>
+<a id="more"></a>
+<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>在做项目迭代时，第一期因为时间的原因，在保证原有功能的情况下，并没有做缓存处理。在这一期的项目迭代时，应用户和产品的需求，在原有的逻辑基础上添加了缓存处理。要求仅从下钻页面返回时保留离开的状态，否则呈现默认的状态。</p>
+<h3 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h3><p>项目总体有三层：</p>
+<ul>
+<li>登陆与权限判断层</li>
+<li>公共路由层</li>
+<li>业务页面层</li>
+</ul>
+<p>登陆与权限判断层主要处理用户的登陆信息和对应页面的权限拦截，对于无页面权限的跳转和未登录状态做重定向处理，此外全局 vuex 存储获得的页面信息。</p>
+<p>公共路由层主要处理获取的页面路由结构，同时与权限路由的菜单配置绑定，为各页面具体的权限约束提供对应的配置方法，方便产品将其与用户角色做相关绑定。</p>
+<p>业务页面层仅关注对应业务逻辑的开发以及相关权限控制，统一接口和方法处理权限。</p>
+<h3 id="缓存方案"><a href="#缓存方案" class="headerlink" title="缓存方案"></a>缓存方案</h3><p>实现缓存的方法有多个，当前考虑的可行的方案有三种，分别是：</p>
+<ul>
+<li>vuex 做查询缓存</li>
+<li>keep-alive 做页面缓存</li>
+<li>webStorage 做条件缓存</li>
+</ul>
+<p>首先说一下最后选择的方案是：sessionStorage 做条件缓存。这里分别来分析一下各方案的优缺点。</p>
+<h4 id="vuex-方案"><a href="#vuex-方案" class="headerlink" title="vuex 方案"></a>vuex 方案</h4><p>vuex 方案是最容易想到的一个方案，毕竟对于跨页面的单页应用来说，在数据的传递上可谓是非常便捷的，对于查询缓存来说，其优点如下：</p>
+<ul>
+<li>获取数据和传递数据容易</li>
+<li>存储数据的操作简单，代码量不大</li>
+</ul>
+<p>但是其缺点也很明显：</p>
+<ul>
+<li>子页面刷新再返回会导致缓存的数据清空</li>
+<li>无论是从子页面还是从别的页面切换回来，此都会缓存查询条件</li>
+</ul>
+<p><strong>缺点的解决思路：</strong></p>
+<p>对于数据会清空的问题，vuex 需要配合 webStorage 对刷新情况做处理；</p>
+<p>对于任意页面都会缓存查询条件问题，又需要配合路由来做处理。</p>
+<h4 id="keep-alive-方案"><a href="#keep-alive-方案" class="headerlink" title="keep-alive 方案"></a>keep-alive 方案</h4><p>keep-alive 方案与 vuex 方案基本差别不带，其缓存整个组件的状态，来保证跳转至其它组件后，当前组件的状态不改变。与 vuex 写法相比，其优点还包括：</p>
+<ul>
+<li>整体的状态能得以保存，无需过多的数据缓存处理</li>
+</ul>
+<p>但是其缺点相对 vuex 来说，也有一些：</p>
+<ul>
+<li>页面参数共享不是很方便</li>
+<li>每新增一个缓存页面都需要更新一下 include 数组</li>
+</ul>
+<p><strong>缺点的解决思路：</strong><br>与 vuex 的解决思路基本一致，但是此还有另外一种操作方法</p>
+<p>keep-alive 还有一种配合路由 meta 的操作写法。但是由于项目路由基本上是动态的，有后台提供相应的路由结构，配置相应的字段还需要与后台沟通，如果考虑不是很充足对于之后的开发也不是很友好；此外，该方法对于页面回退情况有相应问题（刷新同样无法处理）。因此此方案 pass 了。</p>
+<h4 id="webStorage-方案"><a href="#webStorage-方案" class="headerlink" title="webStorage 方案"></a>webStorage 方案</h4><p>鉴于之前的两种方案都包含路由的处理以及 webStorage 的使用，从代码复杂度来衡量，最终还是选用了此方法。具体的思路为：</p>
+<ol>
+<li>路由层添加 <code>$route</code> 的监听，并将其存入路由的 vuex 内，存储页面的 <code>to</code> 与 <code>from</code>。</li>
+<li>子页面删除 <code>mount</code> 钩子，监听对应的 <code>from</code> 的路由，并设置 <code>immediate: true</code>，为需要赋值缓存的页面做单独赋值处理，否则不做操作（如有默认查询则设置默认查询）</li>
+<li>在触发查询操作之前，缓存查询条件至对应的 sessionStorage</li>
+</ol>
+<p>当然，这种方法并不是说缺点很少，其实它也有一些痛点没有解决：</p>
+<ul>
+<li>难以抽象出通用的处理逻辑，仅能对路由层级做一层简单的抽象和存储</li>
+<li>默认值赋值操作比较麻烦，特别是组件拆分比较细的情况</li>
+<li>需要控制好 nextTick</li>
+</ul>
+<h3 id="问题总结"><a href="#问题总结" class="headerlink" title="问题总结"></a>问题总结</h3><h4 id="inject-和-provide"><a href="#inject-和-provide" class="headerlink" title="inject 和 provide"></a>inject 和 provide</h4><p>在使用 vuex 对监听的路由参数做缓存之前，首先考虑的是 inject 和 provide 来做动态传递，毕竟业务组件都在同一个 router-view 之下，这样做参数透传原则上是可行的。</p>
+<p>但是问题是，不知道为何，对于 <code>from</code> 的路由总是监听不到，inject 获取的值一直为 undefined（即使能打印出来结果）。由于使用 JSON.stringfy 分析 from 时会报错，暂时也没法处理该问题，因此采用了 vuex 的备选方案。</p>
+<blockquote>
+<p>class 风格的 ProvideReactive 还没有做过尝试，之后看能否可行</p>
+</blockquote>
+<h4 id="分页问题"><a href="#分页问题" class="headerlink" title="分页问题"></a>分页问题</h4><p>在赋值默认值时，由于分页参数会存储在传参之中，但是总数值不会。虽然做初始化赋值之后查询内容与预期的结果一致，但是唯独分页组件的当前页数不正确（element UI 的 el-pagination），无论 currentPage 值为多少，其最终显示的结果仍然为 1。</p>
+<p><strong>原因：</strong></p>
+<p><code>el-pagination</code> 处理分页逻辑时，在 <code>total / pageSize &lt; currentPage</code> 的情况，其会使用默认的 <code>internalCurrentPage</code> 值，而此属性的默认值为 1。在查询完结果后在为对应的 <code>total</code> 和 <code>currentPage</code> 赋值时，因为 <code>currentPage</code> 和查询返回值是一致的，对于相同值的情况，其 <code>internalPageCount</code> 的新旧值就判断一致了，因此 pager 的显示就会一直为 1。</p>
+<p><strong>解决：</strong><br>解决思路是在初始化时将 count 值设置大一些，或者缓存上一次的 count 值，然后初始化赋值。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Caiyin
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://kazehaiya.github.io/2019/08/15/前端缓存查询状态/" title="前端缓存查询状态">https://kazehaiya.github.io/2019/08/15/前端缓存查询状态/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/vue/" rel="tag"><i class="fa fa-tag"></i> Vue</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/08/11/ES6-模块/" rel="prev" title="ES6 模块">
+      <i class="fa fa-chevron-left"></i> ES6 模块
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/08/23/Vue-代码规范配置/" rel="next" title="Vue 代码规范配置">
+      Vue 代码规范配置 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#背景"><span class="nav-number">2.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#项目结构"><span class="nav-number">3.</span> <span class="nav-text">项目结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存方案"><span class="nav-number">4.</span> <span class="nav-text">缓存方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#vuex-方案"><span class="nav-number">4.1.</span> <span class="nav-text">vuex 方案</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#keep-alive-方案"><span class="nav-number">4.2.</span> <span class="nav-text">keep-alive 方案</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#webStorage-方案"><span class="nav-number">4.3.</span> <span class="nav-text">webStorage 方案</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题总结"><span class="nav-number">5.</span> <span class="nav-text">问题总结</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#inject-和-provide"><span class="nav-number">5.1.</span> <span class="nav-text">inject 和 provide</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分页问题"><span class="nav-number">5.2.</span> <span class="nav-text">分页问题</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Caiyin"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Caiyin</p>
+  <div class="site-description" itemprop="description">Just do IT!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/kazehaiya" title="GitHub → https://github.com/kazehaiya" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:c763416559@163.com" title="Mail → mailto:c763416559@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/Nora_Monocy" title="Weibo → https://weibo.com/Nora_Monocy" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://liujinkai.com/" title="http://liujinkai.com/" rel="noopener" target="_blank">凯凯刘</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://weekly.75team.com/" title="https://weekly.75team.com/" rel="noopener" target="_blank">奇舞周刊</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://75.team/post/list" title="https://75.team/post/list" rel="noopener" target="_blank">奇舞团博客</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://tech.meituan.com/" title="https://tech.meituan.com/" rel="noopener" target="_blank">美团技术团队</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://tech.youzan.com/" title="https://tech.youzan.com/" rel="noopener" target="_blank">有赞技术团队</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-dragon"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Caiyin</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">74k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:07</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/gitalk/1.6.2/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('https://cdn.bootcdn.net/ajax/libs/gitalk/1.6.2/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'd41b2914b32ac3c92a9d',
+      clientSecret: '2065e40ff9986f6a8b7a21ac27b2ec109bbcf71c',
+      repo        : 'blog-commnets',
+      owner       : 'kazehaiya',
+      admin       : ['kazehaiya'],
+      id          : 'a8415fa8024a6731af75ee65dca7d368',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

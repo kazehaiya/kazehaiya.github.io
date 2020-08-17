@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kazehaiya.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言随着项目图表使用的复杂程度的提升，“大数据”与多图表渲染带来的影响是页面响应慢、用户体验随时间越来越糟。通过 chrome 的 performance 分析出的原因是：接口耗时基本可忽略不计，页面渲染耗时才是对用户体验的真正影响。因此如何更“智能”的加载渲染的图表才是问题解决的关键，而这就要聊到“延迟加载”了。">
+<meta name="keywords" content="JavaScript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IntersectionObserver 与延迟加载">
+<meta property="og:url" content="https://kazehaiya.github.io/2019/09/10/IntersectionObserver-与延迟加载/index.html">
+<meta property="og:site_name" content="沐光">
+<meta property="og:description" content="前言随着项目图表使用的复杂程度的提升，“大数据”与多图表渲染带来的影响是页面响应慢、用户体验随时间越来越糟。通过 chrome 的 performance 分析出的原因是：接口耗时基本可忽略不计，页面渲染耗时才是对用户体验的真正影响。因此如何更“智能”的加载渲染的图表才是问题解决的关键，而这就要聊到“延迟加载”了。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/4060631-ae60b52ea8a52184.png?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp">
+<meta property="og:image" content="https://developers.google.com/web/updates/images/2016/04/intersectionobserver/intersectratio.png">
+<meta property="og:updated_time" content="2020-08-16T09:34:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="IntersectionObserver 与延迟加载">
+<meta name="twitter:description" content="前言随着项目图表使用的复杂程度的提升，“大数据”与多图表渲染带来的影响是页面响应慢、用户体验随时间越来越糟。通过 chrome 的 performance 分析出的原因是：接口耗时基本可忽略不计，页面渲染耗时才是对用户体验的真正影响。因此如何更“智能”的加载渲染的图表才是问题解决的关键，而这就要聊到“延迟加载”了。">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/4060631-ae60b52ea8a52184.png?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp">
+
+<link rel="canonical" href="https://kazehaiya.github.io/2019/09/10/IntersectionObserver-与延迟加载/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>IntersectionObserver 与延迟加载 | 沐光</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">沐光</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录在前端之路的点点滴滴</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">13</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">12</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">46</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/kazehaiya" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://kazehaiya.github.io/2019/09/10/IntersectionObserver-与延迟加载/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Caiyin">
+      <meta itemprop="description" content="Just do IT!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="沐光">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          IntersectionObserver 与延迟加载
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-09-10 19:18:42" itemprop="dateCreated datePublished" datetime="2019-09-10T19:18:42+08:00">2019-09-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-08-16 17:34:09" itemprop="dateModified" datetime="2020-08-16T17:34:09+08:00">2020-08-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>随着项目图表使用的复杂程度的提升，“大数据”与多图表渲染带来的影响是页面响应慢、用户体验随时间越来越糟。通过 chrome 的 performance 分析出的原因是：接口耗时基本可忽略不计，页面渲染耗时才是对用户体验的真正影响。因此如何更“智能”的加载渲染的图表才是问题解决的关键，而这就要聊到“延迟加载”了。</p>
+<a id="more"></a>
+<h3 id="延迟加载"><a href="#延迟加载" class="headerlink" title="延迟加载"></a>延迟加载</h3><p>延迟加载比较通俗的说法为“懒加载”，其使用的场景都是在页面加载时优先加载关键资源（比如整体的页面轮廓等），非关键资源则在需要时才进行加载。</p>
+<p>那为什么需要延迟加载呢？有需必有求，首先看看直接加载所导致的一些问题：</p>
+<ul>
+<li>加载过多无用内容，造成数据流量的浪费，增加浏览器压力。</li>
+<li>渲染时间增长，用户等待时间增长，会造成部分用户流失。</li>
+<li>浪费处理时间、电池电量和其它系统资源</li>
+</ul>
+<p>为了增强用户体验，因此我们需要进行延迟加载。</p>
+<h4 id="getBoundingClientRect"><a href="#getBoundingClientRect" class="headerlink" title="getBoundingClientRect"></a>getBoundingClientRect</h4><p>早期还没有 IntersectionObserver 时，为了支持延迟加载，我们常使用的方法是 <code>Element.getBoundingClientRect()</code>。通过该方法来获取目标元素的大小以及其相对于视口的位置，从而来判断是否加载需要渲染的内容。</p>
+<p>其语法为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> targetElement = <span class="built_in">document</span>.getElementById(<span class="string">'id'</span>);</span><br><span class="line"><span class="keyword">const</span> rectObject = targetElement.getBoundingClientRect();</span><br><span class="line"></span><br><span class="line">rectObject.top    <span class="comment">// 元素上边到视窗上边的距离;</span></span><br><span class="line">rectObject.right  <span class="comment">// 元素右边到视窗左边的距离;</span></span><br><span class="line">rectObject.bottom <span class="comment">// 元素下边到视窗上边的距离;</span></span><br><span class="line">rectObject.left   <span class="comment">// 元素左边到视窗左边的距离;</span></span><br><span class="line">rectObject.width  <span class="comment">// 是元素自身的宽</span></span><br><span class="line">rectObject.height <span class="comment">// 是元素自身的高</span></span><br></pre></td></tr></table></figure>
+<p>例子：</p>
+<iframe id="cp_embed_yLBKvKJ" src="//codepen.io/kazehaiya/embed/yLBKvKJ?height=300&theme-id=dark&slug-hash=yLBKvKJ&default-tab=css,result" scrolling="no" frameborder="no" height="300" allowtransparency="true" allowfullscreen="true" class="cp_embed_iframe" style="width: 100%; overflow: hidden;"></iframe>
+<p>既然有了 <code>getBoundingClientRect</code> 方法，那么为什么还需要 <code>IntersectionObserver</code> 方法呢？这里引用 MDN 上的一段话：</p>
+<div class="note info">
+            <p>过去，交集检测通常需要涉及到事件监听，以及对每个目标元素执行 Element.getBoundingClientRect() 方法以获取所需信息。可是这些代码都在主线程上运行，所以任何一点都可能造成性能问题。当网页遍布这些代码时就显得比较丑陋了。</p>
+          </div>
+<p>简而言之，<code>getBoundingClientRect</code> 方法对于需要监听大量对象的情况，其处理并不是特别完美（比如无限滚动，scroll 事件发生过于密集，容易造成性能问题），而这种情况下 <code>IntersectionObserver</code> 可以比较完美的解决这个问题。</p>
+<h3 id="IntersectionObserver"><a href="#IntersectionObserver" class="headerlink" title="IntersectionObserver"></a>IntersectionObserver</h3><p>首先 IntersectionObserver API 是异步的，不随着目标元素的滚动同步触发（即我们不用监听 scroll 事件了）。此外，该观察器的优先级非常低，只在其他任务执行完，浏览器有了空闲才会执行。</p>
+<p>这里再一次引用 MDN 上的解释：</p>
+<div class="note info">
+            <p>Intersection Observer API 会注册一个回调方法，每当期望被监视的元素进入或者退出另外一个元素的时候(或者浏览器的视口)该回调方法将会被执行，或者两个元素的交集部分大小发生变化的时候回调方法也会被执行。通过这种方式，网站将不需要为了监听两个元素的交集变化而在主线程里面做任何操作，并且浏览器可以帮助我们优化和管理两个元素的交集变化。</p>
+          </div>
+<p>少了对滚动事件的处理，在不考虑兼容性的情况下，性能方面肯定优于 <code>getBoundingClientRect</code>。那么它具体该如何使用呢？Demo 如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建一个 observer</span></span><br><span class="line"><span class="keyword">const</span> io = <span class="keyword">new</span> IntersectionObserver(callback, options);</span><br><span class="line"><span class="comment">// 监听目标元素</span></span><br><span class="line">io.observe(element);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 停止目标元素的监听</span></span><br><span class="line">io.unobserve(element);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 终止对所有目标元素可见性变化的观察</span></span><br><span class="line">io.disconnect();</span><br></pre></td></tr></table></figure>
+<p>上面代码中，<code>callback</code> 是触发可见行变化时的回调函数，<code>options</code> 是配置对象。</p>
+<h4 id="options"><a href="#options" class="headerlink" title="options"></a>options</h4><p>首先看看 options 配置，其总共有三个属性：<code>root</code>、<code>rootMargin</code> 和 <code>threshold</code>。</p>
+<p><code>root</code> 指选定的目标容器，默认为浏览器的视窗。</p>
+<p><code>rootMargin</code> 定义元素的 <code>margin</code>，<code>viewport + rootMargin</code> 为最终计算的视窗大小，这里引用一张图</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4060631-ae60b52ea8a52184.png?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp" alt></p>
+<p><code>threshold</code> 属性决定了什么时候触发回调函数。它是既可以是一个单一的 number 也可以是一个 number 数组，其表示目标元素和 root 元素相交程度达到该值的时候，callback 回调函数将会被执行。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> IntersectionObserver(</span><br><span class="line">  (entries, observer) =&gt; &#123; <span class="comment">/* ... */</span> &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">// 在相交程度为 0、25%、50%、75%、100% 时触发回调</span></span><br><span class="line">    threshold: [<span class="number">0</span>, <span class="number">0.25</span>, <span class="number">0.5</span>, <span class="number">0.75</span>, <span class="number">1</span>]</span><br><span class="line">  &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h4 id="callback"><a href="#callback" class="headerlink" title="callback"></a>callback</h4><p>当目标元素可见行变化时，其会触发 <code>callback</code> 函数，一般情况该函数会触发<strong>2次</strong>（进入和离开）。该函数有两个参数： <code>IntersectionObserverEntry 对象</code> 和 <code>观察者</code> 的列表。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> callback = <span class="function"><span class="keyword">function</span>(<span class="params">entries, observers</span>) </span>&#123;</span><br><span class="line">  entries.forEach(<span class="function"><span class="params">entry</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// Each entry describes an intersection change for one observed</span></span><br><span class="line">    <span class="comment">// target element:</span></span><br><span class="line">    <span class="comment">//   entry.rootBounds</span></span><br><span class="line">    <span class="comment">//   entry.boundingClientRect</span></span><br><span class="line">    <span class="comment">//   entry.intersectionRect</span></span><br><span class="line">    <span class="comment">//   entry.intersectionRatio</span></span><br><span class="line">    <span class="comment">//   entry.isIntersecting</span></span><br><span class="line">    <span class="comment">//   entry.target</span></span><br><span class="line">    <span class="comment">//   entry.time</span></span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">🔽[IntersectionObserverEntry]</span><br><span class="line">    time: <span class="number">3893.92</span></span><br><span class="line">  🔽rootBounds: ClientRect</span><br><span class="line">      bottom: <span class="number">920</span></span><br><span class="line">      height: <span class="number">1024</span></span><br><span class="line">      left: <span class="number">0</span></span><br><span class="line">      right: <span class="number">1024</span></span><br><span class="line">      top: <span class="number">0</span></span><br><span class="line">      width: <span class="number">920</span></span><br><span class="line">  🔽boundingClientRect: ClientRect</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  🔽intersectionRect: ClientRect</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    intersectionRatio: <span class="number">0.54</span></span><br><span class="line">  🔽target: div#observee</span><br><span class="line">    <span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
+<p><code>rootBounds</code>： root 元素调用 getBoundingClientRect() 函数的返回值（默认是 viewport 视口）</p>
+<p><code>boundingClientRect</code>： 目标 observer 调用 getBoundingClientRect() 函数的返回值</p>
+<p><code>intersectionRect</code>： 上述两矩形的交集，并且有效的告诉你观测到的元素的哪一部分是可见的</p>
+<p><code>intersectionRect</code>： 该属性告诉你元素目前有多少是可见的，比率是多少</p>
+<p><code>isIntersecting</code>： 目标元素在 root 元素中可见性是否发生了变化（至少得达到 thresholds 数组中的一个阈值）</p>
+<p><code>target</code>：  被观测的目标 DOM 元素</p>
+<p><code>time</code>： 可见行发生变化的时间（单位： ms）</p>
+<p>再次引用一张图片来解释上述部分参数：</p>
+<p><img src="https://developers.google.com/web/updates/images/2016/04/intersectionobserver/intersectratio.png" alt></p>
+<blockquote>
+<p>请留意，你注册的回调函数将会在主线程中被执行。所以该函数执行速度要尽可能的快。如果有一些耗时的操作需要执行，建议使用 Window.requestIdleCallback() 方法。</p>
+</blockquote>
+<h4 id="实战：无限滚动"><a href="#实战：无限滚动" class="headerlink" title="实战：无限滚动"></a>实战：无限滚动</h4><iframe id="cp_embed_YzKLNBz" src="//codepen.io/kazehaiya/embed/YzKLNBz?height=300&theme-id=dark&slug-hash=YzKLNBz&default-tab=css,result" scrolling="no" frameborder="no" height="300" allowtransparency="true" allowfullscreen="true" class="cp_embed_iframe" style="width: 100%; overflow: hidden;"></iframe>
+<h3 id="文章推荐"><a href="#文章推荐" class="headerlink" title="文章推荐"></a>文章推荐</h3><ul>
+<li><a href="https://developers.google.com/web/updates/2019/02/intersectionobserver-v2" target="_blank" rel="noopener">Trust is Good, Observation is Better—Intersection Observer v2</a></li>
+<li><a href="https://developers.google.com/web/fundamentals/performance/lazy-loading-guidance/images-and-video/" target="_blank" rel="noopener">延迟加载图像和视频</a></li>
+</ul>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
+<li><a href="https://developers.google.com/web/updates/2016/04/intersectionobserver" target="_blank" rel="noopener">IntersectionObserver’s Coming into View</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Intersection_Observer_API" target="_blank" rel="noopener">Intersection Observer API</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Element/getBoundingClientRect" target="_blank" rel="noopener">getBoundingClientRect</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2016/11/intersectionobserver_api.html" target="_blank" rel="noopener">IntersectionObserver API 使用教程</a></li>
+<li><a href="https://www.jianshu.com/p/84a86e41eb2b" target="_blank" rel="noopener">谈谈 IntersectionObserver 懒加载</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Caiyin
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://kazehaiya.github.io/2019/09/10/IntersectionObserver-与延迟加载/" title="IntersectionObserver 与延迟加载">https://kazehaiya.github.io/2019/09/10/IntersectionObserver-与延迟加载/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/javascript/" rel="tag"><i class="fa fa-tag"></i> JavaScript</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/09/01/JSX-语法总结/" rel="prev" title="JSX 语法总结">
+      <i class="fa fa-chevron-left"></i> JSX 语法总结
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/09/21/浅谈-proxy/" rel="next" title="浅谈 Proxy">
+      浅谈 Proxy <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#延迟加载"><span class="nav-number">2.</span> <span class="nav-text">延迟加载</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#getBoundingClientRect"><span class="nav-number">2.1.</span> <span class="nav-text">getBoundingClientRect</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IntersectionObserver"><span class="nav-number">3.</span> <span class="nav-text">IntersectionObserver</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#options"><span class="nav-number">3.1.</span> <span class="nav-text">options</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#callback"><span class="nav-number">3.2.</span> <span class="nav-text">callback</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实战：无限滚动"><span class="nav-number">3.3.</span> <span class="nav-text">实战：无限滚动</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文章推荐"><span class="nav-number">4.</span> <span class="nav-text">文章推荐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文章"><span class="nav-number">5.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Caiyin"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Caiyin</p>
+  <div class="site-description" itemprop="description">Just do IT!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/kazehaiya" title="GitHub → https://github.com/kazehaiya" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:c763416559@163.com" title="Mail → mailto:c763416559@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/Nora_Monocy" title="Weibo → https://weibo.com/Nora_Monocy" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://liujinkai.com/" title="http://liujinkai.com/" rel="noopener" target="_blank">凯凯刘</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://weekly.75team.com/" title="https://weekly.75team.com/" rel="noopener" target="_blank">奇舞周刊</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://75.team/post/list" title="https://75.team/post/list" rel="noopener" target="_blank">奇舞团博客</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://tech.meituan.com/" title="https://tech.meituan.com/" rel="noopener" target="_blank">美团技术团队</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://tech.youzan.com/" title="https://tech.youzan.com/" rel="noopener" target="_blank">有赞技术团队</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-dragon"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Caiyin</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">74k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:07</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/gitalk/1.6.2/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('https://cdn.bootcdn.net/ajax/libs/gitalk/1.6.2/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'd41b2914b32ac3c92a9d',
+      clientSecret: '2065e40ff9986f6a8b7a21ac27b2ec109bbcf71c',
+      repo        : 'blog-commnets',
+      owner       : 'kazehaiya',
+      admin       : ['kazehaiya'],
+      id          : '64ff10d07c5995600146cccac428d6bb',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

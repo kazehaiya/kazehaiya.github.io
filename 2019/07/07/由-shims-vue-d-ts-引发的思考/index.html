@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kazehaiya.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言由于项目近期进行 ts 迁移，作为第一个吃螃蟹的人，踩过了不少坑。迁移过程中遇到的大大小小的问题基本上都解决了，但是对于 shims-vue.d.ts 文件的命名以及其内的模块声明始终找不到比较贴切的解释。沉下心来读了些外网资料，总算是有点“豁开云雾见青天”的感觉了。此处就记录我对于 ts 全局模块声明的一些思考以及一些 ts 项目迁移遇到的坑。">
+<meta name="keywords" content="JavaScript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="由 shims-vue.d.ts 引发的思考">
+<meta property="og:url" content="https://kazehaiya.github.io/2019/07/07/由-shims-vue-d-ts-引发的思考/index.html">
+<meta property="og:site_name" content="沐光">
+<meta property="og:description" content="前言由于项目近期进行 ts 迁移，作为第一个吃螃蟹的人，踩过了不少坑。迁移过程中遇到的大大小小的问题基本上都解决了，但是对于 shims-vue.d.ts 文件的命名以及其内的模块声明始终找不到比较贴切的解释。沉下心来读了些外网资料，总算是有点“豁开云雾见青天”的感觉了。此处就记录我对于 ts 全局模块声明的一些思考以及一些 ts 项目迁移遇到的坑。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-08-16T09:34:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="由 shims-vue.d.ts 引发的思考">
+<meta name="twitter:description" content="前言由于项目近期进行 ts 迁移，作为第一个吃螃蟹的人，踩过了不少坑。迁移过程中遇到的大大小小的问题基本上都解决了，但是对于 shims-vue.d.ts 文件的命名以及其内的模块声明始终找不到比较贴切的解释。沉下心来读了些外网资料，总算是有点“豁开云雾见青天”的感觉了。此处就记录我对于 ts 全局模块声明的一些思考以及一些 ts 项目迁移遇到的坑。">
+
+<link rel="canonical" href="https://kazehaiya.github.io/2019/07/07/由-shims-vue-d-ts-引发的思考/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>由 shims-vue.d.ts 引发的思考 | 沐光</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">沐光</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录在前端之路的点点滴滴</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">13</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">12</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">46</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/kazehaiya" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://kazehaiya.github.io/2019/07/07/由-shims-vue-d-ts-引发的思考/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Caiyin">
+      <meta itemprop="description" content="Just do IT!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="沐光">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          由 shims-vue.d.ts 引发的思考
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-07-07 12:02:59" itemprop="dateCreated datePublished" datetime="2019-07-07T12:02:59+08:00">2019-07-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-08-16 17:34:09" itemprop="dateModified" datetime="2020-08-16T17:34:09+08:00">2020-08-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>由于项目近期进行 ts 迁移，作为第一个吃螃蟹的人，踩过了不少坑。迁移过程中遇到的大大小小的问题基本上都解决了，但是对于 shims-vue.d.ts 文件的命名以及其内的模块声明始终找不到比较贴切的解释。沉下心来读了些外网资料，总算是有点“豁开云雾见青天”的感觉了。此处就记录我对于 ts 全局模块声明的一些思考以及一些 ts 项目迁移遇到的坑。</p>
+<a id="more"></a>
+<h3 id="Vue-ts-声明文件"><a href="#Vue-ts-声明文件" class="headerlink" title="Vue ts 声明文件"></a>Vue ts 声明文件</h3><p>在安装 @vue/typescript 之后，项目会生成两个新文件，分别是 <code>shims-vue.d.ts</code> 和 <code>shims-jsx.d.ts</code>，其内容分别是：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// shims-vue.d.ts</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> '*.vue' &#123;</span><br><span class="line">  <span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> Vue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>和</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Vue, &#123; VNode &#125; <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">declare</span> global &#123;</span><br><span class="line">  <span class="keyword">namespace</span> JSX &#123;</span><br><span class="line">    <span class="comment">// tslint:disable no-empty-interface</span></span><br><span class="line">    <span class="keyword">interface</span> Element <span class="keyword">extends</span> VNode &#123; &#125;</span><br><span class="line">    <span class="comment">// tslint:disable no-empty-interface</span></span><br><span class="line">    <span class="keyword">interface</span> ElementClass <span class="keyword">extends</span> Vue &#123; &#125;</span><br><span class="line">    <span class="keyword">interface</span> IntrinsicElements &#123;</span><br><span class="line">      [elem: <span class="built_in">string</span>]: <span class="built_in">any</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么这两个文档有什么作用呢？</p>
+<h4 id="shims-vue-d-ts"><a href="#shims-vue-d-ts" class="headerlink" title="shims-vue.d.ts"></a>shims-vue.d.ts</h4><p>前者为 Ambient Declarations(通称：外部模块定义) ,主要为项目内所有的 vue 文件做模块声明，毕竟 ts 默认只识别 .d.ts、.ts、.tsx 后缀的文件；（即使补充了 Vue 得模块声明，IDE 还是没法识别 .vue 结尾的文件，这就是为什么引入 vue 文件时必须添加后缀的原因，不添加编译也不会报错）</p>
+<h4 id="shims-jsx-d-ts"><a href="#shims-jsx-d-ts" class="headerlink" title="shims-jsx.d.ts"></a>shims-jsx.d.ts</h4><p>后者为 JSX 语法的全局命名空间，这是因为<strong>基于值的元素</strong>会简单的在它所在的作用域里按标识符查找（此处使用的是<strong>无状态函数组件 (SFC)</strong>的方法来定义），当在 tsconfig 内开启了 jsx 语法支持后，其会自动识别对应的 .tsx 结尾的文件，可参考<a href="https://www.tslang.cn/docs/handbook/jsx.html" target="_blank" rel="noopener">官网 jsx</a>。</p>
+<h4 id="产生的问题"><a href="#产生的问题" class="headerlink" title="产生的问题"></a>产生的问题</h4><p>首先，官方文档的上并没有将 shims-xxx.d.ts 做为通用的模板，其仅仅给我们列举了以下模板样例：</p>
+<ul>
+<li>global-modifying-module.d.ts</li>
+<li>global-plugin.d.ts</li>
+<li>global.d.ts</li>
+<li>module-class.d.ts</li>
+<li>module-function.d.ts</li>
+<li>module-plugin.d.ts</li>
+<li>module.d.ts</li>
+</ul>
+<p>那么该如何理解这两个文件？</p>
+<p>是否能够更改在统一规范的文件内？</p>
+<p>全局接口、命名空间、模块等声明又有那些写法来定义？该如何写？</p>
+<p>… 对于产生的这么些问题，下面依次分析。</p>
+<h3 id="解惑"><a href="#解惑" class="headerlink" title="解惑"></a>解惑</h3><h4 id="理解并改造-shims-xxx-d-ts"><a href="#理解并改造-shims-xxx-d-ts" class="headerlink" title="理解并改造 shims-xxx.d.ts"></a>理解并改造 shims-xxx.d.ts</h4><p>我们知道，xxx.d.ts 的文件表明，其内部的一些声明都为全局的声明，能够在项目各组件内都能获取到。因此 Vue 生成的两个 shims-xxx.d.ts 其实是为了表明，该两文件为 Vue 相关的全局声明文件。</p>
+<p>但是从项目管理来说，随着引入的 npm 模块增多（比如公司内部 npm 源上的不带 types 的包），那么模仿 Vue 的声明文件写法，外部声明的文件也会越来越多，文件夹看起来就不是很舒服了。因此有没有一种比较好的方法来解决文件过多的问题呢？</p>
+<p>对于我来说，我更偏向将这些简单的声明维护在一个 .d.ts 文件内，正好官网也推荐维护在一个大的 module 内，因此我们可以维护一个 module.d.ts 来总体声明所有的外部模块。基于官方的例子，我做了两个文件来管理外部模块的声明，分别是 <code>module.d.ts</code> 和 <code>declarations.d.ts</code>。前者主要维护需要写的比较详细的外部模块，后者主要维护简写模式的模块（包括内部需要声明的 .js 文件，兼容历史遗留问题）。例如：</p>
+<p>改造后的 module/index.d.ts</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// This `declare module` is called ambient module, which is used to describe modules written in JavaScript.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加 vue-clipboard2 的 Vue 插件声明</span></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> 'vue-clipboard2' &#123;</span><br><span class="line">  <span class="keyword">import</span> &#123; PluginFunction &#125; <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line">  <span class="keyword">const</span> clipboard: PluginFunction&lt;<span class="built_in">any</span>&gt;;</span><br><span class="line">  <span class="comment">// 定义默认导出的类型</span></span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> clipboard;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加 fe-monitor-sdk 的 Vue 插件声明</span></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> 'fe-monitor-sdk' &#123;</span><br><span class="line">  <span class="keyword">import</span> &#123; PluginObject &#125; <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line">  <span class="comment">// 定义解构的变量类型</span></span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">const</span> monitorVue: PluginObject&lt;<span class="built_in">any</span>&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加所有 .vue 文件的声明</span></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> '*.vue' &#123;</span><br><span class="line">  <span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> Vue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>改造后的 module/declarations.d.ts</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Shorthand ambient modules, All imports from this shorthand module will have the any type.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> '@/cookie-set';</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>附加：对于 global 声明可视情况分类，比如通用的放在 <code>global.d.ts</code>，其余可视情况（如果该类型比较多的话）按照对应类型分类，比如 table 的可全部放在 <code>global-table.d.ts</code>。</p>
+</blockquote>
+<h4 id="全局声明的写法"><a href="#全局声明的写法" class="headerlink" title="全局声明的写法"></a>全局声明的写法</h4><p>另一个一直比较疑惑的问题是全局声明的写法，比如模块的“单文件单模块声明”的写法“单文件多模块合并声明”的写法不太一样，“无导入的全局声明文件”和“带导入声明的全局声明文件”的写法又有些不同，这里我一一列出其可行的写法以及其不同的原因。</p>
+<blockquote>
+<p>注：这里的一些定义都是个人总结的便于记忆的说法，为非标准定义。</p>
+</blockquote>
+<h5 id="单文件单模块声明"><a href="#单文件单模块声明" class="headerlink" title="单文件单模块声明"></a>单文件单模块声明</h5><p>该文件支持两种写法，分别如下：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 写法一</span></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> '*.vue' &#123;</span><br><span class="line">  <span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> Vue;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 写法二</span></span><br><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> '*.vue' &#123;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> Vue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注： 前者（写法一）主要为无 ts 声明的模块添加声明，后者（写法二）主要为已有 types 声明的模块进行声明扩展（可以参考 <a href="https://github.com/vuejs/vue-router/blob/dev/types/vue.d.ts" target="_blank" rel="noopener">vue-router 源码部分</a>）</p>
+</blockquote>
+<h5 id="单文件多模块合并声明"><a href="#单文件多模块合并声明" class="headerlink" title="单文件多模块合并声明"></a>单文件多模块合并声明</h5><p>仅有一种写法（需要关闭对应的多次引入重复模块的 lint 规则或者忽略此 types 文件夹内的所有内容）</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> '*.vue' &#123;</span><br><span class="line">  <span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> Vue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="无导入的全局声明文件"><a href="#无导入的全局声明文件" class="headerlink" title="无导入的全局声明文件"></a>无导入的全局声明文件</h5><p>无导入即没有 import 声明，直接定义全局接口、函数等</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> TableRenderParam <span class="keyword">extends</span> BasicObject &#123;</span><br><span class="line">  row: BasicObject,</span><br><span class="line">  key: <span class="built_in">string</span>,</span><br><span class="line">  index?: <span class="built_in">number</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="带导入声明的全局声明文件"><a href="#带导入声明的全局声明文件" class="headerlink" title="带导入声明的全局声明文件"></a>带导入声明的全局声明文件</h5><p>带有 import 导入插件声明的必须显示定义 global，例如：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; CreateElement &#125; <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// function 部分</span></span><br><span class="line"><span class="keyword">declare</span> global &#123;</span><br><span class="line">  <span class="keyword">interface</span> TableRenderFunc &#123;</span><br><span class="line">    (h: CreateElement, &#123; row, key, index &#125;: TableRenderParam): JSX.Element,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// namespace 部分</span></span><br><span class="line"><span class="keyword">declare</span> global &#123;&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="不同的原因"><a href="#不同的原因" class="headerlink" title="不同的原因"></a>不同的原因</h5><p>如果在“单文件多模块合并声明”将 import 提出至最顶层时，会发现 ts 报错，说模块无法进一步扩大，为什么将 import 提出后会报错提示模块无法扩大？</p>
+<p>个人研究得出的结论是，当将 import 提出至模块外时，就已经表明该文件内的其它 declare 的模块已经是存在 ts 声明的模块，此时再对其进行 declare 声明即对其原本的声明上进行扩展（可参考 vue-router 对于 vue 的扩展），但是对于没有 ts 声明的模块，我们拿不到它的 ts 声明，因此也就没发进行模块扩展，所以就会报错。</p>
+<p>而将 import 放至模块内时，因为 module 本来就表明自己为一个模块，其就可以作为模块的声明，为没有对应声明的模块添加声明了。</p>
+<p>此外，对于多个 declare global 的写法，此是采用了<strong><a href="(https://www.tslang.cn/docs/handbook/declaration-merging.html">声明合并</a>)</strong>的方式，使得所有的模块声明都合并至同一个 global 全局声明中，因此，在对于将 import 提至外层的“带导入声明的全局声明文件”来说，分文件全局维护或者单文件声明合并式维护都是可行的。</p>
+<div class="note info">
+            <p>TypeScript与ECMAScript 2015一样，任何包含顶级import或者export的文件都被当成一个模块。相反地，如果一个文件不带有顶级的import或者export声明，那么它的内容被视为全局可见的（因此对模块也是可见的）。</p>
+          </div>
+<h3 id="ts-踩坑记录"><a href="#ts-踩坑记录" class="headerlink" title="ts 踩坑记录"></a>ts 踩坑记录</h3><p>已经维护至博文<a href="/2019/07/14/项目-ts-迁移的踩坑记录/" title="项目 ts 迁移的踩坑记录">项目 ts 迁移的踩坑记录</a>中了</p>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><ul>
+<li><a href="https://www.tslang.cn/docs/handbook/namespaces-and-modules.html" target="_blank" rel="noopener">命名空间和模块</a></li>
+<li><a href="https://github.com/Microsoft/TypeScript-Handbook/issues/180" target="_blank" rel="noopener">Clarify what “ambient” means</a></li>
+<li><a href="https://basarat.gitbooks.io/typescript/docs/types/ambient/intro.html" target="_blank" rel="noopener">Ambient Declarations</a></li>
+<li><a href="https://ts.xcatliu.com/" target="_blank" rel="noopener">TypeScript 入门教程</a></li>
+<li><a href="https://github.com/vuejs/vue-cli/issues/1198" target="_blank" rel="noopener">Typescript: IDE reports TS2307</a></li>
+<li><a href="https://stackoverflow.com/questions/44058101/typescript-declare-third-party-modules" target="_blank" rel="noopener">typescript declare third party modules</a></li>
+<li><a href="https://my.oschina.net/fenying/blog/747184" target="_blank" rel="noopener">TypeScript 的两种声明文件写法的区别和根本意义</a></li>
+<li><a href="https://idom.me/articles/838.html" target="_blank" rel="noopener">区分 TS 中的 namespace 和 module</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Caiyin
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://kazehaiya.github.io/2019/07/07/由-shims-vue-d-ts-引发的思考/" title="由 shims-vue.d.ts 引发的思考">https://kazehaiya.github.io/2019/07/07/由-shims-vue-d-ts-引发的思考/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/javascript/" rel="tag"><i class="fa fa-tag"></i> JavaScript</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/06/28/关于-JS-中“继承”的写法/" rel="prev" title="关于 JS 中“继承”的写法">
+      <i class="fa fa-chevron-left"></i> 关于 JS 中“继承”的写法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/07/11/使用-vue-cli-发布一个完善的包/" rel="next" title="使用 vue-cli 发布一个完善的包">
+      使用 vue-cli 发布一个完善的包 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Vue-ts-声明文件"><span class="nav-number">2.</span> <span class="nav-text">Vue ts 声明文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#shims-vue-d-ts"><span class="nav-number">2.1.</span> <span class="nav-text">shims-vue.d.ts</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#shims-jsx-d-ts"><span class="nav-number">2.2.</span> <span class="nav-text">shims-jsx.d.ts</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#产生的问题"><span class="nav-number">2.3.</span> <span class="nav-text">产生的问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解惑"><span class="nav-number">3.</span> <span class="nav-text">解惑</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#理解并改造-shims-xxx-d-ts"><span class="nav-number">3.1.</span> <span class="nav-text">理解并改造 shims-xxx.d.ts</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#全局声明的写法"><span class="nav-number">3.2.</span> <span class="nav-text">全局声明的写法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#单文件单模块声明"><span class="nav-number">3.2.1.</span> <span class="nav-text">单文件单模块声明</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#单文件多模块合并声明"><span class="nav-number">3.2.2.</span> <span class="nav-text">单文件多模块合并声明</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#无导入的全局声明文件"><span class="nav-number">3.2.3.</span> <span class="nav-text">无导入的全局声明文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#带导入声明的全局声明文件"><span class="nav-number">3.2.4.</span> <span class="nav-text">带导入声明的全局声明文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#不同的原因"><span class="nav-number">3.2.5.</span> <span class="nav-text">不同的原因</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ts-踩坑记录"><span class="nav-number">4.</span> <span class="nav-text">ts 踩坑记录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文档"><span class="nav-number">5.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Caiyin"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Caiyin</p>
+  <div class="site-description" itemprop="description">Just do IT!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/kazehaiya" title="GitHub → https://github.com/kazehaiya" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:c763416559@163.com" title="Mail → mailto:c763416559@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/Nora_Monocy" title="Weibo → https://weibo.com/Nora_Monocy" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://liujinkai.com/" title="http://liujinkai.com/" rel="noopener" target="_blank">凯凯刘</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://weekly.75team.com/" title="https://weekly.75team.com/" rel="noopener" target="_blank">奇舞周刊</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://75.team/post/list" title="https://75.team/post/list" rel="noopener" target="_blank">奇舞团博客</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://tech.meituan.com/" title="https://tech.meituan.com/" rel="noopener" target="_blank">美团技术团队</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://tech.youzan.com/" title="https://tech.youzan.com/" rel="noopener" target="_blank">有赞技术团队</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-dragon"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Caiyin</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">74k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:07</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/gitalk/1.6.2/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('https://cdn.bootcdn.net/ajax/libs/gitalk/1.6.2/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'd41b2914b32ac3c92a9d',
+      clientSecret: '2065e40ff9986f6a8b7a21ac27b2ec109bbcf71c',
+      repo        : 'blog-commnets',
+      owner       : 'kazehaiya',
+      admin       : ['kazehaiya'],
+      id          : 'a4b491d95b15d041bae3e2e6949088ed',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

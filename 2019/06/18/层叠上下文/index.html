@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kazehaiya.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言在做项目布局回顾时，思考到了一个当初比较犹豫的问题「flex 布局能否产生层叠/堆叠上下文」。在网上也参考了国内外很多有价值的文章，此处小结一下，算是对层叠上下文这一部分做一次较为全面的总结。">
+<meta name="keywords" content="CSS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="层叠上下文">
+<meta property="og:url" content="https://kazehaiya.github.io/2019/06/18/层叠上下文/index.html">
+<meta property="og:site_name" content="沐光">
+<meta property="og:description" content="前言在做项目布局回顾时，思考到了一个当初比较犹豫的问题「flex 布局能否产生层叠/堆叠上下文」。在网上也参考了国内外很多有价值的文章，此处小结一下，算是对层叠上下文这一部分做一次较为全面的总结。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://kazehaiya.github.io/images/stacking-order.png">
+<meta property="og:updated_time" content="2020-08-16T09:34:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="层叠上下文">
+<meta name="twitter:description" content="前言在做项目布局回顾时，思考到了一个当初比较犹豫的问题「flex 布局能否产生层叠/堆叠上下文」。在网上也参考了国内外很多有价值的文章，此处小结一下，算是对层叠上下文这一部分做一次较为全面的总结。">
+<meta name="twitter:image" content="https://kazehaiya.github.io/images/stacking-order.png">
+
+<link rel="canonical" href="https://kazehaiya.github.io/2019/06/18/层叠上下文/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>层叠上下文 | 沐光</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">沐光</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录在前端之路的点点滴滴</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">13</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">12</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">46</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/kazehaiya" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://kazehaiya.github.io/2019/06/18/层叠上下文/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Caiyin">
+      <meta itemprop="description" content="Just do IT!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="沐光">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          层叠上下文
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-06-18 10:43:12" itemprop="dateCreated datePublished" datetime="2019-06-18T10:43:12+08:00">2019-06-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-08-16 17:34:09" itemprop="dateModified" datetime="2020-08-16T17:34:09+08:00">2020-08-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/css/" itemprop="url" rel="index"><span itemprop="name">CSS</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在做项目布局回顾时，思考到了一个当初比较犹豫的问题「flex 布局能否产生层叠/堆叠上下文」。在网上也参考了国内外很多有价值的文章，此处小结一下，算是对<strong>层叠上下文</strong>这一部分做一次较为全面的总结。</p>
+<a id="more"></a>
+<h3 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h3><h4 id="层叠上下文是什么"><a href="#层叠上下文是什么" class="headerlink" title="层叠上下文是什么"></a>层叠上下文是什么</h4><p>这里先引用 MDN 上的一段对<strong>层叠上下文</strong>的介绍：</p>
+<div class="note default">
+            <p><strong>层叠上下文</strong>是HTML元素的三维概念，这些HTML元素在一条假想的相对于面向（电脑屏幕的）视窗或者网页的用户的 z 轴上延伸，HTML元素依据其自身属性按照优先级顺序占用层叠上下文的空间。</p>
+          </div>
+<p>简单来说，电脑屏幕给我们展现的是一个平面，此对应直角坐标系的 X、Y 轴，而垂直与电脑屏幕的这个不可见的轴（相当于直角坐标系的 Z 轴），其上面遍布着不同的堆叠层，而此堆叠层的层叠顺序就是我们所谓的层叠上下文了。</p>
+<blockquote>
+<p>如果有设计经验的，那么这个堆叠层可以理解为 PS 中的画布，默认只有最初的一层（页面中的 html 元素）</p>
+</blockquote>
+<h4 id="层叠上下文的堆叠顺序"><a href="#层叠上下文的堆叠顺序" class="headerlink" title="层叠上下文的堆叠顺序"></a>层叠上下文的堆叠顺序</h4><p>这边借用一张图来描述一下堆叠顺序：</p>
+<p><img src="/images/stacking-order.png" alt="堆叠顺序"></p>
+<p>此处对图做简单说明：</p>
+<ol>
+<li>层叠上下文部分：相当于该层叠区域的装饰，优先级最低，处于最底层</li>
+<li>block 块状水平盒子：层叠区最为基础的布局方式，主要目的是为了控制呈现的样式</li>
+<li>float 浮动盒子：float 默认的 <code>display</code> 属性就是 block ，只是脱离了文档流，其也是一种布局方式</li>
+<li>inline/inline-block 水平盒子：层叠区默认的内容呈现部分，承载页面大多数内容部分（涉及到页面内容的标签基本上是 inline ，或者是隐式行内盒）</li>
+<li>z-index + position（和部分 CSS3 属性）：控制元素在其所在的层叠区 Z 轴上的顺序（默认 auto，相当于 0），有正负值</li>
+</ol>
+<p>其中比较有趣的一点是，<strong><code>inline/inline-block</code> 的层级顺序要高于 <code>block</code> 元素</strong>，具体的体现就在“文字环绕”式布局了。</p>
+<p>其实这么排序也有其理由，我们知道，页面其主要目的是为了呈现内容的，而块级元素偏向于布局（设置宽高、内外边距、边框、行内元素的大多数配置等等），行内元素偏向于内容（与其它内容的间隔、字体大小等等），因此不难理解行内元素应该高于块级元素的层叠级别了。</p>
+<p>此外，对于默认情况（什么都没有设置），后面的元素默认堆叠顺序会高于前面的元素，具体的体现为两个 button 按钮，如果将后者的 <code>margin</code> 值设为负值，其会覆盖掉先前的按钮。</p>
+<blockquote>
+<p>注：在层叠上下文中，其子元素同样也按照上面解释的规则进行层叠。 特别值得一提的是，其子元素的 z-index 值只在父级层叠上下文中有意义。子级层叠上下文被自动视为父级层叠上下文的一个独立单元。</p>
+</blockquote>
+<h4 id="如何产生层叠上下文"><a href="#如何产生层叠上下文" class="headerlink" title="如何产生层叠上下文"></a>如何产生层叠上下文</h4><p>此处还是引用 MDN 上的介绍，文档中的层叠上下文由满足以下任意一个条件的元素形成（未做说明的会影响子元素的 fix 布局）：</p>
+<ul>
+<li>根元素 (HTML)</li>
+<li><code>z-index</code> 值不为 “auto” 的 绝对/相对定位（不影响子元素的 fix 布局）</li>
+<li><code>z-index</code> 值不为 “auto” 的 flex 项目 (flex item)，即：父元素 <code>display: flex|inline-flex</code></li>
+<li><code>opacity</code> 属性值小于 1 的元素（参考 the specification for opacity）（不影响子元素的 fix 布局）</li>
+<li><code>transform</code> 属性值不为 “none” 的元素</li>
+<li><code>mix-blend-mode</code> 属性值不为 “normal” 的元素（不影响子元素的 fix 布局）</li>
+<li><code>filter</code> 值不为 “none” 的元素</li>
+<li><code>perspective</code> 值不为 “none” 的元素</li>
+<li><code>isolation</code> 属性被设置为 “isolate” 的元素（不影响子元素的 fix 布局）</li>
+<li><code>position: fixed</code>（不影响子元素的 fix 布局）</li>
+<li><code>will-change</code> 中指定了任意 CSS 属性，即便你没有直接指定这些属性的值(参考<a href="https://www.w3.org/TR/css-color-3/#transparency）" target="_blank" rel="noopener">这篇文章</a></li>
+<li><code>-webkit-overflow-scrolling</code> 属性被设置 “touch” 的元素（不影响子元素的 fix 布局）</li>
+<li>（补充）<code>transform-style</code> 为 preserve-3d 的元素</li>
+</ul>
+<p>当然，这里仅仅只是列举了能够形成层叠上下文的一些情况，而其中也有部分翻译的的不是很准确（参考<a href="https://www.zhangxinxu.com/wordpress/2016/01/understand-css-stacking-context-order-z-index/" target="_blank" rel="noopener">张鑫旭</a>的文章，后面做了一些要点描述）</p>
+<div class="note warning">
+            <p>层叠上下文的层级是 HTML 元素层级的一个层级，因为只有某些元素才会创建层叠上下文。可以这样说，没有创建自己的层叠上下文的元素 将被父层叠上下文包含。 —— MDN</p>
+          </div>
+<h3 id="详解层叠上下文的形成"><a href="#详解层叠上下文的形成" class="headerlink" title="详解层叠上下文的形成"></a>详解层叠上下文的形成</h3><h4 id="z-index-不为-auto-的-flex-项目"><a href="#z-index-不为-auto-的-flex-项目" class="headerlink" title="z-index 不为 auto 的 flex 项目"></a><code>z-index</code> 不为 auto 的 flex 项目</h4><p>此指的是父元素的 <code>display</code> 属性为 flex/inline-flex ，其子元素的 z-index 值不为 auto，此时该<strong>子元素</strong>会形成堆叠区。</p>
+<iframe id="cp_embed_qzNKaW" src="//codepen.io/kazehaiya/embed/qzNKaW?height=300&theme-id=dark&slug-hash=qzNKaW&default-tab=css,result" scrolling="no" frameborder="no" height="300" allowtransparency="true" allowfullscreen="true" class="cp_embed_iframe" style="width: 100%; overflow: hidden;"></iframe>
+<h4 id="transform-属性值不为-“none”-的元素"><a href="#transform-属性值不为-“none”-的元素" class="headerlink" title="transform 属性值不为 “none” 的元素"></a><code>transform</code> 属性值不为 “none” 的元素</h4><p>在做 <code>position: fixed</code> 定位时，其默认是基于页面窗口创建堆叠区（根元素有个最基础的堆叠区），然而父级元素的 <code>transform</code> 属性值非 none 时，其会生成一个堆叠层，使得内部的 fixed 布局不是以窗口为基本的堆叠层，而是此父级本身，从而产生很“酸爽”的 bug 体验。</p>
+<iframe id="cp_embed_gNMjMK" src="//codepen.io/kazehaiya/embed/gNMjMK?height=300&theme-id=dark&slug-hash=gNMjMK&default-tab=css,result" scrolling="no" frameborder="no" height="300" allowtransparency="true" allowfullscreen="true" class="cp_embed_iframe" style="width: 100%; overflow: hidden;"></iframe>
+<h4 id="不会影响-fix-布局的会生成自身层叠的例子"><a href="#不会影响-fix-布局的会生成自身层叠的例子" class="headerlink" title="不会影响 fix 布局的会生成自身层叠的例子"></a>不会影响 fix 布局的会生成自身层叠的例子</h4><p>此部分对于 <code>-webkit-overflow-scrolling</code> 属性未能尝试成功，可能只能手机端显现（未测试）</p>
+<iframe id="cp_embed_MMyMjw" src="//codepen.io/kazehaiya/embed/MMyMjw?height=360&theme-id=dark&slug-hash=MMyMjw&default-tab=css,result" scrolling="no" frameborder="no" height="360" allowtransparency="true" allowfullscreen="true" class="cp_embed_iframe" style="width: 100%; overflow: hidden;"></iframe>
+<h4 id="会影响-fix-布局的层叠的例子"><a href="#会影响-fix-布局的层叠的例子" class="headerlink" title="会影响 fix 布局的层叠的例子"></a>会影响 fix 布局的层叠的例子</h4><p>有人做了比较全的 demo，我 fork 了一份，删除了错误的 flex 布局例子，去掉不受影响的部分。</p>
+<iframe id="cp_embed_qzNypX" src="//codepen.io/kazehaiya/embed/qzNypX?height=300&theme-id=dark&slug-hash=qzNypX&default-tab=css,result" scrolling="no" frameborder="no" height="300" allowtransparency="true" allowfullscreen="true" class="cp_embed_iframe" style="width: 100%; overflow: hidden;"></iframe>
+<blockquote>
+<p>源码地址：<a href="https://codepen.io/Chokcoco/pen/wqXZXd" target="_blank" rel="noopener">传送门</a></p>
+</blockquote>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>对于层叠上下文，当发生层叠的时候，其覆盖关系遵循两条黄金准则：</p>
+<ol>
+<li><strong>谁大谁上</strong>：当具有明显的层叠水平标示的时候，如具体的 z-index 值，在同一个层叠上下文领域，层叠水平值大的那一个覆盖小的那一个。</li>
+<li><strong>后来居上</strong>：当元素的层叠水平一致、层叠顺序相同的时候，在 DOM 流中处于后面的元素会覆盖前面的元素。</li>
+</ol>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Positioning/Understanding_z_index/The_stacking_context" target="_blank" rel="noopener">The stacking context</a></li>
+<li><a href="https://www.cnblogs.com/coco1s/p/5899089.html" target="_blank" rel="noopener">层叠顺序与堆栈上下文知多少</a></li>
+<li><a href="https://www.zhangxinxu.com/wordpress/2016/01/understand-css-stacking-context-order-z-index/" target="_blank" rel="noopener">深入理解CSS中的层叠上下文和层叠顺序</a></li>
+<li><a href="https://juejin.im/post/5b53e4f751882519f6476a44" target="_blank" rel="noopener">你不知道的CSS层叠上下文</a></li>
+<li><a href="https://www.cnblogs.com/xiahj/p/8036419.html" target="_blank" rel="noopener">深入研究 -webkit-overflow-scrolling: touch 及 ios 滚动</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Caiyin
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://kazehaiya.github.io/2019/06/18/层叠上下文/" title="层叠上下文">https://kazehaiya.github.io/2019/06/18/层叠上下文/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/css/" rel="tag"><i class="fa fa-tag"></i> CSS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/06/10/项目布局与-flex/" rel="prev" title="项目布局与 flex">
+      <i class="fa fa-chevron-left"></i> 项目布局与 flex
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/06/28/关于-JS-中“继承”的写法/" rel="next" title="关于 JS 中“继承”的写法">
+      关于 JS 中“继承”的写法 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#核心概念"><span class="nav-number">2.</span> <span class="nav-text">核心概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#层叠上下文是什么"><span class="nav-number">2.1.</span> <span class="nav-text">层叠上下文是什么</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#层叠上下文的堆叠顺序"><span class="nav-number">2.2.</span> <span class="nav-text">层叠上下文的堆叠顺序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何产生层叠上下文"><span class="nav-number">2.3.</span> <span class="nav-text">如何产生层叠上下文</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#详解层叠上下文的形成"><span class="nav-number">3.</span> <span class="nav-text">详解层叠上下文的形成</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#z-index-不为-auto-的-flex-项目"><span class="nav-number">3.1.</span> <span class="nav-text">z-index 不为 auto 的 flex 项目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#transform-属性值不为-“none”-的元素"><span class="nav-number">3.2.</span> <span class="nav-text">transform 属性值不为 “none” 的元素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#不会影响-fix-布局的会生成自身层叠的例子"><span class="nav-number">3.3.</span> <span class="nav-text">不会影响 fix 布局的会生成自身层叠的例子</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#会影响-fix-布局的层叠的例子"><span class="nav-number">3.4.</span> <span class="nav-text">会影响 fix 布局的层叠的例子</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文章"><span class="nav-number">5.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Caiyin"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Caiyin</p>
+  <div class="site-description" itemprop="description">Just do IT!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/kazehaiya" title="GitHub → https://github.com/kazehaiya" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:c763416559@163.com" title="Mail → mailto:c763416559@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/Nora_Monocy" title="Weibo → https://weibo.com/Nora_Monocy" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://liujinkai.com/" title="http://liujinkai.com/" rel="noopener" target="_blank">凯凯刘</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://weekly.75team.com/" title="https://weekly.75team.com/" rel="noopener" target="_blank">奇舞周刊</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://75.team/post/list" title="https://75.team/post/list" rel="noopener" target="_blank">奇舞团博客</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://tech.meituan.com/" title="https://tech.meituan.com/" rel="noopener" target="_blank">美团技术团队</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://tech.youzan.com/" title="https://tech.youzan.com/" rel="noopener" target="_blank">有赞技术团队</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-dragon"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Caiyin</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">74k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:07</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/gitalk/1.6.2/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('https://cdn.bootcdn.net/ajax/libs/gitalk/1.6.2/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'd41b2914b32ac3c92a9d',
+      clientSecret: '2065e40ff9986f6a8b7a21ac27b2ec109bbcf71c',
+      repo        : 'blog-commnets',
+      owner       : 'kazehaiya',
+      admin       : ['kazehaiya'],
+      id          : '6a154ce1e05e798151f4e64988fbd6f7',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

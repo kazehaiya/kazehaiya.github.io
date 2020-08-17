@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kazehaiya.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言最近在工作中遇到很多奇怪的样式错位问题，解决问题之余，有重新温习了一下样式方面的知识。一般块级元素的问题都比较好解决，而行内元素的问题还总是得试试，可能是理解的不够透彻，因此此篇算是我对行内元素做的一个简短的笔记吧。">
+<meta name="keywords" content="CSS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅谈行内元素">
+<meta property="og:url" content="https://kazehaiya.github.io/2019/04/18/浅谈行内元素/index.html">
+<meta property="og:site_name" content="沐光">
+<meta property="og:description" content="前言最近在工作中遇到很多奇怪的样式错位问题，解决问题之余，有重新温习了一下样式方面的知识。一般块级元素的问题都比较好解决，而行内元素的问题还总是得试试，可能是理解的不够透彻，因此此篇算是我对行内元素做的一个简短的笔记吧。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://kazehaiya.github.io/images/text-wrapping.png">
+<meta property="og:image" content="https://kazehaiya.github.io/images/anonymous-inline-box.png">
+<meta property="og:image" content="https://kazehaiya.github.io/images/inline-box.jpeg">
+<meta property="og:updated_time" content="2020-08-16T09:34:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="浅谈行内元素">
+<meta name="twitter:description" content="前言最近在工作中遇到很多奇怪的样式错位问题，解决问题之余，有重新温习了一下样式方面的知识。一般块级元素的问题都比较好解决，而行内元素的问题还总是得试试，可能是理解的不够透彻，因此此篇算是我对行内元素做的一个简短的笔记吧。">
+<meta name="twitter:image" content="https://kazehaiya.github.io/images/text-wrapping.png">
+
+<link rel="canonical" href="https://kazehaiya.github.io/2019/04/18/浅谈行内元素/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>浅谈行内元素 | 沐光</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">沐光</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录在前端之路的点点滴滴</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">13</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">12</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">46</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/kazehaiya" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://kazehaiya.github.io/2019/04/18/浅谈行内元素/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Caiyin">
+      <meta itemprop="description" content="Just do IT!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="沐光">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          浅谈行内元素
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-04-18 18:11:34" itemprop="dateCreated datePublished" datetime="2019-04-18T18:11:34+08:00">2019-04-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-08-16 17:34:09" itemprop="dateModified" datetime="2020-08-16T17:34:09+08:00">2020-08-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/css/" itemprop="url" rel="index"><span itemprop="name">CSS</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近在工作中遇到很多奇怪的样式错位问题，解决问题之余，有重新温习了一下样式方面的知识。一般块级元素的问题都比较好解决，而行内元素的问题还总是得试试，可能是理解的不够透彻，因此此篇算是我对行内元素做的一个简短的笔记吧。</p>
+<a id="more"></a>
+<h3 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h3><h4 id="什么是行内元素"><a href="#什么是行内元素" class="headerlink" title="什么是行内元素"></a>什么是行内元素</h4><p>行内元素，顾名思义，就是指在在一行内不换行的元素。通俗来讲，行内元素相当于“句子”，其内可以包含数据与其它行内元素。</p>
+<blockquote>
+<p>一个行内元素只占据它对应标签的边框所包含的空间。<br><strong><em>MDN</em></strong> —— 行内元素</p>
+</blockquote>
+<h4 id="常见的行内元素"><a href="#常见的行内元素" class="headerlink" title="常见的行内元素"></a>常见的行内元素</h4><ul>
+<li>b, big, i, small, tt</li>
+<li>abbr, acronym, cite, code, dfn, em, kbd, strong, samp, var</li>
+<li>a, bdo, br, img, map, object, q, script, span, sub, sup</li>
+<li>button, input, label, select, textarea</li>
+</ul>
+<h3 id="行盒子与浮动"><a href="#行盒子与浮动" class="headerlink" title="行盒子与浮动"></a>行盒子与浮动</h3><h4 id="文字环绕特效"><a href="#文字环绕特效" class="headerlink" title="文字环绕特效"></a>文字环绕特效</h4><p>word 文档内有“文字环绕”一表格属性，能够实现图片周围环绕文字，例如：</p>
+<p><img src="/images/text-wrapping.png" alt="文字环绕效果"></p>
+<p>当然，上图是 html 实现的，实现方法也很简单，代码如下（例 1-1）：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">figure</span> <span class="attr">class</span>=<span class="string">"test-figure"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">img</span> <span class="attr">class</span>=<span class="string">"test-img"</span> <span class="attr">src</span>=<span class="string">"./cat.jpg"</span> <span class="attr">alt</span>=<span class="string">""</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">span</span>&gt;</span>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Alias, dolore qui obcaecati fuga ratione nobis dolor veniam soluta sequi rem voluptatem quo similique quis doloribus fugit autem! Quas, ipsum reiciendis?<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">figure</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.test-figure</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">300px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.test-img</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">float</span>: left;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="文字环绕原理"><a href="#文字环绕原理" class="headerlink" title="文字环绕原理"></a>文字环绕原理</h4><p>代码很简单，实现难度也不大，但是为什么这么写能够实现呢？它实现的原理又是什么呢？</p>
+<p>其实，在我们所知的盒子模型中，除了基础的块级盒子和行内盒子，我们还有一个比较隐秘的匿名盒子。参考一个例子（例 1-2）：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">  我在块级盒子的匿名行内盒中</span><br><span class="line">  <span class="tag">&lt;<span class="name">span</span>&gt;</span>我在行内盒子的匿名行内盒中<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>回忆一下 CSS 选择器，其中有两个用的不是很多的<strong>伪元素选择器</strong>：<code>::first-letter</code>、<code>::first-line</code>，在此例中，它们选中的其实就是盒子模型中的匿名盒子的内容。那这个和我们所说的“文字环绕”又有什么关系呢？</p>
+<p>我们知道，浮动会让元素脱离文档流，因此它不会再向非浮动元素影响其它元素的布局，因此在例 1-1 中，我们的 img 标签已经脱离了文档流，<strong>span 标签</strong> 此时在层级上会置于其下，如图：</p>
+<p><img src="/images/anonymous-inline-box.png" alt="匿名行内盒"></p>
+<p>但是！float 元素内的内容，也就是 <code>img</code> 的内容，它并不会跟随 <code>img</code> 标签一起浮动，而是仍然会存在于正常的文档流中，同时也会记住 <code>img</code> 标签的大小，因此在后面的匿名行盒子（<code>span</code> 中的）在计算其应该所在的位置时，会给 float 元素留出它所需要的空间，也就出现了“文字环绕”的样式。</p>
+<blockquote>
+<p>常用伪元素： ::before、::after</p>
+</blockquote>
+<h4 id="知识拓展"><a href="#知识拓展" class="headerlink" title="知识拓展"></a>知识拓展</h4><p>因为浮动并不算是完全脱离文档流，因此在开发中还会出现不少 <code>bug</code>，比如：“高度塌陷”，在处理这类问题时，我们经常用到的方法是 <code>clear: both;</code> ，例如（例 1-3）：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 这里就用类名表示相应效果 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">"float"</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"clear-both"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>但是浏览器在对这做处理时，会为浮动元素留下足够大的空间，也就是给我们的元素加隐性的 <code>padding</code>，从而实现换行的效果（注意： span 标签不生效，<code>display: block</code> 才生效）。</p>
+<h3 id="行内元素的排版"><a href="#行内元素的排版" class="headerlink" title="行内元素的排版"></a>行内元素的排版</h3><h4 id="行盒子的构造"><a href="#行盒子的构造" class="headerlink" title="行盒子的构造"></a>行盒子的构造</h4><p>处理行内元素时，比较令人头疼的就是它们的对齐方式了。虽然对应的知识都比较了解，在项目中遇到多个行内元素没有对齐时，稍微多几次尝试基本上也能够搞定对齐，万一实在弄不定，一个 <code>flex</code> 布局基本能解决所有的痛苦。但是，仅仅这样也就止步于此了，不明白的点最终也弄不明白，因此，我稍微花了些时间去了解了一下行盒子到底是什么东西。</p>
+<p>此处引用《精通 CSS，高级 Web 解决方案》里面的一张图：</p>
+<p><img src="/images/inline-box.jpeg" alt="行内格式化模型"></p>
+<p>这里将行内格式化模型描述很清晰。由于行内盒子不能显示的设置高度，因此决定行内元素的高度那就剩下：<strong>内容高度</strong>。而影响内容高度的有两属性，分别是： <code>line-height</code> 与 <code>font-size</code>（当然 font-family 也会有一定影响）。</p>
+<p>行盒子的行高计算方法是：<strong>行盒子的整体高度</strong>减去<strong><code>font-size</code></strong>，剩余的值再平均分成两份，也就是图内的“半铅空”。例如：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.inline-box</span> &#123;</span><br><span class="line">  <span class="attribute">line-height</span>: <span class="number">28px</span>;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">12px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么“半铅空”为 8px。加入 <code>line-height</code> 值为数字，如： <code>line-height: 1.5</code>，则表明当前 <code>line-height</code> 为当前 <code>font-size</code> 的 1.5 倍，计算方法不变。</p>
+<p>因此在编写样式时，如果发现和设计稿不一致的情况时，若是行内元素，那么就可以考虑下是否是<strong>行高</strong>造成的问题了。</p>
+<h4 id="行内元素的对齐方式"><a href="#行内元素的对齐方式" class="headerlink" title="行内元素的对齐方式"></a>行内元素的对齐方式</h4><p>除了 <code>line-height</code> 之外，影响行内元素对齐的属性那就是 <code>vertical-align</code> 了。它的默认对齐属性值为 <code>baseline</code>。除了 <code>baseline</code> 之外，其实还有很多对齐方式，如： <code>middle</code>, <code>text-top</code>, <code>bottom</code> 等等（更多的可参阅 MDN），举个例子：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line">  span &#123;</span><br><span class="line">    vertical-align: "middle"</span><br><span class="line">  &#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span>This is a paragraph, and this is a <span class="tag">&lt;<span class="name">em</span>&gt;</span>special<span class="tag">&lt;/<span class="name">em</span>&gt;</span> word.<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>行内元素对齐比较常见的问题在于<em>图片</em>的对齐，一般的行内元素对齐要么令其行高一致，要么 <code>vertical-align</code> 统一配置同一值即可，但是图片比较特殊，对齐大概分为这么几种：</p>
+<ol>
+<li>top、text-top</li>
+<li>middle</li>
+<li>baseline</li>
+<li>bottom、text-bottom、sub</li>
+</ol>
+<p>除了 <code>middle</code> 之外，其余的对齐方式会以图片的顶部或者底部来与其余行内元素对齐，因此设置图片对齐方式一般用 <code>vertical-align: middle</code>；又因为默认的行内元素对齐方式为 <code>vertical-align: baseline</code>，因此会出现图片与行内元素无法对齐的情况，了解清楚了这一点那么问题就很好解决了，即：统一行内元素的 <code>vertical-align</code> 的对齐方式为 <code>middle</code> 即可。</p>
+<blockquote>
+<p>注：<code>line-height</code> 设置后会影响 top、bottom 位置，全部保留原来的不变则效果一样，详见 MDN</p>
+</blockquote>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Inline_elemente#See_also" target="_blank" rel="noopener">MDN 行内元素</a></li>
+<li><a href="http://www.ayqy.net/doc/css2-1/visuren.html#anonymous" target="_blank" rel="noopener">匿名行内盒</a></li>
+<li><a href="http://www.ayqy.net/doc/css2-1/visuren.html#float-position" target="_blank" rel="noopener">浮动定位: float 属性</a></li>
+<li><a href="https://segmentfault.com/a/1190000012156828?utm_source=tag-newest" target="_blank" rel="noopener">伪类与伪元素</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/vertical-align" target="_blank" rel="noopener">MDN vertical-align</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Caiyin
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://kazehaiya.github.io/2019/04/18/浅谈行内元素/" title="浅谈行内元素">https://kazehaiya.github.io/2019/04/18/浅谈行内元素/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/css/" rel="tag"><i class="fa fa-tag"></i> CSS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/04/14/发布一个-vue-包/" rel="prev" title="发布一个 vue 包">
+      <i class="fa fa-chevron-left"></i> 发布一个 vue 包
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/04/27/水平垂直居中/" rel="next" title="水平垂直居中">
+      水平垂直居中 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基础知识"><span class="nav-number">2.</span> <span class="nav-text">基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#什么是行内元素"><span class="nav-number">2.1.</span> <span class="nav-text">什么是行内元素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常见的行内元素"><span class="nav-number">2.2.</span> <span class="nav-text">常见的行内元素</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#行盒子与浮动"><span class="nav-number">3.</span> <span class="nav-text">行盒子与浮动</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#文字环绕特效"><span class="nav-number">3.1.</span> <span class="nav-text">文字环绕特效</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文字环绕原理"><span class="nav-number">3.2.</span> <span class="nav-text">文字环绕原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#知识拓展"><span class="nav-number">3.3.</span> <span class="nav-text">知识拓展</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#行内元素的排版"><span class="nav-number">4.</span> <span class="nav-text">行内元素的排版</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#行盒子的构造"><span class="nav-number">4.1.</span> <span class="nav-text">行盒子的构造</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#行内元素的对齐方式"><span class="nav-number">4.2.</span> <span class="nav-text">行内元素的对齐方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文档"><span class="nav-number">5.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Caiyin"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Caiyin</p>
+  <div class="site-description" itemprop="description">Just do IT!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/kazehaiya" title="GitHub → https://github.com/kazehaiya" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:c763416559@163.com" title="Mail → mailto:c763416559@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/Nora_Monocy" title="Weibo → https://weibo.com/Nora_Monocy" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://liujinkai.com/" title="http://liujinkai.com/" rel="noopener" target="_blank">凯凯刘</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://weekly.75team.com/" title="https://weekly.75team.com/" rel="noopener" target="_blank">奇舞周刊</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://75.team/post/list" title="https://75.team/post/list" rel="noopener" target="_blank">奇舞团博客</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://tech.meituan.com/" title="https://tech.meituan.com/" rel="noopener" target="_blank">美团技术团队</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://tech.youzan.com/" title="https://tech.youzan.com/" rel="noopener" target="_blank">有赞技术团队</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-dragon"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Caiyin</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">74k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:07</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/gitalk/1.6.2/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('https://cdn.bootcdn.net/ajax/libs/gitalk/1.6.2/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'd41b2914b32ac3c92a9d',
+      clientSecret: '2065e40ff9986f6a8b7a21ac27b2ec109bbcf71c',
+      repo        : 'blog-commnets',
+      owner       : 'kazehaiya',
+      admin       : ['kazehaiya'],
+      id          : '3dbf71a08648aaf0b7da08b0116039d9',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
