@@ -419,6 +419,97 @@
       </tags>
   </entry>
   <entry>
+    <title>JavaScript 对象</title>
+    <url>/2019/06/06/JavaScript-%E5%AF%B9%E8%B1%A1/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>对象是 JavaScript 的七种主要类型中的一种（string、boolean、number、null、undefined、symbol、object），也是这七种主要类型中最为复杂的一种类型，了解对象对学习 JavaScript、了解 <code>this</code>和作用域链，以及之后的“类”的概念都十分重要，而此篇就从边边角角来介绍 JavaScript 中的<strong>对象</strong>。</p>
+<a id="more"></a>
+<h3 id="基础内容"><a href="#基础内容" class="headerlink" title="基础内容"></a>基础内容</h3><h4 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h4><p>对象写法有两种：声明（文字）形式和构造形式。（一般很少使用构造形式）</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 声明文字形式</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 构造形式</span></span><br><span class="line"><span class="keyword">const</span> obj = <span class="keyword">new</span> <span class="built_in">Object</span>();</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>写法区别：声明文字形式能传递更多的键/值，构造形式得一个个的添加。</p>
+</blockquote>
+<h4 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h4><p>为什么要单独强调<strong>类型</strong>？因为在最开始，我也是认为 JS 中万物接对象，其实不然，像我们所熟悉的简单基本类型（string、boolean、undefined、null和number）就并非对象（字面量形式）。函数就是对象的一个子类型（技术角度来说即“可调用的对象”）；同样的，数组也是，只不过是具备一些额外的行为。</p>
+<blockquote>
+<p><code>typeof null === &#39;object&#39;</code> 是语言本身的 bug，在 JavaScript 中二进制前三位都为 0 的话会被判断为 <code>object</code> ，由于 null 的二进制表示是全 0，因此在做类型判读时会出现“误判”的问题。</p>
+</blockquote>
+<p>基础类型与对象类型的主要区别就是对象的生存期，使用 new 操作符创建的引用类型的实例，在执行流离开当前作用域之前都一直保存在内存中，而自基本类型则只存在于一行代码的执行瞬间，然后立即被销毁，这意味着我们不能在运行时为基本类型添加属性和方法。如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> name = <span class="string">'ConardLi'</span>;</span><br><span class="line">name.color = <span class="string">'red'</span>;</span><br><span class="line"><span class="built_in">console</span>.log(name.color); <span class="comment">// undefined</span></span><br></pre></td></tr></table></figure>
+<h5 id="内置对象"><a href="#内置对象" class="headerlink" title="内置对象"></a>内置对象</h5><p>JavaScript 中还有一些内置对象，例如：</p>
+<ul>
+<li>String</li>
+<li>Boolean</li>
+<li>Number</li>
+<li>Object</li>
+<li>Function</li>
+<li>Array</li>
+<li>Date</li>
+<li>RegExp</li>
+<li>Error</li>
+</ul>
+<p>它们可以类比为 Java 中的 Class（但从 JavaScript 角度来说，它们只是一些可以当作构造函数的内置函数）。但是在使用 JavaScript 时，更为常用的方式是直接声明一个字面量，如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> str1 = <span class="string">"This is a string"</span>;</span><br><span class="line"><span class="keyword">const</span> str2 = <span class="keyword">new</span> <span class="built_in">String</span>(<span class="string">"This is a object"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">typeof</span> str1 === <span class="string">'string'</span>; <span class="comment">// true</span></span><br><span class="line"><span class="keyword">typeof</span> str2 === <span class="string">'object'</span>; <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">str1 <span class="keyword">instanceof</span> <span class="built_in">String</span>; <span class="comment">// false</span></span><br><span class="line">str2 <span class="keyword">instanceof</span> <span class="built_in">String</span>; <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call(str1); <span class="comment">// [object String]</span></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call(str2); <span class="comment">// [object String]</span></span><br></pre></td></tr></table></figure>
+<p>这里解释了字面量并非由 String 的构造函数得到的对象，实际上 str1 为何其表现形式和 str2 无任何不同（从字符串的操作的层面），是因为引擎会自动将字面量转换成其对应的对象类型，因此可以访问对应类型的属性和方法。</p>
+<h4 id="属性与方法"><a href="#属性与方法" class="headerlink" title="属性与方法"></a>属性与方法</h4><p>对象的内容是由一些存储在特定命名位置的值组成的，我们称之为属性（可类比指针来理解）。对于基础类型来说，其所存储的值对应一块固定的空间，不会动态改变；而对于对象这样的较为复杂的类型来说，它们存储的为一块内存区域的引用。</p>
+<p>通俗的来说，基础类型就像手机店货架上的手机壳，它们是实物，“所见即所得”；而复杂类型就像是手机店柜子内的高价手机，展示的是模型机，其象征这这一型号的所有手机，需要的时候通过此去对应仓库获取真机。</p>
+<h5 id="访问方式"><a href="#访问方式" class="headerlink" title="访问方式"></a>访问方式</h5><p>对象属性的访问方式分为两种，例如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123; <span class="attr">name</span>: <span class="number">1</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 属性访问</span></span><br><span class="line">obj.name</span><br><span class="line"></span><br><span class="line"><span class="comment">// 键访问</span></span><br><span class="line">obj[<span class="string">'name'</span>]</span><br></pre></td></tr></table></figure>
+<p>两种方式各有优劣，前者在写的时候较为方便，但是得满足标识符的命名规范，比较固定；后者的写法比较多样（ES6支持可计算属性名），缺点是没有前者直接。</p>
+<p>需要注意的是，属性名永远都是字符串。如果使用字符串之外的值作为属性名，那么其会先转换成字符串，例如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;&#125;;</span><br><span class="line">obj[<span class="literal">true</span>] = <span class="string">'boolean'</span>;</span><br><span class="line">obj[&#123;&#125;] = <span class="string">'object'</span>;</span><br><span class="line">obj[<span class="number">3</span>] = <span class="string">'number'</span>;</span><br><span class="line"></span><br><span class="line">obj[<span class="string">'true'</span>]; <span class="comment">// boolean</span></span><br><span class="line">obj[<span class="string">'[object object]'</span>]; <span class="comment">// object</span></span><br><span class="line">obj[<span class="string">'3'</span>]; <span class="comment">// number</span></span><br></pre></td></tr></table></figure>
+<h5 id="函数属性"><a href="#函数属性" class="headerlink" title="函数属性"></a>函数属性</h5><p>有时候对象中的属性为一个函数，我们习惯上称这样的属性为“函数的方法”（类比 C 语言）。然而从技术角度来说，在 JavaScript 中，函数永远也不会“属于”一个对象，因为 this 是动态绑定至对象上的（先前有写过这么一篇文章），函数与对象间的关系并不稳定，因此对象与函数最多也只能称作为间接关系。最为保险的说法可能是“函数”和“方法”在 JavaScript 中是可以互换的。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  foo: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">1</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 基本上可以等价于</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj1 = &#123;</span><br><span class="line">  foo: foo</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><p>我们知道，在 JS 中数组也是“对象”，但是相对于对象来说，数组有一套更为结构化的值存储机制（通过索引的方式），例如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"></span><br><span class="line">arr[<span class="number">0</span>]; <span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
+<p>由于数组也是一个对象，因此我们也可以给数组添加属性，如：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 沿用上例</span><br><span class="line">arr.bar = &apos;bar&apos;;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：如果试图像数组内添加一个属性，而属性“看起来”像一个数字（如字符串数子），那么它会变成一个数值下标</p>
+</blockquote>
+<h3 id="提升内容"><a href="#提升内容" class="headerlink" title="提升内容"></a>提升内容</h3><h4 id="属性描述符"><a href="#属性描述符" class="headerlink" title="属性描述符"></a>属性描述符</h4><p>最早接触到属性描述符的时候还是在读JS红宝书的时候，不过那时候不是很懂有啥用，随着接触的东西逐渐变多，源码也看了一部分，对属性描述符也有了一定的程度的理解。</p>
+<p>自 ES5 以来，JS 的所有属性都具备了属性描述符，通过 <code>Object.getOwnPropertyDescription(&lt;obj&gt;, &lt;prop&gt;)</code> 能够拿到对应属性的描述，包含内容如下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  value: <span class="string">'xxx'</span>, <span class="comment">// 值</span></span><br><span class="line">  writable: <span class="literal">true</span>, <span class="comment">// 是否可写（默认）</span></span><br><span class="line">  enumerable: <span class="literal">true</span>, <span class="comment">// 是否可枚举（默认）</span></span><br><span class="line">  configurable: <span class="literal">true</span> <span class="comment">// 是否可配置（默认）</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然，我们也可以通过 <code>Object.defineProperty(&lt;obj&gt;, &lt;prop&gt;, {/* */})</code> 来修改属性描述符。</p>
+<h5 id="writable"><a href="#writable" class="headerlink" title="writable"></a>writable</h5><p>writable 决定是否可以修改属性的值，如果设置为 false，那么修改属性值时会静默失效</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">'a'</span>, &#123;</span><br><span class="line">  enumerable: <span class="literal">true</span>,</span><br><span class="line">  configurable: <span class="literal">true</span>,</span><br><span class="line">  writable: <span class="literal">false</span>,</span><br><span class="line">  value: <span class="string">"static"</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">obj.a = <span class="string">'public'</span>;</span><br><span class="line"></span><br><span class="line">obj.a; <span class="comment">// static（严格模式下会报错）</span></span><br></pre></td></tr></table></figure>
+<p>然而，当配置中有配置 getter/setter 时，这个属性会被定义为“访问描述符”（与“数据描述符”相对），对于访问描述符来说， JavaScript 会忽略其 value 和 writable 属性（具体来说此），例如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  a: <span class="number">2</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">'a'</span>, &#123;</span><br><span class="line">  enumerable: <span class="literal">true</span>,</span><br><span class="line">  configurable: <span class="literal">true</span>,</span><br><span class="line">  <span class="keyword">get</span>() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">3</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">obj.a; <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
+<h5 id="configurable"><a href="#configurable" class="headerlink" title="configurable"></a>configurable</h5><p>configurable 决定对象的属性是否可配置。与 writable 不同，writable 控制的是对象属性值能否改变，而 configurable 配置的是属性描述符能否改变，即后者是单向的（某个对象的 configurable 设置为 false 后就无法将其再设置为 true 了）。</p>
+<p>除此以外，其还禁止删除此属性，如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  a: <span class="string">'static'</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">obj.a; <span class="comment">// 2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> obj.a;</span><br><span class="line">obj.a; <span class="comment">// undefined</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">'a'</span>, &#123;</span><br><span class="line">  enumerable: <span class="literal">true</span>,</span><br><span class="line">  configurable: <span class="literal">false</span>,</span><br><span class="line">  writable: <span class="literal">true</span>,</span><br><span class="line">  value: <span class="string">"static"</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">obj.a; <span class="comment">// 2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> obj.a;</span><br><span class="line">obj.a; <span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注： delete 仅是一个删除对象属性的操作，并非一个释放内存的工具</p>
+</blockquote>
+<blockquote>
+<p>特例：当 configurable 设置为 false 之后，writable 可由 true 更改为 false，但无法由 false 更改为 true。</p>
+</blockquote>
+<h5 id="Enumerable"><a href="#Enumerable" class="headerlink" title="Enumerable"></a>Enumerable</h5><p>顾名思义，此描述符控制的事属性是否会在遍历对象时，将其枚举。例如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  bar: <span class="number">1</span>,</span><br><span class="line">  foo: <span class="number">2</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">'c'</span>, &#123;</span><br><span class="line">  enumerable: <span class="literal">false</span>,</span><br><span class="line">  configurable: <span class="literal">true</span>,</span><br><span class="line">  writable: <span class="literal">true</span>,</span><br><span class="line">  value: <span class="number">3</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> obj) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(key, obj[key]); <span class="comment">// 没有 [c 3]</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="string">'c'</span> <span class="keyword">in</span> obj; <span class="comment">// true</span></span><br><span class="line">obj.hasOwnProperty(<span class="string">'c'</span>); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<p>for .. in 循环可以遍历对象的可枚举属性列表（包括[[Prototype]]链），而遍历属性的值我们通常用的是 for .. of，如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> value <span class="keyword">of</span> arr) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(value) <span class="comment">// 1, 2, 3</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>for .. of 首选会向被访问的对象请求一个迭代器对象，然后通过迭代器对象的 next() 方法来遍历返回值，数组内默认会带有迭代器，因此我们可以直接将 for .. of 运用至数组中。但是对象却没有，我么可以这样造一个自定义迭代器。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  a: <span class="number">1</span>,</span><br><span class="line">  b: <span class="number">2</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="built_in">Symbol</span>.iterator, &#123;</span><br><span class="line">  enumerable: <span class="literal">false</span>,</span><br><span class="line">  configurable: <span class="literal">true</span>,</span><br><span class="line">  writable: <span class="literal">false</span>,</span><br><span class="line">  value: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> self = <span class="keyword">this</span>;</span><br><span class="line">    <span class="keyword">let</span> idx = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">const</span> ks = <span class="built_in">Object</span>.keys(self);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      next: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        value: self[ks[idx++]],</span><br><span class="line">        done: (idx &gt; ks.length )</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>遍历数组下标使用的是数字顺序，但是遍历对象时其顺序是不确定的。因此在不同环境要想数据展现形式保持一致，那么一定不要相信任何观察到的顺序，因为它们是不可靠的。</p>
+</blockquote>
+<h4 id="不变性"><a href="#不变性" class="headerlink" title="不变性"></a>不变性</h4><h5 id="对象常量"><a href="#对象常量" class="headerlink" title="对象常量"></a>对象常量</h5><p>我们可以通过设置对象属性的 writable 来设置对象常量，这样能做到真正意义上的不可修改（类比 const 声明）</p>
+<h5 id="禁止扩展"><a href="#禁止扩展" class="headerlink" title="禁止扩展"></a>禁止扩展</h5><p>对象默认是可扩展的，加入想要禁止一个对象的扩展性，即不能后期新增属性，那么可以使用 <code>Object.preventExtensions(&lt;obj&gt;)</code></p>
+<h5 id="密封"><a href="#密封" class="headerlink" title="密封"></a>密封</h5><p><code>Object.seal(&lt;obj&gt;)</code> 会创建一个密封对象，其会在一个现有对象上调用 Object.preventExtensions() 并将所有的属性标记为 <code>configurable: false</code>。其不仅不能添加新属性，也不能重新配置或删除原有属性（可修改属性值）。</p>
+<h5 id="冻结"><a href="#冻结" class="headerlink" title="冻结"></a>冻结</h5><p><code>Object.freeze(&lt;obj&gt;)</code> 会创建一个冻结对象，其会在对象上调用 Object.seal() 并将所有的属性标记为 <code>writable: false</code>，这样就无法修改其值。</p>
+<blockquote>
+<p>注意：对象中引用的对象无法被密封和冻结，只有非引用对象受影响最为全面，并且是浅操作。</p>
+</blockquote>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><ul>
+<li>《你所不知道的 JavaScript》</li>
+</ul>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Linux 防火墙的使用和配置（转载）</title>
     <url>/2020/07/09/Linux-%E9%98%B2%E7%81%AB%E5%A2%99%E7%9A%84%E4%BD%BF%E7%94%A8%E5%92%8C%E9%85%8D%E7%BD%AE%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>文章转载自 <a href="https://www.cnblogs.com/shawhe/p/9485746.html" target="_blank" rel="noopener">linux防火墙使用以及配置</a>，使用方法大同小异，在此转载一篇做个笔记。</p>
@@ -550,97 +641,6 @@
       </categories>
       <tags>
         <tag>linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>JavaScript 对象</title>
-    <url>/2019/06/06/JavaScript-%E5%AF%B9%E8%B1%A1/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>对象是 JavaScript 的七种主要类型中的一种（string、boolean、number、null、undefined、symbol、object），也是这七种主要类型中最为复杂的一种类型，了解对象对学习 JavaScript、了解 <code>this</code>和作用域链，以及之后的“类”的概念都十分重要，而此篇就从边边角角来介绍 JavaScript 中的<strong>对象</strong>。</p>
-<a id="more"></a>
-<h3 id="基础内容"><a href="#基础内容" class="headerlink" title="基础内容"></a>基础内容</h3><h4 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h4><p>对象写法有两种：声明（文字）形式和构造形式。（一般很少使用构造形式）</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 声明文字形式</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 构造形式</span></span><br><span class="line"><span class="keyword">const</span> obj = <span class="keyword">new</span> <span class="built_in">Object</span>();</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>写法区别：声明文字形式能传递更多的键/值，构造形式得一个个的添加。</p>
-</blockquote>
-<h4 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h4><p>为什么要单独强调<strong>类型</strong>？因为在最开始，我也是认为 JS 中万物接对象，其实不然，像我们所熟悉的简单基本类型（string、boolean、undefined、null和number）就并非对象（字面量形式）。函数就是对象的一个子类型（技术角度来说即“可调用的对象”）；同样的，数组也是，只不过是具备一些额外的行为。</p>
-<blockquote>
-<p><code>typeof null === &#39;object&#39;</code> 是语言本身的 bug，在 JavaScript 中二进制前三位都为 0 的话会被判断为 <code>object</code> ，由于 null 的二进制表示是全 0，因此在做类型判读时会出现“误判”的问题。</p>
-</blockquote>
-<p>基础类型与对象类型的主要区别就是对象的生存期，使用 new 操作符创建的引用类型的实例，在执行流离开当前作用域之前都一直保存在内存中，而自基本类型则只存在于一行代码的执行瞬间，然后立即被销毁，这意味着我们不能在运行时为基本类型添加属性和方法。如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> name = <span class="string">'ConardLi'</span>;</span><br><span class="line">name.color = <span class="string">'red'</span>;</span><br><span class="line"><span class="built_in">console</span>.log(name.color); <span class="comment">// undefined</span></span><br></pre></td></tr></table></figure>
-<h5 id="内置对象"><a href="#内置对象" class="headerlink" title="内置对象"></a>内置对象</h5><p>JavaScript 中还有一些内置对象，例如：</p>
-<ul>
-<li>String</li>
-<li>Boolean</li>
-<li>Number</li>
-<li>Object</li>
-<li>Function</li>
-<li>Array</li>
-<li>Date</li>
-<li>RegExp</li>
-<li>Error</li>
-</ul>
-<p>它们可以类比为 Java 中的 Class（但从 JavaScript 角度来说，它们只是一些可以当作构造函数的内置函数）。但是在使用 JavaScript 时，更为常用的方式是直接声明一个字面量，如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> str1 = <span class="string">"This is a string"</span>;</span><br><span class="line"><span class="keyword">const</span> str2 = <span class="keyword">new</span> <span class="built_in">String</span>(<span class="string">"This is a object"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">typeof</span> str1 === <span class="string">'string'</span>; <span class="comment">// true</span></span><br><span class="line"><span class="keyword">typeof</span> str2 === <span class="string">'object'</span>; <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">str1 <span class="keyword">instanceof</span> <span class="built_in">String</span>; <span class="comment">// false</span></span><br><span class="line">str2 <span class="keyword">instanceof</span> <span class="built_in">String</span>; <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call(str1); <span class="comment">// [object String]</span></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call(str2); <span class="comment">// [object String]</span></span><br></pre></td></tr></table></figure>
-<p>这里解释了字面量并非由 String 的构造函数得到的对象，实际上 str1 为何其表现形式和 str2 无任何不同（从字符串的操作的层面），是因为引擎会自动将字面量转换成其对应的对象类型，因此可以访问对应类型的属性和方法。</p>
-<h4 id="属性与方法"><a href="#属性与方法" class="headerlink" title="属性与方法"></a>属性与方法</h4><p>对象的内容是由一些存储在特定命名位置的值组成的，我们称之为属性（可类比指针来理解）。对于基础类型来说，其所存储的值对应一块固定的空间，不会动态改变；而对于对象这样的较为复杂的类型来说，它们存储的为一块内存区域的引用。</p>
-<p>通俗的来说，基础类型就像手机店货架上的手机壳，它们是实物，“所见即所得”；而复杂类型就像是手机店柜子内的高价手机，展示的是模型机，其象征这这一型号的所有手机，需要的时候通过此去对应仓库获取真机。</p>
-<h5 id="访问方式"><a href="#访问方式" class="headerlink" title="访问方式"></a>访问方式</h5><p>对象属性的访问方式分为两种，例如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123; <span class="attr">name</span>: <span class="number">1</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 属性访问</span></span><br><span class="line">obj.name</span><br><span class="line"></span><br><span class="line"><span class="comment">// 键访问</span></span><br><span class="line">obj[<span class="string">'name'</span>]</span><br></pre></td></tr></table></figure>
-<p>两种方式各有优劣，前者在写的时候较为方便，但是得满足标识符的命名规范，比较固定；后者的写法比较多样（ES6支持可计算属性名），缺点是没有前者直接。</p>
-<p>需要注意的是，属性名永远都是字符串。如果使用字符串之外的值作为属性名，那么其会先转换成字符串，例如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;&#125;;</span><br><span class="line">obj[<span class="literal">true</span>] = <span class="string">'boolean'</span>;</span><br><span class="line">obj[&#123;&#125;] = <span class="string">'object'</span>;</span><br><span class="line">obj[<span class="number">3</span>] = <span class="string">'number'</span>;</span><br><span class="line"></span><br><span class="line">obj[<span class="string">'true'</span>]; <span class="comment">// boolean</span></span><br><span class="line">obj[<span class="string">'[object object]'</span>]; <span class="comment">// object</span></span><br><span class="line">obj[<span class="string">'3'</span>]; <span class="comment">// number</span></span><br></pre></td></tr></table></figure>
-<h5 id="函数属性"><a href="#函数属性" class="headerlink" title="函数属性"></a>函数属性</h5><p>有时候对象中的属性为一个函数，我们习惯上称这样的属性为“函数的方法”（类比 C 语言）。然而从技术角度来说，在 JavaScript 中，函数永远也不会“属于”一个对象，因为 this 是动态绑定至对象上的（先前有写过这么一篇文章），函数与对象间的关系并不稳定，因此对象与函数最多也只能称作为间接关系。最为保险的说法可能是“函数”和“方法”在 JavaScript 中是可以互换的。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  foo: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">1</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 基本上可以等价于</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj1 = &#123;</span><br><span class="line">  foo: foo</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><p>我们知道，在 JS 中数组也是“对象”，但是相对于对象来说，数组有一套更为结构化的值存储机制（通过索引的方式），例如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"></span><br><span class="line">arr[<span class="number">0</span>]; <span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
-<p>由于数组也是一个对象，因此我们也可以给数组添加属性，如：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 沿用上例</span><br><span class="line">arr.bar = &apos;bar&apos;;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注意：如果试图像数组内添加一个属性，而属性“看起来”像一个数字（如字符串数子），那么它会变成一个数值下标</p>
-</blockquote>
-<h3 id="提升内容"><a href="#提升内容" class="headerlink" title="提升内容"></a>提升内容</h3><h4 id="属性描述符"><a href="#属性描述符" class="headerlink" title="属性描述符"></a>属性描述符</h4><p>最早接触到属性描述符的时候还是在读JS红宝书的时候，不过那时候不是很懂有啥用，随着接触的东西逐渐变多，源码也看了一部分，对属性描述符也有了一定的程度的理解。</p>
-<p>自 ES5 以来，JS 的所有属性都具备了属性描述符，通过 <code>Object.getOwnPropertyDescription(&lt;obj&gt;, &lt;prop&gt;)</code> 能够拿到对应属性的描述，包含内容如下：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  value: <span class="string">'xxx'</span>, <span class="comment">// 值</span></span><br><span class="line">  writable: <span class="literal">true</span>, <span class="comment">// 是否可写（默认）</span></span><br><span class="line">  enumerable: <span class="literal">true</span>, <span class="comment">// 是否可枚举（默认）</span></span><br><span class="line">  configurable: <span class="literal">true</span> <span class="comment">// 是否可配置（默认）</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>当然，我们也可以通过 <code>Object.defineProperty(&lt;obj&gt;, &lt;prop&gt;, {/* */})</code> 来修改属性描述符。</p>
-<h5 id="writable"><a href="#writable" class="headerlink" title="writable"></a>writable</h5><p>writable 决定是否可以修改属性的值，如果设置为 false，那么修改属性值时会静默失效</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">'a'</span>, &#123;</span><br><span class="line">  enumerable: <span class="literal">true</span>,</span><br><span class="line">  configurable: <span class="literal">true</span>,</span><br><span class="line">  writable: <span class="literal">false</span>,</span><br><span class="line">  value: <span class="string">"static"</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">obj.a = <span class="string">'public'</span>;</span><br><span class="line"></span><br><span class="line">obj.a; <span class="comment">// static（严格模式下会报错）</span></span><br></pre></td></tr></table></figure>
-<p>然而，当配置中有配置 getter/setter 时，这个属性会被定义为“访问描述符”（与“数据描述符”相对），对于访问描述符来说， JavaScript 会忽略其 value 和 writable 属性（具体来说此），例如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  a: <span class="number">2</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">'a'</span>, &#123;</span><br><span class="line">  enumerable: <span class="literal">true</span>,</span><br><span class="line">  configurable: <span class="literal">true</span>,</span><br><span class="line">  <span class="keyword">get</span>() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">3</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">obj.a; <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
-<h5 id="configurable"><a href="#configurable" class="headerlink" title="configurable"></a>configurable</h5><p>configurable 决定对象的属性是否可配置。与 writable 不同，writable 控制的是对象属性值能否改变，而 configurable 配置的是属性描述符能否改变，即后者是单向的（某个对象的 configurable 设置为 false 后就无法将其再设置为 true 了）。</p>
-<p>除此以外，其还禁止删除此属性，如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  a: <span class="string">'static'</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">obj.a; <span class="comment">// 2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> obj.a;</span><br><span class="line">obj.a; <span class="comment">// undefined</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">'a'</span>, &#123;</span><br><span class="line">  enumerable: <span class="literal">true</span>,</span><br><span class="line">  configurable: <span class="literal">false</span>,</span><br><span class="line">  writable: <span class="literal">true</span>,</span><br><span class="line">  value: <span class="string">"static"</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">obj.a; <span class="comment">// 2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> obj.a;</span><br><span class="line">obj.a; <span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注： delete 仅是一个删除对象属性的操作，并非一个释放内存的工具</p>
-</blockquote>
-<blockquote>
-<p>特例：当 configurable 设置为 false 之后，writable 可由 true 更改为 false，但无法由 false 更改为 true。</p>
-</blockquote>
-<h5 id="Enumerable"><a href="#Enumerable" class="headerlink" title="Enumerable"></a>Enumerable</h5><p>顾名思义，此描述符控制的事属性是否会在遍历对象时，将其枚举。例如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  bar: <span class="number">1</span>,</span><br><span class="line">  foo: <span class="number">2</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">'c'</span>, &#123;</span><br><span class="line">  enumerable: <span class="literal">false</span>,</span><br><span class="line">  configurable: <span class="literal">true</span>,</span><br><span class="line">  writable: <span class="literal">true</span>,</span><br><span class="line">  value: <span class="number">3</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> obj) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(key, obj[key]); <span class="comment">// 没有 [c 3]</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="string">'c'</span> <span class="keyword">in</span> obj; <span class="comment">// true</span></span><br><span class="line">obj.hasOwnProperty(<span class="string">'c'</span>); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
-<p>for .. in 循环可以遍历对象的可枚举属性列表（包括[[Prototype]]链），而遍历属性的值我们通常用的是 for .. of，如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> value <span class="keyword">of</span> arr) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(value) <span class="comment">// 1, 2, 3</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>for .. of 首选会向被访问的对象请求一个迭代器对象，然后通过迭代器对象的 next() 方法来遍历返回值，数组内默认会带有迭代器，因此我们可以直接将 for .. of 运用至数组中。但是对象却没有，我么可以这样造一个自定义迭代器。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  a: <span class="number">1</span>,</span><br><span class="line">  b: <span class="number">2</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="built_in">Symbol</span>.iterator, &#123;</span><br><span class="line">  enumerable: <span class="literal">false</span>,</span><br><span class="line">  configurable: <span class="literal">true</span>,</span><br><span class="line">  writable: <span class="literal">false</span>,</span><br><span class="line">  value: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> self = <span class="keyword">this</span>;</span><br><span class="line">    <span class="keyword">let</span> idx = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">const</span> ks = <span class="built_in">Object</span>.keys(self);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      next: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        value: self[ks[idx++]],</span><br><span class="line">        done: (idx &gt; ks.length )</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>遍历数组下标使用的是数字顺序，但是遍历对象时其顺序是不确定的。因此在不同环境要想数据展现形式保持一致，那么一定不要相信任何观察到的顺序，因为它们是不可靠的。</p>
-</blockquote>
-<h4 id="不变性"><a href="#不变性" class="headerlink" title="不变性"></a>不变性</h4><h5 id="对象常量"><a href="#对象常量" class="headerlink" title="对象常量"></a>对象常量</h5><p>我们可以通过设置对象属性的 writable 来设置对象常量，这样能做到真正意义上的不可修改（类比 const 声明）</p>
-<h5 id="禁止扩展"><a href="#禁止扩展" class="headerlink" title="禁止扩展"></a>禁止扩展</h5><p>对象默认是可扩展的，加入想要禁止一个对象的扩展性，即不能后期新增属性，那么可以使用 <code>Object.preventExtensions(&lt;obj&gt;)</code></p>
-<h5 id="密封"><a href="#密封" class="headerlink" title="密封"></a>密封</h5><p><code>Object.seal(&lt;obj&gt;)</code> 会创建一个密封对象，其会在一个现有对象上调用 Object.preventExtensions() 并将所有的属性标记为 <code>configurable: false</code>。其不仅不能添加新属性，也不能重新配置或删除原有属性（可修改属性值）。</p>
-<h5 id="冻结"><a href="#冻结" class="headerlink" title="冻结"></a>冻结</h5><p><code>Object.freeze(&lt;obj&gt;)</code> 会创建一个冻结对象，其会在对象上调用 Object.seal() 并将所有的属性标记为 <code>writable: false</code>，这样就无法修改其值。</p>
-<blockquote>
-<p>注意：对象中引用的对象无法被密封和冻结，只有非引用对象受影响最为全面，并且是浅操作。</p>
-</blockquote>
-<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><ul>
-<li>《你所不知道的 JavaScript》</li>
-</ul>
-]]></content>
-      <categories>
-        <category>JavaScript</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
       </tags>
   </entry>
   <entry>
