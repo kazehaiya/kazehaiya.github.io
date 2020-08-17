@@ -414,8 +414,8 @@
         <category>Vue</category>
       </categories>
       <tags>
-        <tag>JavaScript</tag>
         <tag>Vue</tag>
+        <tag>JavaScript</tag>
       </tags>
   </entry>
   <entry>
@@ -800,6 +800,43 @@
       </tags>
   </entry>
   <entry>
+    <title>git 环境配置</title>
+    <url>/2019/03/31/git-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>git 的环境安装已经有很多次了，虽然简单，但是文章的重点却并不在此，此篇是用来记录学习 git 的一些好的规范、方便的工具、常用的命令以及遇到的坑。</p>
+<a id="more"></a>
+<h3 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h3><h4 id="下载安装-git"><a href="#下载安装-git" class="headerlink" title="下载安装 git"></a>下载安装 git</h4><p><a href="https://git-scm.com/downloads" target="_blank" rel="noopener">git 下载地址</a></p>
+<h4 id="git-环境配置"><a href="#git-环境配置" class="headerlink" title="git 环境配置"></a>git 环境配置</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 设置用户名</span></span><br><span class="line">git config --global user.name <span class="string">"yourname"</span></span><br><span class="line"><span class="comment"># 设置邮箱</span></span><br><span class="line">git config --global user.email <span class="string">"youremail@example.com"</span></span><br></pre></td></tr></table></figure>
+<h4 id="git-commit-规范"><a href="#git-commit-规范" class="headerlink" title="git commit 规范"></a>git commit 规范</h4><p>用于说明 commit 的类型只允许一下 7 种：</p>
+<ul>
+<li>feat：新功能（feature）</li>
+<li>fix：修补bug</li>
+<li>docs：文档（documentation）</li>
+<li>style： 格式（不影响代码运行的变动）</li>
+<li>refactor：重构（即不是新增功能，也不是修改bug的代码变动）</li>
+<li>test：增加测试</li>
+<li>chore：构建过程或辅助工具的变动</li>
+</ul>
+<h4 id="git-常用命令"><a href="#git-常用命令" class="headerlink" title="git 常用命令"></a>git 常用命令</h4><p><img src="/images/git-command.jpg" alt="git命令"></p>
+<h4 id="git-使用的一些问题总结"><a href="#git-使用的一些问题总结" class="headerlink" title="git 使用的一些问题总结"></a>git 使用的一些问题总结</h4><h5 id="如何取消文件跟踪"><a href="#如何取消文件跟踪" class="headerlink" title="如何取消文件跟踪"></a>如何取消文件跟踪</h5><p><code>.gitignore</code> 文件会忽略其中记录的文件，不对其进行状态跟踪，但是对于已经跟踪的文件（即先前未添加至该文件内，后期再加入的）即使之后将其加入此 <code>.gitignore</code> 文件也不生效。</p>
+<p>原因： git 缓存使其继续追踪</p>
+<p>解决方法：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">## 单文件</span><br><span class="line">git rm --cache &lt;fileName&gt;</span><br><span class="line"></span><br><span class="line">## 全部</span><br><span class="line">git rm --cache .</span><br></pre></td></tr></table></figure></p>
+<h5 id="本地远程-tag-版本冲突问题"><a href="#本地远程-tag-版本冲突问题" class="headerlink" title="本地远程 tag 版本冲突问题"></a>本地远程 tag 版本冲突问题</h5><p>当自己打的 tag 标签与远程 tag 标签不同步时，无法正常使用 git pull –tags，此会报错提示 xxx 版本的 tag 本地与远程不统一，此 tag 拒绝被拉取覆盖（不影响其余的 tag），这回造成 VSCode 编辑器的 git 插件无法正常使用。</p>
+<p>解决方法：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git pull --tags -p -f</span><br><span class="line">## 补充</span><br><span class="line">本次仅做了强制本地覆盖并合并 tags</span><br><span class="line">git fetch --tags -h 有对应的指令详细说明</span><br></pre></td></tr></table></figure></p>
+<h3 id="git-学习推荐"><a href="#git-学习推荐" class="headerlink" title="git 学习推荐"></a>git 学习推荐</h3><ul>
+<li><a href="https://learngitbranching.js.org/" target="_blank" rel="noopener">可视化学习 git</a></li>
+</ul>
+<h3 id="相关引用"><a href="#相关引用" class="headerlink" title="相关引用"></a>相关引用</h3><blockquote>
+<p>git 命令图片源自 <a href="https://github.com/DickyQie/Tool-use" target="_blank" rel="noopener">https://github.com/DickyQie/Tool-use</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Env</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>iptables 端口转发配置</title>
     <url>/2020/07/14/iptables-%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%E9%85%8D%E7%BD%AE/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>先前转载了一篇 iptables 的使用和配置的文章，但是凡事都得自己动手学习一下才能深入了解，因此本篇用来记录动手操作了一番后的一些配置心得。当然建议大家了解的时候读一读参考文章，特别是 <code>iptables 入门指南</code> 和 <code>iptables 详解</code>，能让你对 iptables 有更深入的理解。</p>
@@ -960,43 +997,6 @@
       </tags>
   </entry>
   <entry>
-    <title>git 环境配置</title>
-    <url>/2019/03/31/git-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>git 的环境安装已经有很多次了，虽然简单，但是文章的重点却并不在此，此篇是用来记录学习 git 的一些好的规范、方便的工具、常用的命令以及遇到的坑。</p>
-<a id="more"></a>
-<h3 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h3><h4 id="下载安装-git"><a href="#下载安装-git" class="headerlink" title="下载安装 git"></a>下载安装 git</h4><p><a href="https://git-scm.com/downloads" target="_blank" rel="noopener">git 下载地址</a></p>
-<h4 id="git-环境配置"><a href="#git-环境配置" class="headerlink" title="git 环境配置"></a>git 环境配置</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 设置用户名</span></span><br><span class="line">git config --global user.name <span class="string">"yourname"</span></span><br><span class="line"><span class="comment"># 设置邮箱</span></span><br><span class="line">git config --global user.email <span class="string">"youremail@example.com"</span></span><br></pre></td></tr></table></figure>
-<h4 id="git-commit-规范"><a href="#git-commit-规范" class="headerlink" title="git commit 规范"></a>git commit 规范</h4><p>用于说明 commit 的类型只允许一下 7 种：</p>
-<ul>
-<li>feat：新功能（feature）</li>
-<li>fix：修补bug</li>
-<li>docs：文档（documentation）</li>
-<li>style： 格式（不影响代码运行的变动）</li>
-<li>refactor：重构（即不是新增功能，也不是修改bug的代码变动）</li>
-<li>test：增加测试</li>
-<li>chore：构建过程或辅助工具的变动</li>
-</ul>
-<h4 id="git-常用命令"><a href="#git-常用命令" class="headerlink" title="git 常用命令"></a>git 常用命令</h4><p><img src="/images/git-command.jpg" alt="git命令"></p>
-<h4 id="git-使用的一些问题总结"><a href="#git-使用的一些问题总结" class="headerlink" title="git 使用的一些问题总结"></a>git 使用的一些问题总结</h4><h5 id="如何取消文件跟踪"><a href="#如何取消文件跟踪" class="headerlink" title="如何取消文件跟踪"></a>如何取消文件跟踪</h5><p><code>.gitignore</code> 文件会忽略其中记录的文件，不对其进行状态跟踪，但是对于已经跟踪的文件（即先前未添加至该文件内，后期再加入的）即使之后将其加入此 <code>.gitignore</code> 文件也不生效。</p>
-<p>原因： git 缓存使其继续追踪</p>
-<p>解决方法：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">## 单文件</span><br><span class="line">git rm --cache &lt;fileName&gt;</span><br><span class="line"></span><br><span class="line">## 全部</span><br><span class="line">git rm --cache .</span><br></pre></td></tr></table></figure></p>
-<h5 id="本地远程-tag-版本冲突问题"><a href="#本地远程-tag-版本冲突问题" class="headerlink" title="本地远程 tag 版本冲突问题"></a>本地远程 tag 版本冲突问题</h5><p>当自己打的 tag 标签与远程 tag 标签不同步时，无法正常使用 git pull –tags，此会报错提示 xxx 版本的 tag 本地与远程不统一，此 tag 拒绝被拉取覆盖（不影响其余的 tag），这回造成 VSCode 编辑器的 git 插件无法正常使用。</p>
-<p>解决方法：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git pull --tags -p -f</span><br><span class="line">## 补充</span><br><span class="line">本次仅做了强制本地覆盖并合并 tags</span><br><span class="line">git fetch --tags -h 有对应的指令详细说明</span><br></pre></td></tr></table></figure></p>
-<h3 id="git-学习推荐"><a href="#git-学习推荐" class="headerlink" title="git 学习推荐"></a>git 学习推荐</h3><ul>
-<li><a href="https://learngitbranching.js.org/" target="_blank" rel="noopener">可视化学习 git</a></li>
-</ul>
-<h3 id="相关引用"><a href="#相关引用" class="headerlink" title="相关引用"></a>相关引用</h3><blockquote>
-<p>git 命令图片源自 <a href="https://github.com/DickyQie/Tool-use" target="_blank" rel="noopener">https://github.com/DickyQie/Tool-use</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Env</category>
-      </categories>
-      <tags>
-        <tag>Git</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>node 环境配置</title>
     <url>/2019/04/06/node-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>window 上安装 node，其默认的包安装地址在 C 盘，然而从长期来看这并不是很好（如果你 C 盘特别大就当我没说），因此写此篇用于记录 windows 上 node 部分的安装配置，以便今后的查阅。</p>
@@ -1064,6 +1064,89 @@
       </categories>
       <tags>
         <tag>Env</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>webpack library</title>
+    <url>/2019/10/18/webpack-library/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>虽然先前有过使用 webpack 构建包的经验，但是最近同事问我 library 相关知识时，还是支支吾吾答不上来。想了想，知其然而不知其所以然，这和没学没有什么区别啊。所以，经过一番努力，总结了一点关于 library 的知识，这里就做个笔记，以做备忘吧。</p>
+<a id="more"></a>
+<h3 id="配置目的"><a href="#配置目的" class="headerlink" title="配置目的"></a>配置目的</h3><p>在开发 npm 库时，我们有时候需要考虑配置多场景的引入方式，比如： AMD、CommonJS、ES6 Moudule、NodeJs/Window 等等。那么为了能够支持这么些引入方式，library 便是 webpack 为我们提供的简化打包策略的方法，使用 library 的配置方式可以让我们专注于 ES6 的写法，而编译部分就不做过多考虑了。</p>
+<blockquote>
+<p>由于 ES 语法越来越普及，此处仅介绍 ES 模块语法配置需要注意的问题。</p>
+</blockquote>
+<h3 id="文件配置"><a href="#文件配置" class="headerlink" title="文件配置"></a>文件配置</h3><h4 id="单文件配置"><a href="#单文件配置" class="headerlink" title="单文件配置"></a>单文件配置</h4><p>单文件 library 的配置就非常简单了，官方就有很好的例子，这里就先贴一下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"></span><br><span class="line">moudule.export = &#123;</span><br><span class="line">  entry: <span class="string">'./src/index.js'</span>,</span><br><span class="line">  output: &#123;</span><br><span class="line">    path: path.resolve(__dirname, <span class="string">'dist'</span>),</span><br><span class="line">    filename: <span class="string">'webpack-numbers.js'</span>,</span><br><span class="line">    library: <span class="string">'webpack-demo'</span>,</span><br><span class="line">    <span class="comment">// 支持 AMD 和 CommonJS</span></span><br><span class="line">    libraryTarget: <span class="string">"umd"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于如今的项目来说，如果不是对引入方式有特别要求，建议使用 umd 方式；如果有明确指定环境时，再换成对应配置即可。</p>
+<h4 id="多文件配置"><a href="#多文件配置" class="headerlink" title="多文件配置"></a>多文件配置</h4><p>多文件配置唯一注意的是文件的引入，以及默认 library 名同样需要设置成动态的。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="comment">// 多入口文件 JSON 对象</span></span><br><span class="line"><span class="keyword">var</span> components = <span class="built_in">require</span>(<span class="string">'./components.json'</span>);</span><br><span class="line"></span><br><span class="line">moudule.export = &#123;</span><br><span class="line">  entry: components,</span><br><span class="line">  output: &#123;</span><br><span class="line">    path: path.resolve(__dirname, <span class="string">'dist'</span>),</span><br><span class="line">    filename: <span class="string">'[name].js'</span>,</span><br><span class="line">    <span class="comment">// 每个文件的导出对象名与文件名保持一致</span></span><br><span class="line">    library: <span class="string">'[name]'</span>,</span><br><span class="line">    <span class="comment">// 支持 AMD 和 CommonJS</span></span><br><span class="line">    libraryTarget: <span class="string">"umd"</span>,</span><br><span class="line">    <span class="comment">// ES6 编写的组件，如果导出为 export default</span></span><br><span class="line">    <span class="comment">// 如果文件引入测试有问题，可配置此属性</span></span><br><span class="line">    libraryExport: <span class="string">"default"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="属性详解"><a href="#属性详解" class="headerlink" title="属性详解"></a>属性详解</h3><p>其实配置什么的，随便在网上查查，再根据自身的理解尝试，都能有所成效。但是知其然我们也得知其所以然，这里我们就看看大家所关注的 library、libraryTarget、libraryExport 此三属性吧。</p>
+<h4 id="library"><a href="#library" class="headerlink" title="library"></a>library</h4><p>library 可设置的类型有两种，分别是：<code>string</code> 和 <code>object</code>。</p>
+<p>当我们需要对不同环境设置不太一样的导出名时，我们才可能用到 <code>object</code>，例如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 仅此三属性</span></span><br><span class="line"><span class="comment">// 无 root 配置则其采用 commonjs 名，反之 commonjs 采用 root，此两属性必须配置其</span></span><br><span class="line"><span class="comment">// 一，否则会有全局污染的危险</span></span><br><span class="line">library: &#123;</span><br><span class="line">  commonjs: <span class="string">'my-package-a'</span>,</span><br><span class="line">  amd: <span class="string">'my-package-b'</span>,</span><br><span class="line">  root: <span class="string">'my-package-c'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>自测 demo 结果展示：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> <span class="title">e</span>(<span class="params">t, n</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> exports === <span class="string">"object"</span> &amp;&amp; <span class="keyword">typeof</span> <span class="built_in">module</span> === <span class="string">"object"</span>)</span><br><span class="line">    <span class="built_in">module</span>.exports = n();</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> define === <span class="string">"function"</span> &amp;&amp; define.amd)</span><br><span class="line">    define([], n);</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> exports === <span class="string">"object"</span>)</span><br><span class="line">    exports[<span class="string">"my-package-a"</span>] = n();</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    t[<span class="string">"my-package3-c"</span>] = n()</span><br><span class="line">&#125;</span><br><span class="line">)(<span class="comment">/*...*/</span>)</span><br></pre></td></tr></table></figure>
+<p>否则直接使用 string 模式即可。</p>
+<blockquote>
+<p>注意，library 对象模式必须设置 libraryTarget 为 umd 模式；此外 library 名称最好使用<strong>驼峰式</strong>，毕竟生成的是变量。</p>
+</blockquote>
+<div class="note warning">
+            <p>疑问： umd 模式无论如何配置 amd，打包出的内容 amd 部分基本都是 <code>define([], n);</code>，即使配置成驼峰式的值，此外官方的例子上也没有对应值，不清楚是什么问题；但 amd 模式单独打包则有对应的配置名称。</p><p>此 amd 的配置与 amd-require 的结果很相似。</p>
+          </div>
+<h4 id="libraryTarget"><a href="#libraryTarget" class="headerlink" title="libraryTarget"></a>libraryTarget</h4><p><code>libraryTarget</code> 属性主要配置如何暴露我们的 <code>library</code> 名。其支持的值如下：</p>
+<p>变量类型：</p>
+<ul>
+<li>var（默认）</li>
+<li>assign（产生隐含的全局变量，慎用）</li>
+</ul>
+<p>对象类型：</p>
+<ul>
+<li>this（绑定至 this 对象上）</li>
+<li>window（浏览器环境的全局对象 ）</li>
+<li>global（node 环境的全局对象）</li>
+<li>commonjs（绑定至 export 对象）</li>
+<li>self（绑定至 self 对象）</li>
+</ul>
+<p>模块类型：</p>
+<ul>
+<li>amd（amd 引入模式）</li>
+<li>umd（多模式并存）</li>
+<li>commonjs-module（module.exports）</li>
+<li>commonjs2（commonjs-module 的模块导出 + commonjs 对象，会忽略 library 名）</li>
+<li>amd-require（立即加载版的 amd，会忽略 library 名）</li>
+<li>system（systemJs 引入）</li>
+<li>umd2</li>
+</ul>
+<p>其他类型：</p>
+<ul>
+<li>jsonp（library 为名的 jsonp 容器）</li>
+</ul>
+<p>一般根据情况选取合适的 target 方式，通常来看 umd 已经能解决绝大多数通用的引入模式了。</p>
+<blockquote>
+<p>umd2 结果和 umd 貌似差不多，个人暂未找到相应的解释</p>
+</blockquote>
+<h4 id="libraryExport"><a href="#libraryExport" class="headerlink" title="libraryExport"></a>libraryExport</h4><p>该属性主要是用于配置经由 <code>libraryTarget</code> 公开那些模块，默认为 <code>undefined</code>。</p>
+<p>默认情况下（假设 <code>libraryTarget</code> 为 <code>var</code>），变量导出的格式为：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> MyDefaultModule = _entry_return_;</span><br></pre></td></tr></table></figure>
+<p>如果需要显示表明导出哪些模块，我们可以这么配置：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 指定模块</span></span><br><span class="line"><span class="comment">// libraryExport: 'MyModule'</span></span><br><span class="line"><span class="keyword">var</span> MyModule = _entry_return_.MyModule;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 指定模块路径</span></span><br><span class="line"><span class="comment">// libraryExport: ['MyModule', 'MySubModule']</span></span><br><span class="line"><span class="keyword">var</span> MySubModule = _entry_return_.MyModule.MySubModule;</span><br></pre></td></tr></table></figure>
+<p>一般并不需要配置此属性，有一种情况是：当我们使用 ES6 编写模块时，有时候打包生成的文件在引入时，其内容呈现为：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="keyword">default</span>: &#123;<span class="comment">/* ... */</span>&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>毕竟 ES6 的 <code>export default</code> 其 <code>default</code> 严格上来说也是一个变量名，因此为了修复此问题，我们可以配置 <code>libraryExport: &#39;default&#39;</code>，将<strong>默认导出</strong>分配给库目标</p>
+<h3 id="测试例子"><a href="#测试例子" class="headerlink" title="测试例子"></a>测试例子</h3><p>该部分内容还是自己动手，配合官方文档理解起来会更快，可以拷贝该 <a href="https://github.com/kazehaiya/vue-component" target="_blank" rel="noopener">测试 Demo</a> 进行尝试。</p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
+<li><a href="https://webpack.docschina.org/configuration/output/#output-library" target="_blank" rel="noopener">output.library</a></li>
+<li><a href="https://webpack.docschina.org/guides/author-libraries/#src/components/Sidebar/Sidebar.jsx" target="_blank" rel="noopener">创建 library</a></li>
+<li><a href="https://github.com/webpack/webpack/tree/master/examples/multi-part-library" target="_blank" rel="noopener">muti-part-library</a></li>
+<li><a href="https://webpack.docschina.org/configuration/" target="_blank" rel="noopener">webpack 全量配置</a></li>
+<li><a href="https://github.com/webpack/webpack/issues/1114" target="_blank" rel="noopener">commonjs 与 commonjs2</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Webpack</category>
+      </categories>
+      <tags>
+        <tag>Webpack</tag>
       </tags>
   </entry>
   <entry>
@@ -1301,89 +1384,6 @@
       </tags>
   </entry>
   <entry>
-    <title>webpack library</title>
-    <url>/2019/10/18/webpack-library/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>虽然先前有过使用 webpack 构建包的经验，但是最近同事问我 library 相关知识时，还是支支吾吾答不上来。想了想，知其然而不知其所以然，这和没学没有什么区别啊。所以，经过一番努力，总结了一点关于 library 的知识，这里就做个笔记，以做备忘吧。</p>
-<a id="more"></a>
-<h3 id="配置目的"><a href="#配置目的" class="headerlink" title="配置目的"></a>配置目的</h3><p>在开发 npm 库时，我们有时候需要考虑配置多场景的引入方式，比如： AMD、CommonJS、ES6 Moudule、NodeJs/Window 等等。那么为了能够支持这么些引入方式，library 便是 webpack 为我们提供的简化打包策略的方法，使用 library 的配置方式可以让我们专注于 ES6 的写法，而编译部分就不做过多考虑了。</p>
-<blockquote>
-<p>由于 ES 语法越来越普及，此处仅介绍 ES 模块语法配置需要注意的问题。</p>
-</blockquote>
-<h3 id="文件配置"><a href="#文件配置" class="headerlink" title="文件配置"></a>文件配置</h3><h4 id="单文件配置"><a href="#单文件配置" class="headerlink" title="单文件配置"></a>单文件配置</h4><p>单文件 library 的配置就非常简单了，官方就有很好的例子，这里就先贴一下：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"></span><br><span class="line">moudule.export = &#123;</span><br><span class="line">  entry: <span class="string">'./src/index.js'</span>,</span><br><span class="line">  output: &#123;</span><br><span class="line">    path: path.resolve(__dirname, <span class="string">'dist'</span>),</span><br><span class="line">    filename: <span class="string">'webpack-numbers.js'</span>,</span><br><span class="line">    library: <span class="string">'webpack-demo'</span>,</span><br><span class="line">    <span class="comment">// 支持 AMD 和 CommonJS</span></span><br><span class="line">    libraryTarget: <span class="string">"umd"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>对于如今的项目来说，如果不是对引入方式有特别要求，建议使用 umd 方式；如果有明确指定环境时，再换成对应配置即可。</p>
-<h4 id="多文件配置"><a href="#多文件配置" class="headerlink" title="多文件配置"></a>多文件配置</h4><p>多文件配置唯一注意的是文件的引入，以及默认 library 名同样需要设置成动态的。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</span><br><span class="line"><span class="comment">// 多入口文件 JSON 对象</span></span><br><span class="line"><span class="keyword">var</span> components = <span class="built_in">require</span>(<span class="string">'./components.json'</span>);</span><br><span class="line"></span><br><span class="line">moudule.export = &#123;</span><br><span class="line">  entry: components,</span><br><span class="line">  output: &#123;</span><br><span class="line">    path: path.resolve(__dirname, <span class="string">'dist'</span>),</span><br><span class="line">    filename: <span class="string">'[name].js'</span>,</span><br><span class="line">    <span class="comment">// 每个文件的导出对象名与文件名保持一致</span></span><br><span class="line">    library: <span class="string">'[name]'</span>,</span><br><span class="line">    <span class="comment">// 支持 AMD 和 CommonJS</span></span><br><span class="line">    libraryTarget: <span class="string">"umd"</span>,</span><br><span class="line">    <span class="comment">// ES6 编写的组件，如果导出为 export default</span></span><br><span class="line">    <span class="comment">// 如果文件引入测试有问题，可配置此属性</span></span><br><span class="line">    libraryExport: <span class="string">"default"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="属性详解"><a href="#属性详解" class="headerlink" title="属性详解"></a>属性详解</h3><p>其实配置什么的，随便在网上查查，再根据自身的理解尝试，都能有所成效。但是知其然我们也得知其所以然，这里我们就看看大家所关注的 library、libraryTarget、libraryExport 此三属性吧。</p>
-<h4 id="library"><a href="#library" class="headerlink" title="library"></a>library</h4><p>library 可设置的类型有两种，分别是：<code>string</code> 和 <code>object</code>。</p>
-<p>当我们需要对不同环境设置不太一样的导出名时，我们才可能用到 <code>object</code>，例如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 仅此三属性</span></span><br><span class="line"><span class="comment">// 无 root 配置则其采用 commonjs 名，反之 commonjs 采用 root，此两属性必须配置其</span></span><br><span class="line"><span class="comment">// 一，否则会有全局污染的危险</span></span><br><span class="line">library: &#123;</span><br><span class="line">  commonjs: <span class="string">'my-package-a'</span>,</span><br><span class="line">  amd: <span class="string">'my-package-b'</span>,</span><br><span class="line">  root: <span class="string">'my-package-c'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>自测 demo 结果展示：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> <span class="title">e</span>(<span class="params">t, n</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> exports === <span class="string">"object"</span> &amp;&amp; <span class="keyword">typeof</span> <span class="built_in">module</span> === <span class="string">"object"</span>)</span><br><span class="line">    <span class="built_in">module</span>.exports = n();</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> define === <span class="string">"function"</span> &amp;&amp; define.amd)</span><br><span class="line">    define([], n);</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> exports === <span class="string">"object"</span>)</span><br><span class="line">    exports[<span class="string">"my-package-a"</span>] = n();</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    t[<span class="string">"my-package3-c"</span>] = n()</span><br><span class="line">&#125;</span><br><span class="line">)(<span class="comment">/*...*/</span>)</span><br></pre></td></tr></table></figure>
-<p>否则直接使用 string 模式即可。</p>
-<blockquote>
-<p>注意，library 对象模式必须设置 libraryTarget 为 umd 模式；此外 library 名称最好使用<strong>驼峰式</strong>，毕竟生成的是变量。</p>
-</blockquote>
-<div class="note warning">
-            <p>疑问： umd 模式无论如何配置 amd，打包出的内容 amd 部分基本都是 <code>define([], n);</code>，即使配置成驼峰式的值，此外官方的例子上也没有对应值，不清楚是什么问题；但 amd 模式单独打包则有对应的配置名称。</p><p>此 amd 的配置与 amd-require 的结果很相似。</p>
-          </div>
-<h4 id="libraryTarget"><a href="#libraryTarget" class="headerlink" title="libraryTarget"></a>libraryTarget</h4><p><code>libraryTarget</code> 属性主要配置如何暴露我们的 <code>library</code> 名。其支持的值如下：</p>
-<p>变量类型：</p>
-<ul>
-<li>var（默认）</li>
-<li>assign（产生隐含的全局变量，慎用）</li>
-</ul>
-<p>对象类型：</p>
-<ul>
-<li>this（绑定至 this 对象上）</li>
-<li>window（浏览器环境的全局对象 ）</li>
-<li>global（node 环境的全局对象）</li>
-<li>commonjs（绑定至 export 对象）</li>
-<li>self（绑定至 self 对象）</li>
-</ul>
-<p>模块类型：</p>
-<ul>
-<li>amd（amd 引入模式）</li>
-<li>umd（多模式并存）</li>
-<li>commonjs-module（module.exports）</li>
-<li>commonjs2（commonjs-module 的模块导出 + commonjs 对象，会忽略 library 名）</li>
-<li>amd-require（立即加载版的 amd，会忽略 library 名）</li>
-<li>system（systemJs 引入）</li>
-<li>umd2</li>
-</ul>
-<p>其他类型：</p>
-<ul>
-<li>jsonp（library 为名的 jsonp 容器）</li>
-</ul>
-<p>一般根据情况选取合适的 target 方式，通常来看 umd 已经能解决绝大多数通用的引入模式了。</p>
-<blockquote>
-<p>umd2 结果和 umd 貌似差不多，个人暂未找到相应的解释</p>
-</blockquote>
-<h4 id="libraryExport"><a href="#libraryExport" class="headerlink" title="libraryExport"></a>libraryExport</h4><p>该属性主要是用于配置经由 <code>libraryTarget</code> 公开那些模块，默认为 <code>undefined</code>。</p>
-<p>默认情况下（假设 <code>libraryTarget</code> 为 <code>var</code>），变量导出的格式为：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> MyDefaultModule = _entry_return_;</span><br></pre></td></tr></table></figure>
-<p>如果需要显示表明导出哪些模块，我们可以这么配置：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 指定模块</span></span><br><span class="line"><span class="comment">// libraryExport: 'MyModule'</span></span><br><span class="line"><span class="keyword">var</span> MyModule = _entry_return_.MyModule;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 指定模块路径</span></span><br><span class="line"><span class="comment">// libraryExport: ['MyModule', 'MySubModule']</span></span><br><span class="line"><span class="keyword">var</span> MySubModule = _entry_return_.MyModule.MySubModule;</span><br></pre></td></tr></table></figure>
-<p>一般并不需要配置此属性，有一种情况是：当我们使用 ES6 编写模块时，有时候打包生成的文件在引入时，其内容呈现为：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="keyword">default</span>: &#123;<span class="comment">/* ... */</span>&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>毕竟 ES6 的 <code>export default</code> 其 <code>default</code> 严格上来说也是一个变量名，因此为了修复此问题，我们可以配置 <code>libraryExport: &#39;default&#39;</code>，将<strong>默认导出</strong>分配给库目标</p>
-<h3 id="测试例子"><a href="#测试例子" class="headerlink" title="测试例子"></a>测试例子</h3><p>该部分内容还是自己动手，配合官方文档理解起来会更快，可以拷贝该 <a href="https://github.com/kazehaiya/vue-component" target="_blank" rel="noopener">测试 Demo</a> 进行尝试。</p>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
-<li><a href="https://webpack.docschina.org/configuration/output/#output-library" target="_blank" rel="noopener">output.library</a></li>
-<li><a href="https://webpack.docschina.org/guides/author-libraries/#src/components/Sidebar/Sidebar.jsx" target="_blank" rel="noopener">创建 library</a></li>
-<li><a href="https://github.com/webpack/webpack/tree/master/examples/multi-part-library" target="_blank" rel="noopener">muti-part-library</a></li>
-<li><a href="https://webpack.docschina.org/configuration/" target="_blank" rel="noopener">webpack 全量配置</a></li>
-<li><a href="https://github.com/webpack/webpack/issues/1114" target="_blank" rel="noopener">commonjs 与 commonjs2</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Webpack</category>
-      </categories>
-      <tags>
-        <tag>Webpack</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>使用 vue-cli 发布一个完善的包</title>
     <url>/2019/07/11/%E4%BD%BF%E7%94%A8-vue-cli-%E5%8F%91%E5%B8%83%E4%B8%80%E4%B8%AA%E5%AE%8C%E5%96%84%E7%9A%84%E5%8C%85/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>其实先前有写过一篇《发布一个 vue 包》，不过对于“极简主义者”来说，该文章还是显得有些复杂，毕竟需要配置“复杂”的 webpack。那么有没有一种简单上手、开箱即用的方法呢？答案是有的，vue-cli 已经完美的考虑到了这些问题，此处就介绍如何使用 vue-cli 来搭建一个完整的发包环境。</p>
@@ -1583,8 +1583,64 @@
         <category>Vue</category>
       </categories>
       <tags>
-        <tag>JavaScript</tag>
         <tag>Vue</tag>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>分析 Vue 的观察者模式（中）</title>
+    <url>/2019/10/11/%E5%88%86%E6%9E%90-Vue-%E7%9A%84%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%AD%EF%BC%89/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在上篇<a href="/2019/10/10/分析-Vue-的观察者模式（上）/" title="分析 Vue 的观察者模式（上）">分析 Vue 的观察者模式（上）</a>中，简单实现了“手动”版观察者模式，而在本篇中我们继续沿着该思路往下探索，看如何实现“自动”版的观察者。</p>
+<a id="more"></a>
+<h3 id="完善的观察者"><a href="#完善的观察者" class="headerlink" title="完善的观察者"></a>完善的观察者</h3><p>紧接着上文的思路，因为我们只是实现了 Dep 依赖（管家），却还没有对平台的观察处理方式优化，因此我们需要将此步骤给完善起来。</p>
+<p>首先，要实现发布者更新内容后自动触发订阅事件，那么我们需要的是对发布者内容改变的监听，ES5 中恰好有这么一种方法能满足我们的需求，那就是 <code>Object.defineProperty(...)</code>。其语法很简单，我们此处仅仅需要拦截 get 和 set 方法，大致写法为：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> data = &#123;</span><br><span class="line">  name: <span class="string">'test'</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(data, name, &#123;</span><br><span class="line">  <span class="keyword">get</span>() &#123;</span><br><span class="line">    <span class="keyword">return</span> data.name;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="keyword">set</span>(newVal) &#123;</span><br><span class="line">    <span class="comment">// 调用 setter 方法，不可直接赋值，否则会死循环</span></span><br><span class="line">    <span class="comment">// 错误写法 obj[key] = newVal</span></span><br><span class="line">    <span class="comment">// 可查看 Vue 中的 setter 获取</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>既然有了能够观测发布者的方法，那么对于对象变更后的监听就能自动化处理了，那么先前手动触发 <code>dep.depend()</code> 和 <code>dep.notify()</code> 函数的操作就能整合入 <code>Object.defineProperty</code> 内了。</p>
+<p>延续先前的逻辑，<code>dep.notify()</code> 方法执行都得在对象值变动之后，因此我们可以将此方法放入 set 函数内；而 <code>dep.depend()</code> 方法主要是将订阅者事件存储入自身的事件列表中，因此该方法执行一次就行，之后每次更新都触发 <code>notify</code> 来依次执行注册的函数即可。因此，在考虑只是传入简单对象的情况时，这阶段的代码思路大致是：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// （私人管家）依赖收集</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList = [];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 添加订阅方法</span></span><br><span class="line">  depend() &#123;</span><br><span class="line">    <span class="comment">// 此处添加对应订阅方法</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发布者更新消息</span></span><br><span class="line">  notify() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.forEach(<span class="function"><span class="params">sub</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 依次处理订阅的方法</span></span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// （发布者和管家的联系方式）监听器</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">observer</span>(<span class="params">data = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">Object</span>.keys(data).forEach(<span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> val = data[key];</span><br><span class="line">    <span class="keyword">const</span> dep = <span class="keyword">new</span> Dep();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(data, key, &#123;</span><br><span class="line">      <span class="keyword">get</span>() &#123;</span><br><span class="line">        <span class="comment">// get 时添加依赖，当有目标的时候才添加</span></span><br><span class="line">        <span class="keyword">if</span> (target) &#123;</span><br><span class="line">          dep.depend();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> val;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="keyword">set</span>(newVal) &#123;</span><br><span class="line">        <span class="keyword">if</span> (newVal === val) &#123;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// set 时触发更新</span></span><br><span class="line">        <span class="comment">// 此处用 setter 做变动，此处偷懒一下，不要直接赋值，会反复触发 set</span></span><br><span class="line">        val = newVal;</span><br><span class="line">        dep.notify();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么现在问题又有了。目前代码实现至此我们仅仅只是将发布者与其 Dep 依赖进行了关联，那么观察者又该如何将其获订阅者的事件与 Dep 存储的事件列表进行关联呢？从订阅者角度分析一下：</p>
+<ol>
+<li>订阅者决定好要订阅的内容（订阅者的函数）；</li>
+<li>订阅者在对应的观察者平台上注册事件，绑定发布者信息；</li>
+<li>观察者先联系到 Dep 管家，将订阅事件存放至管家处；</li>
+<li>待管家拿到了发布者新情报，则响应所有存储好的订阅者的订阅事件了。</li>
+</ol>
+<p>思路逐渐清晰，那么这么个流程我们可以简化为如下代码：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">target = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.sub = [];</span><br><span class="line">  &#125;</span><br><span class="line">  depend() &#123;</span><br><span class="line">    <span class="keyword">if</span> (target &amp;&amp; !<span class="keyword">this</span>.sub.includes(target)) &#123;</span><br><span class="line">      <span class="keyword">this</span>.sub.push(target);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  notify() &#123;</span><br><span class="line">    <span class="keyword">this</span>.sub.forEach(<span class="function"><span class="params">cb</span> =&gt;</span> cb());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">watcher</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">  target = callback;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 此处触发一下监听对象的 get 方法，将 callback 方法加入 Dep 依赖的订阅队列中</span></span><br><span class="line">  <span class="comment">// 然后清除掉 target，防止重复注册</span></span><br><span class="line"></span><br><span class="line">  target = <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">watcher(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 此处是订阅事件</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>这样我们就讲观察者的订阅方法和 Dep 依赖给绑定上了。考虑到 watcher 的通用性，这里写了一个加强版的 demo，如下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> target = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// （私人管家）依赖收集</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList = [];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 将当前的 watcher 加入 dep 中</span></span><br><span class="line">  addSub(watcher) &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.push(watcher)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 添加订阅方法</span></span><br><span class="line">  depend() &#123;</span><br><span class="line">    <span class="keyword">if</span> (target) &#123;</span><br><span class="line">      target.addDep(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发布者更新消息，触发所有的订阅方法</span></span><br><span class="line">  notify() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.forEach(<span class="function"><span class="params">sub</span> =&gt;</span> &#123;</span><br><span class="line">      sub.update();</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// （平台）观察者</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Watcher</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(data = &#123;&#125;, key = <span class="string">''</span>, cb = <span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;) &#123;</span><br><span class="line">    <span class="keyword">this</span>.cb = cb;</span><br><span class="line">    <span class="keyword">this</span>._data = data;</span><br><span class="line">    <span class="keyword">this</span>.key = key;</span><br><span class="line"></span><br><span class="line">    target = <span class="keyword">this</span>;</span><br><span class="line">    <span class="comment">// 触发 getter，存储本 watcher</span></span><br><span class="line">    <span class="keyword">this</span>.value = data[key];</span><br><span class="line">    <span class="comment">// 防止反复触发</span></span><br><span class="line">    target = <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  addDep(dep) &#123;</span><br><span class="line">    dep.addSub(<span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  update() &#123;</span><br><span class="line">    <span class="keyword">const</span> newVal = <span class="keyword">this</span>._data[<span class="keyword">this</span>.key];</span><br><span class="line">    <span class="keyword">this</span>.value = newVal;</span><br><span class="line">    <span class="keyword">this</span>.cb(newVal);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// （发布者和管家的联系方式）监听器</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">observer</span>(<span class="params">data = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">Object</span>.keys(data).forEach(<span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> val = data[key];</span><br><span class="line">    <span class="keyword">const</span> dep = <span class="keyword">new</span> Dep();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(data, key, &#123;</span><br><span class="line">      <span class="keyword">get</span>() &#123;</span><br><span class="line">        <span class="keyword">if</span> (target) &#123;</span><br><span class="line">          <span class="comment">// get 时添加依赖</span></span><br><span class="line">          dep.depend();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> val;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="keyword">set</span>(newVal) &#123;</span><br><span class="line">        <span class="keyword">if</span> (newVal === val) &#123;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// set 时触发更新</span></span><br><span class="line">        val = newVal;</span><br><span class="line">        dep.notify();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发布者</span></span><br><span class="line"><span class="keyword">const</span> publisher = &#123;</span><br><span class="line">  bookName: <span class="string">'book'</span>,</span><br><span class="line">  bookContent: <span class="string">'hello world'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 管家开始观测发布者</span></span><br><span class="line">observer(publisher);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 订阅者在平台上订阅发布者的部分信息</span></span><br><span class="line"><span class="keyword">new</span> Watcher(publisher, <span class="string">'bookName'</span>, name =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`new book name is <span class="subst">$&#123;name&#125;</span>`</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">new</span> Watcher(publisher, <span class="string">'bookContent'</span>, content =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`new book content is <span class="subst">$&#123;content&#125;</span>`</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发布者发布信息</span></span><br><span class="line">publisher.bookName = <span class="string">'new book'</span>;</span><br><span class="line">publisher.bookContent = <span class="string">'new content'</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="Vue-观察者的实现"><a href="#Vue-观察者的实现" class="headerlink" title="Vue 观察者的实现"></a>Vue 观察者的实现</h3><p>在看源码之前，首先让我们看看 Vue 的实现原理图：</p>
+<p><img src="/images/vue-observer.jpeg" alt="Reactive"></p>
+<p>先仅考虑 data 部分的观察者模式，我们可以看到大致步骤为：</p>
+<ol>
+<li>为发布者 data 做数据监听处理；</li>
+<li>为劫持方法添加 Dep 依赖收集，<code>get</code> 存储 target 目标，set 设置 target 目标；</li>
+<li>依赖收集触发后，触发 Watch 观察者，通知订阅者改变。</li>
+</ol>
+<p>因为流程图中只是详细展示了响应式部分的变动，为了便于大家更清楚的理解这部分的流程，所以这里先解释一下 Vue 中完整的流程：</p>
+<ol>
+<li>页面开始渲染，对 data 进行依赖收集；</li>
+<li>依赖收集完毕，开始监测订阅者的方法，并存储原值方便变更时的对比；</li>
+<li>因为依赖收集完毕，要存储原值则触发了 get 事件，此时添加 dep 依赖，将对应生成的 watcher 存储入依赖列表内</li>
+<li>页面渲染完成，用户触发页面某些点击事件（比如按钮）；</li>
+<li>点击事件绑定了某个 methods 方法，该 methods 方法使得 data 部分内容更新了；</li>
+<li>因为已经对 data 进行了依赖收集，触发了对应的 set 方法；</li>
+<li>set 方法对比新旧值发现值更新了，此时重新收集依赖新的值（特别是对象的情况），然后通知它的私有管家 Dep 进行更新；</li>
+<li>Dep 依赖开始遍历其所存储的数组，为该发布者的订阅者们发送消息，触发订阅事件。</li>
+<li>各订阅者事件触发 update 更新，此时便流转到 render 渲染，之后页面就更新啦！</li>
+</ol>
+<p>为了方便大家理解源码，这里手动实现了一个简单的 observer 模式，基本是按着源码的思路一点点撸出来的，注释很全，方便大家理解！</p>
+<ul>
+<li><a href="https://github.com/kazehaiya/vue-observe" target="_blank" rel="noopener">个人版 vue-observer 源码</a></li>
+</ul>
+<h3 id="源码地址"><a href="#源码地址" class="headerlink" title="源码地址"></a>源码地址</h3><p>所有的 demo 都写入仓库了，仓库地址为：<a href="https://github.com/kazehaiya/vue-observe" target="_blank" rel="noopener">传送门</a></p>
+]]></content>
+      <categories>
+        <category>Vue</category>
+      </categories>
+      <tags>
+        <tag>Vue</tag>
+        <tag>JavaScript</tag>
       </tags>
   </entry>
   <entry>
@@ -1659,62 +1715,6 @@
         <category>Vue</category>
       </categories>
       <tags>
-        <tag>Vue</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>分析 Vue 的观察者模式（中）</title>
-    <url>/2019/10/11/%E5%88%86%E6%9E%90-Vue-%E7%9A%84%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%AD%EF%BC%89/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在上篇<a href="/2019/10/10/分析-Vue-的观察者模式（上）/" title="分析 Vue 的观察者模式（上）">分析 Vue 的观察者模式（上）</a>中，简单实现了“手动”版观察者模式，而在本篇中我们继续沿着该思路往下探索，看如何实现“自动”版的观察者。</p>
-<a id="more"></a>
-<h3 id="完善的观察者"><a href="#完善的观察者" class="headerlink" title="完善的观察者"></a>完善的观察者</h3><p>紧接着上文的思路，因为我们只是实现了 Dep 依赖（管家），却还没有对平台的观察处理方式优化，因此我们需要将此步骤给完善起来。</p>
-<p>首先，要实现发布者更新内容后自动触发订阅事件，那么我们需要的是对发布者内容改变的监听，ES5 中恰好有这么一种方法能满足我们的需求，那就是 <code>Object.defineProperty(...)</code>。其语法很简单，我们此处仅仅需要拦截 get 和 set 方法，大致写法为：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> data = &#123;</span><br><span class="line">  name: <span class="string">'test'</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(data, name, &#123;</span><br><span class="line">  <span class="keyword">get</span>() &#123;</span><br><span class="line">    <span class="keyword">return</span> data.name;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="keyword">set</span>(newVal) &#123;</span><br><span class="line">    <span class="comment">// 调用 setter 方法，不可直接赋值，否则会死循环</span></span><br><span class="line">    <span class="comment">// 错误写法 obj[key] = newVal</span></span><br><span class="line">    <span class="comment">// 可查看 Vue 中的 setter 获取</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>既然有了能够观测发布者的方法，那么对于对象变更后的监听就能自动化处理了，那么先前手动触发 <code>dep.depend()</code> 和 <code>dep.notify()</code> 函数的操作就能整合入 <code>Object.defineProperty</code> 内了。</p>
-<p>延续先前的逻辑，<code>dep.notify()</code> 方法执行都得在对象值变动之后，因此我们可以将此方法放入 set 函数内；而 <code>dep.depend()</code> 方法主要是将订阅者事件存储入自身的事件列表中，因此该方法执行一次就行，之后每次更新都触发 <code>notify</code> 来依次执行注册的函数即可。因此，在考虑只是传入简单对象的情况时，这阶段的代码思路大致是：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// （私人管家）依赖收集</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList = [];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 添加订阅方法</span></span><br><span class="line">  depend() &#123;</span><br><span class="line">    <span class="comment">// 此处添加对应订阅方法</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发布者更新消息</span></span><br><span class="line">  notify() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.forEach(<span class="function"><span class="params">sub</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 依次处理订阅的方法</span></span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// （发布者和管家的联系方式）监听器</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">observer</span>(<span class="params">data = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">Object</span>.keys(data).forEach(<span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> val = data[key];</span><br><span class="line">    <span class="keyword">const</span> dep = <span class="keyword">new</span> Dep();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(data, key, &#123;</span><br><span class="line">      <span class="keyword">get</span>() &#123;</span><br><span class="line">        <span class="comment">// get 时添加依赖，当有目标的时候才添加</span></span><br><span class="line">        <span class="keyword">if</span> (target) &#123;</span><br><span class="line">          dep.depend();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> val;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="keyword">set</span>(newVal) &#123;</span><br><span class="line">        <span class="keyword">if</span> (newVal === val) &#123;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// set 时触发更新</span></span><br><span class="line">        <span class="comment">// 此处用 setter 做变动，此处偷懒一下，不要直接赋值，会反复触发 set</span></span><br><span class="line">        val = newVal;</span><br><span class="line">        dep.notify();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>那么现在问题又有了。目前代码实现至此我们仅仅只是将发布者与其 Dep 依赖进行了关联，那么观察者又该如何将其获订阅者的事件与 Dep 存储的事件列表进行关联呢？从订阅者角度分析一下：</p>
-<ol>
-<li>订阅者决定好要订阅的内容（订阅者的函数）；</li>
-<li>订阅者在对应的观察者平台上注册事件，绑定发布者信息；</li>
-<li>观察者先联系到 Dep 管家，将订阅事件存放至管家处；</li>
-<li>待管家拿到了发布者新情报，则响应所有存储好的订阅者的订阅事件了。</li>
-</ol>
-<p>思路逐渐清晰，那么这么个流程我们可以简化为如下代码：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">target = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.sub = [];</span><br><span class="line">  &#125;</span><br><span class="line">  depend() &#123;</span><br><span class="line">    <span class="keyword">if</span> (target &amp;&amp; !<span class="keyword">this</span>.sub.includes(target)) &#123;</span><br><span class="line">      <span class="keyword">this</span>.sub.push(target);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  notify() &#123;</span><br><span class="line">    <span class="keyword">this</span>.sub.forEach(<span class="function"><span class="params">cb</span> =&gt;</span> cb());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">watcher</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">  target = callback;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 此处触发一下监听对象的 get 方法，将 callback 方法加入 Dep 依赖的订阅队列中</span></span><br><span class="line">  <span class="comment">// 然后清除掉 target，防止重复注册</span></span><br><span class="line"></span><br><span class="line">  target = <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">watcher(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 此处是订阅事件</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>这样我们就讲观察者的订阅方法和 Dep 依赖给绑定上了。考虑到 watcher 的通用性，这里写了一个加强版的 demo，如下：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> target = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// （私人管家）依赖收集</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList = [];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 将当前的 watcher 加入 dep 中</span></span><br><span class="line">  addSub(watcher) &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.push(watcher)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 添加订阅方法</span></span><br><span class="line">  depend() &#123;</span><br><span class="line">    <span class="keyword">if</span> (target) &#123;</span><br><span class="line">      target.addDep(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发布者更新消息，触发所有的订阅方法</span></span><br><span class="line">  notify() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.forEach(<span class="function"><span class="params">sub</span> =&gt;</span> &#123;</span><br><span class="line">      sub.update();</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// （平台）观察者</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Watcher</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(data = &#123;&#125;, key = <span class="string">''</span>, cb = <span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;) &#123;</span><br><span class="line">    <span class="keyword">this</span>.cb = cb;</span><br><span class="line">    <span class="keyword">this</span>._data = data;</span><br><span class="line">    <span class="keyword">this</span>.key = key;</span><br><span class="line"></span><br><span class="line">    target = <span class="keyword">this</span>;</span><br><span class="line">    <span class="comment">// 触发 getter，存储本 watcher</span></span><br><span class="line">    <span class="keyword">this</span>.value = data[key];</span><br><span class="line">    <span class="comment">// 防止反复触发</span></span><br><span class="line">    target = <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  addDep(dep) &#123;</span><br><span class="line">    dep.addSub(<span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  update() &#123;</span><br><span class="line">    <span class="keyword">const</span> newVal = <span class="keyword">this</span>._data[<span class="keyword">this</span>.key];</span><br><span class="line">    <span class="keyword">this</span>.value = newVal;</span><br><span class="line">    <span class="keyword">this</span>.cb(newVal);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// （发布者和管家的联系方式）监听器</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">observer</span>(<span class="params">data = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">Object</span>.keys(data).forEach(<span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> val = data[key];</span><br><span class="line">    <span class="keyword">const</span> dep = <span class="keyword">new</span> Dep();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(data, key, &#123;</span><br><span class="line">      <span class="keyword">get</span>() &#123;</span><br><span class="line">        <span class="keyword">if</span> (target) &#123;</span><br><span class="line">          <span class="comment">// get 时添加依赖</span></span><br><span class="line">          dep.depend();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> val;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="keyword">set</span>(newVal) &#123;</span><br><span class="line">        <span class="keyword">if</span> (newVal === val) &#123;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// set 时触发更新</span></span><br><span class="line">        val = newVal;</span><br><span class="line">        dep.notify();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发布者</span></span><br><span class="line"><span class="keyword">const</span> publisher = &#123;</span><br><span class="line">  bookName: <span class="string">'book'</span>,</span><br><span class="line">  bookContent: <span class="string">'hello world'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 管家开始观测发布者</span></span><br><span class="line">observer(publisher);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 订阅者在平台上订阅发布者的部分信息</span></span><br><span class="line"><span class="keyword">new</span> Watcher(publisher, <span class="string">'bookName'</span>, name =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`new book name is <span class="subst">$&#123;name&#125;</span>`</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">new</span> Watcher(publisher, <span class="string">'bookContent'</span>, content =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`new book content is <span class="subst">$&#123;content&#125;</span>`</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发布者发布信息</span></span><br><span class="line">publisher.bookName = <span class="string">'new book'</span>;</span><br><span class="line">publisher.bookContent = <span class="string">'new content'</span>;</span><br></pre></td></tr></table></figure>
-<h3 id="Vue-观察者的实现"><a href="#Vue-观察者的实现" class="headerlink" title="Vue 观察者的实现"></a>Vue 观察者的实现</h3><p>在看源码之前，首先让我们看看 Vue 的实现原理图：</p>
-<p><img src="/images/vue-observer.jpeg" alt="Reactive"></p>
-<p>先仅考虑 data 部分的观察者模式，我们可以看到大致步骤为：</p>
-<ol>
-<li>为发布者 data 做数据监听处理；</li>
-<li>为劫持方法添加 Dep 依赖收集，<code>get</code> 存储 target 目标，set 设置 target 目标；</li>
-<li>依赖收集触发后，触发 Watch 观察者，通知订阅者改变。</li>
-</ol>
-<p>因为流程图中只是详细展示了响应式部分的变动，为了便于大家更清楚的理解这部分的流程，所以这里先解释一下 Vue 中完整的流程：</p>
-<ol>
-<li>页面开始渲染，对 data 进行依赖收集；</li>
-<li>依赖收集完毕，开始监测订阅者的方法，并存储原值方便变更时的对比；</li>
-<li>因为依赖收集完毕，要存储原值则触发了 get 事件，此时添加 dep 依赖，将对应生成的 watcher 存储入依赖列表内</li>
-<li>页面渲染完成，用户触发页面某些点击事件（比如按钮）；</li>
-<li>点击事件绑定了某个 methods 方法，该 methods 方法使得 data 部分内容更新了；</li>
-<li>因为已经对 data 进行了依赖收集，触发了对应的 set 方法；</li>
-<li>set 方法对比新旧值发现值更新了，此时重新收集依赖新的值（特别是对象的情况），然后通知它的私有管家 Dep 进行更新；</li>
-<li>Dep 依赖开始遍历其所存储的数组，为该发布者的订阅者们发送消息，触发订阅事件。</li>
-<li>各订阅者事件触发 update 更新，此时便流转到 render 渲染，之后页面就更新啦！</li>
-</ol>
-<p>为了方便大家理解源码，这里手动实现了一个简单的 observer 模式，基本是按着源码的思路一点点撸出来的，注释很全，方便大家理解！</p>
-<ul>
-<li><a href="https://github.com/kazehaiya/vue-observe" target="_blank" rel="noopener">个人版 vue-observer 源码</a></li>
-</ul>
-<h3 id="源码地址"><a href="#源码地址" class="headerlink" title="源码地址"></a>源码地址</h3><p>所有的 demo 都写入仓库了，仓库地址为：<a href="https://github.com/kazehaiya/vue-observe" target="_blank" rel="noopener">传送门</a></p>
-]]></content>
-      <categories>
-        <category>Vue</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
         <tag>Vue</tag>
       </tags>
   </entry>
@@ -3046,6 +3046,71 @@
       </tags>
   </entry>
   <entry>
+    <title>项目布局与 flex</title>
+    <url>/2019/06/10/%E9%A1%B9%E7%9B%AE%E5%B8%83%E5%B1%80%E4%B8%8E-flex/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在做项目的整体框架布局时曾用了 3 个版本，由最开始兼容性最好的 position 布局，到中间过渡调整用的 calc 布局，再到目前使用的 flex 布局。因为不考虑兼容性问题，因此用最新的写法来多趟趟水，此篇就是对所写的布局的一些心得。</p>
+<a id="more"></a>
+<h3 id="整体布局"><a href="#整体布局" class="headerlink" title="整体布局"></a>整体布局</h3><p>项目的整体外框为品字形布局，顶部为 logo 、主题和用户信息（hover 展示 poper 详情）；底部左侧为对应主题的图片，以及其一、二级菜单；底部右侧为内容区。此外最右侧还有一个浮动的快捷栏。</p>
+<p>内容区顶部有公告信息（可展示也可隐藏），底部则是自适应内容区。大致结构如下：</p>
+<p><img src="/images/project-container.jpg" alt="项目结构" style="width: 600px"></p>
+<p>下面来说说如何来规划布局以及遇到的问题的处理。</p>
+<h3 id="历史版本及其问题"><a href="#历史版本及其问题" class="headerlink" title="历史版本及其问题"></a>历史版本及其问题</h3><h4 id="position-版本"><a href="#position-版本" class="headerlink" title="position 版本"></a>position 版本</h4><p>早期项目并不是很复杂时，使用的是绝对定位的方式。当时顶部无主题、右侧无公告，同时也没有一直悬挂在右侧的浮动框和动画，因此处理比较简单。不过使用 position 来做定位，又一点不是很好的地方是左侧和顶部需要用 <code>margin</code> 撑开（防止内容被挡住），同时超出部分的滚动条展示，以及一部分切换动画的效果呈现最终让我下定决心来更改整体的布局。</p>
+<h4 id="calc-版本"><a href="#calc-版本" class="headerlink" title="calc 版本"></a>calc 版本</h4><p>中期因为还在开发项目，因此采取了一个过渡方案 calc，将各部分的宽度计算出来，从而做到页面的布局展现。这个版本倒是没什么问题，在 chrome 上运行的很稳定，由于不清楚 calc 计算会不会影响页面的渲染速度，因此最后还是改成了 flex 布局。</p>
+<h3 id="flex-布局分析"><a href="#flex-布局分析" class="headerlink" title="flex 布局分析"></a>flex 布局分析</h3><h4 id="整体结构"><a href="#整体结构" class="headerlink" title="整体结构"></a>整体结构</h4><p>整体的结构可分为上下结构，而下半部分又拆分为左右结构，因此，在设置完顶层的 <code>html</code> 和 <code>body</code> 之后，给项目的最外层 container 元素设以下属性作为外层容器：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.container</span> &#123;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">display</span>: flex;</span><br><span class="line">  <span class="attribute">flex-direction</span>: column;</span><br><span class="line">  <span class="attribute">position</span>: relative;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后顶部设置固定高度 60px，底部默认 flex-grow: 1 撑开即可。然而在内容撑满后，这样设置出现了<a href="#固定高度内容收缩问题">顶部固定高度部分被压缩了</a>。</p>
+<h4 id="顶部结构"><a href="#顶部结构" class="headerlink" title="顶部结构"></a>顶部结构</h4><p>顶部可分为三个部分：左侧的 logo、中间的主题列表以及右侧的用户头像部分。顶部基本太多问题，因为用户头像部分有多个不同的行内元素，而这块产生了<a href="#行内元素对齐问题">行内元素无法对齐的问题</a>（于是采用了最为方便的 flex 写法）</p>
+<h4 id="底部结构"><a href="#底部结构" class="headerlink" title="底部结构"></a>底部结构</h4><p>底部内容区域分为左右结构，左侧菜单展示（用 element-menu 很简单），右侧就是内容区了。这部分左侧收缩有做 transition 动画，对于页面图表渲染较多的情况会比较卡（动画去掉了），基本上没遇到什么麻烦；右侧有一个很头疼的问题，那就是页面顶部的公告，因为是可有可无的，而公告下面的内容区要一直保证能够占满内容区（如果内容超出则显示滚动条）。</p>
+<p>有人会说：“（折中方案）这有什么难的，内容区 flex 布局，上侧公告区（flex-shrink: 0），下部分内容区默认添上 <code>flex-grow: 1</code>，然后溢出滚动就可以了～”。如果事情能这么简单就好了。需求却并不是上下结构，而是一个整体，因为滚动条区域包裹了顶部公告，同时还要兼容以前的页面，即：</p>
+<div class="note default">
+            <p>当 “呈现的内容高度” + “公告高度（得考虑无公告的情况）” &lt; “内容区域高度” 时无滚动条；反之有滚动条。此外还需要做好老代码的兼容处理。</p>
+          </div>
+<p>emmmmm，果然世界上没有产品所想不出来的主意啊，当然，在“折中方案”上线之后，慢慢的终于摸索出了<a href="#内容区的智能滚动条问题">最佳方案</a>。</p>
+<h4 id="右侧悬浮框"><a href="#右侧悬浮框" class="headerlink" title="右侧悬浮框"></a>右侧悬浮框</h4><p>右侧悬浮框虽然并无太多内容，但是需要在 Vue 项目内支持拖拽，大致为：拖拽时颜色变浅，停止拖拽时恢复原样。由于 Vue 提供 drag 方法，因此比较容易想到的方式是在监听拖拽的起止动作，然后动态绑定 class 控制其 <code>Visibility</code> 显隐性，然而基本上每次开始拖拽后立马就结束拖拽了，最终定位的<a href="#诡异的拖拽事件">问题</a>就在 <code>Visibility</code> 上。</p>
+<h3 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h3><h4 id="固定高度内容收缩问题"><a href="#固定高度内容收缩问题" class="headerlink" title="固定高度内容收缩问题"></a>固定高度内容收缩问题</h4><p>在 flex 布局的模式下，子项的默认值为：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">flex</span>: 0 1 <span class="selector-tag">auto</span>;</span><br></pre></td></tr></table></figure>
+<p>其分别表示 <code>flex-grow</code> 为 0，即不会参与多余部分的分配（不可扩张）；<code>flex-shrink</code> 为 1，即当整体空间无法装下所有的内容时，该部分会按照一定的规则来压缩；<code>flex-basic</code> 为 auto，即默认以内容区高度为基础高度。</p>
+<p>那么问题就来了。因为 <code>flex-basic</code> 为 auto，内容区域高度是由内容来决定的，虽然我们通过设置 <code>height: 60px</code> 将高度固定撑开，但是对于 flex 来说，我的 basic 部分并没有这么高（内容没有达到 60px），同时我这部分又是可压缩的，因此我可以匀一点来尽量使得另一部分能够撑满溢出的内容。而结果可想而知（顶部被压缩了）</p>
+<p>解决的思路有三种：</p>
+<ol>
+<li>设置 <code>flex-shrink: 0</code> 来禁止其被压缩</li>
+<li>设置 <code>min-height: 60px</code> 从而保证最低的高度</li>
+<li>将其包裹的内容区高度设置为 60px</li>
+</ol>
+<h4 id="行内元素对齐问题"><a href="#行内元素对齐问题" class="headerlink" title="行内元素对齐问题"></a>行内元素对齐问题</h4><p>这部分先前有写过<a href="https://kazehaiya.github.io/2019/04/18/%E6%B5%85%E8%B0%88%E8%A1%8C%E5%86%85%E5%85%83%E7%B4%A0/">浅谈行内元素</a>，因为各部分默认对齐方式不同，此处仅写出两种最为快捷的方法：</p>
+<ol>
+<li>设置父级为 flex，然后设置 <code>align-items: center</code></li>
+<li>修改各子元素的对齐方式为 <code>vertical-align: center</code></li>
+</ol>
+<h4 id="内容区的智能滚动条问题"><a href="#内容区的智能滚动条问题" class="headerlink" title="内容区的智能滚动条问题"></a>内容区的智能滚动条问题</h4><p>问题简单的抽象为一个有固定宽高的 flex 布局的父容器（column 排序），其包含两个子节点：</p>
+<p>第一个节点可有可无，呈现时为定高的状态；</p>
+<p>第二个节点当内容不是很高时，其会自动填充剩余部分（剩余部分 + 此节点内容 + 第一个节点内容 = 父容器高度）；当内容有足够高时，父级会出现滚动条来显示溢出的内容。</p>
+<p>老版本此部分的实现是：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.content</span> &#123;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">position</span>: relative;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>理想中最完美的升级方案是在原有的基础上添加一个 <code>flex-grow: 1</code> 然后删除 <code>height: 100%</code>，但是由于要不影响原有的代码（仅使用 flex-grow 不知道为什么，某个页面会出现一个只滚动 1px 距离的滚动条，方案 pass），因此做了下改变即添加一项 <code>min-height: calc(100% - 60px)</code> 然后滚动条就没有了。</p>
+<p>前后试了一下，发现必须动态计算的 <code>min-height</code> 值与固定值之和为 100% 时才生效，个人感觉应该是因为刚好占满整个屏幕，因此不会触发多余的 flex 的动态计算，因此也就没有额外的滚动条了；当顶部公告消失时， <code>min-height</code> &lt; <code>height</code> 值，使内容能自动充满屏幕。</p>
+<blockquote>
+<p>如果并非需要兼容历史代码，建议直接 flex-grow: 1，删除 height: 100% 这样应该会好调整一些。</p>
+</blockquote>
+<h4 id="诡异的拖拽事件"><a href="#诡异的拖拽事件" class="headerlink" title="诡异的拖拽事件"></a>诡异的拖拽事件</h4><p>最开始写拖拽方法时添加的类为：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.onDrag</span> &#123;</span><br><span class="line">  <span class="attribute">visibility</span>: hidden;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在拖拽时隐藏元素，松开时显示元素（最开始实验阶段的 vue/cli3 时可以通过此方法实现），后来版本升级后，该方法失效了，会使得隐藏后会立即事情元素焦点，然后立即出发了 dragend 事件，此较好的解决方法目前是将 <code>visibility: hidden</code> 改成了 <code>opacity: 0</code>，但是更新后拖拽过程中设置元素 <code>visibility: hidden;</code> 会使得焦点丢失，这个原因目前不是很明确。</p>
+<h4 id="实例代码"><a href="#实例代码" class="headerlink" title="实例代码"></a>实例代码</h4><blockquote>
+<p><a href="https://codepen.io/kazehaiya/project/editor/XNbLkL" target="_blank" rel="noopener">参考例子</a></p>
+</blockquote>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
+<li><a href="https://www.cnblogs.com/chris-oil/p/5430137.html" target="_blank" rel="noopener">flex设置成 1 和 auto 有什么区别</a></li>
+<li><a href="https://www.w3.org/html/ig/zh/css-flex-1/" target="_blank" rel="noopener">W3C flex</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>CSS</category>
+      </categories>
+      <tags>
+        <tag>CSS</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>项目 ts 迁移的踩坑记录</title>
     <url>/2019/07/14/%E9%A1%B9%E7%9B%AE-ts-%E8%BF%81%E7%A7%BB%E7%9A%84%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>先前发过一篇对于 shimes-vue-ts 文件的思考，其中有一节写到项目 ts 迁移所遇到的问题和解决方法。因为项目才刚迁移完一部分 ts（用得到的部分），踩坑的过程还在进行中，为了更好的记录 ts 迁移过程中所遇到的问题，还是单独写一篇来做记录吧。此篇便是改进后的问题记录，以及相对详细的解决方法。该篇会持续跟新哦~</p>
@@ -3145,71 +3210,6 @@
       </categories>
       <tags>
         <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>项目布局与 flex</title>
-    <url>/2019/06/10/%E9%A1%B9%E7%9B%AE%E5%B8%83%E5%B1%80%E4%B8%8E-flex/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在做项目的整体框架布局时曾用了 3 个版本，由最开始兼容性最好的 position 布局，到中间过渡调整用的 calc 布局，再到目前使用的 flex 布局。因为不考虑兼容性问题，因此用最新的写法来多趟趟水，此篇就是对所写的布局的一些心得。</p>
-<a id="more"></a>
-<h3 id="整体布局"><a href="#整体布局" class="headerlink" title="整体布局"></a>整体布局</h3><p>项目的整体外框为品字形布局，顶部为 logo 、主题和用户信息（hover 展示 poper 详情）；底部左侧为对应主题的图片，以及其一、二级菜单；底部右侧为内容区。此外最右侧还有一个浮动的快捷栏。</p>
-<p>内容区顶部有公告信息（可展示也可隐藏），底部则是自适应内容区。大致结构如下：</p>
-<p><img src="/images/project-container.jpg" alt="项目结构" style="width: 600px"></p>
-<p>下面来说说如何来规划布局以及遇到的问题的处理。</p>
-<h3 id="历史版本及其问题"><a href="#历史版本及其问题" class="headerlink" title="历史版本及其问题"></a>历史版本及其问题</h3><h4 id="position-版本"><a href="#position-版本" class="headerlink" title="position 版本"></a>position 版本</h4><p>早期项目并不是很复杂时，使用的是绝对定位的方式。当时顶部无主题、右侧无公告，同时也没有一直悬挂在右侧的浮动框和动画，因此处理比较简单。不过使用 position 来做定位，又一点不是很好的地方是左侧和顶部需要用 <code>margin</code> 撑开（防止内容被挡住），同时超出部分的滚动条展示，以及一部分切换动画的效果呈现最终让我下定决心来更改整体的布局。</p>
-<h4 id="calc-版本"><a href="#calc-版本" class="headerlink" title="calc 版本"></a>calc 版本</h4><p>中期因为还在开发项目，因此采取了一个过渡方案 calc，将各部分的宽度计算出来，从而做到页面的布局展现。这个版本倒是没什么问题，在 chrome 上运行的很稳定，由于不清楚 calc 计算会不会影响页面的渲染速度，因此最后还是改成了 flex 布局。</p>
-<h3 id="flex-布局分析"><a href="#flex-布局分析" class="headerlink" title="flex 布局分析"></a>flex 布局分析</h3><h4 id="整体结构"><a href="#整体结构" class="headerlink" title="整体结构"></a>整体结构</h4><p>整体的结构可分为上下结构，而下半部分又拆分为左右结构，因此，在设置完顶层的 <code>html</code> 和 <code>body</code> 之后，给项目的最外层 container 元素设以下属性作为外层容器：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.container</span> &#123;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">display</span>: flex;</span><br><span class="line">  <span class="attribute">flex-direction</span>: column;</span><br><span class="line">  <span class="attribute">position</span>: relative;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>然后顶部设置固定高度 60px，底部默认 flex-grow: 1 撑开即可。然而在内容撑满后，这样设置出现了<a href="#固定高度内容收缩问题">顶部固定高度部分被压缩了</a>。</p>
-<h4 id="顶部结构"><a href="#顶部结构" class="headerlink" title="顶部结构"></a>顶部结构</h4><p>顶部可分为三个部分：左侧的 logo、中间的主题列表以及右侧的用户头像部分。顶部基本太多问题，因为用户头像部分有多个不同的行内元素，而这块产生了<a href="#行内元素对齐问题">行内元素无法对齐的问题</a>（于是采用了最为方便的 flex 写法）</p>
-<h4 id="底部结构"><a href="#底部结构" class="headerlink" title="底部结构"></a>底部结构</h4><p>底部内容区域分为左右结构，左侧菜单展示（用 element-menu 很简单），右侧就是内容区了。这部分左侧收缩有做 transition 动画，对于页面图表渲染较多的情况会比较卡（动画去掉了），基本上没遇到什么麻烦；右侧有一个很头疼的问题，那就是页面顶部的公告，因为是可有可无的，而公告下面的内容区要一直保证能够占满内容区（如果内容超出则显示滚动条）。</p>
-<p>有人会说：“（折中方案）这有什么难的，内容区 flex 布局，上侧公告区（flex-shrink: 0），下部分内容区默认添上 <code>flex-grow: 1</code>，然后溢出滚动就可以了～”。如果事情能这么简单就好了。需求却并不是上下结构，而是一个整体，因为滚动条区域包裹了顶部公告，同时还要兼容以前的页面，即：</p>
-<div class="note default">
-            <p>当 “呈现的内容高度” + “公告高度（得考虑无公告的情况）” &lt; “内容区域高度” 时无滚动条；反之有滚动条。此外还需要做好老代码的兼容处理。</p>
-          </div>
-<p>emmmmm，果然世界上没有产品所想不出来的主意啊，当然，在“折中方案”上线之后，慢慢的终于摸索出了<a href="#内容区的智能滚动条问题">最佳方案</a>。</p>
-<h4 id="右侧悬浮框"><a href="#右侧悬浮框" class="headerlink" title="右侧悬浮框"></a>右侧悬浮框</h4><p>右侧悬浮框虽然并无太多内容，但是需要在 Vue 项目内支持拖拽，大致为：拖拽时颜色变浅，停止拖拽时恢复原样。由于 Vue 提供 drag 方法，因此比较容易想到的方式是在监听拖拽的起止动作，然后动态绑定 class 控制其 <code>Visibility</code> 显隐性，然而基本上每次开始拖拽后立马就结束拖拽了，最终定位的<a href="#诡异的拖拽事件">问题</a>就在 <code>Visibility</code> 上。</p>
-<h3 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h3><h4 id="固定高度内容收缩问题"><a href="#固定高度内容收缩问题" class="headerlink" title="固定高度内容收缩问题"></a>固定高度内容收缩问题</h4><p>在 flex 布局的模式下，子项的默认值为：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">flex</span>: 0 1 <span class="selector-tag">auto</span>;</span><br></pre></td></tr></table></figure>
-<p>其分别表示 <code>flex-grow</code> 为 0，即不会参与多余部分的分配（不可扩张）；<code>flex-shrink</code> 为 1，即当整体空间无法装下所有的内容时，该部分会按照一定的规则来压缩；<code>flex-basic</code> 为 auto，即默认以内容区高度为基础高度。</p>
-<p>那么问题就来了。因为 <code>flex-basic</code> 为 auto，内容区域高度是由内容来决定的，虽然我们通过设置 <code>height: 60px</code> 将高度固定撑开，但是对于 flex 来说，我的 basic 部分并没有这么高（内容没有达到 60px），同时我这部分又是可压缩的，因此我可以匀一点来尽量使得另一部分能够撑满溢出的内容。而结果可想而知（顶部被压缩了）</p>
-<p>解决的思路有三种：</p>
-<ol>
-<li>设置 <code>flex-shrink: 0</code> 来禁止其被压缩</li>
-<li>设置 <code>min-height: 60px</code> 从而保证最低的高度</li>
-<li>将其包裹的内容区高度设置为 60px</li>
-</ol>
-<h4 id="行内元素对齐问题"><a href="#行内元素对齐问题" class="headerlink" title="行内元素对齐问题"></a>行内元素对齐问题</h4><p>这部分先前有写过<a href="https://kazehaiya.github.io/2019/04/18/%E6%B5%85%E8%B0%88%E8%A1%8C%E5%86%85%E5%85%83%E7%B4%A0/">浅谈行内元素</a>，因为各部分默认对齐方式不同，此处仅写出两种最为快捷的方法：</p>
-<ol>
-<li>设置父级为 flex，然后设置 <code>align-items: center</code></li>
-<li>修改各子元素的对齐方式为 <code>vertical-align: center</code></li>
-</ol>
-<h4 id="内容区的智能滚动条问题"><a href="#内容区的智能滚动条问题" class="headerlink" title="内容区的智能滚动条问题"></a>内容区的智能滚动条问题</h4><p>问题简单的抽象为一个有固定宽高的 flex 布局的父容器（column 排序），其包含两个子节点：</p>
-<p>第一个节点可有可无，呈现时为定高的状态；</p>
-<p>第二个节点当内容不是很高时，其会自动填充剩余部分（剩余部分 + 此节点内容 + 第一个节点内容 = 父容器高度）；当内容有足够高时，父级会出现滚动条来显示溢出的内容。</p>
-<p>老版本此部分的实现是：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.content</span> &#123;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">position</span>: relative;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>理想中最完美的升级方案是在原有的基础上添加一个 <code>flex-grow: 1</code> 然后删除 <code>height: 100%</code>，但是由于要不影响原有的代码（仅使用 flex-grow 不知道为什么，某个页面会出现一个只滚动 1px 距离的滚动条，方案 pass），因此做了下改变即添加一项 <code>min-height: calc(100% - 60px)</code> 然后滚动条就没有了。</p>
-<p>前后试了一下，发现必须动态计算的 <code>min-height</code> 值与固定值之和为 100% 时才生效，个人感觉应该是因为刚好占满整个屏幕，因此不会触发多余的 flex 的动态计算，因此也就没有额外的滚动条了；当顶部公告消失时， <code>min-height</code> &lt; <code>height</code> 值，使内容能自动充满屏幕。</p>
-<blockquote>
-<p>如果并非需要兼容历史代码，建议直接 flex-grow: 1，删除 height: 100% 这样应该会好调整一些。</p>
-</blockquote>
-<h4 id="诡异的拖拽事件"><a href="#诡异的拖拽事件" class="headerlink" title="诡异的拖拽事件"></a>诡异的拖拽事件</h4><p>最开始写拖拽方法时添加的类为：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.onDrag</span> &#123;</span><br><span class="line">  <span class="attribute">visibility</span>: hidden;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在拖拽时隐藏元素，松开时显示元素（最开始实验阶段的 vue/cli3 时可以通过此方法实现），后来版本升级后，该方法失效了，会使得隐藏后会立即事情元素焦点，然后立即出发了 dragend 事件，此较好的解决方法目前是将 <code>visibility: hidden</code> 改成了 <code>opacity: 0</code>，但是更新后拖拽过程中设置元素 <code>visibility: hidden;</code> 会使得焦点丢失，这个原因目前不是很明确。</p>
-<h4 id="实例代码"><a href="#实例代码" class="headerlink" title="实例代码"></a>实例代码</h4><blockquote>
-<p><a href="https://codepen.io/kazehaiya/project/editor/XNbLkL" target="_blank" rel="noopener">参考例子</a></p>
-</blockquote>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
-<li><a href="https://www.cnblogs.com/chris-oil/p/5430137.html" target="_blank" rel="noopener">flex设置成 1 和 auto 有什么区别</a></li>
-<li><a href="https://www.w3.org/html/ig/zh/css-flex-1/" target="_blank" rel="noopener">W3C flex</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>CSS</category>
-      </categories>
-      <tags>
-        <tag>CSS</tag>
       </tags>
   </entry>
 </search>
