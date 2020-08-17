@@ -254,77 +254,6 @@
       </tags>
   </entry>
   <entry>
-    <title>IntersectionObserver 与延迟加载</title>
-    <url>/2019/09/10/IntersectionObserver-%E4%B8%8E%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>随着项目图表使用的复杂程度的提升，“大数据”与多图表渲染带来的影响是页面响应慢、用户体验随时间越来越糟。通过 chrome 的 performance 分析出的原因是：接口耗时基本可忽略不计，页面渲染耗时才是对用户体验的真正影响。因此如何更“智能”的加载渲染的图表才是问题解决的关键，而这就要聊到“延迟加载”了。</p>
-<a id="more"></a>
-<h3 id="延迟加载"><a href="#延迟加载" class="headerlink" title="延迟加载"></a>延迟加载</h3><p>延迟加载比较通俗的说法为“懒加载”，其使用的场景都是在页面加载时优先加载关键资源（比如整体的页面轮廓等），非关键资源则在需要时才进行加载。</p>
-<p>那为什么需要延迟加载呢？有需必有求，首先看看直接加载所导致的一些问题：</p>
-<ul>
-<li>加载过多无用内容，造成数据流量的浪费，增加浏览器压力。</li>
-<li>渲染时间增长，用户等待时间增长，会造成部分用户流失。</li>
-<li>浪费处理时间、电池电量和其它系统资源</li>
-</ul>
-<p>为了增强用户体验，因此我们需要进行延迟加载。</p>
-<h4 id="getBoundingClientRect"><a href="#getBoundingClientRect" class="headerlink" title="getBoundingClientRect"></a>getBoundingClientRect</h4><p>早期还没有 IntersectionObserver 时，为了支持延迟加载，我们常使用的方法是 <code>Element.getBoundingClientRect()</code>。通过该方法来获取目标元素的大小以及其相对于视口的位置，从而来判断是否加载需要渲染的内容。</p>
-<p>其语法为：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> targetElement = <span class="built_in">document</span>.getElementById(<span class="string">'id'</span>);</span><br><span class="line"><span class="keyword">const</span> rectObject = targetElement.getBoundingClientRect();</span><br><span class="line"></span><br><span class="line">rectObject.top    <span class="comment">// 元素上边到视窗上边的距离;</span></span><br><span class="line">rectObject.right  <span class="comment">// 元素右边到视窗左边的距离;</span></span><br><span class="line">rectObject.bottom <span class="comment">// 元素下边到视窗上边的距离;</span></span><br><span class="line">rectObject.left   <span class="comment">// 元素左边到视窗左边的距离;</span></span><br><span class="line">rectObject.width  <span class="comment">// 是元素自身的宽</span></span><br><span class="line">rectObject.height <span class="comment">// 是元素自身的高</span></span><br></pre></td></tr></table></figure>
-<p>例子：</p>
-<iframe id="cp_embed_yLBKvKJ" src="//codepen.io/kazehaiya/embed/yLBKvKJ?height=300&theme-id=dark&slug-hash=yLBKvKJ&default-tab=css,result" scrolling="no" frameborder="no" height="300" allowtransparency="true" allowfullscreen="true" class="cp_embed_iframe" style="width: 100%; overflow: hidden;"></iframe>
-<p>既然有了 <code>getBoundingClientRect</code> 方法，那么为什么还需要 <code>IntersectionObserver</code> 方法呢？这里引用 MDN 上的一段话：</p>
-<div class="note info">
-            <p>过去，交集检测通常需要涉及到事件监听，以及对每个目标元素执行 Element.getBoundingClientRect() 方法以获取所需信息。可是这些代码都在主线程上运行，所以任何一点都可能造成性能问题。当网页遍布这些代码时就显得比较丑陋了。</p>
-          </div>
-<p>简而言之，<code>getBoundingClientRect</code> 方法对于需要监听大量对象的情况，其处理并不是特别完美（比如无限滚动，scroll 事件发生过于密集，容易造成性能问题），而这种情况下 <code>IntersectionObserver</code> 可以比较完美的解决这个问题。</p>
-<h3 id="IntersectionObserver"><a href="#IntersectionObserver" class="headerlink" title="IntersectionObserver"></a>IntersectionObserver</h3><p>首先 IntersectionObserver API 是异步的，不随着目标元素的滚动同步触发（即我们不用监听 scroll 事件了）。此外，该观察器的优先级非常低，只在其他任务执行完，浏览器有了空闲才会执行。</p>
-<p>这里再一次引用 MDN 上的解释：</p>
-<div class="note info">
-            <p>Intersection Observer API 会注册一个回调方法，每当期望被监视的元素进入或者退出另外一个元素的时候(或者浏览器的视口)该回调方法将会被执行，或者两个元素的交集部分大小发生变化的时候回调方法也会被执行。通过这种方式，网站将不需要为了监听两个元素的交集变化而在主线程里面做任何操作，并且浏览器可以帮助我们优化和管理两个元素的交集变化。</p>
-          </div>
-<p>少了对滚动事件的处理，在不考虑兼容性的情况下，性能方面肯定优于 <code>getBoundingClientRect</code>。那么它具体该如何使用呢？Demo 如下：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 创建一个 observer</span></span><br><span class="line"><span class="keyword">const</span> io = <span class="keyword">new</span> IntersectionObserver(callback, options);</span><br><span class="line"><span class="comment">// 监听目标元素</span></span><br><span class="line">io.observe(element);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 停止目标元素的监听</span></span><br><span class="line">io.unobserve(element);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 终止对所有目标元素可见性变化的观察</span></span><br><span class="line">io.disconnect();</span><br></pre></td></tr></table></figure>
-<p>上面代码中，<code>callback</code> 是触发可见行变化时的回调函数，<code>options</code> 是配置对象。</p>
-<h4 id="options"><a href="#options" class="headerlink" title="options"></a>options</h4><p>首先看看 options 配置，其总共有三个属性：<code>root</code>、<code>rootMargin</code> 和 <code>threshold</code>。</p>
-<p><code>root</code> 指选定的目标容器，默认为浏览器的视窗。</p>
-<p><code>rootMargin</code> 定义元素的 <code>margin</code>，<code>viewport + rootMargin</code> 为最终计算的视窗大小，这里引用一张图</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/4060631-ae60b52ea8a52184.png?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp" alt></p>
-<p><code>threshold</code> 属性决定了什么时候触发回调函数。它是既可以是一个单一的 number 也可以是一个 number 数组，其表示目标元素和 root 元素相交程度达到该值的时候，callback 回调函数将会被执行。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> IntersectionObserver(</span><br><span class="line">  (entries, observer) =&gt; &#123; <span class="comment">/* ... */</span> &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">// 在相交程度为 0、25%、50%、75%、100% 时触发回调</span></span><br><span class="line">    threshold: [<span class="number">0</span>, <span class="number">0.25</span>, <span class="number">0.5</span>, <span class="number">0.75</span>, <span class="number">1</span>]</span><br><span class="line">  &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-<h4 id="callback"><a href="#callback" class="headerlink" title="callback"></a>callback</h4><p>当目标元素可见行变化时，其会触发 <code>callback</code> 函数，一般情况该函数会触发<strong>2次</strong>（进入和离开）。该函数有两个参数： <code>IntersectionObserverEntry 对象</code> 和 <code>观察者</code> 的列表。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> callback = <span class="function"><span class="keyword">function</span>(<span class="params">entries, observers</span>) </span>&#123;</span><br><span class="line">  entries.forEach(<span class="function"><span class="params">entry</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// Each entry describes an intersection change for one observed</span></span><br><span class="line">    <span class="comment">// target element:</span></span><br><span class="line">    <span class="comment">//   entry.rootBounds</span></span><br><span class="line">    <span class="comment">//   entry.boundingClientRect</span></span><br><span class="line">    <span class="comment">//   entry.intersectionRect</span></span><br><span class="line">    <span class="comment">//   entry.intersectionRatio</span></span><br><span class="line">    <span class="comment">//   entry.isIntersecting</span></span><br><span class="line">    <span class="comment">//   entry.target</span></span><br><span class="line">    <span class="comment">//   entry.time</span></span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">🔽[IntersectionObserverEntry]</span><br><span class="line">    time: <span class="number">3893.92</span></span><br><span class="line">  🔽rootBounds: ClientRect</span><br><span class="line">      bottom: <span class="number">920</span></span><br><span class="line">      height: <span class="number">1024</span></span><br><span class="line">      left: <span class="number">0</span></span><br><span class="line">      right: <span class="number">1024</span></span><br><span class="line">      top: <span class="number">0</span></span><br><span class="line">      width: <span class="number">920</span></span><br><span class="line">  🔽boundingClientRect: ClientRect</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  🔽intersectionRect: ClientRect</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    intersectionRatio: <span class="number">0.54</span></span><br><span class="line">  🔽target: div#observee</span><br><span class="line">    <span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
-<p><code>rootBounds</code>： root 元素调用 getBoundingClientRect() 函数的返回值（默认是 viewport 视口）</p>
-<p><code>boundingClientRect</code>： 目标 observer 调用 getBoundingClientRect() 函数的返回值</p>
-<p><code>intersectionRect</code>： 上述两矩形的交集，并且有效的告诉你观测到的元素的哪一部分是可见的</p>
-<p><code>intersectionRect</code>： 该属性告诉你元素目前有多少是可见的，比率是多少</p>
-<p><code>isIntersecting</code>： 目标元素在 root 元素中可见性是否发生了变化（至少得达到 thresholds 数组中的一个阈值）</p>
-<p><code>target</code>：  被观测的目标 DOM 元素</p>
-<p><code>time</code>： 可见行发生变化的时间（单位： ms）</p>
-<p>再次引用一张图片来解释上述部分参数：</p>
-<p><img src="https://developers.google.com/web/updates/images/2016/04/intersectionobserver/intersectratio.png" alt></p>
-<blockquote>
-<p>请留意，你注册的回调函数将会在主线程中被执行。所以该函数执行速度要尽可能的快。如果有一些耗时的操作需要执行，建议使用 Window.requestIdleCallback() 方法。</p>
-</blockquote>
-<h4 id="实战：无限滚动"><a href="#实战：无限滚动" class="headerlink" title="实战：无限滚动"></a>实战：无限滚动</h4><iframe id="cp_embed_YzKLNBz" src="//codepen.io/kazehaiya/embed/YzKLNBz?height=300&theme-id=dark&slug-hash=YzKLNBz&default-tab=css,result" scrolling="no" frameborder="no" height="300" allowtransparency="true" allowfullscreen="true" class="cp_embed_iframe" style="width: 100%; overflow: hidden;"></iframe>
-<h3 id="文章推荐"><a href="#文章推荐" class="headerlink" title="文章推荐"></a>文章推荐</h3><ul>
-<li><a href="https://developers.google.com/web/updates/2019/02/intersectionobserver-v2" target="_blank" rel="noopener">Trust is Good, Observation is Better—Intersection Observer v2</a></li>
-<li><a href="https://developers.google.com/web/fundamentals/performance/lazy-loading-guidance/images-and-video/" target="_blank" rel="noopener">延迟加载图像和视频</a></li>
-</ul>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
-<li><a href="https://developers.google.com/web/updates/2016/04/intersectionobserver" target="_blank" rel="noopener">IntersectionObserver’s Coming into View</a></li>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Intersection_Observer_API" target="_blank" rel="noopener">Intersection Observer API</a></li>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Element/getBoundingClientRect" target="_blank" rel="noopener">getBoundingClientRect</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2016/11/intersectionobserver_api.html" target="_blank" rel="noopener">IntersectionObserver API 使用教程</a></li>
-<li><a href="https://www.jianshu.com/p/84a86e41eb2b" target="_blank" rel="noopener">谈谈 IntersectionObserver 懒加载</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>JavaScript</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>JSX 语法总结</title>
     <url>/2019/09/01/JSX-%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近着手编写 JSON 可视化部分的内容，由于此部分需要基于基础组件进行封装，Vue 的 JSX 的写法用的比较频繁，此处就记录我目前所能总结出的 JSX 的写法，以做备忘。</p>
@@ -419,6 +348,77 @@
       </tags>
   </entry>
   <entry>
+    <title>IntersectionObserver 与延迟加载</title>
+    <url>/2019/09/10/IntersectionObserver-%E4%B8%8E%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>随着项目图表使用的复杂程度的提升，“大数据”与多图表渲染带来的影响是页面响应慢、用户体验随时间越来越糟。通过 chrome 的 performance 分析出的原因是：接口耗时基本可忽略不计，页面渲染耗时才是对用户体验的真正影响。因此如何更“智能”的加载渲染的图表才是问题解决的关键，而这就要聊到“延迟加载”了。</p>
+<a id="more"></a>
+<h3 id="延迟加载"><a href="#延迟加载" class="headerlink" title="延迟加载"></a>延迟加载</h3><p>延迟加载比较通俗的说法为“懒加载”，其使用的场景都是在页面加载时优先加载关键资源（比如整体的页面轮廓等），非关键资源则在需要时才进行加载。</p>
+<p>那为什么需要延迟加载呢？有需必有求，首先看看直接加载所导致的一些问题：</p>
+<ul>
+<li>加载过多无用内容，造成数据流量的浪费，增加浏览器压力。</li>
+<li>渲染时间增长，用户等待时间增长，会造成部分用户流失。</li>
+<li>浪费处理时间、电池电量和其它系统资源</li>
+</ul>
+<p>为了增强用户体验，因此我们需要进行延迟加载。</p>
+<h4 id="getBoundingClientRect"><a href="#getBoundingClientRect" class="headerlink" title="getBoundingClientRect"></a>getBoundingClientRect</h4><p>早期还没有 IntersectionObserver 时，为了支持延迟加载，我们常使用的方法是 <code>Element.getBoundingClientRect()</code>。通过该方法来获取目标元素的大小以及其相对于视口的位置，从而来判断是否加载需要渲染的内容。</p>
+<p>其语法为：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> targetElement = <span class="built_in">document</span>.getElementById(<span class="string">'id'</span>);</span><br><span class="line"><span class="keyword">const</span> rectObject = targetElement.getBoundingClientRect();</span><br><span class="line"></span><br><span class="line">rectObject.top    <span class="comment">// 元素上边到视窗上边的距离;</span></span><br><span class="line">rectObject.right  <span class="comment">// 元素右边到视窗左边的距离;</span></span><br><span class="line">rectObject.bottom <span class="comment">// 元素下边到视窗上边的距离;</span></span><br><span class="line">rectObject.left   <span class="comment">// 元素左边到视窗左边的距离;</span></span><br><span class="line">rectObject.width  <span class="comment">// 是元素自身的宽</span></span><br><span class="line">rectObject.height <span class="comment">// 是元素自身的高</span></span><br></pre></td></tr></table></figure>
+<p>例子：</p>
+<iframe id="cp_embed_yLBKvKJ" src="//codepen.io/kazehaiya/embed/yLBKvKJ?height=300&theme-id=dark&slug-hash=yLBKvKJ&default-tab=css,result" scrolling="no" frameborder="no" height="300" allowtransparency="true" allowfullscreen="true" class="cp_embed_iframe" style="width: 100%; overflow: hidden;"></iframe>
+<p>既然有了 <code>getBoundingClientRect</code> 方法，那么为什么还需要 <code>IntersectionObserver</code> 方法呢？这里引用 MDN 上的一段话：</p>
+<div class="note info">
+            <p>过去，交集检测通常需要涉及到事件监听，以及对每个目标元素执行 Element.getBoundingClientRect() 方法以获取所需信息。可是这些代码都在主线程上运行，所以任何一点都可能造成性能问题。当网页遍布这些代码时就显得比较丑陋了。</p>
+          </div>
+<p>简而言之，<code>getBoundingClientRect</code> 方法对于需要监听大量对象的情况，其处理并不是特别完美（比如无限滚动，scroll 事件发生过于密集，容易造成性能问题），而这种情况下 <code>IntersectionObserver</code> 可以比较完美的解决这个问题。</p>
+<h3 id="IntersectionObserver"><a href="#IntersectionObserver" class="headerlink" title="IntersectionObserver"></a>IntersectionObserver</h3><p>首先 IntersectionObserver API 是异步的，不随着目标元素的滚动同步触发（即我们不用监听 scroll 事件了）。此外，该观察器的优先级非常低，只在其他任务执行完，浏览器有了空闲才会执行。</p>
+<p>这里再一次引用 MDN 上的解释：</p>
+<div class="note info">
+            <p>Intersection Observer API 会注册一个回调方法，每当期望被监视的元素进入或者退出另外一个元素的时候(或者浏览器的视口)该回调方法将会被执行，或者两个元素的交集部分大小发生变化的时候回调方法也会被执行。通过这种方式，网站将不需要为了监听两个元素的交集变化而在主线程里面做任何操作，并且浏览器可以帮助我们优化和管理两个元素的交集变化。</p>
+          </div>
+<p>少了对滚动事件的处理，在不考虑兼容性的情况下，性能方面肯定优于 <code>getBoundingClientRect</code>。那么它具体该如何使用呢？Demo 如下：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 创建一个 observer</span></span><br><span class="line"><span class="keyword">const</span> io = <span class="keyword">new</span> IntersectionObserver(callback, options);</span><br><span class="line"><span class="comment">// 监听目标元素</span></span><br><span class="line">io.observe(element);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 停止目标元素的监听</span></span><br><span class="line">io.unobserve(element);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 终止对所有目标元素可见性变化的观察</span></span><br><span class="line">io.disconnect();</span><br></pre></td></tr></table></figure>
+<p>上面代码中，<code>callback</code> 是触发可见行变化时的回调函数，<code>options</code> 是配置对象。</p>
+<h4 id="options"><a href="#options" class="headerlink" title="options"></a>options</h4><p>首先看看 options 配置，其总共有三个属性：<code>root</code>、<code>rootMargin</code> 和 <code>threshold</code>。</p>
+<p><code>root</code> 指选定的目标容器，默认为浏览器的视窗。</p>
+<p><code>rootMargin</code> 定义元素的 <code>margin</code>，<code>viewport + rootMargin</code> 为最终计算的视窗大小，这里引用一张图</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/4060631-ae60b52ea8a52184.png?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp" alt></p>
+<p><code>threshold</code> 属性决定了什么时候触发回调函数。它是既可以是一个单一的 number 也可以是一个 number 数组，其表示目标元素和 root 元素相交程度达到该值的时候，callback 回调函数将会被执行。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> IntersectionObserver(</span><br><span class="line">  (entries, observer) =&gt; &#123; <span class="comment">/* ... */</span> &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">// 在相交程度为 0、25%、50%、75%、100% 时触发回调</span></span><br><span class="line">    threshold: [<span class="number">0</span>, <span class="number">0.25</span>, <span class="number">0.5</span>, <span class="number">0.75</span>, <span class="number">1</span>]</span><br><span class="line">  &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h4 id="callback"><a href="#callback" class="headerlink" title="callback"></a>callback</h4><p>当目标元素可见行变化时，其会触发 <code>callback</code> 函数，一般情况该函数会触发<strong>2次</strong>（进入和离开）。该函数有两个参数： <code>IntersectionObserverEntry 对象</code> 和 <code>观察者</code> 的列表。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> callback = <span class="function"><span class="keyword">function</span>(<span class="params">entries, observers</span>) </span>&#123;</span><br><span class="line">  entries.forEach(<span class="function"><span class="params">entry</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// Each entry describes an intersection change for one observed</span></span><br><span class="line">    <span class="comment">// target element:</span></span><br><span class="line">    <span class="comment">//   entry.rootBounds</span></span><br><span class="line">    <span class="comment">//   entry.boundingClientRect</span></span><br><span class="line">    <span class="comment">//   entry.intersectionRect</span></span><br><span class="line">    <span class="comment">//   entry.intersectionRatio</span></span><br><span class="line">    <span class="comment">//   entry.isIntersecting</span></span><br><span class="line">    <span class="comment">//   entry.target</span></span><br><span class="line">    <span class="comment">//   entry.time</span></span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">🔽[IntersectionObserverEntry]</span><br><span class="line">    time: <span class="number">3893.92</span></span><br><span class="line">  🔽rootBounds: ClientRect</span><br><span class="line">      bottom: <span class="number">920</span></span><br><span class="line">      height: <span class="number">1024</span></span><br><span class="line">      left: <span class="number">0</span></span><br><span class="line">      right: <span class="number">1024</span></span><br><span class="line">      top: <span class="number">0</span></span><br><span class="line">      width: <span class="number">920</span></span><br><span class="line">  🔽boundingClientRect: ClientRect</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  🔽intersectionRect: ClientRect</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    intersectionRatio: <span class="number">0.54</span></span><br><span class="line">  🔽target: div#observee</span><br><span class="line">    <span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
+<p><code>rootBounds</code>： root 元素调用 getBoundingClientRect() 函数的返回值（默认是 viewport 视口）</p>
+<p><code>boundingClientRect</code>： 目标 observer 调用 getBoundingClientRect() 函数的返回值</p>
+<p><code>intersectionRect</code>： 上述两矩形的交集，并且有效的告诉你观测到的元素的哪一部分是可见的</p>
+<p><code>intersectionRect</code>： 该属性告诉你元素目前有多少是可见的，比率是多少</p>
+<p><code>isIntersecting</code>： 目标元素在 root 元素中可见性是否发生了变化（至少得达到 thresholds 数组中的一个阈值）</p>
+<p><code>target</code>：  被观测的目标 DOM 元素</p>
+<p><code>time</code>： 可见行发生变化的时间（单位： ms）</p>
+<p>再次引用一张图片来解释上述部分参数：</p>
+<p><img src="https://developers.google.com/web/updates/images/2016/04/intersectionobserver/intersectratio.png" alt></p>
+<blockquote>
+<p>请留意，你注册的回调函数将会在主线程中被执行。所以该函数执行速度要尽可能的快。如果有一些耗时的操作需要执行，建议使用 Window.requestIdleCallback() 方法。</p>
+</blockquote>
+<h4 id="实战：无限滚动"><a href="#实战：无限滚动" class="headerlink" title="实战：无限滚动"></a>实战：无限滚动</h4><iframe id="cp_embed_YzKLNBz" src="//codepen.io/kazehaiya/embed/YzKLNBz?height=300&theme-id=dark&slug-hash=YzKLNBz&default-tab=css,result" scrolling="no" frameborder="no" height="300" allowtransparency="true" allowfullscreen="true" class="cp_embed_iframe" style="width: 100%; overflow: hidden;"></iframe>
+<h3 id="文章推荐"><a href="#文章推荐" class="headerlink" title="文章推荐"></a>文章推荐</h3><ul>
+<li><a href="https://developers.google.com/web/updates/2019/02/intersectionobserver-v2" target="_blank" rel="noopener">Trust is Good, Observation is Better—Intersection Observer v2</a></li>
+<li><a href="https://developers.google.com/web/fundamentals/performance/lazy-loading-guidance/images-and-video/" target="_blank" rel="noopener">延迟加载图像和视频</a></li>
+</ul>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
+<li><a href="https://developers.google.com/web/updates/2016/04/intersectionobserver" target="_blank" rel="noopener">IntersectionObserver’s Coming into View</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Intersection_Observer_API" target="_blank" rel="noopener">Intersection Observer API</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Element/getBoundingClientRect" target="_blank" rel="noopener">getBoundingClientRect</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2016/11/intersectionobserver_api.html" target="_blank" rel="noopener">IntersectionObserver API 使用教程</a></li>
+<li><a href="https://www.jianshu.com/p/84a86e41eb2b" target="_blank" rel="noopener">谈谈 IntersectionObserver 懒加载</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>JavaScript 对象</title>
     <url>/2019/06/06/JavaScript-%E5%AF%B9%E8%B1%A1/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>对象是 JavaScript 的七种主要类型中的一种（string、boolean、number、null、undefined、symbol、object），也是这七种主要类型中最为复杂的一种类型，了解对象对学习 JavaScript、了解 <code>this</code>和作用域链，以及之后的“类”的概念都十分重要，而此篇就从边边角角来介绍 JavaScript 中的<strong>对象</strong>。</p>
@@ -507,6 +507,38 @@
       </categories>
       <tags>
         <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mac 指令学习</title>
+    <url>/2020/01/19/Mac-%E6%8C%87%E4%BB%A4%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近在研究可视化编辑器部分的内容，同时借此机会学习学习 node 相关的知识。然而在学习的过程中，发现好不容易申请下来的测试机却不会用，是时候该补充补充 linux 相关的知识了！</p>
+<blockquote>
+<p>该文档持续完善，争取每周一个指令</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="grep-命令"><a href="#grep-命令" class="headerlink" title="grep 命令"></a><code>grep</code> 命令</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 获取对应文件内的内容</span></span><br><span class="line"><span class="comment">## -n 表示加上行号，file 支持 * 通配符</span></span><br><span class="line">grep -n &lt;content&gt; &lt;file&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="du-命令"><a href="#du-命令" class="headerlink" title="du 命令"></a><code>du</code> 命令</h3><p>du 命令用于显示目录或文件的大小</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看文件深度为 n 的所有文件大小</span></span><br><span class="line"><span class="comment"># n=0 时为该文件大小</span></span><br><span class="line">du -d &lt;depth &gt;= 0&gt; -h &lt;file-path&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="tar-命令"><a href="#tar-命令" class="headerlink" title="tar 命令"></a><code>tar</code> 命令</h3><p>tar 是用来建立，还原备份文件的工具程序，它可以加入，解开备份文件内的文件。可以用来做文件压缩</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># touch a.c</span></span><br><span class="line"><span class="comment"># 压缩 a.c文件为 test.tar.gz</span></span><br><span class="line">tar -czvf test.tar.gz a.c</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出压缩文件中的内容</span></span><br><span class="line">tar -tzvf test.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解压缩</span></span><br><span class="line">tar -xzvf test.tar.gz</span><br></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li>-v：显示过程；</li>
+<li>-c 建立新的备份文件；</li>
+<li>-z：gzip 处理备份文件；</li>
+<li>-x：从备份文件中还原文件；</li>
+<li>-t：列出文件内容</li>
+</ul>
+</blockquote>
+<h3 id="which-指令"><a href="#which-指令" class="headerlink" title="which 指令"></a>which 指令</h3><p>其主要用途是定位程序在系统的哪个位置，使用方法很简单</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">which &lt;target1&gt; &lt;target2&gt;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Env</category>
+      </categories>
+      <tags>
+        <tag>Env</tag>
       </tags>
   </entry>
   <entry>
@@ -641,38 +673,6 @@
       </categories>
       <tags>
         <tag>linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Mac 指令学习</title>
-    <url>/2020/01/19/Mac-%E6%8C%87%E4%BB%A4%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近在研究可视化编辑器部分的内容，同时借此机会学习学习 node 相关的知识。然而在学习的过程中，发现好不容易申请下来的测试机却不会用，是时候该补充补充 linux 相关的知识了！</p>
-<blockquote>
-<p>该文档持续完善，争取每周一个指令</p>
-</blockquote>
-<a id="more"></a>
-<h3 id="grep-命令"><a href="#grep-命令" class="headerlink" title="grep 命令"></a><code>grep</code> 命令</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 获取对应文件内的内容</span></span><br><span class="line"><span class="comment">## -n 表示加上行号，file 支持 * 通配符</span></span><br><span class="line">grep -n &lt;content&gt; &lt;file&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="du-命令"><a href="#du-命令" class="headerlink" title="du 命令"></a><code>du</code> 命令</h3><p>du 命令用于显示目录或文件的大小</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看文件深度为 n 的所有文件大小</span></span><br><span class="line"><span class="comment"># n=0 时为该文件大小</span></span><br><span class="line">du -d &lt;depth &gt;= 0&gt; -h &lt;file-path&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="tar-命令"><a href="#tar-命令" class="headerlink" title="tar 命令"></a><code>tar</code> 命令</h3><p>tar 是用来建立，还原备份文件的工具程序，它可以加入，解开备份文件内的文件。可以用来做文件压缩</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># touch a.c</span></span><br><span class="line"><span class="comment"># 压缩 a.c文件为 test.tar.gz</span></span><br><span class="line">tar -czvf test.tar.gz a.c</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出压缩文件中的内容</span></span><br><span class="line">tar -tzvf test.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解压缩</span></span><br><span class="line">tar -xzvf test.tar.gz</span><br></pre></td></tr></table></figure>
-<blockquote>
-<ul>
-<li>-v：显示过程；</li>
-<li>-c 建立新的备份文件；</li>
-<li>-z：gzip 处理备份文件；</li>
-<li>-x：从备份文件中还原文件；</li>
-<li>-t：列出文件内容</li>
-</ul>
-</blockquote>
-<h3 id="which-指令"><a href="#which-指令" class="headerlink" title="which 指令"></a>which 指令</h3><p>其主要用途是定位程序在系统的哪个位置，使用方法很简单</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">which &lt;target1&gt; &lt;target2&gt;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Env</category>
-      </categories>
-      <tags>
-        <tag>Env</tag>
       </tags>
   </entry>
   <entry>
