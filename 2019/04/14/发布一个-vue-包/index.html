@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="沐光">
 <meta property="og:description" content="前言文章用来纪录我如何从零开始，通过 webpack4 发布一个 vue 的 npm 包，同时使用的是 es6 语法。涉及到的知识点包括：  webpack4 npm 包的发布 babel 配置 vue 配置">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-08-16T09:34:09.000Z">
+<meta property="og:updated_time" content="2020-08-21T03:36:39.318Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="发布一个 vue 包">
 <meta name="twitter:description" content="前言文章用来纪录我如何从零开始，通过 webpack4 发布一个 vue 的 npm 包，同时使用的是 es6 语法。涉及到的知识点包括：  webpack4 npm 包的发布 babel 配置 vue 配置">
@@ -136,7 +136,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">46</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">47</span></a>
 
   </li>
       <li class="menu-item menu-item-search">
@@ -227,7 +227,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-16 17:34:09" itemprop="dateModified" datetime="2020-08-16T17:34:09+08:00">2020-08-16</time>
+                <time title="修改时间：2020-08-21 11:36:39" itemprop="dateModified" datetime="2020-08-21T11:36:39+08:00">2020-08-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -286,17 +286,17 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 首先进入对应文件夹，然后</span></span><br><span class="line">yarn init</span><br><span class="line"><span class="comment"># 之后根据提示输入项目名称、版本等内容即可</span></span><br></pre></td></tr></table></figure>
 <h5 id="规范化-package-json-内容"><a href="#规范化-package-json-内容" class="headerlink" title="规范化 package.json 内容"></a>规范化 <code>package.json</code> 内容</h5><p>当然，要发布一个比较规范的包，仅默认的一些配置还是不够的，<code>package.json</code> 的详细配置可见<a href="http://javascript.ruanyifeng.com/nodejs/packagejson.html" target="_blank" rel="noopener">「中文文档」</a>，总结过后，我们可以配置这么一些字段：</p>
 <ul>
-<li>name: 项目名称</li>
-<li>version: 当前包的版本</li>
-<li>keywords: 关键词，方便搜索</li>
-<li>description: 项目描述</li>
-<li>repository: 项目地址</li>
-<li>author: 作者</li>
-<li>contributors: 项目开发人员</li>
-<li>files: 项目包括的文件</li>
-<li>scripts: webpack 打包会用到</li>
-<li>style: 项目样式所存放的地址</li>
-<li>license: 许可证（一般 MIT 即可）</li>
+<li><code>name</code>:         项目名称</li>
+<li><code>version</code>:      当前包的版本</li>
+<li><code>keywords</code>:     关键词，方便搜索</li>
+<li><code>description</code>:  项目描述</li>
+<li><code>repository</code>:   项目地址</li>
+<li><code>author</code>:       作者</li>
+<li><code>contributors</code>: 项目开发人员</li>
+<li><code>files</code>:        项目包括的文件</li>
+<li><code>scripts</code>:      webpack 打包会用到</li>
+<li><code>style</code>:        项目样式所存放的地址</li>
+<li><code>license</code>:      许可证（一般 MIT 即可）</li>
 </ul>
 <p>安装时常用的有此三种依赖：</p>
 <ul>
@@ -359,7 +359,7 @@
 <p>这是一个组件的文件结构，其中的 <code>component</code> 就是我们的 vue 组件，<code>index.js</code> 为向外侧暴露该组件的一个入口文件，其内容基本格式一致，例如：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> myComponent <span class="keyword">from</span> <span class="string">'./src/component'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加单独引用的 install 方法</span></span><br><span class="line">myComponent.install = <span class="function"><span class="keyword">function</span>(<span class="params">Vue, options = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">  Vue.component(myComponent.name, myComponent);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> myComponent;</span><br></pre></td></tr></table></figure>
 <p>整体的配置可以参考 <a href="https://github.com/ElemeFE/element" target="_blank" rel="noopener">elementUI</a> 的组件写法，原理一样，本质是如何添加 install 方法</p>
-<h4 id="开发时的一些疑问"><a href="#开发时的一些疑问" class="headerlink" title="开发时的一些疑问"></a>开发时的一些疑问</h4><h5 id="关于-devtool-的选用"><a href="#关于-devtool-的选用" class="headerlink" title="关于 devtool 的选用"></a>关于 <code>devtool</code> 的选用</h5><p>开发环境推荐： <code>cheap-module-eval-source-map</code></p>
+<h3 id="开发时的一些疑问"><a href="#开发时的一些疑问" class="headerlink" title="开发时的一些疑问"></a>开发时的一些疑问</h3><h4 id="关于-devtool-的选用"><a href="#关于-devtool-的选用" class="headerlink" title="关于 devtool 的选用"></a>关于 <code>devtool</code> 的选用</h4><p>开发环境推荐： <code>cheap-module-eval-source-map</code></p>
 <p>生产环境推荐：<code>cheap-module-source-map</code></p>
 <p>理由：</p>
 <ul>
@@ -368,18 +368,18 @@
 <li>使用 eval 方式可大幅提高持续构建效率，参考 <a href="https://www.webpackjs.com/configuration/devtool/#devtool" target="_blank" rel="noopener">webapck devtool</a> 速度对比列表，这对经常需要边改边调的前端开发而言非常重要</li>
 <li>直接将 sourceMap 放入打包后的文件，会明显增大文件的大小，不利于静态文件的快速加载；而外联 .map 时，.map 文件只会在 F12 开启时进行下载（ sourceMap 主要服务于调试），故推荐使用外联 .map 的形式</li>
 </ul>
-<h5 id="升级-babel-的问题"><a href="#升级-babel-的问题" class="headerlink" title="升级 babel 的问题"></a>升级 babel 的问题</h5><p>依照官方文档的介绍，安装了 <code>@babel/core</code> 等插件，并更新了 <code>.babelrc</code> 的配置，但是 build 的时候报错表示 babel-core 版本过低（直接 <code>yarn add babel-core</code> 装的是 6.x 版本），需要 7.0.0.0 版本，因此需要更新 <code>babel-core</code></p>
+<h4 id="升级-babel-的问题"><a href="#升级-babel-的问题" class="headerlink" title="升级 babel 的问题"></a>升级 babel 的问题</h4><p>依照官方文档的介绍，安装了 <code>@babel/core</code> 等插件，并更新了 <code>.babelrc</code> 的配置，但是 build 的时候报错表示 babel-core 版本过低（直接 <code>yarn add babel-core</code> 装的是 6.x 版本），需要 7.0.0.0 版本，因此需要更新 <code>babel-core</code></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add babel-core@^7.0.0-bridge.0 -D</span><br></pre></td></tr></table></figure>
-<h5 id="本地调试包"><a href="#本地调试包" class="headerlink" title="本地调试包"></a>本地调试包</h5><p>一般通过 <code>yarn link</code> 来调试编写的包，但是除此之外还有另外一个方法，通过相对路径来安装对应的包</p>
+<h4 id="本地调试包"><a href="#本地调试包" class="headerlink" title="本地调试包"></a>本地调试包</h4><p>一般通过 <code>yarn link</code> 来调试编写的包，但是除此之外还有另外一个方法，通过相对路径来安装对应的包</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">"target-file": "file:&lt;relative-path&gt;"</span><br></pre></td></tr></table></figure>
 <p>但是缺点是，每次更新后都需要删除后重新安装此包，或者将包升级一下版本，然后再次安装才能调试，比较麻烦。</p>
 <p>最好的配置方法还是通过 <code>yarn link</code> 来调试。</p>
-<h5 id="按需引入比解构引入打包的体积要大？"><a href="#按需引入比解构引入打包的体积要大？" class="headerlink" title="按需引入比解构引入打包的体积要大？"></a>按需引入比解构引入打包的体积要大？</h5><p>分析了一下打包后的代码，就用以下的例子来解释</p>
+<h4 id="按需引入比解构引入打包的体积要大？"><a href="#按需引入比解构引入打包的体积要大？" class="headerlink" title="按需引入比解构引入打包的体积要大？"></a>按需引入比解构引入打包的体积要大？</h4><p>分析了一下打包后的代码，就用以下的例子来解释</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 按需</span></span><br><span class="line"><span class="keyword">import</span> debouce <span class="keyword">from</span> <span class="string">'lodash/debounce'</span></span><br><span class="line"><span class="comment">// 解构</span></span><br><span class="line"><span class="keyword">import</span> &#123; debounce &#125; <span class="keyword">from</span> <span class="string">'lodash'</span>;</span><br></pre></td></tr></table></figure>
 <p>通过 webpack-bundle-analyzer 分析打包后的内容，发现前者有 lodash 的模块，后者没有，后者没有的原因时在压缩的代码内有 <code>require(&#39;lodash&#39;)</code> 即，我们需要配置 <code>package.json</code> 的 <code>lodash</code> 的 <code>dependencies</code> 依赖，需要引用此包的项目有对 <code>lodash</code> 的依赖，也就是说，解构获取的 <code>debouce</code> 不会将对应的内容连同代码一起打包，而是需要用户安装对应的包的依赖，因此体积相对会变小。</p>
-<h5 id="为什么要用-library？"><a href="#为什么要用-library？" class="headerlink" title="为什么要用 library？"></a>为什么要用 library？</h5><p>使用 umd 是为了兼容 commonjs 和 amd 的方式，一般发包用 umd 可保证不会出啥问题，兼容性也很棒，而使用 umd 则需要配置 library。</p>
-<h5 id="path-和-publicPath"><a href="#path-和-publicPath" class="headerlink" title="path 和 publicPath"></a>path 和 publicPath</h5><p>一般我们配置好 path 其实就能万事大吉了，那 publicPath 究竟有什么用呢？其实简单理解， path 至当前的项目的根目录（本地），publicPath 指的是服务器的根目录（服务器）,比如：将资源放在 CDN 上时，把 publicPath 设置为 CDN 的值就行了。</p>
-<h4 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h4><ul>
+<h4 id="为什么要用-library？"><a href="#为什么要用-library？" class="headerlink" title="为什么要用 library？"></a>为什么要用 library？</h4><p>使用 umd 是为了兼容 commonjs 和 amd 的方式，一般发包用 umd 可保证不会出啥问题，兼容性也很棒，而使用 umd 则需要配置 library。</p>
+<h4 id="path-和-publicPath"><a href="#path-和-publicPath" class="headerlink" title="path 和 publicPath"></a>path 和 publicPath</h4><p>一般我们配置好 path 其实就能万事大吉了，那 publicPath 究竟有什么用呢？其实简单理解， path 至当前的项目的根目录（本地），publicPath 指的是服务器的根目录（服务器）,比如：将资源放在 CDN 上时，把 publicPath 设置为 CDN 的值就行了。</p>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><ul>
 <li><a href="https://www.cnblogs.com/hhhyaaon/p/5657469.html" target="_blank" rel="noopener">webpack devtool配置对比</a></li>
 <li><a href="https://www.webpackjs.com/concepts/" target="_blank" rel="noopener">webpack 文档</a></li>
 <li><a href="https://webpack.docschina.org/configuration/#%E9%80%89%E9%A1%B9" target="_blank" rel="noopener">webpack 配置详情文档</a></li>
@@ -389,7 +389,7 @@
 <li><a href="https://github.com/babel/babel-bridge" target="_blank" rel="noopener">babel-bridge</a></li>
 <li><a href="https://vue-loader.vuejs.org/zh/" target="_blank" rel="noopener">vue-loader</a></li>
 </ul>
-<h4 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h4><p><a href="https://github.com/kazehaiya/vue-component" target="_blank" rel="noopener">完整样例</a></p>
+<h3 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h3><p><a href="https://github.com/kazehaiya/vue-component" target="_blank" rel="noopener">完整样例</a></p>
 
     </div>
 
@@ -427,8 +427,8 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2019/04/06/node-环境配置/" rel="prev" title="node 环境配置">
-      <i class="fa fa-chevron-left"></i> node 环境配置
+    <a href="/2019/04/06/windows-node-环境配置/" rel="prev" title="node 环境配置（windows）">
+      <i class="fa fa-chevron-left"></i> node 环境配置（windows）
     </a></div>
       <div class="post-nav-item">
     <a href="/2019/04/18/浅谈行内元素/" rel="next" title="浅谈行内元素">
@@ -493,7 +493,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#准备工作"><span class="nav-number">2.</span> <span class="nav-text">准备工作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#了解相关知识"><span class="nav-number">2.1.</span> <span class="nav-text">了解相关知识</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#发包前的准备"><span class="nav-number">2.2.</span> <span class="nav-text">发包前的准备</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#创建账号"><span class="nav-number">2.2.1.</span> <span class="nav-text">创建账号</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#创建待发布的包"><span class="nav-number">2.2.2.</span> <span class="nav-text">创建待发布的包</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#规范化-package-json-内容"><span class="nav-number">2.2.3.</span> <span class="nav-text">规范化 package.json 内容</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化包的配置"><span class="nav-number">3.</span> <span class="nav-text">初始化包的配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置-webpack"><span class="nav-number">3.1.</span> <span class="nav-text">配置 webpack</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#出入口文件配置"><span class="nav-number">3.1.1.</span> <span class="nav-text">出入口文件配置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#loader-配置"><span class="nav-number">3.1.2.</span> <span class="nav-text">loader 配置</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#vue-loader"><span class="nav-number">3.1.2.1.</span> <span class="nav-text">vue-loader</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#es6-支持"><span class="nav-number">3.1.2.2.</span> <span class="nav-text">es6 支持</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#css-样式支持"><span class="nav-number">3.1.2.3.</span> <span class="nav-text">css 样式支持</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#其余资源支持"><span class="nav-number">3.1.2.4.</span> <span class="nav-text">其余资源支持</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#optimization-配置"><span class="nav-number">3.1.3.</span> <span class="nav-text">optimization 配置</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#附带的配置"><span class="nav-number">3.1.3.1.</span> <span class="nav-text">附带的配置</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vue-的配置"><span class="nav-number">3.2.</span> <span class="nav-text">vue 的配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#开发时的一些疑问"><span class="nav-number">3.3.</span> <span class="nav-text">开发时的一些疑问</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#关于-devtool-的选用"><span class="nav-number">3.3.1.</span> <span class="nav-text">关于 devtool 的选用</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#升级-babel-的问题"><span class="nav-number">3.3.2.</span> <span class="nav-text">升级 babel 的问题</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#本地调试包"><span class="nav-number">3.3.3.</span> <span class="nav-text">本地调试包</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#按需引入比解构引入打包的体积要大？"><span class="nav-number">3.3.4.</span> <span class="nav-text">按需引入比解构引入打包的体积要大？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#为什么要用-library？"><span class="nav-number">3.3.5.</span> <span class="nav-text">为什么要用 library？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#path-和-publicPath"><span class="nav-number">3.3.6.</span> <span class="nav-text">path 和 publicPath</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考文档"><span class="nav-number">3.4.</span> <span class="nav-text">参考文档</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#附录"><span class="nav-number">3.5.</span> <span class="nav-text">附录</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#准备工作"><span class="nav-number">2.</span> <span class="nav-text">准备工作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#了解相关知识"><span class="nav-number">2.1.</span> <span class="nav-text">了解相关知识</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#发包前的准备"><span class="nav-number">2.2.</span> <span class="nav-text">发包前的准备</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#创建账号"><span class="nav-number">2.2.1.</span> <span class="nav-text">创建账号</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#创建待发布的包"><span class="nav-number">2.2.2.</span> <span class="nav-text">创建待发布的包</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#规范化-package-json-内容"><span class="nav-number">2.2.3.</span> <span class="nav-text">规范化 package.json 内容</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化包的配置"><span class="nav-number">3.</span> <span class="nav-text">初始化包的配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置-webpack"><span class="nav-number">3.1.</span> <span class="nav-text">配置 webpack</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#出入口文件配置"><span class="nav-number">3.1.1.</span> <span class="nav-text">出入口文件配置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#loader-配置"><span class="nav-number">3.1.2.</span> <span class="nav-text">loader 配置</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#vue-loader"><span class="nav-number">3.1.2.1.</span> <span class="nav-text">vue-loader</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#es6-支持"><span class="nav-number">3.1.2.2.</span> <span class="nav-text">es6 支持</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#css-样式支持"><span class="nav-number">3.1.2.3.</span> <span class="nav-text">css 样式支持</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#其余资源支持"><span class="nav-number">3.1.2.4.</span> <span class="nav-text">其余资源支持</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#optimization-配置"><span class="nav-number">3.1.3.</span> <span class="nav-text">optimization 配置</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#附带的配置"><span class="nav-number">3.1.3.1.</span> <span class="nav-text">附带的配置</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vue-的配置"><span class="nav-number">3.2.</span> <span class="nav-text">vue 的配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开发时的一些疑问"><span class="nav-number">4.</span> <span class="nav-text">开发时的一些疑问</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#关于-devtool-的选用"><span class="nav-number">4.1.</span> <span class="nav-text">关于 devtool 的选用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#升级-babel-的问题"><span class="nav-number">4.2.</span> <span class="nav-text">升级 babel 的问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#本地调试包"><span class="nav-number">4.3.</span> <span class="nav-text">本地调试包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#按需引入比解构引入打包的体积要大？"><span class="nav-number">4.4.</span> <span class="nav-text">按需引入比解构引入打包的体积要大？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么要用-library？"><span class="nav-number">4.5.</span> <span class="nav-text">为什么要用 library？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#path-和-publicPath"><span class="nav-number">4.6.</span> <span class="nav-text">path 和 publicPath</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文档"><span class="nav-number">5.</span> <span class="nav-text">参考文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#附录"><span class="nav-number">6.</span> <span class="nav-text">附录</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -509,7 +509,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-count">47</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -592,13 +592,13 @@
       <i class="fa fa-chart-area"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">74k</span>
+    <span title="站点总字数">76k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">1:07</span>
+    <span title="站点阅读时长">1:09</span>
 </div>
 
         
