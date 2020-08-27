@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"kazehaiya.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"kazehaiya.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="前言最近新换了一台 Mac（原来公司的 Mac 敲多了胳膊酸），因此又要重新配置 Mac 环境，想了想如果之后 Mac 又换了一台，那不又双叒叕得重新翻阅文档再配置一遍 Mac 吗。为了省去之后再次查资料的麻烦，这里写一篇记录文。">
@@ -28,13 +28,10 @@
 <meta property="og:site_name" content="沐光">
 <meta property="og:description" content="前言最近新换了一台 Mac（原来公司的 Mac 敲多了胳膊酸），因此又要重新配置 Mac 环境，想了想如果之后 Mac 又换了一台，那不又双叒叕得重新翻阅文档再配置一遍 Mac 吗。为了省去之后再次查资料的麻烦，这里写一篇记录文。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://kazehaiya.github.io/images/iterm-theme.png">
-<meta property="og:image" content="https://kazehaiya.github.io/images/iterm-config.png">
 <meta property="og:updated_time" content="2020-08-26T08:49:27.854Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mac 环境配置">
 <meta name="twitter:description" content="前言最近新换了一台 Mac（原来公司的 Mac 敲多了胳膊酸），因此又要重新配置 Mac 环境，想了想如果之后 Mac 又换了一台，那不又双叒叕得重新翻阅文档再配置一遍 Mac 吗。为了省去之后再次查资料的麻烦，这里写一篇记录文。">
-<meta name="twitter:image" content="https://kazehaiya.github.io/images/iterm-theme.png">
 
 <link rel="canonical" href="https://kazehaiya.github.io/2020/08/26/Mac-环境配置/">
 
@@ -217,15 +214,13 @@
         </h1>
 
         <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-08-26 16:49:27" itemprop="dateModified" datetime="2020-08-26T16:49:27+08:00">2020-08-26</time>
               </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-08-26 16:20:44 / 修改时间：16:49:27" itemprop="dateCreated datePublished" datetime="2020-08-26T16:20:44+08:00">2020-08-26</time>
-            </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -237,16 +232,32 @@
             </span>
 
           
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/08/26/Mac-环境配置/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/08/26/Mac-环境配置/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
             <span class="post-meta-item" title="本文字数">
               <span class="post-meta-item-icon">
                 <i class="far fa-file-word"></i>
               </span>
+                <span class="post-meta-item-text">本文字数：</span>
               <span>1.7k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
               <span>2 分钟</span>
             </span>
 
@@ -284,7 +295,7 @@
 <p>配置完了，然后是下载插件</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 进入自定义插件目录</span></span><br><span class="line"><span class="built_in">cd</span> ~/.oh-my-zsh/custom/plugins</span><br><span class="line"><span class="comment"># 拷贝插件</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-autosuggestions.git</span><br><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-syntax-highlighting.git</span><br></pre></td></tr></table></figure>
 <h3 id="配置-iterm"><a href="#配置-iterm" class="headerlink" title="配置 iterm"></a>配置 iterm</h3><p>下载 <code>solarized</code> 主题，<a href="http://ethanschoonover.com/solarized/files/solarized.zip" target="_blank" rel="noopener">下载链接</a>，这里我创建了一个 Custom 文件夹，解压缩在里边，然后进入 <code>oxs-terminal.app-colors-solarized</code> 文件夹，安装对应的俩 <code>.terminal</code> 主题（双击运行即可）。</p>
-<p><img src="/images/iterm-theme.png" alt="item-theme"></p>
+<p><img data-src="/images/iterm-theme.png" alt="item-theme"></p>
 <blockquote>
 <p>安装完后下载的主题可以删掉了</p>
 </blockquote>
@@ -294,7 +305,7 @@
 <li><code>Text 部分</code>：设置字体 Font 大小</li>
 <li><code>Window 部分</code>：设置 Transparent 背景透明度</li>
 </ul>
-<p><img src="/images/iterm-config.png" alt="item-config"></p>
+<p><img data-src="/images/iterm-config.png" alt="item-config"></p>
 <blockquote>
 <p>一般设置前俩就够了，Window 主要配置 <code>transparence</code> 来控制背景透明度。</p>
 </blockquote>
@@ -410,7 +421,7 @@
 
           </div>
           
-    <div class="comments" id="gitalk-container"></div>
+    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -580,11 +591,73 @@
 
   
   <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 <script src="/js/utils.js"></script><script src="/js/motion.js"></script>
 <script src="/js/schemes/pisces.js"></script>
 <script src="/js/next-boot.js"></script>
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
 
 
 
@@ -606,30 +679,40 @@
 
 
 
+    <div id="pjax">
   
 
   
-
-<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/gitalk/1.6.2/gitalk.min.css">
 
 
 <script>
-NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
-  NexT.utils.getScript('https://cdn.bootcdn.net/ajax/libs/gitalk/1.6.2/gitalk.min.js', () => {
-    var gitalk = new Gitalk({
-      clientID    : 'd41b2914b32ac3c92a9d',
-      clientSecret: '2065e40ff9986f6a8b7a21ac27b2ec109bbcf71c',
-      repo        : 'kazehaiya.github.io',
-      owner       : 'kazehaiya',
-      admin       : ['kazehaiya'],
-      id          : '15a6168f99ee47245297cd11673df710',
-        language: 'zh-CN',
-      distractionFreeMode: true
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
     });
-    gitalk.render('gitalk-container');
-  }, window.Gitalk);
+    new Valine({
+      el         : '#valine-comments',
+      verify     : true,
+      notify     : true,
+      appId      : 'GkgJm97N3UFm2mRb1eFcP2dn-gzGzoHsz',
+      appKey     : 'kJ8tYUUkX4ifhWha8rjnxWS8',
+      placeholder: "请不要吝惜你的笔头，来说点什么吧！",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
 });
 </script>
 
+    </div>
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/Epsilon2.1.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true,"scale":0.5},"react":{"opacity":0.7},"log":false});</script></body>
 </html>

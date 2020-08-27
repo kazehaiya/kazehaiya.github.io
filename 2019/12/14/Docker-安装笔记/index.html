@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"kazehaiya.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"kazehaiya.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="前言不知不觉已经快过 2 个月了，这期间由于项目变更，再加上遇到了一些生活上的波折，基本上没太多心思花在博文的编写了。好不容易稍微有点时间了，立马开始写上一篇，记录一下最近折腾配置的环境。  仅记录 Mac 环境的配置">
@@ -28,12 +28,10 @@
 <meta property="og:site_name" content="沐光">
 <meta property="og:description" content="前言不知不觉已经快过 2 个月了，这期间由于项目变更，再加上遇到了一些生活上的波折，基本上没太多心思花在博文的编写了。好不容易稍微有点时间了，立马开始写上一篇，记录一下最近折腾配置的环境。  仅记录 Mac 环境的配置">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://kazehaiya.github.io/images/docker-registry.jpg">
 <meta property="og:updated_time" content="2020-08-16T09:34:09.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker 安装笔记">
 <meta name="twitter:description" content="前言不知不觉已经快过 2 个月了，这期间由于项目变更，再加上遇到了一些生活上的波折，基本上没太多心思花在博文的编写了。好不容易稍微有点时间了，立马开始写上一篇，记录一下最近折腾配置的环境。  仅记录 Mac 环境的配置">
-<meta name="twitter:image" content="https://kazehaiya.github.io/images/docker-registry.jpg">
 
 <link rel="canonical" href="https://kazehaiya.github.io/2019/12/14/Docker-安装笔记/">
 
@@ -216,14 +214,6 @@
         </h1>
 
         <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-12-14 14:00:36" itemprop="dateCreated datePublished" datetime="2019-12-14T14:00:36+08:00">2019-12-14</time>
-            </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
@@ -242,16 +232,32 @@
             </span>
 
           
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/12/14/Docker-安装笔记/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/12/14/Docker-安装笔记/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
             <span class="post-meta-item" title="本文字数">
               <span class="post-meta-item-icon">
                 <i class="far fa-file-word"></i>
               </span>
+                <span class="post-meta-item-text">本文字数：</span>
               <span>677</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
               <span>1 分钟</span>
             </span>
 
@@ -284,7 +290,7 @@
 <h3 id="Docker-镜像加速"><a href="#Docker-镜像加速" class="headerlink" title="Docker 镜像加速"></a>Docker 镜像加速</h3><p>Docker 默认使用的是国外的源，而国外的源有时会有网络的问题，在后续的拉取中会比较缓慢。</p>
 <p>Mac 上的更改操作比较简单，步骤为：</p>
 <p>点击 Docker 图标 -&gt; Perferences -&gt; Daemon 标签页 -&gt; Registry mirrors</p>
-<p><img src="/images/docker-registry.jpg" alt="Docker 镜像"></p>
+<p><img data-src="/images/docker-registry.jpg" alt="Docker 镜像"></p>
 <p>可添加源有：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 国内官方</span></span><br><span class="line">https://registry.docker-cn.com</span><br><span class="line"><span class="comment"># 网易源</span></span><br><span class="line">https://hub-mirror.c.163.com</span><br><span class="line"><span class="comment"># 阿里云</span></span><br><span class="line">https://registry.aliyuncs.com</span><br><span class="line"><span class="comment"># 中科大</span></span><br><span class="line">https://docker.mirrors.ustc.edu.cn</span><br></pre></td></tr></table></figure>
 <p>之后点击 <code>Apply &amp; Restart</code> 等待片刻即可。</p>
@@ -370,7 +376,7 @@
 
           </div>
           
-    <div class="comments" id="gitalk-container"></div>
+    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -540,11 +546,73 @@
 
   
   <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 <script src="/js/utils.js"></script><script src="/js/motion.js"></script>
 <script src="/js/schemes/pisces.js"></script>
 <script src="/js/next-boot.js"></script>
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
 
 
 
@@ -566,30 +634,40 @@
 
 
 
+    <div id="pjax">
   
 
   
-
-<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/gitalk/1.6.2/gitalk.min.css">
 
 
 <script>
-NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
-  NexT.utils.getScript('https://cdn.bootcdn.net/ajax/libs/gitalk/1.6.2/gitalk.min.js', () => {
-    var gitalk = new Gitalk({
-      clientID    : 'd41b2914b32ac3c92a9d',
-      clientSecret: '2065e40ff9986f6a8b7a21ac27b2ec109bbcf71c',
-      repo        : 'kazehaiya.github.io',
-      owner       : 'kazehaiya',
-      admin       : ['kazehaiya'],
-      id          : 'fb00895a96bce917a3079468c5b4ffe6',
-        language: 'zh-CN',
-      distractionFreeMode: true
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
     });
-    gitalk.render('gitalk-container');
-  }, window.Gitalk);
+    new Valine({
+      el         : '#valine-comments',
+      verify     : true,
+      notify     : true,
+      appId      : 'GkgJm97N3UFm2mRb1eFcP2dn-gzGzoHsz',
+      appKey     : 'kJ8tYUUkX4ifhWha8rjnxWS8',
+      placeholder: "请不要吝惜你的笔头，来说点什么吧！",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
 });
 </script>
 
+    </div>
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/Epsilon2.1.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true,"scale":0.5},"react":{"opacity":0.7},"log":false});</script></body>
 </html>

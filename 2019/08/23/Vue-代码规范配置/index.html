@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"kazehaiya.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"kazehaiya.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="前言工欲善其事，必先利其器。一个好的规范能使的团队开发的效率提升一倍，因此，一个好的规范对于一个团队来说是必不可少的。此处记录我为所在团队维护的一套前端规范相关的配置。">
@@ -214,14 +214,6 @@
         </h1>
 
         <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-08-23 13:10:27" itemprop="dateCreated datePublished" datetime="2019-08-23T13:10:27+08:00">2019-08-23</time>
-            </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
@@ -240,16 +232,32 @@
             </span>
 
           
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/08/23/Vue-代码规范配置/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/08/23/Vue-代码规范配置/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
             <span class="post-meta-item" title="本文字数">
               <span class="post-meta-item-icon">
                 <i class="far fa-file-word"></i>
               </span>
+                <span class="post-meta-item-text">本文字数：</span>
               <span>365</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
               <span>1 分钟</span>
             </span>
 
@@ -337,7 +345,7 @@
 
           </div>
           
-    <div class="comments" id="gitalk-container"></div>
+    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -507,11 +515,73 @@
 
   
   <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 <script src="/js/utils.js"></script><script src="/js/motion.js"></script>
 <script src="/js/schemes/pisces.js"></script>
 <script src="/js/next-boot.js"></script>
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
 
 
 
@@ -533,30 +603,40 @@
 
 
 
+    <div id="pjax">
   
 
   
-
-<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/gitalk/1.6.2/gitalk.min.css">
 
 
 <script>
-NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
-  NexT.utils.getScript('https://cdn.bootcdn.net/ajax/libs/gitalk/1.6.2/gitalk.min.js', () => {
-    var gitalk = new Gitalk({
-      clientID    : 'd41b2914b32ac3c92a9d',
-      clientSecret: '2065e40ff9986f6a8b7a21ac27b2ec109bbcf71c',
-      repo        : 'kazehaiya.github.io',
-      owner       : 'kazehaiya',
-      admin       : ['kazehaiya'],
-      id          : '65b19aebe0367586378baf740f60ee62',
-        language: 'zh-CN',
-      distractionFreeMode: true
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
     });
-    gitalk.render('gitalk-container');
-  }, window.Gitalk);
+    new Valine({
+      el         : '#valine-comments',
+      verify     : true,
+      notify     : true,
+      appId      : 'GkgJm97N3UFm2mRb1eFcP2dn-gzGzoHsz',
+      appKey     : 'kJ8tYUUkX4ifhWha8rjnxWS8',
+      placeholder: "请不要吝惜你的笔头，来说点什么吧！",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
 });
 </script>
 
+    </div>
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/Epsilon2.1.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true,"scale":0.5},"react":{"opacity":0.7},"log":false});</script></body>
 </html>

@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"kazehaiya.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"kazehaiya.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="前言CSS 中除了垂直居中之外，另外一个常见的问题就是 BFC 问题。BFC 全称为 Block Fromatting Context，即“块级格式化上下文”，对于前端开发来说，了解这个还是非常必要的，因为对于 To C 类的产品对于前端 CSS 要求还是挺高的，了解这个能够更为方便的把握住页面的结构层次以及会产生的问题。">
@@ -28,12 +28,10 @@
 <meta property="og:site_name" content="沐光">
 <meta property="og:description" content="前言CSS 中除了垂直居中之外，另外一个常见的问题就是 BFC 问题。BFC 全称为 Block Fromatting Context，即“块级格式化上下文”，对于前端开发来说，了解这个还是非常必要的，因为对于 To C 类的产品对于前端 CSS 要求还是挺高的，了解这个能够更为方便的把握住页面的结构层次以及会产生的问题。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://kazehaiya.github.io/images/bfc_problem_1.png">
 <meta property="og:updated_time" content="2020-08-16T09:34:09.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浅谈 BFC">
 <meta name="twitter:description" content="前言CSS 中除了垂直居中之外，另外一个常见的问题就是 BFC 问题。BFC 全称为 Block Fromatting Context，即“块级格式化上下文”，对于前端开发来说，了解这个还是非常必要的，因为对于 To C 类的产品对于前端 CSS 要求还是挺高的，了解这个能够更为方便的把握住页面的结构层次以及会产生的问题。">
-<meta name="twitter:image" content="https://kazehaiya.github.io/images/bfc_problem_1.png">
 
 <link rel="canonical" href="https://kazehaiya.github.io/2019/05/03/浅谈-BFC/">
 
@@ -216,14 +214,6 @@
         </h1>
 
         <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-05-03 19:38:12" itemprop="dateCreated datePublished" datetime="2019-05-03T19:38:12+08:00">2019-05-03</time>
-            </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
@@ -242,16 +232,32 @@
             </span>
 
           
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/05/03/浅谈-BFC/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/05/03/浅谈-BFC/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
             <span class="post-meta-item" title="本文字数">
               <span class="post-meta-item-icon">
                 <i class="far fa-file-word"></i>
               </span>
+                <span class="post-meta-item-text">本文字数：</span>
               <span>1.9k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
               <span>2 分钟</span>
             </span>
 
@@ -287,7 +293,7 @@
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"container"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">"float-content"</span>&gt;</span>This is a float element<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: bisque;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.float-content</span> &#123;</span><br><span class="line">  <span class="attribute">float</span>: left;</span><br><span class="line">  <span class="attribute">background-color</span>: antiquewhite;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">30%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>由于子元素为浮动元素，脱离了文档流，因此父元素的内容为“空”，因此父元素的高度最终计算为 0。</p>
-<p><img src="/images/bfc_problem_1.png" alt="高度塌陷"></p>
+<p><img data-src="/images/bfc_problem_1.png" alt="高度塌陷"></p>
 <p>解决这个的方法也有很多，这里就不做全量总结了，最为推荐的方法为添加伪元素法：</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span><span class="selector-pseudo">::after</span> &#123;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">""</span>;</span><br><span class="line">  <span class="attribute">clear</span>: both;</span><br><span class="line">  <span class="attribute">display</span>: block;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">visibility</span>: hidden;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="外边距折叠"><a href="#外边距折叠" class="headerlink" title="外边距折叠"></a>外边距折叠</h3><p>外边距折叠问题用图不是很好描述，这里先简单的用字符画来描述一下（两种情形）。</p>
@@ -392,7 +398,7 @@
 
           </div>
           
-    <div class="comments" id="gitalk-container"></div>
+    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -562,11 +568,73 @@
 
   
   <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 <script src="/js/utils.js"></script><script src="/js/motion.js"></script>
 <script src="/js/schemes/pisces.js"></script>
 <script src="/js/next-boot.js"></script>
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
 
 
 
@@ -588,30 +656,40 @@
 
 
 
+    <div id="pjax">
   
 
   
-
-<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/gitalk/1.6.2/gitalk.min.css">
 
 
 <script>
-NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
-  NexT.utils.getScript('https://cdn.bootcdn.net/ajax/libs/gitalk/1.6.2/gitalk.min.js', () => {
-    var gitalk = new Gitalk({
-      clientID    : 'd41b2914b32ac3c92a9d',
-      clientSecret: '2065e40ff9986f6a8b7a21ac27b2ec109bbcf71c',
-      repo        : 'kazehaiya.github.io',
-      owner       : 'kazehaiya',
-      admin       : ['kazehaiya'],
-      id          : 'b489307ce04796cc7ec10ff05caa5fe5',
-        language: 'zh-CN',
-      distractionFreeMode: true
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
     });
-    gitalk.render('gitalk-container');
-  }, window.Gitalk);
+    new Valine({
+      el         : '#valine-comments',
+      verify     : true,
+      notify     : true,
+      appId      : 'GkgJm97N3UFm2mRb1eFcP2dn-gzGzoHsz',
+      appKey     : 'kJ8tYUUkX4ifhWha8rjnxWS8',
+      placeholder: "请不要吝惜你的笔头，来说点什么吧！",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
 });
 </script>
 
+    </div>
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/Epsilon2.1.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true,"scale":0.5},"react":{"opacity":0.7},"log":false});</script></body>
 </html>

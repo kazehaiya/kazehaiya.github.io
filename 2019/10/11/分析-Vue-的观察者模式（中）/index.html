@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"kazehaiya.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"kazehaiya.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="前言在上篇分析 Vue 的观察者模式（上）中，简单实现了“手动”版观察者模式，而在本篇中我们继续沿着该思路往下探索，看如何实现“自动”版的观察者。">
@@ -28,12 +28,10 @@
 <meta property="og:site_name" content="沐光">
 <meta property="og:description" content="前言在上篇分析 Vue 的观察者模式（上）中，简单实现了“手动”版观察者模式，而在本篇中我们继续沿着该思路往下探索，看如何实现“自动”版的观察者。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://kazehaiya.github.io/images/vue-observer.jpeg">
 <meta property="og:updated_time" content="2020-08-16T09:34:09.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="分析 Vue 的观察者模式（中）">
 <meta name="twitter:description" content="前言在上篇分析 Vue 的观察者模式（上）中，简单实现了“手动”版观察者模式，而在本篇中我们继续沿着该思路往下探索，看如何实现“自动”版的观察者。">
-<meta name="twitter:image" content="https://kazehaiya.github.io/images/vue-observer.jpeg">
 
 <link rel="canonical" href="https://kazehaiya.github.io/2019/10/11/分析-Vue-的观察者模式（中）/">
 
@@ -216,14 +214,6 @@
         </h1>
 
         <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-10-11 11:48:30" itemprop="dateCreated datePublished" datetime="2019-10-11T11:48:30+08:00">2019-10-11</time>
-            </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
@@ -242,16 +232,32 @@
             </span>
 
           
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/10/11/分析-Vue-的观察者模式（中）/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/10/11/分析-Vue-的观察者模式（中）/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
             <span class="post-meta-item" title="本文字数">
               <span class="post-meta-item-icon">
                 <i class="far fa-file-word"></i>
               </span>
+                <span class="post-meta-item-text">本文字数：</span>
               <span>1.5k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
               <span>1 分钟</span>
             </span>
 
@@ -284,7 +290,7 @@
 <p>这样我们就讲观察者的订阅方法和 Dep 依赖给绑定上了。考虑到 watcher 的通用性，这里写了一个加强版的 demo，如下：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> target = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// （私人管家）依赖收集</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList = [];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 将当前的 watcher 加入 dep 中</span></span><br><span class="line">  addSub(watcher) &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.push(watcher)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 添加订阅方法</span></span><br><span class="line">  depend() &#123;</span><br><span class="line">    <span class="keyword">if</span> (target) &#123;</span><br><span class="line">      target.addDep(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发布者更新消息，触发所有的订阅方法</span></span><br><span class="line">  notify() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.forEach(<span class="function"><span class="params">sub</span> =&gt;</span> &#123;</span><br><span class="line">      sub.update();</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// （平台）观察者</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Watcher</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(data = &#123;&#125;, key = <span class="string">''</span>, cb = <span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;) &#123;</span><br><span class="line">    <span class="keyword">this</span>.cb = cb;</span><br><span class="line">    <span class="keyword">this</span>._data = data;</span><br><span class="line">    <span class="keyword">this</span>.key = key;</span><br><span class="line"></span><br><span class="line">    target = <span class="keyword">this</span>;</span><br><span class="line">    <span class="comment">// 触发 getter，存储本 watcher</span></span><br><span class="line">    <span class="keyword">this</span>.value = data[key];</span><br><span class="line">    <span class="comment">// 防止反复触发</span></span><br><span class="line">    target = <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  addDep(dep) &#123;</span><br><span class="line">    dep.addSub(<span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  update() &#123;</span><br><span class="line">    <span class="keyword">const</span> newVal = <span class="keyword">this</span>._data[<span class="keyword">this</span>.key];</span><br><span class="line">    <span class="keyword">this</span>.value = newVal;</span><br><span class="line">    <span class="keyword">this</span>.cb(newVal);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// （发布者和管家的联系方式）监听器</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">observer</span>(<span class="params">data = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">Object</span>.keys(data).forEach(<span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> val = data[key];</span><br><span class="line">    <span class="keyword">const</span> dep = <span class="keyword">new</span> Dep();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(data, key, &#123;</span><br><span class="line">      <span class="keyword">get</span>() &#123;</span><br><span class="line">        <span class="keyword">if</span> (target) &#123;</span><br><span class="line">          <span class="comment">// get 时添加依赖</span></span><br><span class="line">          dep.depend();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> val;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="keyword">set</span>(newVal) &#123;</span><br><span class="line">        <span class="keyword">if</span> (newVal === val) &#123;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// set 时触发更新</span></span><br><span class="line">        val = newVal;</span><br><span class="line">        dep.notify();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发布者</span></span><br><span class="line"><span class="keyword">const</span> publisher = &#123;</span><br><span class="line">  bookName: <span class="string">'book'</span>,</span><br><span class="line">  bookContent: <span class="string">'hello world'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 管家开始观测发布者</span></span><br><span class="line">observer(publisher);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 订阅者在平台上订阅发布者的部分信息</span></span><br><span class="line"><span class="keyword">new</span> Watcher(publisher, <span class="string">'bookName'</span>, name =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`new book name is <span class="subst">$&#123;name&#125;</span>`</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">new</span> Watcher(publisher, <span class="string">'bookContent'</span>, content =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`new book content is <span class="subst">$&#123;content&#125;</span>`</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发布者发布信息</span></span><br><span class="line">publisher.bookName = <span class="string">'new book'</span>;</span><br><span class="line">publisher.bookContent = <span class="string">'new content'</span>;</span><br></pre></td></tr></table></figure>
 <h3 id="Vue-观察者的实现"><a href="#Vue-观察者的实现" class="headerlink" title="Vue 观察者的实现"></a>Vue 观察者的实现</h3><p>在看源码之前，首先让我们看看 Vue 的实现原理图：</p>
-<p><img src="/images/vue-observer.jpeg" alt="Reactive"></p>
+<p><img data-src="/images/vue-observer.jpeg" alt="Reactive"></p>
 <p>先仅考虑 data 部分的观察者模式，我们可以看到大致步骤为：</p>
 <ol>
 <li>为发布者 data 做数据监听处理；</li>
@@ -364,7 +370,7 @@
 
           </div>
           
-    <div class="comments" id="gitalk-container"></div>
+    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -534,11 +540,73 @@
 
   
   <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
 <script src="/js/utils.js"></script><script src="/js/motion.js"></script>
 <script src="/js/schemes/pisces.js"></script>
 <script src="/js/next-boot.js"></script>
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
 
 
 
@@ -560,30 +628,40 @@
 
 
 
+    <div id="pjax">
   
 
   
-
-<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/gitalk/1.6.2/gitalk.min.css">
 
 
 <script>
-NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
-  NexT.utils.getScript('https://cdn.bootcdn.net/ajax/libs/gitalk/1.6.2/gitalk.min.js', () => {
-    var gitalk = new Gitalk({
-      clientID    : 'd41b2914b32ac3c92a9d',
-      clientSecret: '2065e40ff9986f6a8b7a21ac27b2ec109bbcf71c',
-      repo        : 'kazehaiya.github.io',
-      owner       : 'kazehaiya',
-      admin       : ['kazehaiya'],
-      id          : '4b5c1597032659dd17a4bd1dce76ba15',
-        language: 'zh-CN',
-      distractionFreeMode: true
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
     });
-    gitalk.render('gitalk-container');
-  }, window.Gitalk);
+    new Valine({
+      el         : '#valine-comments',
+      verify     : true,
+      notify     : true,
+      appId      : 'GkgJm97N3UFm2mRb1eFcP2dn-gzGzoHsz',
+      appKey     : 'kJ8tYUUkX4ifhWha8rjnxWS8',
+      placeholder: "请不要吝惜你的笔头，来说点什么吧！",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
 });
 </script>
 
+    </div>
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/Epsilon2.1.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true,"scale":0.5},"react":{"opacity":0.7},"log":false});</script></body>
 </html>
