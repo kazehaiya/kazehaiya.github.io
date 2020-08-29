@@ -1,38 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Docker 安装 mysql</title>
-    <url>/2020/03/11/Docker-%E5%AE%89%E8%A3%85-mysql/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>自学 Docker 系列，了解常用包的使用和配置安装，此篇记录 mysql 的安装</p>
-<a id="more"></a>
-<h3 id="安装配置"><a href="#安装配置" class="headerlink" title="安装配置"></a>安装配置</h3><p>下载 mysql（8 版本和 7 版本不太一样）</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker pull mysql:latest</span><br><span class="line">docker pull mysql:5.7</span><br></pre></td></tr></table></figure>
-<ol>
-<li>安装 mysql57</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run --name mysql57 -e MYSQL_ROOT_PASSWORD=123456 -p 3306:3306 -d mysql:5.7</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>此时直接通过 tomcat 或者 workbench 连接上即可</p>
-</blockquote>
-<ol start="2">
-<li>安装 mysql:latest</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run --name mysql -e MYSQL_ROOT_PASSWORD=123456 -p 3306:3306 -d mysql</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>如果用 tomcat 连接不上 mysql，那么请参阅参考文章</p>
-</blockquote>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
-<li><a href="https://www.cnblogs.com/feipeng8848/p/10470655.html" target="_blank" rel="noopener">Docker 安装 mysql</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Docker</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Docker 安装 nginx</title>
     <url>/2020/03/11/Docker-%E5%AE%89%E8%A3%85-nginx/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>自学 Docker 系列，了解常用包的使用和配置安装，此篇记录 nginx 的安装</p>
@@ -86,6 +54,38 @@
 <li><a href="https://www.jianshu.com/p/c1ce9eec5fb2" target="_blank" rel="noopener">Linux 彻底卸载 Nginx</a></li>
 <li><a href="https://www.runoob.com/linux/linux-comm-kill.html" target="_blank" rel="noopener">Linux kill 命令</a></li>
 <li><a href="https://www.cnblogs.com/happySmily/p/6003579.html" target="_blank" rel="noopener">nginx 重启报找不到 nginx.pid 的解决方法</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Docker 安装 mysql</title>
+    <url>/2020/03/11/Docker-%E5%AE%89%E8%A3%85-mysql/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>自学 Docker 系列，了解常用包的使用和配置安装，此篇记录 mysql 的安装</p>
+<a id="more"></a>
+<h3 id="安装配置"><a href="#安装配置" class="headerlink" title="安装配置"></a>安装配置</h3><p>下载 mysql（8 版本和 7 版本不太一样）</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker pull mysql:latest</span><br><span class="line">docker pull mysql:5.7</span><br></pre></td></tr></table></figure>
+<ol>
+<li>安装 mysql57</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run --name mysql57 -e MYSQL_ROOT_PASSWORD=123456 -p 3306:3306 -d mysql:5.7</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>此时直接通过 tomcat 或者 workbench 连接上即可</p>
+</blockquote>
+<ol start="2">
+<li>安装 mysql:latest</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run --name mysql -e MYSQL_ROOT_PASSWORD=123456 -p 3306:3306 -d mysql</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如果用 tomcat 连接不上 mysql，那么请参阅参考文章</p>
+</blockquote>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
+<li><a href="https://www.cnblogs.com/feipeng8848/p/10470655.html" target="_blank" rel="noopener">Docker 安装 mysql</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -254,6 +254,77 @@
       </tags>
   </entry>
   <entry>
+    <title>IntersectionObserver 与延迟加载</title>
+    <url>/2019/09/10/IntersectionObserver-%E4%B8%8E%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>随着项目图表使用的复杂程度的提升，“大数据”与多图表渲染带来的影响是页面响应慢、用户体验随时间越来越糟。通过 chrome 的 performance 分析出的原因是：接口耗时基本可忽略不计，页面渲染耗时才是对用户体验的真正影响。因此如何更“智能”的加载渲染的图表才是问题解决的关键，而这就要聊到“延迟加载”了。</p>
+<a id="more"></a>
+<h3 id="延迟加载"><a href="#延迟加载" class="headerlink" title="延迟加载"></a>延迟加载</h3><p>延迟加载比较通俗的说法为“懒加载”，其使用的场景都是在页面加载时优先加载关键资源（比如整体的页面轮廓等），非关键资源则在需要时才进行加载。</p>
+<p>那为什么需要延迟加载呢？有需必有求，首先看看直接加载所导致的一些问题：</p>
+<ul>
+<li>加载过多无用内容，造成数据流量的浪费，增加浏览器压力。</li>
+<li>渲染时间增长，用户等待时间增长，会造成部分用户流失。</li>
+<li>浪费处理时间、电池电量和其它系统资源</li>
+</ul>
+<p>为了增强用户体验，因此我们需要进行延迟加载。</p>
+<h4 id="getBoundingClientRect"><a href="#getBoundingClientRect" class="headerlink" title="getBoundingClientRect"></a>getBoundingClientRect</h4><p>早期还没有 IntersectionObserver 时，为了支持延迟加载，我们常使用的方法是 <code>Element.getBoundingClientRect()</code>。通过该方法来获取目标元素的大小以及其相对于视口的位置，从而来判断是否加载需要渲染的内容。</p>
+<p>其语法为：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> targetElement = <span class="built_in">document</span>.getElementById(<span class="string">'id'</span>);</span><br><span class="line"><span class="keyword">const</span> rectObject = targetElement.getBoundingClientRect();</span><br><span class="line"></span><br><span class="line">rectObject.top    <span class="comment">// 元素上边到视窗上边的距离;</span></span><br><span class="line">rectObject.right  <span class="comment">// 元素右边到视窗左边的距离;</span></span><br><span class="line">rectObject.bottom <span class="comment">// 元素下边到视窗上边的距离;</span></span><br><span class="line">rectObject.left   <span class="comment">// 元素左边到视窗左边的距离;</span></span><br><span class="line">rectObject.width  <span class="comment">// 是元素自身的宽</span></span><br><span class="line">rectObject.height <span class="comment">// 是元素自身的高</span></span><br></pre></td></tr></table></figure>
+<p>例子：</p>
+<iframe id="cp_embed_yLBKvKJ" src="//codepen.io/kazehaiya/embed/yLBKvKJ?height=300&theme-id=dark&slug-hash=yLBKvKJ&default-tab=css,result" scrolling="no" frameborder="no" height="300" allowtransparency="true" allowfullscreen="true" class="cp_embed_iframe" style="width: 100%; overflow: hidden;"></iframe>
+<p>既然有了 <code>getBoundingClientRect</code> 方法，那么为什么还需要 <code>IntersectionObserver</code> 方法呢？这里引用 MDN 上的一段话：</p>
+<div class="note info">
+            <p>过去，交集检测通常需要涉及到事件监听，以及对每个目标元素执行 Element.getBoundingClientRect() 方法以获取所需信息。可是这些代码都在主线程上运行，所以任何一点都可能造成性能问题。当网页遍布这些代码时就显得比较丑陋了。</p>
+          </div>
+<p>简而言之，<code>getBoundingClientRect</code> 方法对于需要监听大量对象的情况，其处理并不是特别完美（比如无限滚动，scroll 事件发生过于密集，容易造成性能问题），而这种情况下 <code>IntersectionObserver</code> 可以比较完美的解决这个问题。</p>
+<h3 id="IntersectionObserver"><a href="#IntersectionObserver" class="headerlink" title="IntersectionObserver"></a>IntersectionObserver</h3><p>首先 IntersectionObserver API 是异步的，不随着目标元素的滚动同步触发（即我们不用监听 scroll 事件了）。此外，该观察器的优先级非常低，只在其他任务执行完，浏览器有了空闲才会执行。</p>
+<p>这里再一次引用 MDN 上的解释：</p>
+<div class="note info">
+            <p>Intersection Observer API 会注册一个回调方法，每当期望被监视的元素进入或者退出另外一个元素的时候(或者浏览器的视口)该回调方法将会被执行，或者两个元素的交集部分大小发生变化的时候回调方法也会被执行。通过这种方式，网站将不需要为了监听两个元素的交集变化而在主线程里面做任何操作，并且浏览器可以帮助我们优化和管理两个元素的交集变化。</p>
+          </div>
+<p>少了对滚动事件的处理，在不考虑兼容性的情况下，性能方面肯定优于 <code>getBoundingClientRect</code>。那么它具体该如何使用呢？Demo 如下：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 创建一个 observer</span></span><br><span class="line"><span class="keyword">const</span> io = <span class="keyword">new</span> IntersectionObserver(callback, options);</span><br><span class="line"><span class="comment">// 监听目标元素</span></span><br><span class="line">io.observe(element);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 停止目标元素的监听</span></span><br><span class="line">io.unobserve(element);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 终止对所有目标元素可见性变化的观察</span></span><br><span class="line">io.disconnect();</span><br></pre></td></tr></table></figure>
+<p>上面代码中，<code>callback</code> 是触发可见行变化时的回调函数，<code>options</code> 是配置对象。</p>
+<h4 id="options"><a href="#options" class="headerlink" title="options"></a>options</h4><p>首先看看 options 配置，其总共有三个属性：<code>root</code>、<code>rootMargin</code> 和 <code>threshold</code>。</p>
+<p><code>root</code> 指选定的目标容器，默认为浏览器的视窗。</p>
+<p><code>rootMargin</code> 定义元素的 <code>margin</code>，<code>viewport + rootMargin</code> 为最终计算的视窗大小，这里引用一张图</p>
+<p><img data-src="https://upload-images.jianshu.io/upload_images/4060631-ae60b52ea8a52184.png?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp" alt></p>
+<p><code>threshold</code> 属性决定了什么时候触发回调函数。它是既可以是一个单一的 number 也可以是一个 number 数组，其表示目标元素和 root 元素相交程度达到该值的时候，callback 回调函数将会被执行。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> IntersectionObserver(</span><br><span class="line">  (entries, observer) =&gt; &#123; <span class="comment">/* ... */</span> &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">// 在相交程度为 0、25%、50%、75%、100% 时触发回调</span></span><br><span class="line">    threshold: [<span class="number">0</span>, <span class="number">0.25</span>, <span class="number">0.5</span>, <span class="number">0.75</span>, <span class="number">1</span>]</span><br><span class="line">  &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h4 id="callback"><a href="#callback" class="headerlink" title="callback"></a>callback</h4><p>当目标元素可见行变化时，其会触发 <code>callback</code> 函数，一般情况该函数会触发<strong>2次</strong>（进入和离开）。该函数有两个参数： <code>IntersectionObserverEntry 对象</code> 和 <code>观察者</code> 的列表。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> callback = <span class="function"><span class="keyword">function</span>(<span class="params">entries, observers</span>) </span>&#123;</span><br><span class="line">  entries.forEach(<span class="function"><span class="params">entry</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// Each entry describes an intersection change for one observed</span></span><br><span class="line">    <span class="comment">// target element:</span></span><br><span class="line">    <span class="comment">//   entry.rootBounds</span></span><br><span class="line">    <span class="comment">//   entry.boundingClientRect</span></span><br><span class="line">    <span class="comment">//   entry.intersectionRect</span></span><br><span class="line">    <span class="comment">//   entry.intersectionRatio</span></span><br><span class="line">    <span class="comment">//   entry.isIntersecting</span></span><br><span class="line">    <span class="comment">//   entry.target</span></span><br><span class="line">    <span class="comment">//   entry.time</span></span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">🔽[IntersectionObserverEntry]</span><br><span class="line">    time: <span class="number">3893.92</span></span><br><span class="line">  🔽rootBounds: ClientRect</span><br><span class="line">      bottom: <span class="number">920</span></span><br><span class="line">      height: <span class="number">1024</span></span><br><span class="line">      left: <span class="number">0</span></span><br><span class="line">      right: <span class="number">1024</span></span><br><span class="line">      top: <span class="number">0</span></span><br><span class="line">      width: <span class="number">920</span></span><br><span class="line">  🔽boundingClientRect: ClientRect</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  🔽intersectionRect: ClientRect</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    intersectionRatio: <span class="number">0.54</span></span><br><span class="line">  🔽target: div#observee</span><br><span class="line">    <span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
+<p><code>rootBounds</code>： root 元素调用 getBoundingClientRect() 函数的返回值（默认是 viewport 视口）</p>
+<p><code>boundingClientRect</code>： 目标 observer 调用 getBoundingClientRect() 函数的返回值</p>
+<p><code>intersectionRect</code>： 上述两矩形的交集，并且有效的告诉你观测到的元素的哪一部分是可见的</p>
+<p><code>intersectionRect</code>： 该属性告诉你元素目前有多少是可见的，比率是多少</p>
+<p><code>isIntersecting</code>： 目标元素在 root 元素中可见性是否发生了变化（至少得达到 thresholds 数组中的一个阈值）</p>
+<p><code>target</code>：  被观测的目标 DOM 元素</p>
+<p><code>time</code>： 可见行发生变化的时间（单位： ms）</p>
+<p>再次引用一张图片来解释上述部分参数：</p>
+<p><img data-src="https://developers.google.com/web/updates/images/2016/04/intersectionobserver/intersectratio.png" alt></p>
+<blockquote>
+<p>请留意，你注册的回调函数将会在主线程中被执行。所以该函数执行速度要尽可能的快。如果有一些耗时的操作需要执行，建议使用 Window.requestIdleCallback() 方法。</p>
+</blockquote>
+<h4 id="实战：无限滚动"><a href="#实战：无限滚动" class="headerlink" title="实战：无限滚动"></a>实战：无限滚动</h4><iframe id="cp_embed_YzKLNBz" src="//codepen.io/kazehaiya/embed/YzKLNBz?height=300&theme-id=dark&slug-hash=YzKLNBz&default-tab=css,result" scrolling="no" frameborder="no" height="300" allowtransparency="true" allowfullscreen="true" class="cp_embed_iframe" style="width: 100%; overflow: hidden;"></iframe>
+<h3 id="文章推荐"><a href="#文章推荐" class="headerlink" title="文章推荐"></a>文章推荐</h3><ul>
+<li><a href="https://developers.google.com/web/updates/2019/02/intersectionobserver-v2" target="_blank" rel="noopener">Trust is Good, Observation is Better—Intersection Observer v2</a></li>
+<li><a href="https://developers.google.com/web/fundamentals/performance/lazy-loading-guidance/images-and-video/" target="_blank" rel="noopener">延迟加载图像和视频</a></li>
+</ul>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
+<li><a href="https://developers.google.com/web/updates/2016/04/intersectionobserver" target="_blank" rel="noopener">IntersectionObserver’s Coming into View</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Intersection_Observer_API" target="_blank" rel="noopener">Intersection Observer API</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Element/getBoundingClientRect" target="_blank" rel="noopener">getBoundingClientRect</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2016/11/intersectionobserver_api.html" target="_blank" rel="noopener">IntersectionObserver API 使用教程</a></li>
+<li><a href="https://www.jianshu.com/p/84a86e41eb2b" target="_blank" rel="noopener">谈谈 IntersectionObserver 懒加载</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>JSX 语法总结</title>
     <url>/2019/09/01/JSX-%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近着手编写 JSON 可视化部分的内容，由于此部分需要基于基础组件进行封装，Vue 的 JSX 的写法用的比较频繁，此处就记录我目前所能总结出的 JSX 的写法，以做备忘。</p>
@@ -344,77 +415,6 @@
       </categories>
       <tags>
         <tag>Vue</tag>
-        <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>IntersectionObserver 与延迟加载</title>
-    <url>/2019/09/10/IntersectionObserver-%E4%B8%8E%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>随着项目图表使用的复杂程度的提升，“大数据”与多图表渲染带来的影响是页面响应慢、用户体验随时间越来越糟。通过 chrome 的 performance 分析出的原因是：接口耗时基本可忽略不计，页面渲染耗时才是对用户体验的真正影响。因此如何更“智能”的加载渲染的图表才是问题解决的关键，而这就要聊到“延迟加载”了。</p>
-<a id="more"></a>
-<h3 id="延迟加载"><a href="#延迟加载" class="headerlink" title="延迟加载"></a>延迟加载</h3><p>延迟加载比较通俗的说法为“懒加载”，其使用的场景都是在页面加载时优先加载关键资源（比如整体的页面轮廓等），非关键资源则在需要时才进行加载。</p>
-<p>那为什么需要延迟加载呢？有需必有求，首先看看直接加载所导致的一些问题：</p>
-<ul>
-<li>加载过多无用内容，造成数据流量的浪费，增加浏览器压力。</li>
-<li>渲染时间增长，用户等待时间增长，会造成部分用户流失。</li>
-<li>浪费处理时间、电池电量和其它系统资源</li>
-</ul>
-<p>为了增强用户体验，因此我们需要进行延迟加载。</p>
-<h4 id="getBoundingClientRect"><a href="#getBoundingClientRect" class="headerlink" title="getBoundingClientRect"></a>getBoundingClientRect</h4><p>早期还没有 IntersectionObserver 时，为了支持延迟加载，我们常使用的方法是 <code>Element.getBoundingClientRect()</code>。通过该方法来获取目标元素的大小以及其相对于视口的位置，从而来判断是否加载需要渲染的内容。</p>
-<p>其语法为：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> targetElement = <span class="built_in">document</span>.getElementById(<span class="string">'id'</span>);</span><br><span class="line"><span class="keyword">const</span> rectObject = targetElement.getBoundingClientRect();</span><br><span class="line"></span><br><span class="line">rectObject.top    <span class="comment">// 元素上边到视窗上边的距离;</span></span><br><span class="line">rectObject.right  <span class="comment">// 元素右边到视窗左边的距离;</span></span><br><span class="line">rectObject.bottom <span class="comment">// 元素下边到视窗上边的距离;</span></span><br><span class="line">rectObject.left   <span class="comment">// 元素左边到视窗左边的距离;</span></span><br><span class="line">rectObject.width  <span class="comment">// 是元素自身的宽</span></span><br><span class="line">rectObject.height <span class="comment">// 是元素自身的高</span></span><br></pre></td></tr></table></figure>
-<p>例子：</p>
-<iframe id="cp_embed_yLBKvKJ" src="//codepen.io/kazehaiya/embed/yLBKvKJ?height=300&theme-id=dark&slug-hash=yLBKvKJ&default-tab=css,result" scrolling="no" frameborder="no" height="300" allowtransparency="true" allowfullscreen="true" class="cp_embed_iframe" style="width: 100%; overflow: hidden;"></iframe>
-<p>既然有了 <code>getBoundingClientRect</code> 方法，那么为什么还需要 <code>IntersectionObserver</code> 方法呢？这里引用 MDN 上的一段话：</p>
-<div class="note info">
-            <p>过去，交集检测通常需要涉及到事件监听，以及对每个目标元素执行 Element.getBoundingClientRect() 方法以获取所需信息。可是这些代码都在主线程上运行，所以任何一点都可能造成性能问题。当网页遍布这些代码时就显得比较丑陋了。</p>
-          </div>
-<p>简而言之，<code>getBoundingClientRect</code> 方法对于需要监听大量对象的情况，其处理并不是特别完美（比如无限滚动，scroll 事件发生过于密集，容易造成性能问题），而这种情况下 <code>IntersectionObserver</code> 可以比较完美的解决这个问题。</p>
-<h3 id="IntersectionObserver"><a href="#IntersectionObserver" class="headerlink" title="IntersectionObserver"></a>IntersectionObserver</h3><p>首先 IntersectionObserver API 是异步的，不随着目标元素的滚动同步触发（即我们不用监听 scroll 事件了）。此外，该观察器的优先级非常低，只在其他任务执行完，浏览器有了空闲才会执行。</p>
-<p>这里再一次引用 MDN 上的解释：</p>
-<div class="note info">
-            <p>Intersection Observer API 会注册一个回调方法，每当期望被监视的元素进入或者退出另外一个元素的时候(或者浏览器的视口)该回调方法将会被执行，或者两个元素的交集部分大小发生变化的时候回调方法也会被执行。通过这种方式，网站将不需要为了监听两个元素的交集变化而在主线程里面做任何操作，并且浏览器可以帮助我们优化和管理两个元素的交集变化。</p>
-          </div>
-<p>少了对滚动事件的处理，在不考虑兼容性的情况下，性能方面肯定优于 <code>getBoundingClientRect</code>。那么它具体该如何使用呢？Demo 如下：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 创建一个 observer</span></span><br><span class="line"><span class="keyword">const</span> io = <span class="keyword">new</span> IntersectionObserver(callback, options);</span><br><span class="line"><span class="comment">// 监听目标元素</span></span><br><span class="line">io.observe(element);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 停止目标元素的监听</span></span><br><span class="line">io.unobserve(element);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 终止对所有目标元素可见性变化的观察</span></span><br><span class="line">io.disconnect();</span><br></pre></td></tr></table></figure>
-<p>上面代码中，<code>callback</code> 是触发可见行变化时的回调函数，<code>options</code> 是配置对象。</p>
-<h4 id="options"><a href="#options" class="headerlink" title="options"></a>options</h4><p>首先看看 options 配置，其总共有三个属性：<code>root</code>、<code>rootMargin</code> 和 <code>threshold</code>。</p>
-<p><code>root</code> 指选定的目标容器，默认为浏览器的视窗。</p>
-<p><code>rootMargin</code> 定义元素的 <code>margin</code>，<code>viewport + rootMargin</code> 为最终计算的视窗大小，这里引用一张图</p>
-<p><img data-src="https://upload-images.jianshu.io/upload_images/4060631-ae60b52ea8a52184.png?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp" alt></p>
-<p><code>threshold</code> 属性决定了什么时候触发回调函数。它是既可以是一个单一的 number 也可以是一个 number 数组，其表示目标元素和 root 元素相交程度达到该值的时候，callback 回调函数将会被执行。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> IntersectionObserver(</span><br><span class="line">  (entries, observer) =&gt; &#123; <span class="comment">/* ... */</span> &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">// 在相交程度为 0、25%、50%、75%、100% 时触发回调</span></span><br><span class="line">    threshold: [<span class="number">0</span>, <span class="number">0.25</span>, <span class="number">0.5</span>, <span class="number">0.75</span>, <span class="number">1</span>]</span><br><span class="line">  &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-<h4 id="callback"><a href="#callback" class="headerlink" title="callback"></a>callback</h4><p>当目标元素可见行变化时，其会触发 <code>callback</code> 函数，一般情况该函数会触发<strong>2次</strong>（进入和离开）。该函数有两个参数： <code>IntersectionObserverEntry 对象</code> 和 <code>观察者</code> 的列表。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> callback = <span class="function"><span class="keyword">function</span>(<span class="params">entries, observers</span>) </span>&#123;</span><br><span class="line">  entries.forEach(<span class="function"><span class="params">entry</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// Each entry describes an intersection change for one observed</span></span><br><span class="line">    <span class="comment">// target element:</span></span><br><span class="line">    <span class="comment">//   entry.rootBounds</span></span><br><span class="line">    <span class="comment">//   entry.boundingClientRect</span></span><br><span class="line">    <span class="comment">//   entry.intersectionRect</span></span><br><span class="line">    <span class="comment">//   entry.intersectionRatio</span></span><br><span class="line">    <span class="comment">//   entry.isIntersecting</span></span><br><span class="line">    <span class="comment">//   entry.target</span></span><br><span class="line">    <span class="comment">//   entry.time</span></span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">🔽[IntersectionObserverEntry]</span><br><span class="line">    time: <span class="number">3893.92</span></span><br><span class="line">  🔽rootBounds: ClientRect</span><br><span class="line">      bottom: <span class="number">920</span></span><br><span class="line">      height: <span class="number">1024</span></span><br><span class="line">      left: <span class="number">0</span></span><br><span class="line">      right: <span class="number">1024</span></span><br><span class="line">      top: <span class="number">0</span></span><br><span class="line">      width: <span class="number">920</span></span><br><span class="line">  🔽boundingClientRect: ClientRect</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  🔽intersectionRect: ClientRect</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    intersectionRatio: <span class="number">0.54</span></span><br><span class="line">  🔽target: div#observee</span><br><span class="line">    <span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
-<p><code>rootBounds</code>： root 元素调用 getBoundingClientRect() 函数的返回值（默认是 viewport 视口）</p>
-<p><code>boundingClientRect</code>： 目标 observer 调用 getBoundingClientRect() 函数的返回值</p>
-<p><code>intersectionRect</code>： 上述两矩形的交集，并且有效的告诉你观测到的元素的哪一部分是可见的</p>
-<p><code>intersectionRect</code>： 该属性告诉你元素目前有多少是可见的，比率是多少</p>
-<p><code>isIntersecting</code>： 目标元素在 root 元素中可见性是否发生了变化（至少得达到 thresholds 数组中的一个阈值）</p>
-<p><code>target</code>：  被观测的目标 DOM 元素</p>
-<p><code>time</code>： 可见行发生变化的时间（单位： ms）</p>
-<p>再次引用一张图片来解释上述部分参数：</p>
-<p><img data-src="https://developers.google.com/web/updates/images/2016/04/intersectionobserver/intersectratio.png" alt></p>
-<blockquote>
-<p>请留意，你注册的回调函数将会在主线程中被执行。所以该函数执行速度要尽可能的快。如果有一些耗时的操作需要执行，建议使用 Window.requestIdleCallback() 方法。</p>
-</blockquote>
-<h4 id="实战：无限滚动"><a href="#实战：无限滚动" class="headerlink" title="实战：无限滚动"></a>实战：无限滚动</h4><iframe id="cp_embed_YzKLNBz" src="//codepen.io/kazehaiya/embed/YzKLNBz?height=300&theme-id=dark&slug-hash=YzKLNBz&default-tab=css,result" scrolling="no" frameborder="no" height="300" allowtransparency="true" allowfullscreen="true" class="cp_embed_iframe" style="width: 100%; overflow: hidden;"></iframe>
-<h3 id="文章推荐"><a href="#文章推荐" class="headerlink" title="文章推荐"></a>文章推荐</h3><ul>
-<li><a href="https://developers.google.com/web/updates/2019/02/intersectionobserver-v2" target="_blank" rel="noopener">Trust is Good, Observation is Better—Intersection Observer v2</a></li>
-<li><a href="https://developers.google.com/web/fundamentals/performance/lazy-loading-guidance/images-and-video/" target="_blank" rel="noopener">延迟加载图像和视频</a></li>
-</ul>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
-<li><a href="https://developers.google.com/web/updates/2016/04/intersectionobserver" target="_blank" rel="noopener">IntersectionObserver’s Coming into View</a></li>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Intersection_Observer_API" target="_blank" rel="noopener">Intersection Observer API</a></li>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Element/getBoundingClientRect" target="_blank" rel="noopener">getBoundingClientRect</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2016/11/intersectionobserver_api.html" target="_blank" rel="noopener">IntersectionObserver API 使用教程</a></li>
-<li><a href="https://www.jianshu.com/p/84a86e41eb2b" target="_blank" rel="noopener">谈谈 IntersectionObserver 懒加载</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>JavaScript</category>
-      </categories>
-      <tags>
         <tag>JavaScript</tag>
       </tags>
   </entry>
@@ -1438,62 +1438,6 @@
       </tags>
   </entry>
   <entry>
-    <title>使用 git submodule 来管理子模块</title>
-    <url>/2019/10/17/%E4%BD%BF%E7%94%A8-git-submodule-%E6%9D%A5%E7%AE%A1%E7%90%86%E5%AD%90%E6%A8%A1%E5%9D%97/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>近期在考虑项目拆分的过程中，对于公共组件的维护总共找到了两种方式，分别是：发布 npm 包与 <code>git submodule</code> 子模块管理。对于 npm 发包的方法这里我就不做赘述了（先前有写到过），而另一种 <code>git submodule</code> 的方法这里就详细介绍一下，对于不想使用发包的方式（比较繁琐）来维护子项目的 coder 来说，这种方式可以算是最为方便的了。</p>
-<a id="more"></a>
-<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><p>有种情况我们经常会遇到：某个工作中的项目需要包含并使用另一个项目。也许是第三方库，或者你独立开发的，用于多个父项目的库。现在问题来了：你想要把它们当做两个独立的项目，同时又想在一个项目中使用另一个。</p>
-<p>我们举一个例子。假设你正在开发一个网站然后创建了 Atom 订阅。你决定使用一个库，而不是写自己的 Atom 生成代码。你可能不得不通过 CPAN 安装或 Ruby gem 来包含共享库中的代码，或者将源代码直接拷贝到自己的项目中。如果将这个库包含进来，那么无论用何种方式都很难定制它，部署则更加困难，因为你必须确保每一个客户端都包含该库。如果将代码复制到自己的项目中，那么你做的任何自定义修改都会使合并上游的改动变得困难。</p>
-<p>Git 通过子模块来解决这个问题。子模块允许你将一个 Git 仓库作为另一个 Git 仓库的子目录。它能让你将另一个仓库克隆到自己的项目中，同时还保持提交的独立。</p>
-<blockquote>
-<p>该部分直接引用官方的例子，就不造轮子了。</p>
-</blockquote>
-<h3 id="命令使用"><a href="#命令使用" class="headerlink" title="命令使用"></a>命令使用</h3><p>使用 <code>git submodule</code> 时，需要的一些命令有：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 当前项目文件名如不指定，则默认为仓库名</span></span><br><span class="line"><span class="comment"># 目标仓库路径可为远程仓库地址，也可为当前相对路径</span></span><br><span class="line">git submodule add &lt;目标仓库路径&gt; &lt;当前项目文件名&gt;</span><br><span class="line"><span class="comment"># 查看子模块状态</span></span><br><span class="line">git submodule (status)</span><br><span class="line"><span class="comment"># 将子模块与远程保持同步（会切换至一个临时分支）</span></span><br><span class="line">git submodule update --remote</span><br><span class="line"><span class="comment"># 将所有子模块都切换至 master 分支</span></span><br><span class="line">git submodule foreach <span class="string">'git checkout master'</span></span><br><span class="line"><span class="comment"># 将所有子模块同步远程更新</span></span><br><span class="line">git submodule foreach <span class="string">'git pull'</span></span><br><span class="line"><span class="comment"># 查看子模块追踪的内容信息</span></span><br><span class="line">git diff --cached --submodule</span><br></pre></td></tr></table></figure>
-<h3 id="初次添加仓库操作"><a href="#初次添加仓库操作" class="headerlink" title="初次添加仓库操作"></a>初次添加仓库操作</h3><p>作为添加者来说，子模块的添加是很简单的一件事，主要步骤如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 添加仓库</span></span><br><span class="line">git submodule add &lt;子模块仓库路径&gt; &lt;当前项目文件名&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 此时打印 git status 会显示 submodule 的一些信息</span></span><br><span class="line"><span class="comment"># .submodule 文件内存储的就是我们需要的映射信息了</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 提交更新并推送至远程</span></span><br><span class="line"><span class="comment"># 当仓库提交至远程时，子模块的内容并不会被带过去</span></span><br><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">"init submodule"</span></span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
-<h3 id="拷贝远程仓库"><a href="#拷贝远程仓库" class="headerlink" title="拷贝远程仓库"></a>拷贝远程仓库</h3><p>拷贝远程带有子模块的项目需要稍微注意一点，那就是子模块需要额外的步骤才能将内容拷贝下来，具体步骤如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 克隆仓库</span></span><br><span class="line">git <span class="built_in">clone</span> &lt;远程仓库地址&gt;</span><br><span class="line"><span class="comment"># 此时子模块是没有内容的，所以</span></span><br><span class="line"><span class="comment"># 初始化本地配置文件</span></span><br><span class="line">git submodule init</span><br><span class="line"><span class="comment"># 配置文件有记录对应的 commit id，此将子模块文件同步至配置文件内记录的 id 处</span></span><br><span class="line"><span class="comment"># 注意： `git submodule update` 拿到的文件内容并不一定与子模块仓库的最新状态保持一致</span></span><br><span class="line"><span class="comment"># 因为它记录的为先前初始化时的版本，需要额外更新</span></span><br><span class="line">git submodule update</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>三步简化成一步的操作为： git clone &lt;远程仓库地址&gt; –recursive</p>
-</blockquote>
-<h3 id="更新子模块"><a href="#更新子模块" class="headerlink" title="更新子模块"></a>更新子模块</h3><p>更新的方法也有多种，最为基础的处理方式是：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 进入项目中的子模块内</span></span><br><span class="line"><span class="built_in">cd</span> &lt;child-module&gt;</span><br><span class="line"><span class="comment"># 拉取新内容</span></span><br><span class="line">git fetch</span><br><span class="line"><span class="comment"># 合并新内容</span></span><br><span class="line">git merge</span><br><span class="line"><span class="comment"># fetch 和 merge 可以简化为一步： git pull</span></span><br></pre></td></tr></table></figure>
-<p>当然，此做法比较繁杂，较为简便的处理方法是（无需进入子模块）：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 添加 remote 会更新至远程项目的最新版本，否则是本地最新版本</span></span><br><span class="line">git submodule update --remote</span><br></pre></td></tr></table></figure>
-<p>Git 会自动进入子模块并更新它。但是该命令会默认假定你想要更新并检出子模块的 master 分支。简单的说，此时子模块会自动生成一个新临时分支，与远程的源保持一致，如果子模块内部有改动，想要迁回，那么将子模块的 branch 切回原来的分支即可。</p>
-<p>例如：子模块本来是 master 分支，后来远程子模块的源更新了，此时 <code>git submodule update --remote</code> 会将子模块分支切换成一个 hash id 分支。此时进入子模块目录，<code>git checkout master</code> 切回 master 分支，你会发现该 master 分支内容与执行 <code>update</code> 指令之前的是一致的，没有变动，但会提醒你远程的源已经更新了，需要手动 pull 一下。</p>
-<div class="note info">
-            <p>这样看来，这两种写法都没差啦～反正最后都得自己手动处理一下。</p>
-          </div>
-<p>对于包含多个子模块的项目来说，进入子模块一个个更新着实是很麻烦，批量更新可以使用 foreach，例如：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 同步最新的 head 指针，否则</span></span><br><span class="line">git submodule update --remote</span><br><span class="line"><span class="comment"># 将默认迁出的分支迁回 master，然后拉取更新</span></span><br><span class="line">git submodule foreach git checkout master</span><br><span class="line">git submodule foreach git pull</span><br></pre></td></tr></table></figure>
-<p>或者，如果知道更新了，可以省略掉前两步骤（前面步骤主要是为了 <code>git status</code> | <code>git submodules</code> 看有没有子模块变动），直接拉取就行，这样也不用再去切分支了。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git submodule foreach git pull</span><br></pre></td></tr></table></figure>
-<h3 id="更改子模块"><a href="#更改子模块" class="headerlink" title="更改子模块"></a>更改子模块</h3><p>前面对子模块的处理仅仅只是同步更新而已，这和使用 npm 包没啥区别，但毕竟是将子模块给弄进项目了，当个包放在那里用，那也太委屈了。其实在主项目内，我们还可以对子模块进行更新，还可以并发布其改动，这样就能节省很多时间和劳力了（前提是别改造得别人无法使用，变成私有代码库了）。</p>
-<p>这里仅介绍比较省时的操作，直接启动 merge ，我们可以用下面这个命令：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git submodule update --remote --merge</span><br></pre></td></tr></table></figure>
-<p>进入子模块后，我们就能和平常一样的合并冲突了。</p>
-<p>在主分支进行推送时，我们得保证当前分支的所有子模块都已经与远程一致（或者都落后，但不可 diverged），防止别的伙伴接受不到新的变动，因此推送的命令改为：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 这样 git 会进入到子模块中然后在推送主项目前推送了它。如果那个子模块因为某些原因推送失败，主项目也会推送失败</span></span><br><span class="line"><span class="comment"># 该方法暂未尝试，一直用的 foreach push，比较方便</span></span><br><span class="line">git push --recurse-submodules=on-demand</span><br></pre></td></tr></table></figure>
-<p><strong>注：</strong>如果出现了无法推送的情况，特别是远程分支为本地项目的情况，此时我们需要进入该远程分支，然后设置 ‘.git/config’ 文件，加上内容如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[receive]</span><br><span class="line">        denyCurrentBranch = false</span><br></pre></td></tr></table></figure>
-<p>这样就能 push 了。</p>
-<h3 id="删除子模块"><a href="#删除子模块" class="headerlink" title="删除子模块"></a>删除子模块</h3><p>删除子模块需要进行 2 步操作，首先得删除对应的 cache 缓存追踪，然后再删除对应的模块文件</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git rm --cached &lt;fileName&gt;</span><br><span class="line">rm --rf &lt;fileName&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
-<li><a href="https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E5%AD%90%E6%A8%A1%E5%9D%97" target="_blank" rel="noopener">Git 子模块</a></li>
-<li><a href="https://www.jianshu.com/p/9000cd49822c" target="_blank" rel="noopener">Git 子模块的管理和使用</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Git</category>
-      </categories>
-      <tags>
-        <tag>Git</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>使用 vue-cli 发布一个完善的包</title>
     <url>/2019/07/11/%E4%BD%BF%E7%94%A8-vue-cli-%E5%8F%91%E5%B8%83%E4%B8%80%E4%B8%AA%E5%AE%8C%E5%96%84%E7%9A%84%E5%8C%85/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>其实先前有写过一篇《发布一个 vue 包》，不过对于“极简主义者”来说，该文章还是显得有些复杂，毕竟需要配置“复杂”的 webpack。那么有没有一种简单上手、开箱即用的方法呢？答案是有的，vue-cli 已经完美的考虑到了这些问题，此处就介绍如何使用 vue-cli 来搭建一个完整的发包环境。</p>
@@ -1604,50 +1548,59 @@
       </tags>
   </entry>
   <entry>
-    <title>关于 JS 中“继承”的写法</title>
-    <url>/2019/06/28/%E5%85%B3%E4%BA%8E-JS-%E4%B8%AD%E2%80%9C%E7%BB%A7%E6%89%BF%E2%80%9D%E7%9A%84%E5%86%99%E6%B3%95/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在巩固继承这部分知识时，突然想到早期分享时同事提出的一些疑问，即实现 JS 继承具体有那些方法。在经过一番调研后，此篇便是我所总结出的比较全面的方法。当然，文中记录的仅是一些基础的继承方法以及它们之间的的区别，以供参考。</p>
+    <title>使用 git submodule 来管理子模块</title>
+    <url>/2019/10/17/%E4%BD%BF%E7%94%A8-git-submodule-%E6%9D%A5%E7%AE%A1%E7%90%86%E5%AD%90%E6%A8%A1%E5%9D%97/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>近期在考虑项目拆分的过程中，对于公共组件的维护总共找到了两种方式，分别是：发布 npm 包与 <code>git submodule</code> 子模块管理。对于 npm 发包的方法这里我就不做赘述了（先前有写到过），而另一种 <code>git submodule</code> 的方法这里就详细介绍一下，对于不想使用发包的方式（比较繁琐）来维护子项目的 coder 来说，这种方式可以算是最为方便的了。</p>
 <a id="more"></a>
-<h3 id="（原型）继承"><a href="#（原型）继承" class="headerlink" title="（原型）继承"></a>（原型）继承</h3><p>JavaScript 中有许多模拟类行为的方法，其中“继承”（更贴切的说法是委托）便是其中的一项，没有“继承”机制，JavaScript 中的类就是一个空架子。</p>
-<p>假如我们以此例作为继承的模板，归结下来总共有 5 种继承的写法。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 父类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Father</span>(<span class="params">age</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.age = age;</span><br><span class="line">&#125;</span><br><span class="line">Father.prototype.getAge = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.age;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 子类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Child</span>(<span class="params">age, size</span>) </span>&#123;</span><br><span class="line">    Father.call(<span class="keyword">this</span>, age);</span><br><span class="line">    <span class="keyword">this</span>.size = size;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 继承的实现，看下例 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 实例</span></span><br><span class="line"><span class="keyword">const</span> child = <span class="keyword">new</span> Child(<span class="number">28</span>, <span class="string">'small'</span>)</span><br></pre></td></tr></table></figure>
-<h4 id="隐式链接法"><a href="#隐式链接法" class="headerlink" title="隐式链接法"></a>隐式链接法</h4><p>ES6 之前比较非常规的写法是手动更改 <code>__proto__</code> 属性来最简化链式继承。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Child.prototype.__proto__ = Father.prototype</span><br></pre></td></tr></table></figure>
-<p>优点：操作很简便直接</p>
-<p>缺点：该方法并非标准，并且无法兼容所有浏览器，慎用。</p>
-<h4 id="直接引用法"><a href="#直接引用法" class="headerlink" title="直接引用法"></a>直接引用法</h4><p>直接将子类的 prototype 对象指向父类的 prototype 对象。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Child.prototype = Father.prototype;</span><br></pre></td></tr></table></figure>
-<p>优点：操作简单</p>
-<p>缺点： Child 的 prototype 属性修改会直接影响到父类，此写法其实相当于直接在父类进行修改，新创建一个子类有些多此一举。</p>
-<h4 id="实例化方法"><a href="#实例化方法" class="headerlink" title="实例化方法"></a>实例化方法</h4><p>子类的 prototype 属性为父类的实例对象，借由对象的 prototype 链来传递。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Child.prototype = <span class="keyword">new</span> Father();</span><br><span class="line"><span class="comment">// Child.prototype.constructor = Chlid;</span></span><br></pre></td></tr></table></figure>
-<p>优点：能基本满足“继承”的需求</p>
-<p>缺点：</p>
-<ol>
-<li>需要创建一个新对象，然后将旧对象（原本存在的 prototype 对象，带有 constructor）抛弃掉，不能直接修改默认的 prototype 对象。</li>
-<li>会产生副作用，比如：原型（prototype）上会有“脏”属性，本例的 prototype 上会有多余的 age 属性。</li>
-<li>必要时还得自己重写一下 Child 的 constructor 指向，如“寄生组合式继承”。</li>
-</ol>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><p>有种情况我们经常会遇到：某个工作中的项目需要包含并使用另一个项目。也许是第三方库，或者你独立开发的，用于多个父项目的库。现在问题来了：你想要把它们当做两个独立的项目，同时又想在一个项目中使用另一个。</p>
+<p>我们举一个例子。假设你正在开发一个网站然后创建了 Atom 订阅。你决定使用一个库，而不是写自己的 Atom 生成代码。你可能不得不通过 CPAN 安装或 Ruby gem 来包含共享库中的代码，或者将源代码直接拷贝到自己的项目中。如果将这个库包含进来，那么无论用何种方式都很难定制它，部署则更加困难，因为你必须确保每一个客户端都包含该库。如果将代码复制到自己的项目中，那么你做的任何自定义修改都会使合并上游的改动变得困难。</p>
+<p>Git 通过子模块来解决这个问题。子模块允许你将一个 Git 仓库作为另一个 Git 仓库的子目录。它能让你将另一个仓库克隆到自己的项目中，同时还保持提交的独立。</p>
 <blockquote>
-<p>“寄生组合式继承” 在 ES5 中为最佳写法，如果不考虑其稍微的复杂性。</p>
+<p>该部分直接引用官方的例子，就不造轮子了。</p>
 </blockquote>
-<h4 id="对象构造法"><a href="#对象构造法" class="headerlink" title="对象构造法"></a>对象构造法</h4><p>通过 <code>Object.create</code> 方法来构造一个合适的关联对象。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Child.prototype = <span class="built_in">Object</span>.create(Father.prototype)</span><br><span class="line"><span class="comment">// Child.prototype.constructor = Chlid;</span></span><br></pre></td></tr></table></figure>
-<p>优点：在 ES6 之前的最佳之选，优于实例化方法。</p>
-<p>缺点：与实例化方法基本相同，但没有副作用。此外，其隐式 <code>__proto__</code> 链比实例化方法要多一层，链式查找方法相对会耗时长一点点，基本可忽略。</p>
-<h4 id="设置原型法"><a href="#设置原型法" class="headerlink" title="设置原型法"></a>设置原型法</h4><p>使用 ES6 的原型设置方法，此法在 ES6 环境为最佳之选，没有之一。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Object</span>.setPrototypeOf(Child.prototype, Father.prototype)</span><br></pre></td></tr></table></figure>
-<p>优点：能覆盖所有需求，清晰易懂，可读性强。</p>
-<p>缺点：性能比 <code>Object.create</code> 稍微差点，如果考虑性能的话可优先使用 <code>Object.create</code> 方法</p>
-<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><blockquote>
-<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/setPrototypeOf" target="_blank" rel="noopener">MDN</a></p>
+<h3 id="命令使用"><a href="#命令使用" class="headerlink" title="命令使用"></a>命令使用</h3><p>使用 <code>git submodule</code> 时，需要的一些命令有：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 当前项目文件名如不指定，则默认为仓库名</span></span><br><span class="line"><span class="comment"># 目标仓库路径可为远程仓库地址，也可为当前相对路径</span></span><br><span class="line">git submodule add &lt;目标仓库路径&gt; &lt;当前项目文件名&gt;</span><br><span class="line"><span class="comment"># 查看子模块状态</span></span><br><span class="line">git submodule (status)</span><br><span class="line"><span class="comment"># 将子模块与远程保持同步（会切换至一个临时分支）</span></span><br><span class="line">git submodule update --remote</span><br><span class="line"><span class="comment"># 将所有子模块都切换至 master 分支</span></span><br><span class="line">git submodule foreach <span class="string">'git checkout master'</span></span><br><span class="line"><span class="comment"># 将所有子模块同步远程更新</span></span><br><span class="line">git submodule foreach <span class="string">'git pull'</span></span><br><span class="line"><span class="comment"># 查看子模块追踪的内容信息</span></span><br><span class="line">git diff --cached --submodule</span><br></pre></td></tr></table></figure>
+<h3 id="初次添加仓库操作"><a href="#初次添加仓库操作" class="headerlink" title="初次添加仓库操作"></a>初次添加仓库操作</h3><p>作为添加者来说，子模块的添加是很简单的一件事，主要步骤如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 添加仓库</span></span><br><span class="line">git submodule add &lt;子模块仓库路径&gt; &lt;当前项目文件名&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 此时打印 git status 会显示 submodule 的一些信息</span></span><br><span class="line"><span class="comment"># .submodule 文件内存储的就是我们需要的映射信息了</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 提交更新并推送至远程</span></span><br><span class="line"><span class="comment"># 当仓库提交至远程时，子模块的内容并不会被带过去</span></span><br><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">"init submodule"</span></span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+<h3 id="拷贝远程仓库"><a href="#拷贝远程仓库" class="headerlink" title="拷贝远程仓库"></a>拷贝远程仓库</h3><p>拷贝远程带有子模块的项目需要稍微注意一点，那就是子模块需要额外的步骤才能将内容拷贝下来，具体步骤如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 克隆仓库</span></span><br><span class="line">git <span class="built_in">clone</span> &lt;远程仓库地址&gt;</span><br><span class="line"><span class="comment"># 此时子模块是没有内容的，所以</span></span><br><span class="line"><span class="comment"># 初始化本地配置文件</span></span><br><span class="line">git submodule init</span><br><span class="line"><span class="comment"># 配置文件有记录对应的 commit id，此将子模块文件同步至配置文件内记录的 id 处</span></span><br><span class="line"><span class="comment"># 注意： `git submodule update` 拿到的文件内容并不一定与子模块仓库的最新状态保持一致</span></span><br><span class="line"><span class="comment"># 因为它记录的为先前初始化时的版本，需要额外更新</span></span><br><span class="line">git submodule update</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>三步简化成一步的操作为： git clone &lt;远程仓库地址&gt; –recursive</p>
 </blockquote>
+<h3 id="更新子模块"><a href="#更新子模块" class="headerlink" title="更新子模块"></a>更新子模块</h3><p>更新的方法也有多种，最为基础的处理方式是：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 进入项目中的子模块内</span></span><br><span class="line"><span class="built_in">cd</span> &lt;child-module&gt;</span><br><span class="line"><span class="comment"># 拉取新内容</span></span><br><span class="line">git fetch</span><br><span class="line"><span class="comment"># 合并新内容</span></span><br><span class="line">git merge</span><br><span class="line"><span class="comment"># fetch 和 merge 可以简化为一步： git pull</span></span><br></pre></td></tr></table></figure>
+<p>当然，此做法比较繁杂，较为简便的处理方法是（无需进入子模块）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 添加 remote 会更新至远程项目的最新版本，否则是本地最新版本</span></span><br><span class="line">git submodule update --remote</span><br></pre></td></tr></table></figure>
+<p>Git 会自动进入子模块并更新它。但是该命令会默认假定你想要更新并检出子模块的 master 分支。简单的说，此时子模块会自动生成一个新临时分支，与远程的源保持一致，如果子模块内部有改动，想要迁回，那么将子模块的 branch 切回原来的分支即可。</p>
+<p>例如：子模块本来是 master 分支，后来远程子模块的源更新了，此时 <code>git submodule update --remote</code> 会将子模块分支切换成一个 hash id 分支。此时进入子模块目录，<code>git checkout master</code> 切回 master 分支，你会发现该 master 分支内容与执行 <code>update</code> 指令之前的是一致的，没有变动，但会提醒你远程的源已经更新了，需要手动 pull 一下。</p>
+<div class="note info">
+            <p>这样看来，这两种写法都没差啦～反正最后都得自己手动处理一下。</p>
+          </div>
+<p>对于包含多个子模块的项目来说，进入子模块一个个更新着实是很麻烦，批量更新可以使用 foreach，例如：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 同步最新的 head 指针，否则</span></span><br><span class="line">git submodule update --remote</span><br><span class="line"><span class="comment"># 将默认迁出的分支迁回 master，然后拉取更新</span></span><br><span class="line">git submodule foreach git checkout master</span><br><span class="line">git submodule foreach git pull</span><br></pre></td></tr></table></figure>
+<p>或者，如果知道更新了，可以省略掉前两步骤（前面步骤主要是为了 <code>git status</code> | <code>git submodules</code> 看有没有子模块变动），直接拉取就行，这样也不用再去切分支了。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git submodule foreach git pull</span><br></pre></td></tr></table></figure>
+<h3 id="更改子模块"><a href="#更改子模块" class="headerlink" title="更改子模块"></a>更改子模块</h3><p>前面对子模块的处理仅仅只是同步更新而已，这和使用 npm 包没啥区别，但毕竟是将子模块给弄进项目了，当个包放在那里用，那也太委屈了。其实在主项目内，我们还可以对子模块进行更新，还可以并发布其改动，这样就能节省很多时间和劳力了（前提是别改造得别人无法使用，变成私有代码库了）。</p>
+<p>这里仅介绍比较省时的操作，直接启动 merge ，我们可以用下面这个命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git submodule update --remote --merge</span><br></pre></td></tr></table></figure>
+<p>进入子模块后，我们就能和平常一样的合并冲突了。</p>
+<p>在主分支进行推送时，我们得保证当前分支的所有子模块都已经与远程一致（或者都落后，但不可 diverged），防止别的伙伴接受不到新的变动，因此推送的命令改为：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 这样 git 会进入到子模块中然后在推送主项目前推送了它。如果那个子模块因为某些原因推送失败，主项目也会推送失败</span></span><br><span class="line"><span class="comment"># 该方法暂未尝试，一直用的 foreach push，比较方便</span></span><br><span class="line">git push --recurse-submodules=on-demand</span><br></pre></td></tr></table></figure>
+<p><strong>注：</strong>如果出现了无法推送的情况，特别是远程分支为本地项目的情况，此时我们需要进入该远程分支，然后设置 ‘.git/config’ 文件，加上内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[receive]</span><br><span class="line">        denyCurrentBranch = false</span><br></pre></td></tr></table></figure>
+<p>这样就能 push 了。</p>
+<h3 id="删除子模块"><a href="#删除子模块" class="headerlink" title="删除子模块"></a>删除子模块</h3><p>删除子模块需要进行 2 步操作，首先得删除对应的 cache 缓存追踪，然后再删除对应的模块文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git rm --cached &lt;fileName&gt;</span><br><span class="line">rm --rf &lt;fileName&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
+<li><a href="https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E5%AD%90%E6%A8%A1%E5%9D%97" target="_blank" rel="noopener">Git 子模块</a></li>
+<li><a href="https://www.jianshu.com/p/9000cd49822c" target="_blank" rel="noopener">Git 子模块的管理和使用</a></li>
+</ul>
 ]]></content>
       <categories>
-        <category>JavaScript</category>
+        <category>Git</category>
       </categories>
       <tags>
-        <tag>JavaScript</tag>
+        <tag>Git</tag>
       </tags>
   </entry>
   <entry>
@@ -1698,58 +1651,49 @@
       </tags>
   </entry>
   <entry>
-    <title>分析 Vue 的观察者模式（中）</title>
-    <url>/2019/10/11/%E5%88%86%E6%9E%90-Vue-%E7%9A%84%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%AD%EF%BC%89/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在上篇<a href="/2019/10/10/分析-Vue-的观察者模式（上）/" title="分析 Vue 的观察者模式（上）">分析 Vue 的观察者模式（上）</a>中，简单实现了“手动”版观察者模式，而在本篇中我们继续沿着该思路往下探索，看如何实现“自动”版的观察者。</p>
+    <title>关于 JS 中“继承”的写法</title>
+    <url>/2019/06/28/%E5%85%B3%E4%BA%8E-JS-%E4%B8%AD%E2%80%9C%E7%BB%A7%E6%89%BF%E2%80%9D%E7%9A%84%E5%86%99%E6%B3%95/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在巩固继承这部分知识时，突然想到早期分享时同事提出的一些疑问，即实现 JS 继承具体有那些方法。在经过一番调研后，此篇便是我所总结出的比较全面的方法。当然，文中记录的仅是一些基础的继承方法以及它们之间的的区别，以供参考。</p>
 <a id="more"></a>
-<h3 id="完善的观察者"><a href="#完善的观察者" class="headerlink" title="完善的观察者"></a>完善的观察者</h3><p>紧接着上文的思路，因为我们只是实现了 Dep 依赖（管家），却还没有对平台的观察处理方式优化，因此我们需要将此步骤给完善起来。</p>
-<p>首先，要实现发布者更新内容后自动触发订阅事件，那么我们需要的是对发布者内容改变的监听，ES5 中恰好有这么一种方法能满足我们的需求，那就是 <code>Object.defineProperty(...)</code>。其语法很简单，我们此处仅仅需要拦截 get 和 set 方法，大致写法为：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> data = &#123;</span><br><span class="line">  name: <span class="string">'test'</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(data, name, &#123;</span><br><span class="line">  <span class="keyword">get</span>() &#123;</span><br><span class="line">    <span class="keyword">return</span> data.name;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="keyword">set</span>(newVal) &#123;</span><br><span class="line">    <span class="comment">// 调用 setter 方法，不可直接赋值，否则会死循环</span></span><br><span class="line">    <span class="comment">// 错误写法 obj[key] = newVal</span></span><br><span class="line">    <span class="comment">// 可查看 Vue 中的 setter 获取</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>既然有了能够观测发布者的方法，那么对于对象变更后的监听就能自动化处理了，那么先前手动触发 <code>dep.depend()</code> 和 <code>dep.notify()</code> 函数的操作就能整合入 <code>Object.defineProperty</code> 内了。</p>
-<p>延续先前的逻辑，<code>dep.notify()</code> 方法执行都得在对象值变动之后，因此我们可以将此方法放入 set 函数内；而 <code>dep.depend()</code> 方法主要是将订阅者事件存储入自身的事件列表中，因此该方法执行一次就行，之后每次更新都触发 <code>notify</code> 来依次执行注册的函数即可。因此，在考虑只是传入简单对象的情况时，这阶段的代码思路大致是：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// （私人管家）依赖收集</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList = [];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 添加订阅方法</span></span><br><span class="line">  depend() &#123;</span><br><span class="line">    <span class="comment">// 此处添加对应订阅方法</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发布者更新消息</span></span><br><span class="line">  notify() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.forEach(<span class="function"><span class="params">sub</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 依次处理订阅的方法</span></span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// （发布者和管家的联系方式）监听器</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">observer</span>(<span class="params">data = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">Object</span>.keys(data).forEach(<span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> val = data[key];</span><br><span class="line">    <span class="keyword">const</span> dep = <span class="keyword">new</span> Dep();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(data, key, &#123;</span><br><span class="line">      <span class="keyword">get</span>() &#123;</span><br><span class="line">        <span class="comment">// get 时添加依赖，当有目标的时候才添加</span></span><br><span class="line">        <span class="keyword">if</span> (target) &#123;</span><br><span class="line">          dep.depend();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> val;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="keyword">set</span>(newVal) &#123;</span><br><span class="line">        <span class="keyword">if</span> (newVal === val) &#123;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// set 时触发更新</span></span><br><span class="line">        <span class="comment">// 此处用 setter 做变动，此处偷懒一下，不要直接赋值，会反复触发 set</span></span><br><span class="line">        val = newVal;</span><br><span class="line">        dep.notify();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>那么现在问题又有了。目前代码实现至此我们仅仅只是将发布者与其 Dep 依赖进行了关联，那么观察者又该如何将其获订阅者的事件与 Dep 存储的事件列表进行关联呢？从订阅者角度分析一下：</p>
+<h3 id="（原型）继承"><a href="#（原型）继承" class="headerlink" title="（原型）继承"></a>（原型）继承</h3><p>JavaScript 中有许多模拟类行为的方法，其中“继承”（更贴切的说法是委托）便是其中的一项，没有“继承”机制，JavaScript 中的类就是一个空架子。</p>
+<p>假如我们以此例作为继承的模板，归结下来总共有 5 种继承的写法。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 父类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Father</span>(<span class="params">age</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.age = age;</span><br><span class="line">&#125;</span><br><span class="line">Father.prototype.getAge = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.age;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 子类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Child</span>(<span class="params">age, size</span>) </span>&#123;</span><br><span class="line">    Father.call(<span class="keyword">this</span>, age);</span><br><span class="line">    <span class="keyword">this</span>.size = size;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 继承的实现，看下例 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 实例</span></span><br><span class="line"><span class="keyword">const</span> child = <span class="keyword">new</span> Child(<span class="number">28</span>, <span class="string">'small'</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="隐式链接法"><a href="#隐式链接法" class="headerlink" title="隐式链接法"></a>隐式链接法</h4><p>ES6 之前比较非常规的写法是手动更改 <code>__proto__</code> 属性来最简化链式继承。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Child.prototype.__proto__ = Father.prototype</span><br></pre></td></tr></table></figure>
+<p>优点：操作很简便直接</p>
+<p>缺点：该方法并非标准，并且无法兼容所有浏览器，慎用。</p>
+<h4 id="直接引用法"><a href="#直接引用法" class="headerlink" title="直接引用法"></a>直接引用法</h4><p>直接将子类的 prototype 对象指向父类的 prototype 对象。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Child.prototype = Father.prototype;</span><br></pre></td></tr></table></figure>
+<p>优点：操作简单</p>
+<p>缺点： Child 的 prototype 属性修改会直接影响到父类，此写法其实相当于直接在父类进行修改，新创建一个子类有些多此一举。</p>
+<h4 id="实例化方法"><a href="#实例化方法" class="headerlink" title="实例化方法"></a>实例化方法</h4><p>子类的 prototype 属性为父类的实例对象，借由对象的 prototype 链来传递。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Child.prototype = <span class="keyword">new</span> Father();</span><br><span class="line"><span class="comment">// Child.prototype.constructor = Chlid;</span></span><br></pre></td></tr></table></figure>
+<p>优点：能基本满足“继承”的需求</p>
+<p>缺点：</p>
 <ol>
-<li>订阅者决定好要订阅的内容（订阅者的函数）；</li>
-<li>订阅者在对应的观察者平台上注册事件，绑定发布者信息；</li>
-<li>观察者先联系到 Dep 管家，将订阅事件存放至管家处；</li>
-<li>待管家拿到了发布者新情报，则响应所有存储好的订阅者的订阅事件了。</li>
+<li>需要创建一个新对象，然后将旧对象（原本存在的 prototype 对象，带有 constructor）抛弃掉，不能直接修改默认的 prototype 对象。</li>
+<li>会产生副作用，比如：原型（prototype）上会有“脏”属性，本例的 prototype 上会有多余的 age 属性。</li>
+<li>必要时还得自己重写一下 Child 的 constructor 指向，如“寄生组合式继承”。</li>
 </ol>
-<p>思路逐渐清晰，那么这么个流程我们可以简化为如下代码：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">target = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.sub = [];</span><br><span class="line">  &#125;</span><br><span class="line">  depend() &#123;</span><br><span class="line">    <span class="keyword">if</span> (target &amp;&amp; !<span class="keyword">this</span>.sub.includes(target)) &#123;</span><br><span class="line">      <span class="keyword">this</span>.sub.push(target);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  notify() &#123;</span><br><span class="line">    <span class="keyword">this</span>.sub.forEach(<span class="function"><span class="params">cb</span> =&gt;</span> cb());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">watcher</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">  target = callback;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 此处触发一下监听对象的 get 方法，将 callback 方法加入 Dep 依赖的订阅队列中</span></span><br><span class="line">  <span class="comment">// 然后清除掉 target，防止重复注册</span></span><br><span class="line"></span><br><span class="line">  target = <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">watcher(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 此处是订阅事件</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>这样我们就讲观察者的订阅方法和 Dep 依赖给绑定上了。考虑到 watcher 的通用性，这里写了一个加强版的 demo，如下：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> target = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// （私人管家）依赖收集</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList = [];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 将当前的 watcher 加入 dep 中</span></span><br><span class="line">  addSub(watcher) &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.push(watcher)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 添加订阅方法</span></span><br><span class="line">  depend() &#123;</span><br><span class="line">    <span class="keyword">if</span> (target) &#123;</span><br><span class="line">      target.addDep(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发布者更新消息，触发所有的订阅方法</span></span><br><span class="line">  notify() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.forEach(<span class="function"><span class="params">sub</span> =&gt;</span> &#123;</span><br><span class="line">      sub.update();</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// （平台）观察者</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Watcher</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(data = &#123;&#125;, key = <span class="string">''</span>, cb = <span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;) &#123;</span><br><span class="line">    <span class="keyword">this</span>.cb = cb;</span><br><span class="line">    <span class="keyword">this</span>._data = data;</span><br><span class="line">    <span class="keyword">this</span>.key = key;</span><br><span class="line"></span><br><span class="line">    target = <span class="keyword">this</span>;</span><br><span class="line">    <span class="comment">// 触发 getter，存储本 watcher</span></span><br><span class="line">    <span class="keyword">this</span>.value = data[key];</span><br><span class="line">    <span class="comment">// 防止反复触发</span></span><br><span class="line">    target = <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  addDep(dep) &#123;</span><br><span class="line">    dep.addSub(<span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  update() &#123;</span><br><span class="line">    <span class="keyword">const</span> newVal = <span class="keyword">this</span>._data[<span class="keyword">this</span>.key];</span><br><span class="line">    <span class="keyword">this</span>.value = newVal;</span><br><span class="line">    <span class="keyword">this</span>.cb(newVal);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// （发布者和管家的联系方式）监听器</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">observer</span>(<span class="params">data = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">Object</span>.keys(data).forEach(<span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> val = data[key];</span><br><span class="line">    <span class="keyword">const</span> dep = <span class="keyword">new</span> Dep();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(data, key, &#123;</span><br><span class="line">      <span class="keyword">get</span>() &#123;</span><br><span class="line">        <span class="keyword">if</span> (target) &#123;</span><br><span class="line">          <span class="comment">// get 时添加依赖</span></span><br><span class="line">          dep.depend();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> val;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="keyword">set</span>(newVal) &#123;</span><br><span class="line">        <span class="keyword">if</span> (newVal === val) &#123;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// set 时触发更新</span></span><br><span class="line">        val = newVal;</span><br><span class="line">        dep.notify();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发布者</span></span><br><span class="line"><span class="keyword">const</span> publisher = &#123;</span><br><span class="line">  bookName: <span class="string">'book'</span>,</span><br><span class="line">  bookContent: <span class="string">'hello world'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 管家开始观测发布者</span></span><br><span class="line">observer(publisher);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 订阅者在平台上订阅发布者的部分信息</span></span><br><span class="line"><span class="keyword">new</span> Watcher(publisher, <span class="string">'bookName'</span>, name =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`new book name is <span class="subst">$&#123;name&#125;</span>`</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">new</span> Watcher(publisher, <span class="string">'bookContent'</span>, content =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`new book content is <span class="subst">$&#123;content&#125;</span>`</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发布者发布信息</span></span><br><span class="line">publisher.bookName = <span class="string">'new book'</span>;</span><br><span class="line">publisher.bookContent = <span class="string">'new content'</span>;</span><br></pre></td></tr></table></figure>
-<h3 id="Vue-观察者的实现"><a href="#Vue-观察者的实现" class="headerlink" title="Vue 观察者的实现"></a>Vue 观察者的实现</h3><p>在看源码之前，首先让我们看看 Vue 的实现原理图：</p>
-<p><img data-src="/images/vue-observer.jpeg" alt="Reactive"></p>
-<p>先仅考虑 data 部分的观察者模式，我们可以看到大致步骤为：</p>
-<ol>
-<li>为发布者 data 做数据监听处理；</li>
-<li>为劫持方法添加 Dep 依赖收集，<code>get</code> 存储 target 目标，set 设置 target 目标；</li>
-<li>依赖收集触发后，触发 Watch 观察者，通知订阅者改变。</li>
-</ol>
-<p>因为流程图中只是详细展示了响应式部分的变动，为了便于大家更清楚的理解这部分的流程，所以这里先解释一下 Vue 中完整的流程：</p>
-<ol>
-<li>页面开始渲染，对 data 进行依赖收集；</li>
-<li>依赖收集完毕，开始监测订阅者的方法，并存储原值方便变更时的对比；</li>
-<li>因为依赖收集完毕，要存储原值则触发了 get 事件，此时添加 dep 依赖，将对应生成的 watcher 存储入依赖列表内</li>
-<li>页面渲染完成，用户触发页面某些点击事件（比如按钮）；</li>
-<li>点击事件绑定了某个 methods 方法，该 methods 方法使得 data 部分内容更新了；</li>
-<li>因为已经对 data 进行了依赖收集，触发了对应的 set 方法；</li>
-<li>set 方法对比新旧值发现值更新了，此时重新收集依赖新的值（特别是对象的情况），然后通知它的私有管家 Dep 进行更新；</li>
-<li>Dep 依赖开始遍历其所存储的数组，为该发布者的订阅者们发送消息，触发订阅事件。</li>
-<li>各订阅者事件触发 update 更新，此时便流转到 render 渲染，之后页面就更新啦！</li>
-</ol>
-<p>为了方便大家理解源码，这里手动实现了一个简单的 observer 模式，基本是按着源码的思路一点点撸出来的，注释很全，方便大家理解！</p>
-<ul>
-<li><a href="https://github.com/kazehaiya/vue-observe" target="_blank" rel="noopener">个人版 vue-observer 源码</a></li>
-</ul>
-<h3 id="源码地址"><a href="#源码地址" class="headerlink" title="源码地址"></a>源码地址</h3><p>所有的 demo 都写入仓库了，仓库地址为：<a href="https://github.com/kazehaiya/vue-observe" target="_blank" rel="noopener">传送门</a></p>
+<blockquote>
+<p>“寄生组合式继承” 在 ES5 中为最佳写法，如果不考虑其稍微的复杂性。</p>
+</blockquote>
+<h4 id="对象构造法"><a href="#对象构造法" class="headerlink" title="对象构造法"></a>对象构造法</h4><p>通过 <code>Object.create</code> 方法来构造一个合适的关联对象。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Child.prototype = <span class="built_in">Object</span>.create(Father.prototype)</span><br><span class="line"><span class="comment">// Child.prototype.constructor = Chlid;</span></span><br></pre></td></tr></table></figure>
+<p>优点：在 ES6 之前的最佳之选，优于实例化方法。</p>
+<p>缺点：与实例化方法基本相同，但没有副作用。此外，其隐式 <code>__proto__</code> 链比实例化方法要多一层，链式查找方法相对会耗时长一点点，基本可忽略。</p>
+<h4 id="设置原型法"><a href="#设置原型法" class="headerlink" title="设置原型法"></a>设置原型法</h4><p>使用 ES6 的原型设置方法，此法在 ES6 环境为最佳之选，没有之一。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Object</span>.setPrototypeOf(Child.prototype, Father.prototype)</span><br></pre></td></tr></table></figure>
+<p>优点：能覆盖所有需求，清晰易懂，可读性强。</p>
+<p>缺点：性能比 <code>Object.create</code> 稍微差点，如果考虑性能的话可优先使用 <code>Object.create</code> 方法</p>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><blockquote>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/setPrototypeOf" target="_blank" rel="noopener">MDN</a></p>
+</blockquote>
 ]]></content>
       <categories>
-        <category>Vue</category>
+        <category>JavaScript</category>
       </categories>
       <tags>
-        <tag>Vue</tag>
         <tag>JavaScript</tag>
       </tags>
   </entry>
@@ -2117,35 +2061,59 @@
       </tags>
   </entry>
   <entry>
-    <title>在 typescript 中添加 webworker</title>
-    <url>/2020/04/28/%E5%9C%A8-typescript-%E4%B8%AD%E6%B7%BB%E5%8A%A0-webworker/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近在做 Vue 项目时遇到一个读取 xlsx 文件的需求，考虑到文件可能比较大的情况，为了不让页面卡死，因此引入了 webworker，本来想着应该是很容易的事情，结果却并不是很简单，主要难在配置上，这里就记录一下配置时遇到的困难。</p>
+    <title>分析 Vue 的观察者模式（中）</title>
+    <url>/2019/10/11/%E5%88%86%E6%9E%90-Vue-%E7%9A%84%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%AD%EF%BC%89/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在上篇<a href="/2019/10/10/分析-Vue-的观察者模式（上）/" title="分析 Vue 的观察者模式（上）">分析 Vue 的观察者模式（上）</a>中，简单实现了“手动”版观察者模式，而在本篇中我们继续沿着该思路往下探索，看如何实现“自动”版的观察者。</p>
 <a id="more"></a>
-<h3 id="配置-loader"><a href="#配置-loader" class="headerlink" title="配置 loader"></a>配置 loader</h3><p>因为是 ts 写的项目，因此查阅了一下引入 webworker 需要那些插件，因此首先需要配置的是 loader 文件了。</p>
+<h3 id="完善的观察者"><a href="#完善的观察者" class="headerlink" title="完善的观察者"></a>完善的观察者</h3><p>紧接着上文的思路，因为我们只是实现了 Dep 依赖（管家），却还没有对平台的观察处理方式优化，因此我们需要将此步骤给完善起来。</p>
+<p>首先，要实现发布者更新内容后自动触发订阅事件，那么我们需要的是对发布者内容改变的监听，ES5 中恰好有这么一种方法能满足我们的需求，那就是 <code>Object.defineProperty(...)</code>。其语法很简单，我们此处仅仅需要拦截 get 和 set 方法，大致写法为：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> data = &#123;</span><br><span class="line">  name: <span class="string">'test'</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(data, name, &#123;</span><br><span class="line">  <span class="keyword">get</span>() &#123;</span><br><span class="line">    <span class="keyword">return</span> data.name;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="keyword">set</span>(newVal) &#123;</span><br><span class="line">    <span class="comment">// 调用 setter 方法，不可直接赋值，否则会死循环</span></span><br><span class="line">    <span class="comment">// 错误写法 obj[key] = newVal</span></span><br><span class="line">    <span class="comment">// 可查看 Vue 中的 setter 获取</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>既然有了能够观测发布者的方法，那么对于对象变更后的监听就能自动化处理了，那么先前手动触发 <code>dep.depend()</code> 和 <code>dep.notify()</code> 函数的操作就能整合入 <code>Object.defineProperty</code> 内了。</p>
+<p>延续先前的逻辑，<code>dep.notify()</code> 方法执行都得在对象值变动之后，因此我们可以将此方法放入 set 函数内；而 <code>dep.depend()</code> 方法主要是将订阅者事件存储入自身的事件列表中，因此该方法执行一次就行，之后每次更新都触发 <code>notify</code> 来依次执行注册的函数即可。因此，在考虑只是传入简单对象的情况时，这阶段的代码思路大致是：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// （私人管家）依赖收集</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList = [];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 添加订阅方法</span></span><br><span class="line">  depend() &#123;</span><br><span class="line">    <span class="comment">// 此处添加对应订阅方法</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发布者更新消息</span></span><br><span class="line">  notify() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.forEach(<span class="function"><span class="params">sub</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 依次处理订阅的方法</span></span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// （发布者和管家的联系方式）监听器</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">observer</span>(<span class="params">data = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">Object</span>.keys(data).forEach(<span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> val = data[key];</span><br><span class="line">    <span class="keyword">const</span> dep = <span class="keyword">new</span> Dep();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(data, key, &#123;</span><br><span class="line">      <span class="keyword">get</span>() &#123;</span><br><span class="line">        <span class="comment">// get 时添加依赖，当有目标的时候才添加</span></span><br><span class="line">        <span class="keyword">if</span> (target) &#123;</span><br><span class="line">          dep.depend();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> val;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="keyword">set</span>(newVal) &#123;</span><br><span class="line">        <span class="keyword">if</span> (newVal === val) &#123;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// set 时触发更新</span></span><br><span class="line">        <span class="comment">// 此处用 setter 做变动，此处偷懒一下，不要直接赋值，会反复触发 set</span></span><br><span class="line">        val = newVal;</span><br><span class="line">        dep.notify();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么现在问题又有了。目前代码实现至此我们仅仅只是将发布者与其 Dep 依赖进行了关联，那么观察者又该如何将其获订阅者的事件与 Dep 存储的事件列表进行关联呢？从订阅者角度分析一下：</p>
 <ol>
-<li>安装 worker-loader</li>
+<li>订阅者决定好要订阅的内容（订阅者的函数）；</li>
+<li>订阅者在对应的观察者平台上注册事件，绑定发布者信息；</li>
+<li>观察者先联系到 Dep 管家，将订阅事件存放至管家处；</li>
+<li>待管家拿到了发布者新情报，则响应所有存储好的订阅者的订阅事件了。</li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yarn add worker-loader -D</span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>在 vue.config.js 内添加如下内容：</li>
+<p>思路逐渐清晰，那么这么个流程我们可以简化为如下代码：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">target = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.sub = [];</span><br><span class="line">  &#125;</span><br><span class="line">  depend() &#123;</span><br><span class="line">    <span class="keyword">if</span> (target &amp;&amp; !<span class="keyword">this</span>.sub.includes(target)) &#123;</span><br><span class="line">      <span class="keyword">this</span>.sub.push(target);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  notify() &#123;</span><br><span class="line">    <span class="keyword">this</span>.sub.forEach(<span class="function"><span class="params">cb</span> =&gt;</span> cb());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">watcher</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">  target = callback;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 此处触发一下监听对象的 get 方法，将 callback 方法加入 Dep 依赖的订阅队列中</span></span><br><span class="line">  <span class="comment">// 然后清除掉 target，防止重复注册</span></span><br><span class="line"></span><br><span class="line">  target = <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">watcher(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 此处是订阅事件</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>这样我们就讲观察者的订阅方法和 Dep 依赖给绑定上了。考虑到 watcher 的通用性，这里写了一个加强版的 demo，如下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> target = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// （私人管家）依赖收集</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList = [];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 将当前的 watcher 加入 dep 中</span></span><br><span class="line">  addSub(watcher) &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.push(watcher)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 添加订阅方法</span></span><br><span class="line">  depend() &#123;</span><br><span class="line">    <span class="keyword">if</span> (target) &#123;</span><br><span class="line">      target.addDep(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发布者更新消息，触发所有的订阅方法</span></span><br><span class="line">  notify() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.forEach(<span class="function"><span class="params">sub</span> =&gt;</span> &#123;</span><br><span class="line">      sub.update();</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// （平台）观察者</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Watcher</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(data = &#123;&#125;, key = <span class="string">''</span>, cb = <span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;) &#123;</span><br><span class="line">    <span class="keyword">this</span>.cb = cb;</span><br><span class="line">    <span class="keyword">this</span>._data = data;</span><br><span class="line">    <span class="keyword">this</span>.key = key;</span><br><span class="line"></span><br><span class="line">    target = <span class="keyword">this</span>;</span><br><span class="line">    <span class="comment">// 触发 getter，存储本 watcher</span></span><br><span class="line">    <span class="keyword">this</span>.value = data[key];</span><br><span class="line">    <span class="comment">// 防止反复触发</span></span><br><span class="line">    target = <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  addDep(dep) &#123;</span><br><span class="line">    dep.addSub(<span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  update() &#123;</span><br><span class="line">    <span class="keyword">const</span> newVal = <span class="keyword">this</span>._data[<span class="keyword">this</span>.key];</span><br><span class="line">    <span class="keyword">this</span>.value = newVal;</span><br><span class="line">    <span class="keyword">this</span>.cb(newVal);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// （发布者和管家的联系方式）监听器</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">observer</span>(<span class="params">data = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">Object</span>.keys(data).forEach(<span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> val = data[key];</span><br><span class="line">    <span class="keyword">const</span> dep = <span class="keyword">new</span> Dep();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(data, key, &#123;</span><br><span class="line">      <span class="keyword">get</span>() &#123;</span><br><span class="line">        <span class="keyword">if</span> (target) &#123;</span><br><span class="line">          <span class="comment">// get 时添加依赖</span></span><br><span class="line">          dep.depend();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> val;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="keyword">set</span>(newVal) &#123;</span><br><span class="line">        <span class="keyword">if</span> (newVal === val) &#123;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// set 时触发更新</span></span><br><span class="line">        val = newVal;</span><br><span class="line">        dep.notify();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发布者</span></span><br><span class="line"><span class="keyword">const</span> publisher = &#123;</span><br><span class="line">  bookName: <span class="string">'book'</span>,</span><br><span class="line">  bookContent: <span class="string">'hello world'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 管家开始观测发布者</span></span><br><span class="line">observer(publisher);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 订阅者在平台上订阅发布者的部分信息</span></span><br><span class="line"><span class="keyword">new</span> Watcher(publisher, <span class="string">'bookName'</span>, name =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`new book name is <span class="subst">$&#123;name&#125;</span>`</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">new</span> Watcher(publisher, <span class="string">'bookContent'</span>, content =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`new book content is <span class="subst">$&#123;content&#125;</span>`</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发布者发布信息</span></span><br><span class="line">publisher.bookName = <span class="string">'new book'</span>;</span><br><span class="line">publisher.bookContent = <span class="string">'new content'</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="Vue-观察者的实现"><a href="#Vue-观察者的实现" class="headerlink" title="Vue 观察者的实现"></a>Vue 观察者的实现</h3><p>在看源码之前，首先让我们看看 Vue 的实现原理图：</p>
+<p><img data-src="/images/vue-observer.jpeg" alt="Reactive"></p>
+<p>先仅考虑 data 部分的观察者模式，我们可以看到大致步骤为：</p>
+<ol>
+<li>为发布者 data 做数据监听处理；</li>
+<li>为劫持方法添加 Dep 依赖收集，<code>get</code> 存储 target 目标，set 设置 target 目标；</li>
+<li>依赖收集触发后，触发 Watch 观察者，通知订阅者改变。</li>
 </ol>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  chainWebpack: <span class="function"><span class="params">config</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="comment">// 添加 worker-loader 支持</span></span><br><span class="line">    config.module</span><br><span class="line">      .rule(<span class="string">'webWorker'</span>)</span><br><span class="line">      .post()</span><br><span class="line">      .test(<span class="regexp">/\.worker\.(j|t)s$/</span>)</span><br><span class="line">      .use(<span class="string">'worker-loader'</span>)</span><br><span class="line">      .loader(<span class="string">'worker-loader'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ol start="3">
-<li>重启项目</li>
+<p>因为流程图中只是详细展示了响应式部分的变动，为了便于大家更清楚的理解这部分的流程，所以这里先解释一下 Vue 中完整的流程：</p>
+<ol>
+<li>页面开始渲染，对 data 进行依赖收集；</li>
+<li>依赖收集完毕，开始监测订阅者的方法，并存储原值方便变更时的对比；</li>
+<li>因为依赖收集完毕，要存储原值则触发了 get 事件，此时添加 dep 依赖，将对应生成的 watcher 存储入依赖列表内</li>
+<li>页面渲染完成，用户触发页面某些点击事件（比如按钮）；</li>
+<li>点击事件绑定了某个 methods 方法，该 methods 方法使得 data 部分内容更新了；</li>
+<li>因为已经对 data 进行了依赖收集，触发了对应的 set 方法；</li>
+<li>set 方法对比新旧值发现值更新了，此时重新收集依赖新的值（特别是对象的情况），然后通知它的私有管家 Dep 进行更新；</li>
+<li>Dep 依赖开始遍历其所存储的数组，为该发布者的订阅者们发送消息，触发订阅事件。</li>
+<li>各订阅者事件触发 update 更新，此时便流转到 render 渲染，之后页面就更新啦！</li>
 </ol>
-<h3 id="worker-文件的写法"><a href="#worker-文件的写法" class="headerlink" title="worker 文件的写法"></a>worker 文件的写法</h3><p>在 ts 项目中，类型声明是很重要的一点，对于 worker 文件因为没有导出，在主进程中引入会很棘手，参考网上的例子，一般 worker 文件需要这么配置</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 文件命名： xxx.worker.ts</span></span><br><span class="line"><span class="comment">// 创建 this 指针，或者配置 webpack 的 output 的 globalObject 属性</span></span><br><span class="line"><span class="keyword">const</span> _self: Worker = self <span class="keyword">as</span> <span class="built_in">any</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监听 message 事件</span></span><br><span class="line">_self.addEventListener(<span class="string">'message'</span>, <span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监听错误事件</span></span><br><span class="line">_self.addEventListener(<span class="string">'error'</span>, <span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(e.message);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
-<li><a href="http://www.ruanyifeng.com/blog/2018/07/web-worker.html" target="_blank" rel="noopener">Web Worker 使用教程</a></li>
-<li><a href="https://www.cnblogs.com/liuxianan/p/js-excel.html" target="_blank" rel="noopener">如何使用 JavaScript 实现纯前端读取和导出 excel 文件</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/83138304" target="_blank" rel="noopener">webpack + typescript 环境下配置</a></li>
+<p>为了方便大家理解源码，这里手动实现了一个简单的 observer 模式，基本是按着源码的思路一点点撸出来的，注释很全，方便大家理解！</p>
+<ul>
+<li><a href="https://github.com/kazehaiya/vue-observe" target="_blank" rel="noopener">个人版 vue-observer 源码</a></li>
 </ul>
+<h3 id="源码地址"><a href="#源码地址" class="headerlink" title="源码地址"></a>源码地址</h3><p>所有的 demo 都写入仓库了，仓库地址为：<a href="https://github.com/kazehaiya/vue-observe" target="_blank" rel="noopener">传送门</a></p>
 ]]></content>
       <categories>
         <category>Vue</category>
       </categories>
       <tags>
         <tag>Vue</tag>
+        <tag>JavaScript</tag>
       </tags>
   </entry>
   <entry>
@@ -2286,6 +2254,38 @@
       <tags>
         <tag>Vue</tag>
         <tag>Webpack</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在 typescript 中添加 webworker</title>
+    <url>/2020/04/28/%E5%9C%A8-typescript-%E4%B8%AD%E6%B7%BB%E5%8A%A0-webworker/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近在做 Vue 项目时遇到一个读取 xlsx 文件的需求，考虑到文件可能比较大的情况，为了不让页面卡死，因此引入了 webworker，本来想着应该是很容易的事情，结果却并不是很简单，主要难在配置上，这里就记录一下配置时遇到的困难。</p>
+<a id="more"></a>
+<h3 id="配置-loader"><a href="#配置-loader" class="headerlink" title="配置 loader"></a>配置 loader</h3><p>因为是 ts 写的项目，因此查阅了一下引入 webworker 需要那些插件，因此首先需要配置的是 loader 文件了。</p>
+<ol>
+<li>安装 worker-loader</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yarn add worker-loader -D</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>在 vue.config.js 内添加如下内容：</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  chainWebpack: <span class="function"><span class="params">config</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="comment">// 添加 worker-loader 支持</span></span><br><span class="line">    config.module</span><br><span class="line">      .rule(<span class="string">'webWorker'</span>)</span><br><span class="line">      .post()</span><br><span class="line">      .test(<span class="regexp">/\.worker\.(j|t)s$/</span>)</span><br><span class="line">      .use(<span class="string">'worker-loader'</span>)</span><br><span class="line">      .loader(<span class="string">'worker-loader'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>重启项目</li>
+</ol>
+<h3 id="worker-文件的写法"><a href="#worker-文件的写法" class="headerlink" title="worker 文件的写法"></a>worker 文件的写法</h3><p>在 ts 项目中，类型声明是很重要的一点，对于 worker 文件因为没有导出，在主进程中引入会很棘手，参考网上的例子，一般 worker 文件需要这么配置</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 文件命名： xxx.worker.ts</span></span><br><span class="line"><span class="comment">// 创建 this 指针，或者配置 webpack 的 output 的 globalObject 属性</span></span><br><span class="line"><span class="keyword">const</span> _self: Worker = self <span class="keyword">as</span> <span class="built_in">any</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监听 message 事件</span></span><br><span class="line">_self.addEventListener(<span class="string">'message'</span>, <span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监听错误事件</span></span><br><span class="line">_self.addEventListener(<span class="string">'error'</span>, <span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(e.message);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
+<li><a href="http://www.ruanyifeng.com/blog/2018/07/web-worker.html" target="_blank" rel="noopener">Web Worker 使用教程</a></li>
+<li><a href="https://www.cnblogs.com/liuxianan/p/js-excel.html" target="_blank" rel="noopener">如何使用 JavaScript 实现纯前端读取和导出 excel 文件</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/83138304" target="_blank" rel="noopener">webpack + typescript 环境下配置</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Vue</category>
+      </categories>
+      <tags>
+        <tag>Vue</tag>
       </tags>
   </entry>
   <entry>
@@ -2539,44 +2539,6 @@
       </tags>
   </entry>
   <entry>
-    <title>浅谈 Proxy</title>
-    <url>/2019/09/21/%E6%B5%85%E8%B0%88-proxy/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近阅读的 《你所不知道的 JavaScript 下篇》 基本上讲的都是 ES6 的一些知识，先前跟着阮一峰老师的 《ES6 入门》 一书，将大多数工作中常用的知识都过了一遍，但是少数稍微复杂的却都是“点到为止”，<code>Proxy</code> 代理正属于这一类。现在正好又学到了这一块，为了加深印象，还是写一篇博文以作记录。</p>
-<blockquote>
-<p>此篇仅记录一些基础内容，方便理解，更为深层次的内容之后有时间进行补充。</p>
-</blockquote>
-<a id="more"></a>
-<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p><code>Proxy</code> 是什么，其有什么作用？简单来说，其主要是拦截对目标对象进行的一些操作，方便定义一些基本的操作以及配置自定义的用户行为。</p>
-<p><code>Proxy</code> 的语法很简单，如下：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> proxyObject = <span class="keyword">new</span> <span class="built_in">Proxy</span>(target, handler);</span><br></pre></td></tr></table></figure>
-<p>其中 <code>target</code> 为需要进行“代理”的对象，<code>handler</code> 则是对该对象进行拦截的一些配置了。</p>
-<blockquote>
-<p>引： <code>Proxy</code> 用于修改某些操作的默认行为，等同于在语言层面做出修改，所以属于一种“元编程”（meta programming），即对编程语言进行编程。</p>
-</blockquote>
-<h4 id="handler-方法"><a href="#handler-方法" class="headerlink" title="handler 方法"></a>handler 方法</h4><p>handler 总共有 13 种可代理的方法，每一种方法都有与之对应的 Reflect 函数，具体的我就不全部列举出来了，这里今介绍一些可能会常用的：</p>
-<h5 id="getOwnPropertyDescriptor-与-defineProperty"><a href="#getOwnPropertyDescriptor-与-defineProperty" class="headerlink" title="getOwnPropertyDescriptor 与 defineProperty"></a><code>getOwnPropertyDescriptor</code> 与 <code>defineProperty</code></h5><p>此两操作可以算是一种配套的操作，一个读取对象的属性描述符，另一个配置对象，例如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> target = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> p = <span class="keyword">new</span> <span class="built_in">Proxy</span>(target,&#123;</span><br><span class="line">    getOwnPropertyDescriptor(target, prop) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'called'</span> + prop);</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Reflect</span>.getOwnPropertyDescriptor(target, prop);</span><br><span class="line">    &#125;,</span><br><span class="line">    defineProperty(target, prop, descriptor) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'defined'</span>, prop);</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Reflect</span>.defineProperty(target, prop, descriptor);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">p.age = <span class="number">123</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// called age</span></span><br><span class="line"><span class="comment">// defined age</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注意： 当 handler 中有设置 get/set 方法时，此两 trap 会被覆盖掉。</p>
-</blockquote>
-<h5 id="get-与-set"><a href="#get-与-set" class="headerlink" title="get 与 set"></a><code>get</code> 与 <code>set</code></h5><p>此两方法一眼便知是拦截对象的读写操作，与上面的不同的是，此仅仅涉及到读与写的配置，更为详细的配置还是得依靠 <code>defineProperty</code> 方法。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> target = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> p = <span class="keyword">new</span> <span class="built_in">Proxy</span>(target,&#123;</span><br><span class="line">    <span class="keyword">get</span>(target, prop)&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'get'</span>, prop)</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Reflect</span>.get(target, prop) || <span class="string">'-'</span>;</span><br><span class="line">        <span class="comment">// 直接 target[prop] 结果也一致</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="keyword">set</span>(target, prop, value, receiver) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'set'</span>, prop, value);</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Reflect</span>.set(target, prop, value, receiver);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">p.a = <span class="number">123</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(p.a);</span><br><span class="line"></span><br><span class="line"><span class="comment">// set a 123</span></span><br><span class="line"><span class="comment">// get a</span></span><br><span class="line"><span class="comment">// 123</span></span><br></pre></td></tr></table></figure>
-<h5 id="apply-与-construct"><a href="#apply-与-construct" class="headerlink" title="apply 与 construct"></a><code>apply</code> 与 <code>construct</code></h5><p>此两方法主要用于扩展构造函数，例如 MDN 上的 extend 的方法：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">extend</span>(<span class="params">sup, base</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 获取 base 的 constructor 描述（不是原型链描述，而是构造函数描述）</span></span><br><span class="line">  <span class="comment">// base === base.prototype.constructor</span></span><br><span class="line">  <span class="keyword">var</span> descriptor = <span class="built_in">Object</span>.getOwnPropertyDescriptor(</span><br><span class="line">    base.prototype, <span class="string">"constructor"</span></span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  <span class="comment">// base 的 prototype 继承 sup 的 prototype</span></span><br><span class="line">  base.prototype = <span class="built_in">Object</span>.create(sup.prototype);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 添加 base 构造函数的代理</span></span><br><span class="line">  <span class="keyword">var</span> handler = &#123;</span><br><span class="line">    <span class="comment">// new 对象时为目标对象绑定 __proto__ 链（就是手动实现 new 的过程）</span></span><br><span class="line">    construct: <span class="function"><span class="keyword">function</span>(<span class="params">target, args</span>) </span>&#123;</span><br><span class="line">      <span class="comment">// 创建目标函数</span></span><br><span class="line">      <span class="keyword">var</span> obj = <span class="built_in">Object</span>.create(base.prototype);</span><br><span class="line">      <span class="comment">// 注：this 为 handler 对象，触发 apply 方法，绑定示例属性</span></span><br><span class="line">      <span class="keyword">this</span>.apply(target, obj, args);</span><br><span class="line">      <span class="comment">// 返回目标函数</span></span><br><span class="line">      <span class="keyword">return</span> obj;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 调用目标函数时，将 sup 的 base 的作用域绑定至实例对象</span></span><br><span class="line">    <span class="comment">// 也就是原来构造函数的那种 apply/call 写法</span></span><br><span class="line">    apply: <span class="function"><span class="keyword">function</span>(<span class="params">target, that, args</span>) </span>&#123;</span><br><span class="line">      sup.apply(that, args);</span><br><span class="line">      base.apply(that, args);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">var</span> proxy = <span class="keyword">new</span> <span class="built_in">Proxy</span>(base, handler);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 构造函数添加代理拦截</span></span><br><span class="line">  descriptor.value = proxy;</span><br><span class="line">  <span class="built_in">Object</span>.defineProperty(base.prototype, <span class="string">"constructor"</span>, descriptor);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 返回配置后的代理</span></span><br><span class="line">  <span class="keyword">return</span> proxy;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> Person = <span class="function"><span class="keyword">function</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.name = name</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 注意 name 需写在 age 前面，与父类保持一致</span></span><br><span class="line"><span class="comment">// 内部不在需要 apply/call 方法，已经通过代理处理了</span></span><br><span class="line"><span class="keyword">var</span> Boy = extend(Person, <span class="function"><span class="keyword">function</span>(<span class="params">name, age</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.age = age;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">Boy.prototype.sex = <span class="string">"M"</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 此才会出发 handler</span></span><br><span class="line"><span class="keyword">var</span> Peter = <span class="keyword">new</span> Boy(<span class="string">"Peter"</span>, <span class="number">13</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(Peter.sex);  <span class="comment">// "M"</span></span><br><span class="line"><span class="built_in">console</span>.log(Peter.name); <span class="comment">// "Peter"</span></span><br><span class="line"><span class="built_in">console</span>.log(Peter.age);  <span class="comment">// 13</span></span><br></pre></td></tr></table></figure>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
-<li><a href="http://es6.ruanyifeng.com/#docs/proxy" target="_blank" rel="noopener">Proxy ES6</a></li>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy" target="_blank" rel="noopener">Proxy MDN</a></li>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy/handler" target="_blank" rel="noopener">handler MDN</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>JavaScript</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>浅谈 BFC</title>
     <url>/2019/05/03/%E6%B5%85%E8%B0%88-BFC/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>CSS 中除了垂直居中之外，另外一个常见的问题就是 BFC 问题。BFC 全称为 Block Fromatting Context，即“块级格式化上下文”，对于前端开发来说，了解这个还是非常必要的，因为对于 To C 类的产品对于前端 CSS 要求还是挺高的，了解这个能够更为方便的把握住页面的结构层次以及会产生的问题。</p>
@@ -2658,6 +2620,44 @@
       </categories>
       <tags>
         <tag>CSS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>浅谈 Proxy</title>
+    <url>/2019/09/21/%E6%B5%85%E8%B0%88-proxy/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近阅读的 《你所不知道的 JavaScript 下篇》 基本上讲的都是 ES6 的一些知识，先前跟着阮一峰老师的 《ES6 入门》 一书，将大多数工作中常用的知识都过了一遍，但是少数稍微复杂的却都是“点到为止”，<code>Proxy</code> 代理正属于这一类。现在正好又学到了这一块，为了加深印象，还是写一篇博文以作记录。</p>
+<blockquote>
+<p>此篇仅记录一些基础内容，方便理解，更为深层次的内容之后有时间进行补充。</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p><code>Proxy</code> 是什么，其有什么作用？简单来说，其主要是拦截对目标对象进行的一些操作，方便定义一些基本的操作以及配置自定义的用户行为。</p>
+<p><code>Proxy</code> 的语法很简单，如下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> proxyObject = <span class="keyword">new</span> <span class="built_in">Proxy</span>(target, handler);</span><br></pre></td></tr></table></figure>
+<p>其中 <code>target</code> 为需要进行“代理”的对象，<code>handler</code> 则是对该对象进行拦截的一些配置了。</p>
+<blockquote>
+<p>引： <code>Proxy</code> 用于修改某些操作的默认行为，等同于在语言层面做出修改，所以属于一种“元编程”（meta programming），即对编程语言进行编程。</p>
+</blockquote>
+<h4 id="handler-方法"><a href="#handler-方法" class="headerlink" title="handler 方法"></a>handler 方法</h4><p>handler 总共有 13 种可代理的方法，每一种方法都有与之对应的 Reflect 函数，具体的我就不全部列举出来了，这里今介绍一些可能会常用的：</p>
+<h5 id="getOwnPropertyDescriptor-与-defineProperty"><a href="#getOwnPropertyDescriptor-与-defineProperty" class="headerlink" title="getOwnPropertyDescriptor 与 defineProperty"></a><code>getOwnPropertyDescriptor</code> 与 <code>defineProperty</code></h5><p>此两操作可以算是一种配套的操作，一个读取对象的属性描述符，另一个配置对象，例如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> target = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> p = <span class="keyword">new</span> <span class="built_in">Proxy</span>(target,&#123;</span><br><span class="line">    getOwnPropertyDescriptor(target, prop) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'called'</span> + prop);</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Reflect</span>.getOwnPropertyDescriptor(target, prop);</span><br><span class="line">    &#125;,</span><br><span class="line">    defineProperty(target, prop, descriptor) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'defined'</span>, prop);</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Reflect</span>.defineProperty(target, prop, descriptor);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">p.age = <span class="number">123</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// called age</span></span><br><span class="line"><span class="comment">// defined age</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意： 当 handler 中有设置 get/set 方法时，此两 trap 会被覆盖掉。</p>
+</blockquote>
+<h5 id="get-与-set"><a href="#get-与-set" class="headerlink" title="get 与 set"></a><code>get</code> 与 <code>set</code></h5><p>此两方法一眼便知是拦截对象的读写操作，与上面的不同的是，此仅仅涉及到读与写的配置，更为详细的配置还是得依靠 <code>defineProperty</code> 方法。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> target = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> p = <span class="keyword">new</span> <span class="built_in">Proxy</span>(target,&#123;</span><br><span class="line">    <span class="keyword">get</span>(target, prop)&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'get'</span>, prop)</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Reflect</span>.get(target, prop) || <span class="string">'-'</span>;</span><br><span class="line">        <span class="comment">// 直接 target[prop] 结果也一致</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="keyword">set</span>(target, prop, value, receiver) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'set'</span>, prop, value);</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Reflect</span>.set(target, prop, value, receiver);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">p.a = <span class="number">123</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(p.a);</span><br><span class="line"></span><br><span class="line"><span class="comment">// set a 123</span></span><br><span class="line"><span class="comment">// get a</span></span><br><span class="line"><span class="comment">// 123</span></span><br></pre></td></tr></table></figure>
+<h5 id="apply-与-construct"><a href="#apply-与-construct" class="headerlink" title="apply 与 construct"></a><code>apply</code> 与 <code>construct</code></h5><p>此两方法主要用于扩展构造函数，例如 MDN 上的 extend 的方法：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">extend</span>(<span class="params">sup, base</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 获取 base 的 constructor 描述（不是原型链描述，而是构造函数描述）</span></span><br><span class="line">  <span class="comment">// base === base.prototype.constructor</span></span><br><span class="line">  <span class="keyword">var</span> descriptor = <span class="built_in">Object</span>.getOwnPropertyDescriptor(</span><br><span class="line">    base.prototype, <span class="string">"constructor"</span></span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  <span class="comment">// base 的 prototype 继承 sup 的 prototype</span></span><br><span class="line">  base.prototype = <span class="built_in">Object</span>.create(sup.prototype);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 添加 base 构造函数的代理</span></span><br><span class="line">  <span class="keyword">var</span> handler = &#123;</span><br><span class="line">    <span class="comment">// new 对象时为目标对象绑定 __proto__ 链（就是手动实现 new 的过程）</span></span><br><span class="line">    construct: <span class="function"><span class="keyword">function</span>(<span class="params">target, args</span>) </span>&#123;</span><br><span class="line">      <span class="comment">// 创建目标函数</span></span><br><span class="line">      <span class="keyword">var</span> obj = <span class="built_in">Object</span>.create(base.prototype);</span><br><span class="line">      <span class="comment">// 注：this 为 handler 对象，触发 apply 方法，绑定示例属性</span></span><br><span class="line">      <span class="keyword">this</span>.apply(target, obj, args);</span><br><span class="line">      <span class="comment">// 返回目标函数</span></span><br><span class="line">      <span class="keyword">return</span> obj;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 调用目标函数时，将 sup 的 base 的作用域绑定至实例对象</span></span><br><span class="line">    <span class="comment">// 也就是原来构造函数的那种 apply/call 写法</span></span><br><span class="line">    apply: <span class="function"><span class="keyword">function</span>(<span class="params">target, that, args</span>) </span>&#123;</span><br><span class="line">      sup.apply(that, args);</span><br><span class="line">      base.apply(that, args);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">var</span> proxy = <span class="keyword">new</span> <span class="built_in">Proxy</span>(base, handler);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 构造函数添加代理拦截</span></span><br><span class="line">  descriptor.value = proxy;</span><br><span class="line">  <span class="built_in">Object</span>.defineProperty(base.prototype, <span class="string">"constructor"</span>, descriptor);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 返回配置后的代理</span></span><br><span class="line">  <span class="keyword">return</span> proxy;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> Person = <span class="function"><span class="keyword">function</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.name = name</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 注意 name 需写在 age 前面，与父类保持一致</span></span><br><span class="line"><span class="comment">// 内部不在需要 apply/call 方法，已经通过代理处理了</span></span><br><span class="line"><span class="keyword">var</span> Boy = extend(Person, <span class="function"><span class="keyword">function</span>(<span class="params">name, age</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.age = age;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">Boy.prototype.sex = <span class="string">"M"</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 此才会出发 handler</span></span><br><span class="line"><span class="keyword">var</span> Peter = <span class="keyword">new</span> Boy(<span class="string">"Peter"</span>, <span class="number">13</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(Peter.sex);  <span class="comment">// "M"</span></span><br><span class="line"><span class="built_in">console</span>.log(Peter.name); <span class="comment">// "Peter"</span></span><br><span class="line"><span class="built_in">console</span>.log(Peter.age);  <span class="comment">// 13</span></span><br></pre></td></tr></table></figure>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
+<li><a href="http://es6.ruanyifeng.com/#docs/proxy" target="_blank" rel="noopener">Proxy ES6</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy" target="_blank" rel="noopener">Proxy MDN</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy/handler" target="_blank" rel="noopener">handler MDN</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
       </tags>
   </entry>
   <entry>
