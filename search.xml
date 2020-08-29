@@ -33,68 +33,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Docker 安装笔记</title>
-    <url>/2019/12/14/Docker-%E5%AE%89%E8%A3%85%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>不知不觉已经快过 2 个月了，这期间由于项目变更，再加上遇到了一些生活上的波折，基本上没太多心思花在博文的编写了。好不容易稍微有点时间了，立马开始写上一篇，记录一下最近折腾配置的环境。</p>
-<blockquote>
-<p>仅记录 Mac 环境的配置</p>
-</blockquote>
-<a id="more"></a>
-<h3 id="Docker-安装"><a href="#Docker-安装" class="headerlink" title="Docker 安装"></a>Docker 安装</h3><p>Docker 安装很简单，有两种方式（基本上网上都有），分别为：</p>
-<ul>
-<li>brew 安装</li>
-<li>安装包安装</li>
-</ul>
-<h4 id="brew-安装"><a href="#brew-安装" class="headerlink" title="brew 安装"></a>brew 安装</h4><p>brew 安装很简单，命令为：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">## 等待的时间会有点长</span></span><br><span class="line">brew cask install docker</span><br></pre></td></tr></table></figure>
-<h4 id="手动下载安装"><a href="#手动下载安装" class="headerlink" title="手动下载安装"></a>手动下载安装</h4><p>docker 手动下载安装也不是特别复杂，但是为了更为方便快捷，最好还是去<a href="https://hub.docker.com/" target="_blank" rel="noopener">官网注册</a>一个 ID（迟早会去注册账号的），然后再 download 桌面版。</p>
-<blockquote>
-<p>虽然不知道能不能打开此链接，但是还是奉上 download <a href="https://hub.docker.com/?overlay=onboarding" target="_blank" rel="noopener">传送门</a></p>
-</blockquote>
-<p>此外，还有其它的安装途径，比如 <a href="http://get.daocloud.io/#install-docker-for-mac-windows" target="_blank" rel="noopener">Docker 极速下载</a> 网站（该版本比较低，因此需要自己升级）</p>
-<h3 id="Docker-镜像加速"><a href="#Docker-镜像加速" class="headerlink" title="Docker 镜像加速"></a>Docker 镜像加速</h3><p>Docker 默认使用的是国外的源，而国外的源有时会有网络的问题，在后续的拉取中会比较缓慢。</p>
-<p>Mac 上的更改操作比较简单，步骤为：</p>
-<p>点击 Docker 图标 -&gt; Perferences -&gt; Daemon 标签页 -&gt; Registry mirrors</p>
-<p><img data-src="/images/docker-registry.jpg" alt="Docker 镜像"></p>
-<p>可添加源有：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 国内官方</span></span><br><span class="line">https://registry.docker-cn.com</span><br><span class="line"><span class="comment"># 网易源</span></span><br><span class="line">https://hub-mirror.c.163.com</span><br><span class="line"><span class="comment"># 阿里云</span></span><br><span class="line">https://registry.aliyuncs.com</span><br><span class="line"><span class="comment"># 中科大</span></span><br><span class="line">https://docker.mirrors.ustc.edu.cn</span><br></pre></td></tr></table></figure>
-<p>之后点击 <code>Apply &amp; Restart</code> 等待片刻即可。</p>
-<h3 id="基础命令"><a href="#基础命令" class="headerlink" title="基础命令"></a>基础命令</h3><h4 id="拉取远程镜像"><a href="#拉取远程镜像" class="headerlink" title="拉取远程镜像"></a>拉取远程镜像</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker pull [registry[:port]/]packages[:tags]</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>默认拉取的为 <a href="https://hub.docker.com/explore/" target="_blank" rel="noopener">Docker Hub</a> 的 latest 版本的包</p>
-</blockquote>
-<h4 id="镜像列举与空间占用"><a href="#镜像列举与空间占用" class="headerlink" title="镜像列举与空间占用"></a>镜像列举与空间占用</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看当前下载的镜像资源（压缩的）</span></span><br><span class="line">docker images</span><br><span class="line"><span class="comment"># 查看镜像、容器、卷宗占用体积</span></span><br><span class="line">docker system df</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p><code>docker image prune</code> 删除无用镜像</p>
-</blockquote>
-<h4 id="删除镜像与容器"><a href="#删除镜像与容器" class="headerlink" title="删除镜像与容器"></a>删除镜像与容器</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 删除镜像</span></span><br><span class="line">docker rmi &lt;image&gt; [others...]</span><br><span class="line"><span class="comment"># 删除容器</span></span><br><span class="line">docker rm &lt;container-hash/container-name&gt;</span><br></pre></td></tr></table></figure>
-<h4 id="运行与操作容器"><a href="#运行与操作容器" class="headerlink" title="运行与操作容器"></a>运行与操作容器</h4><p>创建并运行容器</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run</span><br><span class="line">  [--name &lt;container-name&gt;]</span><br><span class="line">  [-p &lt;image-port&gt;:&lt;<span class="built_in">local</span>-port&gt;]</span><br><span class="line">  [-v &lt;<span class="built_in">local</span>-path&gt;:&lt;container-path&gt;]</span><br><span class="line">  [-e &lt;container-env&gt;=&lt;params&gt;]</span><br><span class="line">  [-d]</span><br><span class="line">  &lt;image-name&gt;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>name 为容器别名； p 为端口映射； v 为卷宗地址映射； e 为环境变量声明； d 为后台运行容器</p>
-</blockquote>
-<p>启动容器</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker start &lt;container-name/container-hash&gt;</span><br></pre></td></tr></table></figure>
-<p>重新启动容器</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker restart &lt;container-name/container-hash&gt;</span><br></pre></td></tr></table></figure>
-<p>终止容器</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker stop &lt;container-name/container-hash&gt;</span><br></pre></td></tr></table></figure>
-<p>进入容器</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 以 bash 的方式，进入伪终端； -it： 支持 stdin 切推出不会停止容器</span></span><br><span class="line">docker <span class="built_in">exec</span> -it &lt;container-name&gt; bash</span><br></pre></td></tr></table></figure>
-<h3 id="拷贝镜像内容"><a href="#拷贝镜像内容" class="headerlink" title="拷贝镜像内容"></a>拷贝镜像内容</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker cp &lt;container&gt;:&lt;path&gt; &lt;<span class="built_in">local</span>-path&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
-<li><a href="https://www.runoob.com/docker/macos-docker-install.html" target="_blank" rel="noopener">MacOS Docker 安装</a></li>
-<li><a href="https://yeasy.gitbooks.io/docker_practice/" target="_blank" rel="noopener">Docker — 从入门到实践</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Docker</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Docker 安装 nginx</title>
     <url>/2020/03/11/Docker-%E5%AE%89%E8%A3%85-nginx/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>自学 Docker 系列，了解常用包的使用和配置安装，此篇记录 nginx 的安装</p>
@@ -148,6 +86,68 @@
 <li><a href="https://www.jianshu.com/p/c1ce9eec5fb2" target="_blank" rel="noopener">Linux 彻底卸载 Nginx</a></li>
 <li><a href="https://www.runoob.com/linux/linux-comm-kill.html" target="_blank" rel="noopener">Linux kill 命令</a></li>
 <li><a href="https://www.cnblogs.com/happySmily/p/6003579.html" target="_blank" rel="noopener">nginx 重启报找不到 nginx.pid 的解决方法</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Docker 安装笔记</title>
+    <url>/2019/12/14/Docker-%E5%AE%89%E8%A3%85%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>不知不觉已经快过 2 个月了，这期间由于项目变更，再加上遇到了一些生活上的波折，基本上没太多心思花在博文的编写了。好不容易稍微有点时间了，立马开始写上一篇，记录一下最近折腾配置的环境。</p>
+<blockquote>
+<p>仅记录 Mac 环境的配置</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="Docker-安装"><a href="#Docker-安装" class="headerlink" title="Docker 安装"></a>Docker 安装</h3><p>Docker 安装很简单，有两种方式（基本上网上都有），分别为：</p>
+<ul>
+<li>brew 安装</li>
+<li>安装包安装</li>
+</ul>
+<h4 id="brew-安装"><a href="#brew-安装" class="headerlink" title="brew 安装"></a>brew 安装</h4><p>brew 安装很简单，命令为：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">## 等待的时间会有点长</span></span><br><span class="line">brew cask install docker</span><br></pre></td></tr></table></figure>
+<h4 id="手动下载安装"><a href="#手动下载安装" class="headerlink" title="手动下载安装"></a>手动下载安装</h4><p>docker 手动下载安装也不是特别复杂，但是为了更为方便快捷，最好还是去<a href="https://hub.docker.com/" target="_blank" rel="noopener">官网注册</a>一个 ID（迟早会去注册账号的），然后再 download 桌面版。</p>
+<blockquote>
+<p>虽然不知道能不能打开此链接，但是还是奉上 download <a href="https://hub.docker.com/?overlay=onboarding" target="_blank" rel="noopener">传送门</a></p>
+</blockquote>
+<p>此外，还有其它的安装途径，比如 <a href="http://get.daocloud.io/#install-docker-for-mac-windows" target="_blank" rel="noopener">Docker 极速下载</a> 网站（该版本比较低，因此需要自己升级）</p>
+<h3 id="Docker-镜像加速"><a href="#Docker-镜像加速" class="headerlink" title="Docker 镜像加速"></a>Docker 镜像加速</h3><p>Docker 默认使用的是国外的源，而国外的源有时会有网络的问题，在后续的拉取中会比较缓慢。</p>
+<p>Mac 上的更改操作比较简单，步骤为：</p>
+<p>点击 Docker 图标 -&gt; Perferences -&gt; Daemon 标签页 -&gt; Registry mirrors</p>
+<p><img data-src="/images/docker-registry.jpg" alt="Docker 镜像"></p>
+<p>可添加源有：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 国内官方</span></span><br><span class="line">https://registry.docker-cn.com</span><br><span class="line"><span class="comment"># 网易源</span></span><br><span class="line">https://hub-mirror.c.163.com</span><br><span class="line"><span class="comment"># 阿里云</span></span><br><span class="line">https://registry.aliyuncs.com</span><br><span class="line"><span class="comment"># 中科大</span></span><br><span class="line">https://docker.mirrors.ustc.edu.cn</span><br></pre></td></tr></table></figure>
+<p>之后点击 <code>Apply &amp; Restart</code> 等待片刻即可。</p>
+<h3 id="基础命令"><a href="#基础命令" class="headerlink" title="基础命令"></a>基础命令</h3><h4 id="拉取远程镜像"><a href="#拉取远程镜像" class="headerlink" title="拉取远程镜像"></a>拉取远程镜像</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker pull [registry[:port]/]packages[:tags]</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>默认拉取的为 <a href="https://hub.docker.com/explore/" target="_blank" rel="noopener">Docker Hub</a> 的 latest 版本的包</p>
+</blockquote>
+<h4 id="镜像列举与空间占用"><a href="#镜像列举与空间占用" class="headerlink" title="镜像列举与空间占用"></a>镜像列举与空间占用</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看当前下载的镜像资源（压缩的）</span></span><br><span class="line">docker images</span><br><span class="line"><span class="comment"># 查看镜像、容器、卷宗占用体积</span></span><br><span class="line">docker system df</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>docker image prune</code> 删除无用镜像</p>
+</blockquote>
+<h4 id="删除镜像与容器"><a href="#删除镜像与容器" class="headerlink" title="删除镜像与容器"></a>删除镜像与容器</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 删除镜像</span></span><br><span class="line">docker rmi &lt;image&gt; [others...]</span><br><span class="line"><span class="comment"># 删除容器</span></span><br><span class="line">docker rm &lt;container-hash/container-name&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="运行与操作容器"><a href="#运行与操作容器" class="headerlink" title="运行与操作容器"></a>运行与操作容器</h4><p>创建并运行容器</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run</span><br><span class="line">  [--name &lt;container-name&gt;]</span><br><span class="line">  [-p &lt;image-port&gt;:&lt;<span class="built_in">local</span>-port&gt;]</span><br><span class="line">  [-v &lt;<span class="built_in">local</span>-path&gt;:&lt;container-path&gt;]</span><br><span class="line">  [-e &lt;container-env&gt;=&lt;params&gt;]</span><br><span class="line">  [-d]</span><br><span class="line">  &lt;image-name&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>name 为容器别名； p 为端口映射； v 为卷宗地址映射； e 为环境变量声明； d 为后台运行容器</p>
+</blockquote>
+<p>启动容器</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker start &lt;container-name/container-hash&gt;</span><br></pre></td></tr></table></figure>
+<p>重新启动容器</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker restart &lt;container-name/container-hash&gt;</span><br></pre></td></tr></table></figure>
+<p>终止容器</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker stop &lt;container-name/container-hash&gt;</span><br></pre></td></tr></table></figure>
+<p>进入容器</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 以 bash 的方式，进入伪终端； -it： 支持 stdin 切推出不会停止容器</span></span><br><span class="line">docker <span class="built_in">exec</span> -it &lt;container-name&gt; bash</span><br></pre></td></tr></table></figure>
+<h3 id="拷贝镜像内容"><a href="#拷贝镜像内容" class="headerlink" title="拷贝镜像内容"></a>拷贝镜像内容</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker cp &lt;container&gt;:&lt;path&gt; &lt;<span class="built_in">local</span>-path&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
+<li><a href="https://www.runoob.com/docker/macos-docker-install.html" target="_blank" rel="noopener">MacOS Docker 安装</a></li>
+<li><a href="https://yeasy.gitbooks.io/docker_practice/" target="_blank" rel="noopener">Docker — 从入门到实践</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -910,6 +910,43 @@
       </tags>
   </entry>
   <entry>
+    <title>git 环境配置</title>
+    <url>/2019/03/31/git-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>git 的环境安装已经有很多次了，虽然简单，但是文章的重点却并不在此，此篇是用来记录学习 git 的一些好的规范、方便的工具、常用的命令以及遇到的坑。</p>
+<a id="more"></a>
+<h3 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h3><h4 id="下载安装-git"><a href="#下载安装-git" class="headerlink" title="下载安装 git"></a>下载安装 git</h4><p><a href="https://git-scm.com/downloads" target="_blank" rel="noopener">git 下载地址</a></p>
+<h4 id="git-环境配置"><a href="#git-环境配置" class="headerlink" title="git 环境配置"></a>git 环境配置</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 设置用户名</span></span><br><span class="line">git config --global user.name <span class="string">"yourname"</span></span><br><span class="line"><span class="comment"># 设置邮箱</span></span><br><span class="line">git config --global user.email <span class="string">"youremail@example.com"</span></span><br></pre></td></tr></table></figure>
+<h4 id="git-commit-规范"><a href="#git-commit-规范" class="headerlink" title="git commit 规范"></a>git commit 规范</h4><p>用于说明 commit 的类型只允许一下 7 种：</p>
+<ul>
+<li>feat：新功能（feature）</li>
+<li>fix：修补bug</li>
+<li>docs：文档（documentation）</li>
+<li>style： 格式（不影响代码运行的变动）</li>
+<li>refactor：重构（即不是新增功能，也不是修改bug的代码变动）</li>
+<li>test：增加测试</li>
+<li>chore：构建过程或辅助工具的变动</li>
+</ul>
+<h4 id="git-常用命令"><a href="#git-常用命令" class="headerlink" title="git 常用命令"></a>git 常用命令</h4><p><img data-src="/images/git-command.jpg" alt="git命令"></p>
+<h4 id="git-使用的一些问题总结"><a href="#git-使用的一些问题总结" class="headerlink" title="git 使用的一些问题总结"></a>git 使用的一些问题总结</h4><h5 id="如何取消文件跟踪"><a href="#如何取消文件跟踪" class="headerlink" title="如何取消文件跟踪"></a>如何取消文件跟踪</h5><p><code>.gitignore</code> 文件会忽略其中记录的文件，不对其进行状态跟踪，但是对于已经跟踪的文件（即先前未添加至该文件内，后期再加入的）即使之后将其加入此 <code>.gitignore</code> 文件也不生效。</p>
+<p>原因： git 缓存使其继续追踪</p>
+<p>解决方法：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">## 单文件</span><br><span class="line">git rm --cache &lt;fileName&gt;</span><br><span class="line"></span><br><span class="line">## 全部</span><br><span class="line">git rm --cache .</span><br></pre></td></tr></table></figure></p>
+<h5 id="本地远程-tag-版本冲突问题"><a href="#本地远程-tag-版本冲突问题" class="headerlink" title="本地远程 tag 版本冲突问题"></a>本地远程 tag 版本冲突问题</h5><p>当自己打的 tag 标签与远程 tag 标签不同步时，无法正常使用 git pull –tags，此会报错提示 xxx 版本的 tag 本地与远程不统一，此 tag 拒绝被拉取覆盖（不影响其余的 tag），这回造成 VSCode 编辑器的 git 插件无法正常使用。</p>
+<p>解决方法：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git pull --tags -p -f</span><br><span class="line">## 补充</span><br><span class="line">本次仅做了强制本地覆盖并合并 tags</span><br><span class="line">git fetch --tags -h 有对应的指令详细说明</span><br></pre></td></tr></table></figure></p>
+<h3 id="git-学习推荐"><a href="#git-学习推荐" class="headerlink" title="git 学习推荐"></a>git 学习推荐</h3><ul>
+<li><a href="https://learngitbranching.js.org/" target="_blank" rel="noopener">可视化学习 git</a></li>
+</ul>
+<h3 id="相关引用"><a href="#相关引用" class="headerlink" title="相关引用"></a>相关引用</h3><blockquote>
+<p>git 命令图片源自 <a href="https://github.com/DickyQie/Tool-use" target="_blank" rel="noopener">https://github.com/DickyQie/Tool-use</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Env</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>iptables 端口转发配置</title>
     <url>/2020/07/14/iptables-%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%E9%85%8D%E7%BD%AE/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>先前转载了一篇 iptables 的使用和配置的文章，但是凡事都得自己动手学习一下才能深入了解，因此本篇用来记录动手操作了一番后的一些配置心得。当然建议大家了解的时候读一读参考文章，特别是 <code>iptables 入门指南</code> 和 <code>iptables 详解</code>，能让你对 iptables 有更深入的理解。</p>
@@ -998,40 +1035,35 @@
       </tags>
   </entry>
   <entry>
-    <title>git 环境配置</title>
-    <url>/2019/03/31/git-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>git 的环境安装已经有很多次了，虽然简单，但是文章的重点却并不在此，此篇是用来记录学习 git 的一些好的规范、方便的工具、常用的命令以及遇到的坑。</p>
+    <title>npx 的用途</title>
+    <url>/2020/03/04/npx-%E7%9A%84%E7%94%A8%E9%80%94/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近在使用 <code>package.json</code> 的 script 运行指令时，发现通过 npm 包安装的部分指令无法使用（比如 docsify 指令），原因是因为 <code>docsify-cli</code> 当作 <code>devDependence</code> 依赖项安装至项目中了，这与在终端上直接运行 docsify 指令一样，因为全局环境并没有对应的指令，因此会提示找不到对应的指令，这时候就能用上 npx 了。</p>
 <a id="more"></a>
-<h3 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h3><h4 id="下载安装-git"><a href="#下载安装-git" class="headerlink" title="下载安装 git"></a>下载安装 git</h4><p><a href="https://git-scm.com/downloads" target="_blank" rel="noopener">git 下载地址</a></p>
-<h4 id="git-环境配置"><a href="#git-环境配置" class="headerlink" title="git 环境配置"></a>git 环境配置</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 设置用户名</span></span><br><span class="line">git config --global user.name <span class="string">"yourname"</span></span><br><span class="line"><span class="comment"># 设置邮箱</span></span><br><span class="line">git config --global user.email <span class="string">"youremail@example.com"</span></span><br></pre></td></tr></table></figure>
-<h4 id="git-commit-规范"><a href="#git-commit-规范" class="headerlink" title="git commit 规范"></a>git commit 规范</h4><p>用于说明 commit 的类型只允许一下 7 种：</p>
+<h3 id="简介-npx"><a href="#简介-npx" class="headerlink" title="简介 npx"></a>简介 npx</h3><p>npx 是自 npm5.2 之后发布的一个命令，用于执行 <code>node_modules/.bin</code> 内的可执行命令，其主要解决的就是前言中描述的问题：<strong>能够直接执行项目内安装的模块的命令</strong>。</p>
+<p>npx 的执行流程如下：</p>
 <ul>
-<li>feat：新功能（feature）</li>
-<li>fix：修补bug</li>
-<li>docs：文档（documentation）</li>
-<li>style： 格式（不影响代码运行的变动）</li>
-<li>refactor：重构（即不是新增功能，也不是修改bug的代码变动）</li>
-<li>test：增加测试</li>
-<li>chore：构建过程或辅助工具的变动</li>
+<li>去 <code>node_modules/.bin</code> 路径检查 npx 后面的命令是否存在，找到之后执行；</li>
+<li>找不到，就去环境变量 $PATH 里面，检查 npx 后面的命令是否存在，找到之后执行;</li>
+<li>还是找不到，自动下载一个临时的依赖包最新版本在一个临时目录，然后再运行命令，运行完之后删除，不污染全局环境。</li>
 </ul>
-<h4 id="git-常用命令"><a href="#git-常用命令" class="headerlink" title="git 常用命令"></a>git 常用命令</h4><p><img data-src="/images/git-command.jpg" alt="git命令"></p>
-<h4 id="git-使用的一些问题总结"><a href="#git-使用的一些问题总结" class="headerlink" title="git 使用的一些问题总结"></a>git 使用的一些问题总结</h4><h5 id="如何取消文件跟踪"><a href="#如何取消文件跟踪" class="headerlink" title="如何取消文件跟踪"></a>如何取消文件跟踪</h5><p><code>.gitignore</code> 文件会忽略其中记录的文件，不对其进行状态跟踪，但是对于已经跟踪的文件（即先前未添加至该文件内，后期再加入的）即使之后将其加入此 <code>.gitignore</code> 文件也不生效。</p>
-<p>原因： git 缓存使其继续追踪</p>
-<p>解决方法：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">## 单文件</span><br><span class="line">git rm --cache &lt;fileName&gt;</span><br><span class="line"></span><br><span class="line">## 全部</span><br><span class="line">git rm --cache .</span><br></pre></td></tr></table></figure></p>
-<h5 id="本地远程-tag-版本冲突问题"><a href="#本地远程-tag-版本冲突问题" class="headerlink" title="本地远程 tag 版本冲突问题"></a>本地远程 tag 版本冲突问题</h5><p>当自己打的 tag 标签与远程 tag 标签不同步时，无法正常使用 git pull –tags，此会报错提示 xxx 版本的 tag 本地与远程不统一，此 tag 拒绝被拉取覆盖（不影响其余的 tag），这回造成 VSCode 编辑器的 git 插件无法正常使用。</p>
-<p>解决方法：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git pull --tags -p -f</span><br><span class="line">## 补充</span><br><span class="line">本次仅做了强制本地覆盖并合并 tags</span><br><span class="line">git fetch --tags -h 有对应的指令详细说明</span><br></pre></td></tr></table></figure></p>
-<h3 id="git-学习推荐"><a href="#git-学习推荐" class="headerlink" title="git 学习推荐"></a>git 学习推荐</h3><ul>
-<li><a href="https://learngitbranching.js.org/" target="_blank" rel="noopener">可视化学习 git</a></li>
-</ul>
-<h3 id="相关引用"><a href="#相关引用" class="headerlink" title="相关引用"></a>相关引用</h3><blockquote>
-<p>git 命令图片源自 <a href="https://github.com/DickyQie/Tool-use" target="_blank" rel="noopener">https://github.com/DickyQie/Tool-use</a></p>
+<blockquote>
+<p>使用 npx 能够减少无用的全局模块的安装，比如 <code>npx http-server</code> 可以在当前目录启动一个 Web 服务，即使没有安装对应的包</p>
 </blockquote>
+<h3 id="npx-常用参数"><a href="#npx-常用参数" class="headerlink" title="npx 常用参数"></a>npx 常用参数</h3><h4 id="–no-install-参数"><a href="#–no-install-参数" class="headerlink" title="–no-install 参数"></a>–no-install 参数</h4><p>如果想让 npx 强制使用本地模块，不下载远程模块，可以使用 –no-install 参数。如果本地不存在该模块，就会报错。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npx --no-install http-server</span><br></pre></td></tr></table></figure>
+<h4 id="–ignore-existing-参数"><a href="#–ignore-existing-参数" class="headerlink" title="–ignore-existing 参数"></a>–ignore-existing 参数</h4><p>与上面相反，此命令是强制忽略本地的同名模块，强制安装使用远程模块。比如，本地已经全局安装了create-react-app，但还是想使用远程模块，就用这个参数。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npx --ignore-existing create-react-app my-react-app</span><br></pre></td></tr></table></figure>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><ul>
+<li><a href="https://www.npmjs.com/package/npx" target="_blank" rel="noopener">npx</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2019/02/npx.html" target="_blank" rel="noopener">npx 使用教程</a></li>
+<li><a href="https://www.jianshu.com/p/14c813bba544" target="_blank" rel="noopener">npx详细使用</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>Env</category>
       </categories>
       <tags>
-        <tag>Git</tag>
+        <tag>Env</tag>
       </tags>
   </entry>
   <entry>
@@ -1104,38 +1136,6 @@
       </categories>
       <tags>
         <tag>Markdown</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>npx 的用途</title>
-    <url>/2020/03/04/npx-%E7%9A%84%E7%94%A8%E9%80%94/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近在使用 <code>package.json</code> 的 script 运行指令时，发现通过 npm 包安装的部分指令无法使用（比如 docsify 指令），原因是因为 <code>docsify-cli</code> 当作 <code>devDependence</code> 依赖项安装至项目中了，这与在终端上直接运行 docsify 指令一样，因为全局环境并没有对应的指令，因此会提示找不到对应的指令，这时候就能用上 npx 了。</p>
-<a id="more"></a>
-<h3 id="简介-npx"><a href="#简介-npx" class="headerlink" title="简介 npx"></a>简介 npx</h3><p>npx 是自 npm5.2 之后发布的一个命令，用于执行 <code>node_modules/.bin</code> 内的可执行命令，其主要解决的就是前言中描述的问题：<strong>能够直接执行项目内安装的模块的命令</strong>。</p>
-<p>npx 的执行流程如下：</p>
-<ul>
-<li>去 <code>node_modules/.bin</code> 路径检查 npx 后面的命令是否存在，找到之后执行；</li>
-<li>找不到，就去环境变量 $PATH 里面，检查 npx 后面的命令是否存在，找到之后执行;</li>
-<li>还是找不到，自动下载一个临时的依赖包最新版本在一个临时目录，然后再运行命令，运行完之后删除，不污染全局环境。</li>
-</ul>
-<blockquote>
-<p>使用 npx 能够减少无用的全局模块的安装，比如 <code>npx http-server</code> 可以在当前目录启动一个 Web 服务，即使没有安装对应的包</p>
-</blockquote>
-<h3 id="npx-常用参数"><a href="#npx-常用参数" class="headerlink" title="npx 常用参数"></a>npx 常用参数</h3><h4 id="–no-install-参数"><a href="#–no-install-参数" class="headerlink" title="–no-install 参数"></a>–no-install 参数</h4><p>如果想让 npx 强制使用本地模块，不下载远程模块，可以使用 –no-install 参数。如果本地不存在该模块，就会报错。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npx --no-install http-server</span><br></pre></td></tr></table></figure>
-<h4 id="–ignore-existing-参数"><a href="#–ignore-existing-参数" class="headerlink" title="–ignore-existing 参数"></a>–ignore-existing 参数</h4><p>与上面相反，此命令是强制忽略本地的同名模块，强制安装使用远程模块。比如，本地已经全局安装了create-react-app，但还是想使用远程模块，就用这个参数。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">npx --ignore-existing create-react-app my-react-app</span><br></pre></td></tr></table></figure>
-<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><ul>
-<li><a href="https://www.npmjs.com/package/npx" target="_blank" rel="noopener">npx</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2019/02/npx.html" target="_blank" rel="noopener">npx 使用教程</a></li>
-<li><a href="https://www.jianshu.com/p/14c813bba544" target="_blank" rel="noopener">npx详细使用</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Env</category>
-      </categories>
-      <tags>
-        <tag>Env</tag>
       </tags>
   </entry>
   <entry>
@@ -1494,6 +1494,53 @@
       </tags>
   </entry>
   <entry>
+    <title>关于 JS 中“继承”的写法</title>
+    <url>/2019/06/28/%E5%85%B3%E4%BA%8E-JS-%E4%B8%AD%E2%80%9C%E7%BB%A7%E6%89%BF%E2%80%9D%E7%9A%84%E5%86%99%E6%B3%95/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在巩固继承这部分知识时，突然想到早期分享时同事提出的一些疑问，即实现 JS 继承具体有那些方法。在经过一番调研后，此篇便是我所总结出的比较全面的方法。当然，文中记录的仅是一些基础的继承方法以及它们之间的的区别，以供参考。</p>
+<a id="more"></a>
+<h3 id="（原型）继承"><a href="#（原型）继承" class="headerlink" title="（原型）继承"></a>（原型）继承</h3><p>JavaScript 中有许多模拟类行为的方法，其中“继承”（更贴切的说法是委托）便是其中的一项，没有“继承”机制，JavaScript 中的类就是一个空架子。</p>
+<p>假如我们以此例作为继承的模板，归结下来总共有 5 种继承的写法。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 父类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Father</span>(<span class="params">age</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.age = age;</span><br><span class="line">&#125;</span><br><span class="line">Father.prototype.getAge = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.age;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 子类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Child</span>(<span class="params">age, size</span>) </span>&#123;</span><br><span class="line">    Father.call(<span class="keyword">this</span>, age);</span><br><span class="line">    <span class="keyword">this</span>.size = size;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 继承的实现，看下例 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 实例</span></span><br><span class="line"><span class="keyword">const</span> child = <span class="keyword">new</span> Child(<span class="number">28</span>, <span class="string">'small'</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="隐式链接法"><a href="#隐式链接法" class="headerlink" title="隐式链接法"></a>隐式链接法</h4><p>ES6 之前比较非常规的写法是手动更改 <code>__proto__</code> 属性来最简化链式继承。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Child.prototype.__proto__ = Father.prototype</span><br></pre></td></tr></table></figure>
+<p>优点：操作很简便直接</p>
+<p>缺点：该方法并非标准，并且无法兼容所有浏览器，慎用。</p>
+<h4 id="直接引用法"><a href="#直接引用法" class="headerlink" title="直接引用法"></a>直接引用法</h4><p>直接将子类的 prototype 对象指向父类的 prototype 对象。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Child.prototype = Father.prototype;</span><br></pre></td></tr></table></figure>
+<p>优点：操作简单</p>
+<p>缺点： Child 的 prototype 属性修改会直接影响到父类，此写法其实相当于直接在父类进行修改，新创建一个子类有些多此一举。</p>
+<h4 id="实例化方法"><a href="#实例化方法" class="headerlink" title="实例化方法"></a>实例化方法</h4><p>子类的 prototype 属性为父类的实例对象，借由对象的 prototype 链来传递。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Child.prototype = <span class="keyword">new</span> Father();</span><br><span class="line"><span class="comment">// Child.prototype.constructor = Chlid;</span></span><br></pre></td></tr></table></figure>
+<p>优点：能基本满足“继承”的需求</p>
+<p>缺点：</p>
+<ol>
+<li>需要创建一个新对象，然后将旧对象（原本存在的 prototype 对象，带有 constructor）抛弃掉，不能直接修改默认的 prototype 对象。</li>
+<li>会产生副作用，比如：原型（prototype）上会有“脏”属性，本例的 prototype 上会有多余的 age 属性。</li>
+<li>必要时还得自己重写一下 Child 的 constructor 指向，如“寄生组合式继承”。</li>
+</ol>
+<blockquote>
+<p>“寄生组合式继承” 在 ES5 中为最佳写法，如果不考虑其稍微的复杂性。</p>
+</blockquote>
+<h4 id="对象构造法"><a href="#对象构造法" class="headerlink" title="对象构造法"></a>对象构造法</h4><p>通过 <code>Object.create</code> 方法来构造一个合适的关联对象。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Child.prototype = <span class="built_in">Object</span>.create(Father.prototype)</span><br><span class="line"><span class="comment">// Child.prototype.constructor = Chlid;</span></span><br></pre></td></tr></table></figure>
+<p>优点：在 ES6 之前的最佳之选，优于实例化方法。</p>
+<p>缺点：与实例化方法基本相同，但没有副作用。此外，其隐式 <code>__proto__</code> 链比实例化方法要多一层，链式查找方法相对会耗时长一点点，基本可忽略。</p>
+<h4 id="设置原型法"><a href="#设置原型法" class="headerlink" title="设置原型法"></a>设置原型法</h4><p>使用 ES6 的原型设置方法，此法在 ES6 环境为最佳之选，没有之一。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Object</span>.setPrototypeOf(Child.prototype, Father.prototype)</span><br></pre></td></tr></table></figure>
+<p>优点：能覆盖所有需求，清晰易懂，可读性强。</p>
+<p>缺点：性能比 <code>Object.create</code> 稍微差点，如果考虑性能的话可优先使用 <code>Object.create</code> 方法</p>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><blockquote>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/setPrototypeOf" target="_blank" rel="noopener">MDN</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>使用 vue-cli 发布一个完善的包</title>
     <url>/2019/07/11/%E4%BD%BF%E7%94%A8-vue-cli-%E5%8F%91%E5%B8%83%E4%B8%80%E4%B8%AA%E5%AE%8C%E5%96%84%E7%9A%84%E5%8C%85/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>其实先前有写过一篇《发布一个 vue 包》，不过对于“极简主义者”来说，该文章还是显得有些复杂，毕竟需要配置“复杂”的 webpack。那么有没有一种简单上手、开箱即用的方法呢？答案是有的，vue-cli 已经完美的考虑到了这些问题，此处就介绍如何使用 vue-cli 来搭建一个完整的发包环境。</p>
@@ -1604,49 +1651,49 @@
       </tags>
   </entry>
   <entry>
-    <title>关于 JS 中“继承”的写法</title>
-    <url>/2019/06/28/%E5%85%B3%E4%BA%8E-JS-%E4%B8%AD%E2%80%9C%E7%BB%A7%E6%89%BF%E2%80%9D%E7%9A%84%E5%86%99%E6%B3%95/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在巩固继承这部分知识时，突然想到早期分享时同事提出的一些疑问，即实现 JS 继承具体有那些方法。在经过一番调研后，此篇便是我所总结出的比较全面的方法。当然，文中记录的仅是一些基础的继承方法以及它们之间的的区别，以供参考。</p>
+    <title>分析 Vue 的观察者模式（上）</title>
+    <url>/2019/10/10/%E5%88%86%E6%9E%90-Vue-%E7%9A%84%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%8A%EF%BC%89/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近又鼓起勇气鼓捣 vue 源码，然后不经意间瞅了瞅最早开始学习 vue 源码时跟着撸的一个 vue-observer 的实例，发现自己对于观察者模式还是有些不太明白。因此，在学习了《JavaScript 设计模式》的“观察者模式”一篇后，总算有了一点灵感。目前趁灵感还在，在此便记录下我的理解。</p>
 <a id="more"></a>
-<h3 id="（原型）继承"><a href="#（原型）继承" class="headerlink" title="（原型）继承"></a>（原型）继承</h3><p>JavaScript 中有许多模拟类行为的方法，其中“继承”（更贴切的说法是委托）便是其中的一项，没有“继承”机制，JavaScript 中的类就是一个空架子。</p>
-<p>假如我们以此例作为继承的模板，归结下来总共有 5 种继承的写法。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 父类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Father</span>(<span class="params">age</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.age = age;</span><br><span class="line">&#125;</span><br><span class="line">Father.prototype.getAge = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.age;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 子类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Child</span>(<span class="params">age, size</span>) </span>&#123;</span><br><span class="line">    Father.call(<span class="keyword">this</span>, age);</span><br><span class="line">    <span class="keyword">this</span>.size = size;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 继承的实现，看下例 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 实例</span></span><br><span class="line"><span class="keyword">const</span> child = <span class="keyword">new</span> Child(<span class="number">28</span>, <span class="string">'small'</span>)</span><br></pre></td></tr></table></figure>
-<h4 id="隐式链接法"><a href="#隐式链接法" class="headerlink" title="隐式链接法"></a>隐式链接法</h4><p>ES6 之前比较非常规的写法是手动更改 <code>__proto__</code> 属性来最简化链式继承。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Child.prototype.__proto__ = Father.prototype</span><br></pre></td></tr></table></figure>
-<p>优点：操作很简便直接</p>
-<p>缺点：该方法并非标准，并且无法兼容所有浏览器，慎用。</p>
-<h4 id="直接引用法"><a href="#直接引用法" class="headerlink" title="直接引用法"></a>直接引用法</h4><p>直接将子类的 prototype 对象指向父类的 prototype 对象。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Child.prototype = Father.prototype;</span><br></pre></td></tr></table></figure>
-<p>优点：操作简单</p>
-<p>缺点： Child 的 prototype 属性修改会直接影响到父类，此写法其实相当于直接在父类进行修改，新创建一个子类有些多此一举。</p>
-<h4 id="实例化方法"><a href="#实例化方法" class="headerlink" title="实例化方法"></a>实例化方法</h4><p>子类的 prototype 属性为父类的实例对象，借由对象的 prototype 链来传递。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Child.prototype = <span class="keyword">new</span> Father();</span><br><span class="line"><span class="comment">// Child.prototype.constructor = Chlid;</span></span><br></pre></td></tr></table></figure>
-<p>优点：能基本满足“继承”的需求</p>
-<p>缺点：</p>
+<h3 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h3><p>什么是观察者模式呢？首先引用一下比较正规的说法：</p>
+<div class="note info">
+            <p>观察者模式：又被称作发布-订阅者模式或消息机制，定义了一种依赖关系，解决了主体对象与观察者之间功能的耦合。</p>
+          </div>
+<p>简单来说，观察者模式主要实现的是一种对于未来可能发生的事情做的一种消息订阅处理。DOM2 级事件中的 addEventListener 方法以及生活中的订报纸都基本上就是这种原理。</p>
+<p>首先我们得有发布者和订阅者，他们之间如何联系起来那就需要一个观察者平台。订阅者在观察者平台上向发布者添加订阅，待发布者在发布信息后，观察者平台获取到更新的信息后，给各个订阅者发提醒表示“你关注的发布者更新了文档哦～”，这样订阅者就能得到更新后的消息内容了。</p>
+<p>其实发布者和订阅者都很简单，关键点还是观察者这个中间平台的实现。我们最终想要的结果其实可简化为如下代码：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 观察者（平台）</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">observer</span>(<span class="params"></span>) </span>&#123; <span class="comment">/***/</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发布者（平台作者）</span></span><br><span class="line"><span class="keyword">const</span> publisher = &#123; <span class="attr">bookName</span>: <span class="string">'Hello World!'</span>, <span class="attr">content</span>: <span class="string">'This is a book'</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 订阅者（在平台上订阅某作者）</span></span><br><span class="line"><span class="keyword">const</span> subscriber = observer(publisher);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 之后 publisher 改变什么东西，observer 触发订阅的消息即可。</span></span><br></pre></td></tr></table></figure>
+<h3 id="简单的观察者"><a href="#简单的观察者" class="headerlink" title="简单的观察者"></a>简单的观察者</h3><p>前面分析到，观察者其实就是对于发布者和订阅者的一个中间平台，因此观察者所需要的能力包括：添加订阅者、消息推送和删除订阅者。先不考虑最终自动化处理发布订阅的流程以及删除操作，手动处理的大致流程为：</p>
 <ol>
-<li>需要创建一个新对象，然后将旧对象（原本存在的 prototype 对象，带有 constructor）抛弃掉，不能直接修改默认的 prototype 对象。</li>
-<li>会产生副作用，比如：原型（prototype）上会有“脏”属性，本例的 prototype 上会有多余的 age 属性。</li>
-<li>必要时还得自己重写一下 Child 的 constructor 指向，如“寄生组合式继承”。</li>
+<li>平台上新增了一个订阅者，并订阅了一个发布者；</li>
+<li>发布者更改了自身的某些属性；</li>
+<li>平台通知订阅者，“你订阅的发布者更新了新内容”。</li>
 </ol>
-<blockquote>
-<p>“寄生组合式继承” 在 ES5 中为最佳写法，如果不考虑其稍微的复杂性。</p>
-</blockquote>
-<h4 id="对象构造法"><a href="#对象构造法" class="headerlink" title="对象构造法"></a>对象构造法</h4><p>通过 <code>Object.create</code> 方法来构造一个合适的关联对象。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Child.prototype = <span class="built_in">Object</span>.create(Father.prototype)</span><br><span class="line"><span class="comment">// Child.prototype.constructor = Chlid;</span></span><br></pre></td></tr></table></figure>
-<p>优点：在 ES6 之前的最佳之选，优于实例化方法。</p>
-<p>缺点：与实例化方法基本相同，但没有副作用。此外，其隐式 <code>__proto__</code> 链比实例化方法要多一层，链式查找方法相对会耗时长一点点，基本可忽略。</p>
-<h4 id="设置原型法"><a href="#设置原型法" class="headerlink" title="设置原型法"></a>设置原型法</h4><p>使用 ES6 的原型设置方法，此法在 ES6 环境为最佳之选，没有之一。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Object</span>.setPrototypeOf(Child.prototype, Father.prototype)</span><br></pre></td></tr></table></figure>
-<p>优点：能覆盖所有需求，清晰易懂，可读性强。</p>
-<p>缺点：性能比 <code>Object.create</code> 稍微差点，如果考虑性能的话可优先使用 <code>Object.create</code> 方法</p>
-<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><blockquote>
-<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/setPrototypeOf" target="_blank" rel="noopener">MDN</a></p>
-</blockquote>
+<p>因此我们可以简化一个观察者模型为：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Observer</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList = [];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 添加订阅方法</span></span><br><span class="line">  addSubscriber(subscribFunc) &#123;</span><br><span class="line">    <span class="keyword">if</span> (subscribFunc &amp;&amp; !<span class="keyword">this</span>.subscriberList.includes(subscribFunc)) &#123;</span><br><span class="line">      <span class="keyword">this</span>.subscriberList.push(subscribFunc);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发布者更新消息，触发所有的订阅方法</span></span><br><span class="line">  notify() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.forEach(<span class="function"><span class="params">subscribFunc</span> =&gt;</span> subscribFunc());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 观察者</span></span><br><span class="line"><span class="keyword">const</span> observer = <span class="keyword">new</span> Observer();</span><br><span class="line"><span class="comment">// 发布者</span></span><br><span class="line"><span class="keyword">const</span> publisher = &#123; <span class="attr">bookName</span>: <span class="string">'Hello'</span> &#125;</span><br><span class="line"><span class="comment">// 订阅者</span></span><br><span class="line"><span class="keyword">const</span> subscriber = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`The publisher your followed update the book <span class="subst">$&#123;publisher.bookName&#125;</span>`</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 订阅者订阅事件需要平台完成</span></span><br><span class="line">observer.addSubscriber(subscriber);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发布者更新消息</span></span><br><span class="line">publisher.bookName = <span class="string">'Hello World'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 平台根据订阅者设置的事件通知订阅者，你有新订阅信息</span></span><br><span class="line">observer.notify();</span><br></pre></td></tr></table></figure>
+<h3 id="稍复杂的观察者"><a href="#稍复杂的观察者" class="headerlink" title="稍复杂的观察者"></a>稍复杂的观察者</h3><p>前面基本上勾勒出了基本的观察者模型大致逻辑，虽然是纯“手动”操作，但是顺着这个机制走下去就没有太大问题。现在我们需要的是慢慢将“手动”转变为“自动”，而要实现这种转变则需要一些中间的封装，也就是中间的依赖类，此时我们的思路是这样的：</p>
+<ol>
+<li>为每个发布者生成一个对应的依赖收集对象（类比 Vue 中 data 返回的对象）</li>
+<li>为负责依赖收集的对象添加订阅者事件（类比 Vue 中的 methods 和 computed 内容）</li>
+<li>发布者更新内容，订阅者事件触发</li>
+</ol>
+<p>因为待依赖收集的对象总是动态变动的，因此我们还得维护一个全局的 target 对象来动态绑定当前变动的发布者，此时的代码可以抽象为：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> target = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList = [];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 添加订阅方法</span></span><br><span class="line">  depend() &#123;</span><br><span class="line">    <span class="keyword">if</span> (target &amp;&amp; !<span class="keyword">this</span>.subscriberList.includes(target)) &#123;</span><br><span class="line">      <span class="keyword">this</span>.subscriberList.push(target);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发布者更新消息，触发所有的订阅方法</span></span><br><span class="line">  notify() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.forEach(<span class="function"><span class="params">sub</span> =&gt;</span> sub());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 中间依赖的平台</span></span><br><span class="line"><span class="keyword">const</span> dep = <span class="keyword">new</span> Dep();</span><br><span class="line"><span class="comment">// 发布者（data 对象中的属性，为了方便处理，直接扩出来了，写成对象也行）</span></span><br><span class="line"><span class="keyword">let</span> bookName = <span class="string">"Hello World"</span>;</span><br><span class="line"><span class="keyword">let</span> bookContent = <span class="string">"This is a book"</span>;</span><br><span class="line"><span class="keyword">let</span> publishInfo = <span class="string">''</span>; <span class="comment">// 消息提示</span></span><br><span class="line"><span class="comment">// 绑定当前的订阅者（method 方法）</span></span><br><span class="line"><span class="keyword">const</span> target = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  publishInfo = <span class="string">`The book <span class="subst">$&#123;bookName&#125;</span>‘s content is <span class="subst">$&#123;bookContent&#125;</span>`</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 订阅者还未订阅信息</span></span><br><span class="line"><span class="built_in">console</span>.log(publishInfo); <span class="comment">// ‘’</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 订阅者在平台上添加订阅事件，并推送用户目前的最新信息</span></span><br><span class="line">dep.depend();</span><br><span class="line">target();</span><br><span class="line"><span class="built_in">console</span>.log(publishInfo) <span class="comment">// The book Hello World‘s content is This is a book</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// publisher 更新消息</span></span><br><span class="line">bookContent = <span class="string">'The content is "Hello World"'</span>;</span><br><span class="line"><span class="comment">// 平台还未处理前，原信息没有改变</span></span><br><span class="line"><span class="built_in">console</span>.log(publishInfo) <span class="comment">// The book Hello World‘s content is This is a book</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 平台观察到 publisher 更新内容了，更新了用户的通知信息</span></span><br><span class="line">dep.notify();</span><br><span class="line"><span class="comment">// 呈现更新后的信息</span></span><br><span class="line"><span class="built_in">console</span>.log(publishInfo) <span class="comment">// The book Hello World‘s content is The content is "Hello World"</span></span><br></pre></td></tr></table></figure>
+<p>与前面的相比，目前这一版的优点在于：</p>
+<ol>
+<li>每个发布者都有属于自己的小管家，而不是与各订阅者一一绑定（原绑定方式：发布者 -&gt; 平台 -&gt; 订阅者），方便消息推送管理；</li>
+<li>平台能动态绑定发布者（原来是通过订阅者显示绑定发布者）；</li>
+</ol>
+<p>但是目前还有一些缺陷，那就是：<strong>还没有实现动态的观察变化</strong></p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
+<li><a href="https://mp.weixin.qq.com/s/Wm5-3hsqre7ft_f0YBnoeg" target="_blank" rel="noopener">以 Vue 为例，解释 JavaScript 的反应性</a></li>
+</ul>
 ]]></content>
       <categories>
-        <category>JavaScript</category>
+        <category>Vue</category>
       </categories>
       <tags>
+        <tag>Vue</tag>
         <tag>JavaScript</tag>
       </tags>
   </entry>
@@ -1779,53 +1826,6 @@
       </categories>
       <tags>
         <tag>Vue</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>分析 Vue 的观察者模式（上）</title>
-    <url>/2019/10/10/%E5%88%86%E6%9E%90-Vue-%E7%9A%84%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%8A%EF%BC%89/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近又鼓起勇气鼓捣 vue 源码，然后不经意间瞅了瞅最早开始学习 vue 源码时跟着撸的一个 vue-observer 的实例，发现自己对于观察者模式还是有些不太明白。因此，在学习了《JavaScript 设计模式》的“观察者模式”一篇后，总算有了一点灵感。目前趁灵感还在，在此便记录下我的理解。</p>
-<a id="more"></a>
-<h3 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h3><p>什么是观察者模式呢？首先引用一下比较正规的说法：</p>
-<div class="note info">
-            <p>观察者模式：又被称作发布-订阅者模式或消息机制，定义了一种依赖关系，解决了主体对象与观察者之间功能的耦合。</p>
-          </div>
-<p>简单来说，观察者模式主要实现的是一种对于未来可能发生的事情做的一种消息订阅处理。DOM2 级事件中的 addEventListener 方法以及生活中的订报纸都基本上就是这种原理。</p>
-<p>首先我们得有发布者和订阅者，他们之间如何联系起来那就需要一个观察者平台。订阅者在观察者平台上向发布者添加订阅，待发布者在发布信息后，观察者平台获取到更新的信息后，给各个订阅者发提醒表示“你关注的发布者更新了文档哦～”，这样订阅者就能得到更新后的消息内容了。</p>
-<p>其实发布者和订阅者都很简单，关键点还是观察者这个中间平台的实现。我们最终想要的结果其实可简化为如下代码：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 观察者（平台）</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">observer</span>(<span class="params"></span>) </span>&#123; <span class="comment">/***/</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发布者（平台作者）</span></span><br><span class="line"><span class="keyword">const</span> publisher = &#123; <span class="attr">bookName</span>: <span class="string">'Hello World!'</span>, <span class="attr">content</span>: <span class="string">'This is a book'</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 订阅者（在平台上订阅某作者）</span></span><br><span class="line"><span class="keyword">const</span> subscriber = observer(publisher);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 之后 publisher 改变什么东西，observer 触发订阅的消息即可。</span></span><br></pre></td></tr></table></figure>
-<h3 id="简单的观察者"><a href="#简单的观察者" class="headerlink" title="简单的观察者"></a>简单的观察者</h3><p>前面分析到，观察者其实就是对于发布者和订阅者的一个中间平台，因此观察者所需要的能力包括：添加订阅者、消息推送和删除订阅者。先不考虑最终自动化处理发布订阅的流程以及删除操作，手动处理的大致流程为：</p>
-<ol>
-<li>平台上新增了一个订阅者，并订阅了一个发布者；</li>
-<li>发布者更改了自身的某些属性；</li>
-<li>平台通知订阅者，“你订阅的发布者更新了新内容”。</li>
-</ol>
-<p>因此我们可以简化一个观察者模型为：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Observer</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList = [];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 添加订阅方法</span></span><br><span class="line">  addSubscriber(subscribFunc) &#123;</span><br><span class="line">    <span class="keyword">if</span> (subscribFunc &amp;&amp; !<span class="keyword">this</span>.subscriberList.includes(subscribFunc)) &#123;</span><br><span class="line">      <span class="keyword">this</span>.subscriberList.push(subscribFunc);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发布者更新消息，触发所有的订阅方法</span></span><br><span class="line">  notify() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.forEach(<span class="function"><span class="params">subscribFunc</span> =&gt;</span> subscribFunc());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 观察者</span></span><br><span class="line"><span class="keyword">const</span> observer = <span class="keyword">new</span> Observer();</span><br><span class="line"><span class="comment">// 发布者</span></span><br><span class="line"><span class="keyword">const</span> publisher = &#123; <span class="attr">bookName</span>: <span class="string">'Hello'</span> &#125;</span><br><span class="line"><span class="comment">// 订阅者</span></span><br><span class="line"><span class="keyword">const</span> subscriber = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`The publisher your followed update the book <span class="subst">$&#123;publisher.bookName&#125;</span>`</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 订阅者订阅事件需要平台完成</span></span><br><span class="line">observer.addSubscriber(subscriber);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发布者更新消息</span></span><br><span class="line">publisher.bookName = <span class="string">'Hello World'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 平台根据订阅者设置的事件通知订阅者，你有新订阅信息</span></span><br><span class="line">observer.notify();</span><br></pre></td></tr></table></figure>
-<h3 id="稍复杂的观察者"><a href="#稍复杂的观察者" class="headerlink" title="稍复杂的观察者"></a>稍复杂的观察者</h3><p>前面基本上勾勒出了基本的观察者模型大致逻辑，虽然是纯“手动”操作，但是顺着这个机制走下去就没有太大问题。现在我们需要的是慢慢将“手动”转变为“自动”，而要实现这种转变则需要一些中间的封装，也就是中间的依赖类，此时我们的思路是这样的：</p>
-<ol>
-<li>为每个发布者生成一个对应的依赖收集对象（类比 Vue 中 data 返回的对象）</li>
-<li>为负责依赖收集的对象添加订阅者事件（类比 Vue 中的 methods 和 computed 内容）</li>
-<li>发布者更新内容，订阅者事件触发</li>
-</ol>
-<p>因为待依赖收集的对象总是动态变动的，因此我们还得维护一个全局的 target 对象来动态绑定当前变动的发布者，此时的代码可以抽象为：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> target = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList = [];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 添加订阅方法</span></span><br><span class="line">  depend() &#123;</span><br><span class="line">    <span class="keyword">if</span> (target &amp;&amp; !<span class="keyword">this</span>.subscriberList.includes(target)) &#123;</span><br><span class="line">      <span class="keyword">this</span>.subscriberList.push(target);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发布者更新消息，触发所有的订阅方法</span></span><br><span class="line">  notify() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.forEach(<span class="function"><span class="params">sub</span> =&gt;</span> sub());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 中间依赖的平台</span></span><br><span class="line"><span class="keyword">const</span> dep = <span class="keyword">new</span> Dep();</span><br><span class="line"><span class="comment">// 发布者（data 对象中的属性，为了方便处理，直接扩出来了，写成对象也行）</span></span><br><span class="line"><span class="keyword">let</span> bookName = <span class="string">"Hello World"</span>;</span><br><span class="line"><span class="keyword">let</span> bookContent = <span class="string">"This is a book"</span>;</span><br><span class="line"><span class="keyword">let</span> publishInfo = <span class="string">''</span>; <span class="comment">// 消息提示</span></span><br><span class="line"><span class="comment">// 绑定当前的订阅者（method 方法）</span></span><br><span class="line"><span class="keyword">const</span> target = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  publishInfo = <span class="string">`The book <span class="subst">$&#123;bookName&#125;</span>‘s content is <span class="subst">$&#123;bookContent&#125;</span>`</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 订阅者还未订阅信息</span></span><br><span class="line"><span class="built_in">console</span>.log(publishInfo); <span class="comment">// ‘’</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 订阅者在平台上添加订阅事件，并推送用户目前的最新信息</span></span><br><span class="line">dep.depend();</span><br><span class="line">target();</span><br><span class="line"><span class="built_in">console</span>.log(publishInfo) <span class="comment">// The book Hello World‘s content is This is a book</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// publisher 更新消息</span></span><br><span class="line">bookContent = <span class="string">'The content is "Hello World"'</span>;</span><br><span class="line"><span class="comment">// 平台还未处理前，原信息没有改变</span></span><br><span class="line"><span class="built_in">console</span>.log(publishInfo) <span class="comment">// The book Hello World‘s content is This is a book</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 平台观察到 publisher 更新内容了，更新了用户的通知信息</span></span><br><span class="line">dep.notify();</span><br><span class="line"><span class="comment">// 呈现更新后的信息</span></span><br><span class="line"><span class="built_in">console</span>.log(publishInfo) <span class="comment">// The book Hello World‘s content is The content is "Hello World"</span></span><br></pre></td></tr></table></figure>
-<p>与前面的相比，目前这一版的优点在于：</p>
-<ol>
-<li>每个发布者都有属于自己的小管家，而不是与各订阅者一一绑定（原绑定方式：发布者 -&gt; 平台 -&gt; 订阅者），方便消息推送管理；</li>
-<li>平台能动态绑定发布者（原来是通过订阅者显示绑定发布者）；</li>
-</ol>
-<p>但是目前还有一些缺陷，那就是：<strong>还没有实现动态的观察变化</strong></p>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
-<li><a href="https://mp.weixin.qq.com/s/Wm5-3hsqre7ft_f0YBnoeg" target="_blank" rel="noopener">以 Vue 为例，解释 JavaScript 的反应性</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Vue</category>
-      </categories>
-      <tags>
-        <tag>Vue</tag>
-        <tag>JavaScript</tag>
       </tags>
   </entry>
   <entry>
@@ -2427,6 +2427,58 @@
       </tags>
   </entry>
   <entry>
+    <title>水平垂直居中</title>
+    <url>/2019/04/27/%E6%B0%B4%E5%B9%B3%E5%9E%82%E7%9B%B4%E5%B1%85%E4%B8%AD/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在面试中，面试官考察 CSS 方面的内容时，比较常见的一个问题就是<strong>水平垂直居中</strong>问题。其实不仅仅是面是，在工作中也常常会遇到这样的布局，因此对于一些常见的水平垂直居中的方法，在此做了一番总结，以作备忘。</p>
+<a id="more"></a>
+<h3 id="块级元素的水平垂直居中定位"><a href="#块级元素的水平垂直居中定位" class="headerlink" title="块级元素的水平垂直居中定位"></a>块级元素的水平垂直居中定位</h3><p>对于块级元素的垂直居中定位，我们处理的方法有很多，就以下公共模板做讨论：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"parent parent-special"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"child child-common"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.parent</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: black;</span><br><span class="line">  <span class="attribute">position</span>: relative;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">400px</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">400px</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.parent-special</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.child</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.child-common</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="position-margin"><a href="#position-margin" class="headerlink" title="position + margin"></a>position + margin</h4><p>定位配合 margin 来实现的方法比较简单粗暴，由于子元素有定宽定高的限制，因此适用于一些简单的布局，比如弹框之类的（这里仅讨论绝对定位）。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.child</span> &#123;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">50%</span>;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">50%</span>;</span><br><span class="line">  <span class="attribute">margin</span>: -<span class="number">50px</span> <span class="number">0</span> <span class="number">0</span> -<span class="number">50px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="position-transform"><a href="#position-transform" class="headerlink" title="position + transform"></a>position + transform</h4><p>前面的方法对于子元素大小固定的情况可以适用，但是对于子元素大小不固定的情况却没法处理，好在 CSS3 的新属性 <code>transform</code> 能帮我们解决这个问题</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.child</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">50%</span>;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">50%</span>;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">translate</span>(-<span class="number">50%</span>, -<span class="number">50%</span>);</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">30%</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">30%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注：虽然 transform 能解决问题，但是当 width 和 height 百分比计算后的值为非偶数时，通过 translate 补正会造成页面字体模糊以及抖动问题（抖动可用 3d 校正，模糊无解），因此这个得视情况使用。</p>
+</blockquote>
+<h4 id="table-cell"><a href="#table-cell" class="headerlink" title="table-cell"></a>table-cell</h4><p>回顾比较”久远”的解决方法那就是传统的 <code>table-cell</code> 布局了，父级的 <code>display</code> 属性为 table，子元素设置为 table-cell，配合 <code>vertical-align</code>，就能实现垂直居中，不过此处的居中偏向于行内元素。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.parent-special</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: table;</span><br><span class="line">  <span class="comment">/* 为了表现得更鲜明一点 */</span></span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">30px</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.child</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: table-cell;</span><br><span class="line">  <span class="attribute">vertical-align</span>: middle;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注： 这种情况比较适合于子元素内容呈现形式为为行内的情况，子元素此时会占满整个父元素。</p>
+</blockquote>
+<h4 id="margin-auto"><a href="#margin-auto" class="headerlink" title="margin: auto"></a>margin: auto</h4><p>我们知道 <code>margin: auto</code> 会自动补充左右两侧的内容，如果能够实现自动补充上下两端的内容那不就能够实现垂直居中了么！因此我们通过定位来“提示”自动补全。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.child</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">bottom</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">right</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">margin</span>: auto;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">30%</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">30%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然而这种写法会让子元素撑满整个父级，适用于仅包含一个元素的情况；如果只想要垂直居中（子元素的上下 <code>margin</code> 会被填满），那么可以这么修改：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.child</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">bottom</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">margin</span>: auto <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">30%</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">30%</span>;</span><br><span class="line">  <span class="comment">/* 取其一 */</span></span><br><span class="line">  left/right: 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="flex"><a href="#flex" class="headerlink" title="flex"></a>flex</h4><p><code>flex</code> 属性就不做过多说明，这个很好理解，阮一峰的博客有很详细的实例，我就不赘述了（<code>grid</code> 可类比）。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.parent-special</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: flex;</span><br><span class="line">  <span class="attribute">justify-content</span>: center;</span><br><span class="line">  <span class="attribute">align-items</span>: center;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.child</span> &#123;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">30%</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">30%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="行内元素的垂直居中定位"><a href="#行内元素的垂直居中定位" class="headerlink" title="行内元素的垂直居中定位"></a>行内元素的垂直居中定位</h3><p>行内元素的垂直居中面试中不是特别常见（水平居中谁都会，此处 pass），但工作中还是遇到不少，先前的<a href="https://kazehaiya.github.io/2019/04/18/%E6%B5%85%E8%B0%88%E8%A1%8C%E5%86%85%E5%85%83%E7%B4%A0/">《浅谈行内元素》</a>一文中也有简单介绍，此处以以下公共模板做讨论：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"inline"</span>&gt;</span>行内元素内容<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="line-height-font-size-vertical-align"><a href="#line-height-font-size-vertical-align" class="headerlink" title="line-height + font-size + vertical-align"></a>line-height + font-size + vertical-align</h4><p>此为在不改变行内元素属性的情况下，通用的居中方式</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.inline</span> &#123;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">12px</span>;</span><br><span class="line">  <span class="attribute">line-height</span>: <span class="number">20px</span>;</span><br><span class="line">  <span class="attribute">vertical-align</span>: middle;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注，当该行内元素有同级的行内元素位于其左右时， <code>vertical-align</code> 需统一一下，因为默认的值为 <code>baseline</code></p>
+</blockquote>
+<h4 id="inline-block-伪元素"><a href="#inline-block-伪元素" class="headerlink" title="inline-block + 伪元素"></a>inline-block + 伪元素</h4><p>另外比较“骚气”的处理方法就是改变盒子的 display 状态，然后给予一个定位的中心点（默认没有的），以此中心点来影响其余的匿名行盒子的定位。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.inline</span> &#123;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">  <span class="attribute">vertical-align</span>: middle;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.inline</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">""</span>;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">  <span class="attribute">vertical-align</span>: middle;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注：此方法可行是可行，但是浏览器在渲染空节点时，仍然会占一个空格，也就是说，水平居中总会差那么一点点，如果不是特别挑剔那么就没什么大问题。</p>
+</blockquote>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
+<li><a href="http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html" target="_blank" rel="noopener">Flex 布局语法篇</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2015/07/flex-examples.html" target="_blank" rel="noopener">Flex 布局实例篇</a></li>
+<li><a href="https://segmentfault.com/a/1190000010614270" target="_blank" rel="noopener">一些面试时关于 CSS 的问题</a></li>
+</ul>
+<h3 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h3><p>本篇为我的 segmentfault 中的文章的一部分，因为刚好温故 CSS 时又看到了布局这部分内容，因此再总结一次，记录下一些新的收获，同时修改一下当时学习记录的一些错误点。</p>
+]]></content>
+      <categories>
+        <category>CSS</category>
+      </categories>
+      <tags>
+        <tag>CSS</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>搭建私人 git 仓库</title>
     <url>/2019/08/04/%E6%90%AD%E5%BB%BA%E7%A7%81%E4%BA%BA-git-%E4%BB%93%E5%BA%93/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>本文原来维护在 segmentfault 上，由于本周时间不是很充足，因此将原来的文章维护至本博客，之后时间充裕的时候再补充一篇。本文简单介绍一下如何在自己服务器上搭建死人的 git 仓库，毕竟近期的 github 也不算是十分安全~还是有必要了解一下私人 git 仓库的搭建之法的。</p>
@@ -2484,58 +2536,6 @@
       </categories>
       <tags>
         <tag>Git</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>水平垂直居中</title>
-    <url>/2019/04/27/%E6%B0%B4%E5%B9%B3%E5%9E%82%E7%9B%B4%E5%B1%85%E4%B8%AD/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在面试中，面试官考察 CSS 方面的内容时，比较常见的一个问题就是<strong>水平垂直居中</strong>问题。其实不仅仅是面是，在工作中也常常会遇到这样的布局，因此对于一些常见的水平垂直居中的方法，在此做了一番总结，以作备忘。</p>
-<a id="more"></a>
-<h3 id="块级元素的水平垂直居中定位"><a href="#块级元素的水平垂直居中定位" class="headerlink" title="块级元素的水平垂直居中定位"></a>块级元素的水平垂直居中定位</h3><p>对于块级元素的垂直居中定位，我们处理的方法有很多，就以下公共模板做讨论：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"parent parent-special"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"child child-common"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.parent</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: black;</span><br><span class="line">  <span class="attribute">position</span>: relative;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">400px</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">400px</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.parent-special</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.child</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.child-common</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="position-margin"><a href="#position-margin" class="headerlink" title="position + margin"></a>position + margin</h4><p>定位配合 margin 来实现的方法比较简单粗暴，由于子元素有定宽定高的限制，因此适用于一些简单的布局，比如弹框之类的（这里仅讨论绝对定位）。</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.child</span> &#123;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">50%</span>;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">50%</span>;</span><br><span class="line">  <span class="attribute">margin</span>: -<span class="number">50px</span> <span class="number">0</span> <span class="number">0</span> -<span class="number">50px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="position-transform"><a href="#position-transform" class="headerlink" title="position + transform"></a>position + transform</h4><p>前面的方法对于子元素大小固定的情况可以适用，但是对于子元素大小不固定的情况却没法处理，好在 CSS3 的新属性 <code>transform</code> 能帮我们解决这个问题</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.child</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">50%</span>;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">50%</span>;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">translate</span>(-<span class="number">50%</span>, -<span class="number">50%</span>);</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">30%</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">30%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注：虽然 transform 能解决问题，但是当 width 和 height 百分比计算后的值为非偶数时，通过 translate 补正会造成页面字体模糊以及抖动问题（抖动可用 3d 校正，模糊无解），因此这个得视情况使用。</p>
-</blockquote>
-<h4 id="table-cell"><a href="#table-cell" class="headerlink" title="table-cell"></a>table-cell</h4><p>回顾比较”久远”的解决方法那就是传统的 <code>table-cell</code> 布局了，父级的 <code>display</code> 属性为 table，子元素设置为 table-cell，配合 <code>vertical-align</code>，就能实现垂直居中，不过此处的居中偏向于行内元素。</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.parent-special</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: table;</span><br><span class="line">  <span class="comment">/* 为了表现得更鲜明一点 */</span></span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">30px</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.child</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: table-cell;</span><br><span class="line">  <span class="attribute">vertical-align</span>: middle;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注： 这种情况比较适合于子元素内容呈现形式为为行内的情况，子元素此时会占满整个父元素。</p>
-</blockquote>
-<h4 id="margin-auto"><a href="#margin-auto" class="headerlink" title="margin: auto"></a>margin: auto</h4><p>我们知道 <code>margin: auto</code> 会自动补充左右两侧的内容，如果能够实现自动补充上下两端的内容那不就能够实现垂直居中了么！因此我们通过定位来“提示”自动补全。</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.child</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">bottom</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">right</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">margin</span>: auto;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">30%</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">30%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>然而这种写法会让子元素撑满整个父级，适用于仅包含一个元素的情况；如果只想要垂直居中（子元素的上下 <code>margin</code> 会被填满），那么可以这么修改：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.child</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">bottom</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">margin</span>: auto <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">30%</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">30%</span>;</span><br><span class="line">  <span class="comment">/* 取其一 */</span></span><br><span class="line">  left/right: 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="flex"><a href="#flex" class="headerlink" title="flex"></a>flex</h4><p><code>flex</code> 属性就不做过多说明，这个很好理解，阮一峰的博客有很详细的实例，我就不赘述了（<code>grid</code> 可类比）。</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.parent-special</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: flex;</span><br><span class="line">  <span class="attribute">justify-content</span>: center;</span><br><span class="line">  <span class="attribute">align-items</span>: center;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.child</span> &#123;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">30%</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">30%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="行内元素的垂直居中定位"><a href="#行内元素的垂直居中定位" class="headerlink" title="行内元素的垂直居中定位"></a>行内元素的垂直居中定位</h3><p>行内元素的垂直居中面试中不是特别常见（水平居中谁都会，此处 pass），但工作中还是遇到不少，先前的<a href="https://kazehaiya.github.io/2019/04/18/%E6%B5%85%E8%B0%88%E8%A1%8C%E5%86%85%E5%85%83%E7%B4%A0/">《浅谈行内元素》</a>一文中也有简单介绍，此处以以下公共模板做讨论：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"inline"</span>&gt;</span>行内元素内容<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h4 id="line-height-font-size-vertical-align"><a href="#line-height-font-size-vertical-align" class="headerlink" title="line-height + font-size + vertical-align"></a>line-height + font-size + vertical-align</h4><p>此为在不改变行内元素属性的情况下，通用的居中方式</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.inline</span> &#123;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">12px</span>;</span><br><span class="line">  <span class="attribute">line-height</span>: <span class="number">20px</span>;</span><br><span class="line">  <span class="attribute">vertical-align</span>: middle;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注，当该行内元素有同级的行内元素位于其左右时， <code>vertical-align</code> 需统一一下，因为默认的值为 <code>baseline</code></p>
-</blockquote>
-<h4 id="inline-block-伪元素"><a href="#inline-block-伪元素" class="headerlink" title="inline-block + 伪元素"></a>inline-block + 伪元素</h4><p>另外比较“骚气”的处理方法就是改变盒子的 display 状态，然后给予一个定位的中心点（默认没有的），以此中心点来影响其余的匿名行盒子的定位。</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.inline</span> &#123;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">  <span class="attribute">vertical-align</span>: middle;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.inline</span><span class="selector-pseudo">::before</span> &#123;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">""</span>;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">  <span class="attribute">vertical-align</span>: middle;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注：此方法可行是可行，但是浏览器在渲染空节点时，仍然会占一个空格，也就是说，水平居中总会差那么一点点，如果不是特别挑剔那么就没什么大问题。</p>
-</blockquote>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
-<li><a href="http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html" target="_blank" rel="noopener">Flex 布局语法篇</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2015/07/flex-examples.html" target="_blank" rel="noopener">Flex 布局实例篇</a></li>
-<li><a href="https://segmentfault.com/a/1190000010614270" target="_blank" rel="noopener">一些面试时关于 CSS 的问题</a></li>
-</ul>
-<h3 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h3><p>本篇为我的 segmentfault 中的文章的一部分，因为刚好温故 CSS 时又看到了布局这部分内容，因此再总结一次，记录下一些新的收获，同时修改一下当时学习记录的一些错误点。</p>
-]]></content>
-      <categories>
-        <category>CSS</category>
-      </categories>
-      <tags>
-        <tag>CSS</tag>
       </tags>
   </entry>
   <entry>
@@ -2730,6 +2730,83 @@
       </tags>
   </entry>
   <entry>
+    <title>由 shims-vue.d.ts 引发的思考</title>
+    <url>/2019/07/07/%E7%94%B1-shims-vue-d-ts-%E5%BC%95%E5%8F%91%E7%9A%84%E6%80%9D%E8%80%83/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>由于项目近期进行 ts 迁移，作为第一个吃螃蟹的人，踩过了不少坑。迁移过程中遇到的大大小小的问题基本上都解决了，但是对于 shims-vue.d.ts 文件的命名以及其内的模块声明始终找不到比较贴切的解释。沉下心来读了些外网资料，总算是有点“豁开云雾见青天”的感觉了。此处就记录我对于 ts 全局模块声明的一些思考以及一些 ts 项目迁移遇到的坑。</p>
+<a id="more"></a>
+<h3 id="Vue-ts-声明文件"><a href="#Vue-ts-声明文件" class="headerlink" title="Vue ts 声明文件"></a>Vue ts 声明文件</h3><p>在安装 @vue/typescript 之后，项目会生成两个新文件，分别是 <code>shims-vue.d.ts</code> 和 <code>shims-jsx.d.ts</code>，其内容分别是：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="comment">// shims-vue.d.ts</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> '*.vue' &#123;</span><br><span class="line">  <span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> Vue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>和</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> Vue, &#123; VNode &#125; <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">declare</span> global &#123;</span><br><span class="line">  <span class="keyword">namespace</span> JSX &#123;</span><br><span class="line">    <span class="comment">// tslint:disable no-empty-interface</span></span><br><span class="line">    <span class="keyword">interface</span> Element <span class="keyword">extends</span> VNode &#123; &#125;</span><br><span class="line">    <span class="comment">// tslint:disable no-empty-interface</span></span><br><span class="line">    <span class="keyword">interface</span> ElementClass <span class="keyword">extends</span> Vue &#123; &#125;</span><br><span class="line">    <span class="keyword">interface</span> IntrinsicElements &#123;</span><br><span class="line">      [elem: <span class="built_in">string</span>]: <span class="built_in">any</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么这两个文档有什么作用呢？</p>
+<h4 id="shims-vue-d-ts"><a href="#shims-vue-d-ts" class="headerlink" title="shims-vue.d.ts"></a>shims-vue.d.ts</h4><p>前者为 Ambient Declarations(通称：外部模块定义) ,主要为项目内所有的 vue 文件做模块声明，毕竟 ts 默认只识别 .d.ts、.ts、.tsx 后缀的文件；（即使补充了 Vue 得模块声明，IDE 还是没法识别 .vue 结尾的文件，这就是为什么引入 vue 文件时必须添加后缀的原因，不添加编译也不会报错）</p>
+<h4 id="shims-jsx-d-ts"><a href="#shims-jsx-d-ts" class="headerlink" title="shims-jsx.d.ts"></a>shims-jsx.d.ts</h4><p>后者为 JSX 语法的全局命名空间，这是因为<strong>基于值的元素</strong>会简单的在它所在的作用域里按标识符查找（此处使用的是<strong>无状态函数组件 (SFC)</strong>的方法来定义），当在 tsconfig 内开启了 jsx 语法支持后，其会自动识别对应的 .tsx 结尾的文件，可参考<a href="https://www.tslang.cn/docs/handbook/jsx.html" target="_blank" rel="noopener">官网 jsx</a>。</p>
+<h4 id="产生的问题"><a href="#产生的问题" class="headerlink" title="产生的问题"></a>产生的问题</h4><p>首先，官方文档的上并没有将 shims-xxx.d.ts 做为通用的模板，其仅仅给我们列举了以下模板样例：</p>
+<ul>
+<li>global-modifying-module.d.ts</li>
+<li>global-plugin.d.ts</li>
+<li>global.d.ts</li>
+<li>module-class.d.ts</li>
+<li>module-function.d.ts</li>
+<li>module-plugin.d.ts</li>
+<li>module.d.ts</li>
+</ul>
+<p>那么该如何理解这两个文件？</p>
+<p>是否能够更改在统一规范的文件内？</p>
+<p>全局接口、命名空间、模块等声明又有那些写法来定义？该如何写？</p>
+<p>… 对于产生的这么些问题，下面依次分析。</p>
+<h3 id="解惑"><a href="#解惑" class="headerlink" title="解惑"></a>解惑</h3><h4 id="理解并改造-shims-xxx-d-ts"><a href="#理解并改造-shims-xxx-d-ts" class="headerlink" title="理解并改造 shims-xxx.d.ts"></a>理解并改造 shims-xxx.d.ts</h4><p>我们知道，xxx.d.ts 的文件表明，其内部的一些声明都为全局的声明，能够在项目各组件内都能获取到。因此 Vue 生成的两个 shims-xxx.d.ts 其实是为了表明，该两文件为 Vue 相关的全局声明文件。</p>
+<p>但是从项目管理来说，随着引入的 npm 模块增多（比如公司内部 npm 源上的不带 types 的包），那么模仿 Vue 的声明文件写法，外部声明的文件也会越来越多，文件夹看起来就不是很舒服了。因此有没有一种比较好的方法来解决文件过多的问题呢？</p>
+<p>对于我来说，我更偏向将这些简单的声明维护在一个 .d.ts 文件内，正好官网也推荐维护在一个大的 module 内，因此我们可以维护一个 module.d.ts 来总体声明所有的外部模块。基于官方的例子，我做了两个文件来管理外部模块的声明，分别是 <code>module.d.ts</code> 和 <code>declarations.d.ts</code>。前者主要维护需要写的比较详细的外部模块，后者主要维护简写模式的模块（包括内部需要声明的 .js 文件，兼容历史遗留问题）。例如：</p>
+<p>改造后的 module/index.d.ts</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="comment">// This `declare module` is called ambient module, which is used to describe modules written in JavaScript.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加 vue-clipboard2 的 Vue 插件声明</span></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> 'vue-clipboard2' &#123;</span><br><span class="line">  <span class="keyword">import</span> &#123; PluginFunction &#125; <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line">  <span class="keyword">const</span> clipboard: PluginFunction&lt;<span class="built_in">any</span>&gt;;</span><br><span class="line">  <span class="comment">// 定义默认导出的类型</span></span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> clipboard;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加 fe-monitor-sdk 的 Vue 插件声明</span></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> 'fe-monitor-sdk' &#123;</span><br><span class="line">  <span class="keyword">import</span> &#123; PluginObject &#125; <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line">  <span class="comment">// 定义解构的变量类型</span></span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">const</span> monitorVue: PluginObject&lt;<span class="built_in">any</span>&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加所有 .vue 文件的声明</span></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> '*.vue' &#123;</span><br><span class="line">  <span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> Vue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>改造后的 module/declarations.d.ts</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Shorthand ambient modules, All imports from this shorthand module will have the any type.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> '@/cookie-set';</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>附加：对于 global 声明可视情况分类，比如通用的放在 <code>global.d.ts</code>，其余可视情况（如果该类型比较多的话）按照对应类型分类，比如 table 的可全部放在 <code>global-table.d.ts</code>。</p>
+</blockquote>
+<h4 id="全局声明的写法"><a href="#全局声明的写法" class="headerlink" title="全局声明的写法"></a>全局声明的写法</h4><p>另一个一直比较疑惑的问题是全局声明的写法，比如模块的“单文件单模块声明”的写法“单文件多模块合并声明”的写法不太一样，“无导入的全局声明文件”和“带导入声明的全局声明文件”的写法又有些不同，这里我一一列出其可行的写法以及其不同的原因。</p>
+<blockquote>
+<p>注：这里的一些定义都是个人总结的便于记忆的说法，为非标准定义。</p>
+</blockquote>
+<h5 id="单文件单模块声明"><a href="#单文件单模块声明" class="headerlink" title="单文件单模块声明"></a>单文件单模块声明</h5><p>该文件支持两种写法，分别如下：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 写法一</span></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> '*.vue' &#123;</span><br><span class="line">  <span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> Vue;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 写法二</span></span><br><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> '*.vue' &#123;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> Vue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注： 前者（写法一）主要为无 ts 声明的模块添加声明，后者（写法二）主要为已有 types 声明的模块进行声明扩展（可以参考 <a href="https://github.com/vuejs/vue-router/blob/dev/types/vue.d.ts" target="_blank" rel="noopener">vue-router 源码部分</a>）</p>
+</blockquote>
+<h5 id="单文件多模块合并声明"><a href="#单文件多模块合并声明" class="headerlink" title="单文件多模块合并声明"></a>单文件多模块合并声明</h5><p>仅有一种写法（需要关闭对应的多次引入重复模块的 lint 规则或者忽略此 types 文件夹内的所有内容）</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> '*.vue' &#123;</span><br><span class="line">  <span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> Vue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="无导入的全局声明文件"><a href="#无导入的全局声明文件" class="headerlink" title="无导入的全局声明文件"></a>无导入的全局声明文件</h5><p>无导入即没有 import 声明，直接定义全局接口、函数等</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> TableRenderParam <span class="keyword">extends</span> BasicObject &#123;</span><br><span class="line">  row: BasicObject,</span><br><span class="line">  key: <span class="built_in">string</span>,</span><br><span class="line">  index?: <span class="built_in">number</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="带导入声明的全局声明文件"><a href="#带导入声明的全局声明文件" class="headerlink" title="带导入声明的全局声明文件"></a>带导入声明的全局声明文件</h5><p>带有 import 导入插件声明的必须显示定义 global，例如：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; CreateElement &#125; <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// function 部分</span></span><br><span class="line"><span class="keyword">declare</span> global &#123;</span><br><span class="line">  <span class="keyword">interface</span> TableRenderFunc &#123;</span><br><span class="line">    (h: CreateElement, &#123; row, key, index &#125;: TableRenderParam): JSX.Element,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// namespace 部分</span></span><br><span class="line"><span class="keyword">declare</span> global &#123;&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="不同的原因"><a href="#不同的原因" class="headerlink" title="不同的原因"></a>不同的原因</h5><p>如果在“单文件多模块合并声明”将 import 提出至最顶层时，会发现 ts 报错，说模块无法进一步扩大，为什么将 import 提出后会报错提示模块无法扩大？</p>
+<p>个人研究得出的结论是，当将 import 提出至模块外时，就已经表明该文件内的其它 declare 的模块已经是存在 ts 声明的模块，此时再对其进行 declare 声明即对其原本的声明上进行扩展（可参考 vue-router 对于 vue 的扩展），但是对于没有 ts 声明的模块，我们拿不到它的 ts 声明，因此也就没发进行模块扩展，所以就会报错。</p>
+<p>而将 import 放至模块内时，因为 module 本来就表明自己为一个模块，其就可以作为模块的声明，为没有对应声明的模块添加声明了。</p>
+<p>此外，对于多个 declare global 的写法，此是采用了<strong><a href="(https://www.tslang.cn/docs/handbook/declaration-merging.html">声明合并</a>)</strong>的方式，使得所有的模块声明都合并至同一个 global 全局声明中，因此，在对于将 import 提至外层的“带导入声明的全局声明文件”来说，分文件全局维护或者单文件声明合并式维护都是可行的。</p>
+<div class="note info">
+            <p>TypeScript与ECMAScript 2015一样，任何包含顶级import或者export的文件都被当成一个模块。相反地，如果一个文件不带有顶级的import或者export声明，那么它的内容被视为全局可见的（因此对模块也是可见的）。</p>
+          </div>
+<h3 id="ts-踩坑记录"><a href="#ts-踩坑记录" class="headerlink" title="ts 踩坑记录"></a>ts 踩坑记录</h3><p>已经维护至博文<a href="/2019/07/14/项目-ts-迁移的踩坑记录/" title="项目 ts 迁移的踩坑记录">项目 ts 迁移的踩坑记录</a>中了</p>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><ul>
+<li><a href="https://www.tslang.cn/docs/handbook/namespaces-and-modules.html" target="_blank" rel="noopener">命名空间和模块</a></li>
+<li><a href="https://github.com/Microsoft/TypeScript-Handbook/issues/180" target="_blank" rel="noopener">Clarify what “ambient” means</a></li>
+<li><a href="https://basarat.gitbooks.io/typescript/docs/types/ambient/intro.html" target="_blank" rel="noopener">Ambient Declarations</a></li>
+<li><a href="https://ts.xcatliu.com/" target="_blank" rel="noopener">TypeScript 入门教程</a></li>
+<li><a href="https://github.com/vuejs/vue-cli/issues/1198" target="_blank" rel="noopener">Typescript: IDE reports TS2307</a></li>
+<li><a href="https://stackoverflow.com/questions/44058101/typescript-declare-third-party-modules" target="_blank" rel="noopener">typescript declare third party modules</a></li>
+<li><a href="https://my.oschina.net/fenying/blog/747184" target="_blank" rel="noopener">TypeScript 的两种声明文件写法的区别和根本意义</a></li>
+<li><a href="https://idom.me/articles/838.html" target="_blank" rel="noopener">区分 TS 中的 namespace 和 module</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>深入了解 this</title>
     <url>/2019/05/19/%E6%B7%B1%E5%85%A5%E4%BA%86%E8%A7%A3-this/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在 JavaScript 学习过程中，除了作用域与闭包之外，困扰我们的难点还有 this，甚至可以说是前端 JS 学习的噩梦。实际上 this 并没有想象中的那么复杂，只是开发者往往会将理解过程复杂化，在缺乏清楚认识的情况下，this 对我们来说就完全是一种魔法了。而此篇就来揭开 this 神秘的面纱。</p>
@@ -2834,83 +2911,6 @@
 <h4 id="箭头函数"><a href="#箭头函数" class="headerlink" title="箭头函数"></a>箭头函数</h4><p>ES6 中的箭头函数并不会使用四条标准的绑定规则，而是根据外层作用域来决定 this。例如：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 此处的 this 在词法上继承自 foo</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.a);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>因此，我们在使用这种 ES6 的“胖箭头”时，就可以抛弃 ES5 中的 <code>var self = this</code> 的“词法作用域”式的代码了。</p>
-]]></content>
-      <categories>
-        <category>JavaScript</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>由 shims-vue.d.ts 引发的思考</title>
-    <url>/2019/07/07/%E7%94%B1-shims-vue-d-ts-%E5%BC%95%E5%8F%91%E7%9A%84%E6%80%9D%E8%80%83/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>由于项目近期进行 ts 迁移，作为第一个吃螃蟹的人，踩过了不少坑。迁移过程中遇到的大大小小的问题基本上都解决了，但是对于 shims-vue.d.ts 文件的命名以及其内的模块声明始终找不到比较贴切的解释。沉下心来读了些外网资料，总算是有点“豁开云雾见青天”的感觉了。此处就记录我对于 ts 全局模块声明的一些思考以及一些 ts 项目迁移遇到的坑。</p>
-<a id="more"></a>
-<h3 id="Vue-ts-声明文件"><a href="#Vue-ts-声明文件" class="headerlink" title="Vue ts 声明文件"></a>Vue ts 声明文件</h3><p>在安装 @vue/typescript 之后，项目会生成两个新文件，分别是 <code>shims-vue.d.ts</code> 和 <code>shims-jsx.d.ts</code>，其内容分别是：</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="comment">// shims-vue.d.ts</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> '*.vue' &#123;</span><br><span class="line">  <span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> Vue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>和</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> Vue, &#123; VNode &#125; <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">declare</span> global &#123;</span><br><span class="line">  <span class="keyword">namespace</span> JSX &#123;</span><br><span class="line">    <span class="comment">// tslint:disable no-empty-interface</span></span><br><span class="line">    <span class="keyword">interface</span> Element <span class="keyword">extends</span> VNode &#123; &#125;</span><br><span class="line">    <span class="comment">// tslint:disable no-empty-interface</span></span><br><span class="line">    <span class="keyword">interface</span> ElementClass <span class="keyword">extends</span> Vue &#123; &#125;</span><br><span class="line">    <span class="keyword">interface</span> IntrinsicElements &#123;</span><br><span class="line">      [elem: <span class="built_in">string</span>]: <span class="built_in">any</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>那么这两个文档有什么作用呢？</p>
-<h4 id="shims-vue-d-ts"><a href="#shims-vue-d-ts" class="headerlink" title="shims-vue.d.ts"></a>shims-vue.d.ts</h4><p>前者为 Ambient Declarations(通称：外部模块定义) ,主要为项目内所有的 vue 文件做模块声明，毕竟 ts 默认只识别 .d.ts、.ts、.tsx 后缀的文件；（即使补充了 Vue 得模块声明，IDE 还是没法识别 .vue 结尾的文件，这就是为什么引入 vue 文件时必须添加后缀的原因，不添加编译也不会报错）</p>
-<h4 id="shims-jsx-d-ts"><a href="#shims-jsx-d-ts" class="headerlink" title="shims-jsx.d.ts"></a>shims-jsx.d.ts</h4><p>后者为 JSX 语法的全局命名空间，这是因为<strong>基于值的元素</strong>会简单的在它所在的作用域里按标识符查找（此处使用的是<strong>无状态函数组件 (SFC)</strong>的方法来定义），当在 tsconfig 内开启了 jsx 语法支持后，其会自动识别对应的 .tsx 结尾的文件，可参考<a href="https://www.tslang.cn/docs/handbook/jsx.html" target="_blank" rel="noopener">官网 jsx</a>。</p>
-<h4 id="产生的问题"><a href="#产生的问题" class="headerlink" title="产生的问题"></a>产生的问题</h4><p>首先，官方文档的上并没有将 shims-xxx.d.ts 做为通用的模板，其仅仅给我们列举了以下模板样例：</p>
-<ul>
-<li>global-modifying-module.d.ts</li>
-<li>global-plugin.d.ts</li>
-<li>global.d.ts</li>
-<li>module-class.d.ts</li>
-<li>module-function.d.ts</li>
-<li>module-plugin.d.ts</li>
-<li>module.d.ts</li>
-</ul>
-<p>那么该如何理解这两个文件？</p>
-<p>是否能够更改在统一规范的文件内？</p>
-<p>全局接口、命名空间、模块等声明又有那些写法来定义？该如何写？</p>
-<p>… 对于产生的这么些问题，下面依次分析。</p>
-<h3 id="解惑"><a href="#解惑" class="headerlink" title="解惑"></a>解惑</h3><h4 id="理解并改造-shims-xxx-d-ts"><a href="#理解并改造-shims-xxx-d-ts" class="headerlink" title="理解并改造 shims-xxx.d.ts"></a>理解并改造 shims-xxx.d.ts</h4><p>我们知道，xxx.d.ts 的文件表明，其内部的一些声明都为全局的声明，能够在项目各组件内都能获取到。因此 Vue 生成的两个 shims-xxx.d.ts 其实是为了表明，该两文件为 Vue 相关的全局声明文件。</p>
-<p>但是从项目管理来说，随着引入的 npm 模块增多（比如公司内部 npm 源上的不带 types 的包），那么模仿 Vue 的声明文件写法，外部声明的文件也会越来越多，文件夹看起来就不是很舒服了。因此有没有一种比较好的方法来解决文件过多的问题呢？</p>
-<p>对于我来说，我更偏向将这些简单的声明维护在一个 .d.ts 文件内，正好官网也推荐维护在一个大的 module 内，因此我们可以维护一个 module.d.ts 来总体声明所有的外部模块。基于官方的例子，我做了两个文件来管理外部模块的声明，分别是 <code>module.d.ts</code> 和 <code>declarations.d.ts</code>。前者主要维护需要写的比较详细的外部模块，后者主要维护简写模式的模块（包括内部需要声明的 .js 文件，兼容历史遗留问题）。例如：</p>
-<p>改造后的 module/index.d.ts</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="comment">// This `declare module` is called ambient module, which is used to describe modules written in JavaScript.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加 vue-clipboard2 的 Vue 插件声明</span></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> 'vue-clipboard2' &#123;</span><br><span class="line">  <span class="keyword">import</span> &#123; PluginFunction &#125; <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line">  <span class="keyword">const</span> clipboard: PluginFunction&lt;<span class="built_in">any</span>&gt;;</span><br><span class="line">  <span class="comment">// 定义默认导出的类型</span></span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> clipboard;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加 fe-monitor-sdk 的 Vue 插件声明</span></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> 'fe-monitor-sdk' &#123;</span><br><span class="line">  <span class="keyword">import</span> &#123; PluginObject &#125; <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line">  <span class="comment">// 定义解构的变量类型</span></span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">const</span> monitorVue: PluginObject&lt;<span class="built_in">any</span>&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加所有 .vue 文件的声明</span></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> '*.vue' &#123;</span><br><span class="line">  <span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> Vue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>改造后的 module/declarations.d.ts</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Shorthand ambient modules, All imports from this shorthand module will have the any type.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> '@/cookie-set';</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>附加：对于 global 声明可视情况分类，比如通用的放在 <code>global.d.ts</code>，其余可视情况（如果该类型比较多的话）按照对应类型分类，比如 table 的可全部放在 <code>global-table.d.ts</code>。</p>
-</blockquote>
-<h4 id="全局声明的写法"><a href="#全局声明的写法" class="headerlink" title="全局声明的写法"></a>全局声明的写法</h4><p>另一个一直比较疑惑的问题是全局声明的写法，比如模块的“单文件单模块声明”的写法“单文件多模块合并声明”的写法不太一样，“无导入的全局声明文件”和“带导入声明的全局声明文件”的写法又有些不同，这里我一一列出其可行的写法以及其不同的原因。</p>
-<blockquote>
-<p>注：这里的一些定义都是个人总结的便于记忆的说法，为非标准定义。</p>
-</blockquote>
-<h5 id="单文件单模块声明"><a href="#单文件单模块声明" class="headerlink" title="单文件单模块声明"></a>单文件单模块声明</h5><p>该文件支持两种写法，分别如下：</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 写法一</span></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> '*.vue' &#123;</span><br><span class="line">  <span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> Vue;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 写法二</span></span><br><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> '*.vue' &#123;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> Vue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注： 前者（写法一）主要为无 ts 声明的模块添加声明，后者（写法二）主要为已有 types 声明的模块进行声明扩展（可以参考 <a href="https://github.com/vuejs/vue-router/blob/dev/types/vue.d.ts" target="_blank" rel="noopener">vue-router 源码部分</a>）</p>
-</blockquote>
-<h5 id="单文件多模块合并声明"><a href="#单文件多模块合并声明" class="headerlink" title="单文件多模块合并声明"></a>单文件多模块合并声明</h5><p>仅有一种写法（需要关闭对应的多次引入重复模块的 lint 规则或者忽略此 types 文件夹内的所有内容）</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">declare</span> <span class="keyword">module</span> '*.vue' &#123;</span><br><span class="line">  <span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> Vue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="无导入的全局声明文件"><a href="#无导入的全局声明文件" class="headerlink" title="无导入的全局声明文件"></a>无导入的全局声明文件</h5><p>无导入即没有 import 声明，直接定义全局接口、函数等</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">interface</span> TableRenderParam <span class="keyword">extends</span> BasicObject &#123;</span><br><span class="line">  row: BasicObject,</span><br><span class="line">  key: <span class="built_in">string</span>,</span><br><span class="line">  index?: <span class="built_in">number</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="带导入声明的全局声明文件"><a href="#带导入声明的全局声明文件" class="headerlink" title="带导入声明的全局声明文件"></a>带导入声明的全局声明文件</h5><p>带有 import 导入插件声明的必须显示定义 global，例如：</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; CreateElement &#125; <span class="keyword">from</span> <span class="string">'vue'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// function 部分</span></span><br><span class="line"><span class="keyword">declare</span> global &#123;</span><br><span class="line">  <span class="keyword">interface</span> TableRenderFunc &#123;</span><br><span class="line">    (h: CreateElement, &#123; row, key, index &#125;: TableRenderParam): JSX.Element,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// namespace 部分</span></span><br><span class="line"><span class="keyword">declare</span> global &#123;&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="不同的原因"><a href="#不同的原因" class="headerlink" title="不同的原因"></a>不同的原因</h5><p>如果在“单文件多模块合并声明”将 import 提出至最顶层时，会发现 ts 报错，说模块无法进一步扩大，为什么将 import 提出后会报错提示模块无法扩大？</p>
-<p>个人研究得出的结论是，当将 import 提出至模块外时，就已经表明该文件内的其它 declare 的模块已经是存在 ts 声明的模块，此时再对其进行 declare 声明即对其原本的声明上进行扩展（可参考 vue-router 对于 vue 的扩展），但是对于没有 ts 声明的模块，我们拿不到它的 ts 声明，因此也就没发进行模块扩展，所以就会报错。</p>
-<p>而将 import 放至模块内时，因为 module 本来就表明自己为一个模块，其就可以作为模块的声明，为没有对应声明的模块添加声明了。</p>
-<p>此外，对于多个 declare global 的写法，此是采用了<strong><a href="(https://www.tslang.cn/docs/handbook/declaration-merging.html">声明合并</a>)</strong>的方式，使得所有的模块声明都合并至同一个 global 全局声明中，因此，在对于将 import 提至外层的“带导入声明的全局声明文件”来说，分文件全局维护或者单文件声明合并式维护都是可行的。</p>
-<div class="note info">
-            <p>TypeScript与ECMAScript 2015一样，任何包含顶级import或者export的文件都被当成一个模块。相反地，如果一个文件不带有顶级的import或者export声明，那么它的内容被视为全局可见的（因此对模块也是可见的）。</p>
-          </div>
-<h3 id="ts-踩坑记录"><a href="#ts-踩坑记录" class="headerlink" title="ts 踩坑记录"></a>ts 踩坑记录</h3><p>已经维护至博文<a href="/2019/07/14/项目-ts-迁移的踩坑记录/" title="项目 ts 迁移的踩坑记录">项目 ts 迁移的踩坑记录</a>中了</p>
-<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><ul>
-<li><a href="https://www.tslang.cn/docs/handbook/namespaces-and-modules.html" target="_blank" rel="noopener">命名空间和模块</a></li>
-<li><a href="https://github.com/Microsoft/TypeScript-Handbook/issues/180" target="_blank" rel="noopener">Clarify what “ambient” means</a></li>
-<li><a href="https://basarat.gitbooks.io/typescript/docs/types/ambient/intro.html" target="_blank" rel="noopener">Ambient Declarations</a></li>
-<li><a href="https://ts.xcatliu.com/" target="_blank" rel="noopener">TypeScript 入门教程</a></li>
-<li><a href="https://github.com/vuejs/vue-cli/issues/1198" target="_blank" rel="noopener">Typescript: IDE reports TS2307</a></li>
-<li><a href="https://stackoverflow.com/questions/44058101/typescript-declare-third-party-modules" target="_blank" rel="noopener">typescript declare third party modules</a></li>
-<li><a href="https://my.oschina.net/fenying/blog/747184" target="_blank" rel="noopener">TypeScript 的两种声明文件写法的区别和根本意义</a></li>
-<li><a href="https://idom.me/articles/838.html" target="_blank" rel="noopener">区分 TS 中的 namespace 和 module</a></li>
-</ul>
 ]]></content>
       <categories>
         <category>JavaScript</category>
