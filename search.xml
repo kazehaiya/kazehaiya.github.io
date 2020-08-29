@@ -1,28 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Docker 安装 mysql</title>
-    <url>/2020/03/11/Docker-%E5%AE%89%E8%A3%85-mysql/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>自学 Docker 系列，了解常用包的使用和配置安装，此篇记录 mysql 的安装</p>
+    <title>Docker 安装笔记</title>
+    <url>/2019/12/14/Docker-%E5%AE%89%E8%A3%85%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>不知不觉已经快过 2 个月了，这期间由于项目变更，再加上遇到了一些生活上的波折，基本上没太多心思花在博文的编写了。好不容易稍微有点时间了，立马开始写上一篇，记录一下最近折腾配置的环境。</p>
+<blockquote>
+<p>仅记录 Mac 环境的配置</p>
+</blockquote>
 <a id="more"></a>
-<h3 id="安装配置"><a href="#安装配置" class="headerlink" title="安装配置"></a>安装配置</h3><p>下载 mysql（8 版本和 7 版本不太一样）</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker pull mysql:latest</span><br><span class="line">docker pull mysql:5.7</span><br></pre></td></tr></table></figure>
-<ol>
-<li>安装 mysql57</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run --name mysql57 -e MYSQL_ROOT_PASSWORD=123456 -p 3306:3306 -d mysql:5.7</span><br></pre></td></tr></table></figure>
+<h3 id="Docker-安装"><a href="#Docker-安装" class="headerlink" title="Docker 安装"></a>Docker 安装</h3><p>Docker 安装很简单，有两种方式（基本上网上都有），分别为：</p>
+<ul>
+<li>brew 安装</li>
+<li>安装包安装</li>
+</ul>
+<h4 id="brew-安装"><a href="#brew-安装" class="headerlink" title="brew 安装"></a>brew 安装</h4><p>brew 安装很简单，命令为：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">## 等待的时间会有点长</span></span><br><span class="line">brew cask install docker</span><br></pre></td></tr></table></figure>
+<h4 id="手动下载安装"><a href="#手动下载安装" class="headerlink" title="手动下载安装"></a>手动下载安装</h4><p>docker 手动下载安装也不是特别复杂，但是为了更为方便快捷，最好还是去<a href="https://hub.docker.com/" target="_blank" rel="noopener">官网注册</a>一个 ID（迟早会去注册账号的），然后再 download 桌面版。</p>
 <blockquote>
-<p>此时直接通过 tomcat 或者 workbench 连接上即可</p>
+<p>虽然不知道能不能打开此链接，但是还是奉上 download <a href="https://hub.docker.com/?overlay=onboarding" target="_blank" rel="noopener">传送门</a></p>
 </blockquote>
-<ol start="2">
-<li>安装 mysql:latest</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run --name mysql -e MYSQL_ROOT_PASSWORD=123456 -p 3306:3306 -d mysql</span><br></pre></td></tr></table></figure>
+<p>此外，还有其它的安装途径，比如 <a href="http://get.daocloud.io/#install-docker-for-mac-windows" target="_blank" rel="noopener">Docker 极速下载</a> 网站（该版本比较低，因此需要自己升级）</p>
+<h3 id="Docker-镜像加速"><a href="#Docker-镜像加速" class="headerlink" title="Docker 镜像加速"></a>Docker 镜像加速</h3><p>Docker 默认使用的是国外的源，而国外的源有时会有网络的问题，在后续的拉取中会比较缓慢。</p>
+<p>Mac 上的更改操作比较简单，步骤为：</p>
+<p>点击 Docker 图标 -&gt; Perferences -&gt; Daemon 标签页 -&gt; Registry mirrors</p>
+<p><img data-src="/images/docker-registry.jpg" alt="Docker 镜像"></p>
+<p>可添加源有：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 国内官方</span></span><br><span class="line">https://registry.docker-cn.com</span><br><span class="line"><span class="comment"># 网易源</span></span><br><span class="line">https://hub-mirror.c.163.com</span><br><span class="line"><span class="comment"># 阿里云</span></span><br><span class="line">https://registry.aliyuncs.com</span><br><span class="line"><span class="comment"># 中科大</span></span><br><span class="line">https://docker.mirrors.ustc.edu.cn</span><br></pre></td></tr></table></figure>
+<p>之后点击 <code>Apply &amp; Restart</code> 等待片刻即可。</p>
+<h3 id="基础命令"><a href="#基础命令" class="headerlink" title="基础命令"></a>基础命令</h3><h4 id="拉取远程镜像"><a href="#拉取远程镜像" class="headerlink" title="拉取远程镜像"></a>拉取远程镜像</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker pull [registry[:port]/]packages[:tags]</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>如果用 tomcat 连接不上 mysql，那么请参阅参考文章</p>
+<p>默认拉取的为 <a href="https://hub.docker.com/explore/" target="_blank" rel="noopener">Docker Hub</a> 的 latest 版本的包</p>
 </blockquote>
+<h4 id="镜像列举与空间占用"><a href="#镜像列举与空间占用" class="headerlink" title="镜像列举与空间占用"></a>镜像列举与空间占用</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看当前下载的镜像资源（压缩的）</span></span><br><span class="line">docker images</span><br><span class="line"><span class="comment"># 查看镜像、容器、卷宗占用体积</span></span><br><span class="line">docker system df</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>docker image prune</code> 删除无用镜像</p>
+</blockquote>
+<h4 id="删除镜像与容器"><a href="#删除镜像与容器" class="headerlink" title="删除镜像与容器"></a>删除镜像与容器</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 删除镜像</span></span><br><span class="line">docker rmi &lt;image&gt; [others...]</span><br><span class="line"><span class="comment"># 删除容器</span></span><br><span class="line">docker rm &lt;container-hash/container-name&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="运行与操作容器"><a href="#运行与操作容器" class="headerlink" title="运行与操作容器"></a>运行与操作容器</h4><p>创建并运行容器</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run</span><br><span class="line">  [--name &lt;container-name&gt;]</span><br><span class="line">  [-p &lt;image-port&gt;:&lt;<span class="built_in">local</span>-port&gt;]</span><br><span class="line">  [-v &lt;<span class="built_in">local</span>-path&gt;:&lt;container-path&gt;]</span><br><span class="line">  [-e &lt;container-env&gt;=&lt;params&gt;]</span><br><span class="line">  [-d]</span><br><span class="line">  &lt;image-name&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>name 为容器别名； p 为端口映射； v 为卷宗地址映射； e 为环境变量声明； d 为后台运行容器</p>
+</blockquote>
+<p>启动容器</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker start &lt;container-name/container-hash&gt;</span><br></pre></td></tr></table></figure>
+<p>重新启动容器</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker restart &lt;container-name/container-hash&gt;</span><br></pre></td></tr></table></figure>
+<p>终止容器</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker stop &lt;container-name/container-hash&gt;</span><br></pre></td></tr></table></figure>
+<p>进入容器</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 以 bash 的方式，进入伪终端； -it： 支持 stdin 切推出不会停止容器</span></span><br><span class="line">docker <span class="built_in">exec</span> -it &lt;container-name&gt; bash</span><br></pre></td></tr></table></figure>
+<h3 id="拷贝镜像内容"><a href="#拷贝镜像内容" class="headerlink" title="拷贝镜像内容"></a>拷贝镜像内容</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker cp &lt;container&gt;:&lt;path&gt; &lt;<span class="built_in">local</span>-path&gt;</span><br></pre></td></tr></table></figure>
 <h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
-<li><a href="https://www.cnblogs.com/feipeng8848/p/10470655.html" target="_blank" rel="noopener">Docker 安装 mysql</a></li>
+<li><a href="https://www.runoob.com/docker/macos-docker-install.html" target="_blank" rel="noopener">MacOS Docker 安装</a></li>
+<li><a href="https://yeasy.gitbooks.io/docker_practice/" target="_blank" rel="noopener">Docker — 从入门到实践</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -96,58 +126,28 @@
       </tags>
   </entry>
   <entry>
-    <title>Docker 安装笔记</title>
-    <url>/2019/12/14/Docker-%E5%AE%89%E8%A3%85%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>不知不觉已经快过 2 个月了，这期间由于项目变更，再加上遇到了一些生活上的波折，基本上没太多心思花在博文的编写了。好不容易稍微有点时间了，立马开始写上一篇，记录一下最近折腾配置的环境。</p>
-<blockquote>
-<p>仅记录 Mac 环境的配置</p>
-</blockquote>
+    <title>Docker 安装 mysql</title>
+    <url>/2020/03/11/Docker-%E5%AE%89%E8%A3%85-mysql/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>自学 Docker 系列，了解常用包的使用和配置安装，此篇记录 mysql 的安装</p>
 <a id="more"></a>
-<h3 id="Docker-安装"><a href="#Docker-安装" class="headerlink" title="Docker 安装"></a>Docker 安装</h3><p>Docker 安装很简单，有两种方式（基本上网上都有），分别为：</p>
-<ul>
-<li>brew 安装</li>
-<li>安装包安装</li>
-</ul>
-<h4 id="brew-安装"><a href="#brew-安装" class="headerlink" title="brew 安装"></a>brew 安装</h4><p>brew 安装很简单，命令为：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">## 等待的时间会有点长</span></span><br><span class="line">brew cask install docker</span><br></pre></td></tr></table></figure>
-<h4 id="手动下载安装"><a href="#手动下载安装" class="headerlink" title="手动下载安装"></a>手动下载安装</h4><p>docker 手动下载安装也不是特别复杂，但是为了更为方便快捷，最好还是去<a href="https://hub.docker.com/" target="_blank" rel="noopener">官网注册</a>一个 ID（迟早会去注册账号的），然后再 download 桌面版。</p>
+<h3 id="安装配置"><a href="#安装配置" class="headerlink" title="安装配置"></a>安装配置</h3><p>下载 mysql（8 版本和 7 版本不太一样）</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker pull mysql:latest</span><br><span class="line">docker pull mysql:5.7</span><br></pre></td></tr></table></figure>
+<ol>
+<li>安装 mysql57</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run --name mysql57 -e MYSQL_ROOT_PASSWORD=123456 -p 3306:3306 -d mysql:5.7</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>虽然不知道能不能打开此链接，但是还是奉上 download <a href="https://hub.docker.com/?overlay=onboarding" target="_blank" rel="noopener">传送门</a></p>
+<p>此时直接通过 tomcat 或者 workbench 连接上即可</p>
 </blockquote>
-<p>此外，还有其它的安装途径，比如 <a href="http://get.daocloud.io/#install-docker-for-mac-windows" target="_blank" rel="noopener">Docker 极速下载</a> 网站（该版本比较低，因此需要自己升级）</p>
-<h3 id="Docker-镜像加速"><a href="#Docker-镜像加速" class="headerlink" title="Docker 镜像加速"></a>Docker 镜像加速</h3><p>Docker 默认使用的是国外的源，而国外的源有时会有网络的问题，在后续的拉取中会比较缓慢。</p>
-<p>Mac 上的更改操作比较简单，步骤为：</p>
-<p>点击 Docker 图标 -&gt; Perferences -&gt; Daemon 标签页 -&gt; Registry mirrors</p>
-<p><img data-src="/images/docker-registry.jpg" alt="Docker 镜像"></p>
-<p>可添加源有：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 国内官方</span></span><br><span class="line">https://registry.docker-cn.com</span><br><span class="line"><span class="comment"># 网易源</span></span><br><span class="line">https://hub-mirror.c.163.com</span><br><span class="line"><span class="comment"># 阿里云</span></span><br><span class="line">https://registry.aliyuncs.com</span><br><span class="line"><span class="comment"># 中科大</span></span><br><span class="line">https://docker.mirrors.ustc.edu.cn</span><br></pre></td></tr></table></figure>
-<p>之后点击 <code>Apply &amp; Restart</code> 等待片刻即可。</p>
-<h3 id="基础命令"><a href="#基础命令" class="headerlink" title="基础命令"></a>基础命令</h3><h4 id="拉取远程镜像"><a href="#拉取远程镜像" class="headerlink" title="拉取远程镜像"></a>拉取远程镜像</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker pull [registry[:port]/]packages[:tags]</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>安装 mysql:latest</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run --name mysql -e MYSQL_ROOT_PASSWORD=123456 -p 3306:3306 -d mysql</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>默认拉取的为 <a href="https://hub.docker.com/explore/" target="_blank" rel="noopener">Docker Hub</a> 的 latest 版本的包</p>
+<p>如果用 tomcat 连接不上 mysql，那么请参阅参考文章</p>
 </blockquote>
-<h4 id="镜像列举与空间占用"><a href="#镜像列举与空间占用" class="headerlink" title="镜像列举与空间占用"></a>镜像列举与空间占用</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看当前下载的镜像资源（压缩的）</span></span><br><span class="line">docker images</span><br><span class="line"><span class="comment"># 查看镜像、容器、卷宗占用体积</span></span><br><span class="line">docker system df</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p><code>docker image prune</code> 删除无用镜像</p>
-</blockquote>
-<h4 id="删除镜像与容器"><a href="#删除镜像与容器" class="headerlink" title="删除镜像与容器"></a>删除镜像与容器</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 删除镜像</span></span><br><span class="line">docker rmi &lt;image&gt; [others...]</span><br><span class="line"><span class="comment"># 删除容器</span></span><br><span class="line">docker rm &lt;container-hash/container-name&gt;</span><br></pre></td></tr></table></figure>
-<h4 id="运行与操作容器"><a href="#运行与操作容器" class="headerlink" title="运行与操作容器"></a>运行与操作容器</h4><p>创建并运行容器</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run</span><br><span class="line">  [--name &lt;container-name&gt;]</span><br><span class="line">  [-p &lt;image-port&gt;:&lt;<span class="built_in">local</span>-port&gt;]</span><br><span class="line">  [-v &lt;<span class="built_in">local</span>-path&gt;:&lt;container-path&gt;]</span><br><span class="line">  [-e &lt;container-env&gt;=&lt;params&gt;]</span><br><span class="line">  [-d]</span><br><span class="line">  &lt;image-name&gt;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>name 为容器别名； p 为端口映射； v 为卷宗地址映射； e 为环境变量声明； d 为后台运行容器</p>
-</blockquote>
-<p>启动容器</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker start &lt;container-name/container-hash&gt;</span><br></pre></td></tr></table></figure>
-<p>重新启动容器</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker restart &lt;container-name/container-hash&gt;</span><br></pre></td></tr></table></figure>
-<p>终止容器</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker stop &lt;container-name/container-hash&gt;</span><br></pre></td></tr></table></figure>
-<p>进入容器</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 以 bash 的方式，进入伪终端； -it： 支持 stdin 切推出不会停止容器</span></span><br><span class="line">docker <span class="built_in">exec</span> -it &lt;container-name&gt; bash</span><br></pre></td></tr></table></figure>
-<h3 id="拷贝镜像内容"><a href="#拷贝镜像内容" class="headerlink" title="拷贝镜像内容"></a>拷贝镜像内容</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker cp &lt;container&gt;:&lt;path&gt; &lt;<span class="built_in">local</span>-path&gt;</span><br></pre></td></tr></table></figure>
 <h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
-<li><a href="https://www.runoob.com/docker/macos-docker-install.html" target="_blank" rel="noopener">MacOS Docker 安装</a></li>
-<li><a href="https://yeasy.gitbooks.io/docker_practice/" target="_blank" rel="noopener">Docker — 从入门到实践</a></li>
+<li><a href="https://www.cnblogs.com/feipeng8848/p/10470655.html" target="_blank" rel="noopener">Docker 安装 mysql</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -229,31 +229,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Github 无法登陆问题</title>
-    <url>/2020/03/09/Github-%E6%97%A0%E6%B3%95%E7%99%BB%E9%99%86%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>从过年回家到现在（肺炎封城），github 就从来没有登陆成功，原先一直以为是家里网的问题，知道今天偶然间用手机登上了 github，发现事情并没有那么简单，重新配置了一下 <code>/etc/hosts</code> 文件后，终于能登上 github 官网了。</p>
-<a id="more"></a>
-<h3 id="hosts-文件"><a href="#hosts-文件" class="headerlink" title="hosts 文件"></a>hosts 文件</h3><p>Hosts 是一个没有扩展名的系统文件，其作用就是将一些常用的网址域名与其对应的 IP 地址建立一个关联“数据库”，当用户在浏览器中输入一个需要登录的网址时，系统会首先自动从 Hosts 文件中寻找对应的 IP 地址，一旦找到，系统会立即打开对应网页，如果没有找到，则系统会再将网址提交 DNS 域名解析服务器进行 IP 地址的解析。</p>
-<blockquote>
-<p>注意：Hosts 文件配置的映射是静态的，如果目标域名对应的 ip 更改了，但 hosts 文件的映射没有及时更新，会导致页面无法访问。</p>
-</blockquote>
-<h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><p>解决方法非常简单，将 <code>/etc/host</code> 文件内的 <code>github.com</code> 的映射注释掉即可，或者是更新对应的 ip。</p>
-<p>一般在 <a href="https://www.ipaddress.com/" target="_blank" rel="noopener">IPAddress</a> 里面进行 IP 查询。</p>
-<blockquote>
-<p>补充：更新 IP 的方法好像不行</p>
-</blockquote>
-<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><ul>
-<li><a href="https://baike.baidu.com/item/hosts/10474546?fr=aladdin" target="_blank" rel="noopener">hosts</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Env</category>
-      </categories>
-      <tags>
-        <tag>Env</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>IntersectionObserver 与延迟加载</title>
     <url>/2019/09/10/IntersectionObserver-%E4%B8%8E%E5%BB%B6%E8%BF%9F%E5%8A%A0%E8%BD%BD/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>随着项目图表使用的复杂程度的提升，“大数据”与多图表渲染带来的影响是页面响应慢、用户体验随时间越来越糟。通过 chrome 的 performance 分析出的原因是：接口耗时基本可忽略不计，页面渲染耗时才是对用户体验的真正影响。因此如何更“智能”的加载渲染的图表才是问题解决的关键，而这就要聊到“延迟加载”了。</p>
@@ -322,6 +297,31 @@
       </categories>
       <tags>
         <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Github 无法登陆问题</title>
+    <url>/2020/03/09/Github-%E6%97%A0%E6%B3%95%E7%99%BB%E9%99%86%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>从过年回家到现在（肺炎封城），github 就从来没有登陆成功，原先一直以为是家里网的问题，知道今天偶然间用手机登上了 github，发现事情并没有那么简单，重新配置了一下 <code>/etc/hosts</code> 文件后，终于能登上 github 官网了。</p>
+<a id="more"></a>
+<h3 id="hosts-文件"><a href="#hosts-文件" class="headerlink" title="hosts 文件"></a>hosts 文件</h3><p>Hosts 是一个没有扩展名的系统文件，其作用就是将一些常用的网址域名与其对应的 IP 地址建立一个关联“数据库”，当用户在浏览器中输入一个需要登录的网址时，系统会首先自动从 Hosts 文件中寻找对应的 IP 地址，一旦找到，系统会立即打开对应网页，如果没有找到，则系统会再将网址提交 DNS 域名解析服务器进行 IP 地址的解析。</p>
+<blockquote>
+<p>注意：Hosts 文件配置的映射是静态的，如果目标域名对应的 ip 更改了，但 hosts 文件的映射没有及时更新，会导致页面无法访问。</p>
+</blockquote>
+<h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><p>解决方法非常简单，将 <code>/etc/host</code> 文件内的 <code>github.com</code> 的映射注释掉即可，或者是更新对应的 ip。</p>
+<p>一般在 <a href="https://www.ipaddress.com/" target="_blank" rel="noopener">IPAddress</a> 里面进行 IP 查询。</p>
+<blockquote>
+<p>补充：更新 IP 的方法好像不行</p>
+</blockquote>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><ul>
+<li><a href="https://baike.baidu.com/item/hosts/10474546?fr=aladdin" target="_blank" rel="noopener">hosts</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Env</category>
+      </categories>
+      <tags>
+        <tag>Env</tag>
       </tags>
   </entry>
   <entry>
@@ -415,97 +415,6 @@
       </categories>
       <tags>
         <tag>Vue</tag>
-        <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>JavaScript 对象</title>
-    <url>/2019/06/06/JavaScript-%E5%AF%B9%E8%B1%A1/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>对象是 JavaScript 的七种主要类型中的一种（string、boolean、number、null、undefined、symbol、object），也是这七种主要类型中最为复杂的一种类型，了解对象对学习 JavaScript、了解 <code>this</code>和作用域链，以及之后的“类”的概念都十分重要，而此篇就从边边角角来介绍 JavaScript 中的<strong>对象</strong>。</p>
-<a id="more"></a>
-<h3 id="基础内容"><a href="#基础内容" class="headerlink" title="基础内容"></a>基础内容</h3><h4 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h4><p>对象写法有两种：声明（文字）形式和构造形式。（一般很少使用构造形式）</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 声明文字形式</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 构造形式</span></span><br><span class="line"><span class="keyword">const</span> obj = <span class="keyword">new</span> <span class="built_in">Object</span>();</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>写法区别：声明文字形式能传递更多的键/值，构造形式得一个个的添加。</p>
-</blockquote>
-<h4 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h4><p>为什么要单独强调<strong>类型</strong>？因为在最开始，我也是认为 JS 中万物接对象，其实不然，像我们所熟悉的简单基本类型（string、boolean、undefined、null和number）就并非对象（字面量形式）。函数就是对象的一个子类型（技术角度来说即“可调用的对象”）；同样的，数组也是，只不过是具备一些额外的行为。</p>
-<blockquote>
-<p><code>typeof null === &#39;object&#39;</code> 是语言本身的 bug，在 JavaScript 中二进制前三位都为 0 的话会被判断为 <code>object</code> ，由于 null 的二进制表示是全 0，因此在做类型判读时会出现“误判”的问题。</p>
-</blockquote>
-<p>基础类型与对象类型的主要区别就是对象的生存期，使用 new 操作符创建的引用类型的实例，在执行流离开当前作用域之前都一直保存在内存中，而自基本类型则只存在于一行代码的执行瞬间，然后立即被销毁，这意味着我们不能在运行时为基本类型添加属性和方法。如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> name = <span class="string">'ConardLi'</span>;</span><br><span class="line">name.color = <span class="string">'red'</span>;</span><br><span class="line"><span class="built_in">console</span>.log(name.color); <span class="comment">// undefined</span></span><br></pre></td></tr></table></figure>
-<h5 id="内置对象"><a href="#内置对象" class="headerlink" title="内置对象"></a>内置对象</h5><p>JavaScript 中还有一些内置对象，例如：</p>
-<ul>
-<li>String</li>
-<li>Boolean</li>
-<li>Number</li>
-<li>Object</li>
-<li>Function</li>
-<li>Array</li>
-<li>Date</li>
-<li>RegExp</li>
-<li>Error</li>
-</ul>
-<p>它们可以类比为 Java 中的 Class（但从 JavaScript 角度来说，它们只是一些可以当作构造函数的内置函数）。但是在使用 JavaScript 时，更为常用的方式是直接声明一个字面量，如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> str1 = <span class="string">"This is a string"</span>;</span><br><span class="line"><span class="keyword">const</span> str2 = <span class="keyword">new</span> <span class="built_in">String</span>(<span class="string">"This is a object"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">typeof</span> str1 === <span class="string">'string'</span>; <span class="comment">// true</span></span><br><span class="line"><span class="keyword">typeof</span> str2 === <span class="string">'object'</span>; <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">str1 <span class="keyword">instanceof</span> <span class="built_in">String</span>; <span class="comment">// false</span></span><br><span class="line">str2 <span class="keyword">instanceof</span> <span class="built_in">String</span>; <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call(str1); <span class="comment">// [object String]</span></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call(str2); <span class="comment">// [object String]</span></span><br></pre></td></tr></table></figure>
-<p>这里解释了字面量并非由 String 的构造函数得到的对象，实际上 str1 为何其表现形式和 str2 无任何不同（从字符串的操作的层面），是因为引擎会自动将字面量转换成其对应的对象类型，因此可以访问对应类型的属性和方法。</p>
-<h4 id="属性与方法"><a href="#属性与方法" class="headerlink" title="属性与方法"></a>属性与方法</h4><p>对象的内容是由一些存储在特定命名位置的值组成的，我们称之为属性（可类比指针来理解）。对于基础类型来说，其所存储的值对应一块固定的空间，不会动态改变；而对于对象这样的较为复杂的类型来说，它们存储的为一块内存区域的引用。</p>
-<p>通俗的来说，基础类型就像手机店货架上的手机壳，它们是实物，“所见即所得”；而复杂类型就像是手机店柜子内的高价手机，展示的是模型机，其象征这这一型号的所有手机，需要的时候通过此去对应仓库获取真机。</p>
-<h5 id="访问方式"><a href="#访问方式" class="headerlink" title="访问方式"></a>访问方式</h5><p>对象属性的访问方式分为两种，例如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123; <span class="attr">name</span>: <span class="number">1</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 属性访问</span></span><br><span class="line">obj.name</span><br><span class="line"></span><br><span class="line"><span class="comment">// 键访问</span></span><br><span class="line">obj[<span class="string">'name'</span>]</span><br></pre></td></tr></table></figure>
-<p>两种方式各有优劣，前者在写的时候较为方便，但是得满足标识符的命名规范，比较固定；后者的写法比较多样（ES6支持可计算属性名），缺点是没有前者直接。</p>
-<p>需要注意的是，属性名永远都是字符串。如果使用字符串之外的值作为属性名，那么其会先转换成字符串，例如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;&#125;;</span><br><span class="line">obj[<span class="literal">true</span>] = <span class="string">'boolean'</span>;</span><br><span class="line">obj[&#123;&#125;] = <span class="string">'object'</span>;</span><br><span class="line">obj[<span class="number">3</span>] = <span class="string">'number'</span>;</span><br><span class="line"></span><br><span class="line">obj[<span class="string">'true'</span>]; <span class="comment">// boolean</span></span><br><span class="line">obj[<span class="string">'[object object]'</span>]; <span class="comment">// object</span></span><br><span class="line">obj[<span class="string">'3'</span>]; <span class="comment">// number</span></span><br></pre></td></tr></table></figure>
-<h5 id="函数属性"><a href="#函数属性" class="headerlink" title="函数属性"></a>函数属性</h5><p>有时候对象中的属性为一个函数，我们习惯上称这样的属性为“函数的方法”（类比 C 语言）。然而从技术角度来说，在 JavaScript 中，函数永远也不会“属于”一个对象，因为 this 是动态绑定至对象上的（先前有写过这么一篇文章），函数与对象间的关系并不稳定，因此对象与函数最多也只能称作为间接关系。最为保险的说法可能是“函数”和“方法”在 JavaScript 中是可以互换的。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  foo: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">1</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 基本上可以等价于</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj1 = &#123;</span><br><span class="line">  foo: foo</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><p>我们知道，在 JS 中数组也是“对象”，但是相对于对象来说，数组有一套更为结构化的值存储机制（通过索引的方式），例如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"></span><br><span class="line">arr[<span class="number">0</span>]; <span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
-<p>由于数组也是一个对象，因此我们也可以给数组添加属性，如：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 沿用上例</span><br><span class="line">arr.bar = &apos;bar&apos;;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注意：如果试图像数组内添加一个属性，而属性“看起来”像一个数字（如字符串数子），那么它会变成一个数值下标</p>
-</blockquote>
-<h3 id="提升内容"><a href="#提升内容" class="headerlink" title="提升内容"></a>提升内容</h3><h4 id="属性描述符"><a href="#属性描述符" class="headerlink" title="属性描述符"></a>属性描述符</h4><p>最早接触到属性描述符的时候还是在读JS红宝书的时候，不过那时候不是很懂有啥用，随着接触的东西逐渐变多，源码也看了一部分，对属性描述符也有了一定的程度的理解。</p>
-<p>自 ES5 以来，JS 的所有属性都具备了属性描述符，通过 <code>Object.getOwnPropertyDescription(&lt;obj&gt;, &lt;prop&gt;)</code> 能够拿到对应属性的描述，包含内容如下：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  value: <span class="string">'xxx'</span>, <span class="comment">// 值</span></span><br><span class="line">  writable: <span class="literal">true</span>, <span class="comment">// 是否可写（默认）</span></span><br><span class="line">  enumerable: <span class="literal">true</span>, <span class="comment">// 是否可枚举（默认）</span></span><br><span class="line">  configurable: <span class="literal">true</span> <span class="comment">// 是否可配置（默认）</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>当然，我们也可以通过 <code>Object.defineProperty(&lt;obj&gt;, &lt;prop&gt;, {/* */})</code> 来修改属性描述符。</p>
-<h5 id="writable"><a href="#writable" class="headerlink" title="writable"></a>writable</h5><p>writable 决定是否可以修改属性的值，如果设置为 false，那么修改属性值时会静默失效</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">'a'</span>, &#123;</span><br><span class="line">  enumerable: <span class="literal">true</span>,</span><br><span class="line">  configurable: <span class="literal">true</span>,</span><br><span class="line">  writable: <span class="literal">false</span>,</span><br><span class="line">  value: <span class="string">"static"</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">obj.a = <span class="string">'public'</span>;</span><br><span class="line"></span><br><span class="line">obj.a; <span class="comment">// static（严格模式下会报错）</span></span><br></pre></td></tr></table></figure>
-<p>然而，当配置中有配置 getter/setter 时，这个属性会被定义为“访问描述符”（与“数据描述符”相对），对于访问描述符来说， JavaScript 会忽略其 value 和 writable 属性（具体来说此），例如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  a: <span class="number">2</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">'a'</span>, &#123;</span><br><span class="line">  enumerable: <span class="literal">true</span>,</span><br><span class="line">  configurable: <span class="literal">true</span>,</span><br><span class="line">  <span class="keyword">get</span>() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">3</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">obj.a; <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
-<h5 id="configurable"><a href="#configurable" class="headerlink" title="configurable"></a>configurable</h5><p>configurable 决定对象的属性是否可配置。与 writable 不同，writable 控制的是对象属性值能否改变，而 configurable 配置的是属性描述符能否改变，即后者是单向的（某个对象的 configurable 设置为 false 后就无法将其再设置为 true 了）。</p>
-<p>除此以外，其还禁止删除此属性，如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  a: <span class="string">'static'</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">obj.a; <span class="comment">// 2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> obj.a;</span><br><span class="line">obj.a; <span class="comment">// undefined</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">'a'</span>, &#123;</span><br><span class="line">  enumerable: <span class="literal">true</span>,</span><br><span class="line">  configurable: <span class="literal">false</span>,</span><br><span class="line">  writable: <span class="literal">true</span>,</span><br><span class="line">  value: <span class="string">"static"</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">obj.a; <span class="comment">// 2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> obj.a;</span><br><span class="line">obj.a; <span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注： delete 仅是一个删除对象属性的操作，并非一个释放内存的工具</p>
-</blockquote>
-<blockquote>
-<p>特例：当 configurable 设置为 false 之后，writable 可由 true 更改为 false，但无法由 false 更改为 true。</p>
-</blockquote>
-<h5 id="Enumerable"><a href="#Enumerable" class="headerlink" title="Enumerable"></a>Enumerable</h5><p>顾名思义，此描述符控制的事属性是否会在遍历对象时，将其枚举。例如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  bar: <span class="number">1</span>,</span><br><span class="line">  foo: <span class="number">2</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">'c'</span>, &#123;</span><br><span class="line">  enumerable: <span class="literal">false</span>,</span><br><span class="line">  configurable: <span class="literal">true</span>,</span><br><span class="line">  writable: <span class="literal">true</span>,</span><br><span class="line">  value: <span class="number">3</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> obj) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(key, obj[key]); <span class="comment">// 没有 [c 3]</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="string">'c'</span> <span class="keyword">in</span> obj; <span class="comment">// true</span></span><br><span class="line">obj.hasOwnProperty(<span class="string">'c'</span>); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
-<p>for .. in 循环可以遍历对象的可枚举属性列表（包括[[Prototype]]链），而遍历属性的值我们通常用的是 for .. of，如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> value <span class="keyword">of</span> arr) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(value) <span class="comment">// 1, 2, 3</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>for .. of 首选会向被访问的对象请求一个迭代器对象，然后通过迭代器对象的 next() 方法来遍历返回值，数组内默认会带有迭代器，因此我们可以直接将 for .. of 运用至数组中。但是对象却没有，我么可以这样造一个自定义迭代器。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  a: <span class="number">1</span>,</span><br><span class="line">  b: <span class="number">2</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="built_in">Symbol</span>.iterator, &#123;</span><br><span class="line">  enumerable: <span class="literal">false</span>,</span><br><span class="line">  configurable: <span class="literal">true</span>,</span><br><span class="line">  writable: <span class="literal">false</span>,</span><br><span class="line">  value: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> self = <span class="keyword">this</span>;</span><br><span class="line">    <span class="keyword">let</span> idx = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">const</span> ks = <span class="built_in">Object</span>.keys(self);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      next: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        value: self[ks[idx++]],</span><br><span class="line">        done: (idx &gt; ks.length )</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>遍历数组下标使用的是数字顺序，但是遍历对象时其顺序是不确定的。因此在不同环境要想数据展现形式保持一致，那么一定不要相信任何观察到的顺序，因为它们是不可靠的。</p>
-</blockquote>
-<h4 id="不变性"><a href="#不变性" class="headerlink" title="不变性"></a>不变性</h4><h5 id="对象常量"><a href="#对象常量" class="headerlink" title="对象常量"></a>对象常量</h5><p>我们可以通过设置对象属性的 writable 来设置对象常量，这样能做到真正意义上的不可修改（类比 const 声明）</p>
-<h5 id="禁止扩展"><a href="#禁止扩展" class="headerlink" title="禁止扩展"></a>禁止扩展</h5><p>对象默认是可扩展的，加入想要禁止一个对象的扩展性，即不能后期新增属性，那么可以使用 <code>Object.preventExtensions(&lt;obj&gt;)</code></p>
-<h5 id="密封"><a href="#密封" class="headerlink" title="密封"></a>密封</h5><p><code>Object.seal(&lt;obj&gt;)</code> 会创建一个密封对象，其会在一个现有对象上调用 Object.preventExtensions() 并将所有的属性标记为 <code>configurable: false</code>。其不仅不能添加新属性，也不能重新配置或删除原有属性（可修改属性值）。</p>
-<h5 id="冻结"><a href="#冻结" class="headerlink" title="冻结"></a>冻结</h5><p><code>Object.freeze(&lt;obj&gt;)</code> 会创建一个冻结对象，其会在对象上调用 Object.seal() 并将所有的属性标记为 <code>writable: false</code>，这样就无法修改其值。</p>
-<blockquote>
-<p>注意：对象中引用的对象无法被密封和冻结，只有非引用对象受影响最为全面，并且是浅操作。</p>
-</blockquote>
-<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><ul>
-<li>《你所不知道的 JavaScript》</li>
-</ul>
-]]></content>
-      <categories>
-        <category>JavaScript</category>
-      </categories>
-      <tags>
         <tag>JavaScript</tag>
       </tags>
   </entry>
@@ -641,6 +550,97 @@
       </categories>
       <tags>
         <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JavaScript 对象</title>
+    <url>/2019/06/06/JavaScript-%E5%AF%B9%E8%B1%A1/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>对象是 JavaScript 的七种主要类型中的一种（string、boolean、number、null、undefined、symbol、object），也是这七种主要类型中最为复杂的一种类型，了解对象对学习 JavaScript、了解 <code>this</code>和作用域链，以及之后的“类”的概念都十分重要，而此篇就从边边角角来介绍 JavaScript 中的<strong>对象</strong>。</p>
+<a id="more"></a>
+<h3 id="基础内容"><a href="#基础内容" class="headerlink" title="基础内容"></a>基础内容</h3><h4 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h4><p>对象写法有两种：声明（文字）形式和构造形式。（一般很少使用构造形式）</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 声明文字形式</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 构造形式</span></span><br><span class="line"><span class="keyword">const</span> obj = <span class="keyword">new</span> <span class="built_in">Object</span>();</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>写法区别：声明文字形式能传递更多的键/值，构造形式得一个个的添加。</p>
+</blockquote>
+<h4 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h4><p>为什么要单独强调<strong>类型</strong>？因为在最开始，我也是认为 JS 中万物接对象，其实不然，像我们所熟悉的简单基本类型（string、boolean、undefined、null和number）就并非对象（字面量形式）。函数就是对象的一个子类型（技术角度来说即“可调用的对象”）；同样的，数组也是，只不过是具备一些额外的行为。</p>
+<blockquote>
+<p><code>typeof null === &#39;object&#39;</code> 是语言本身的 bug，在 JavaScript 中二进制前三位都为 0 的话会被判断为 <code>object</code> ，由于 null 的二进制表示是全 0，因此在做类型判读时会出现“误判”的问题。</p>
+</blockquote>
+<p>基础类型与对象类型的主要区别就是对象的生存期，使用 new 操作符创建的引用类型的实例，在执行流离开当前作用域之前都一直保存在内存中，而自基本类型则只存在于一行代码的执行瞬间，然后立即被销毁，这意味着我们不能在运行时为基本类型添加属性和方法。如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> name = <span class="string">'ConardLi'</span>;</span><br><span class="line">name.color = <span class="string">'red'</span>;</span><br><span class="line"><span class="built_in">console</span>.log(name.color); <span class="comment">// undefined</span></span><br></pre></td></tr></table></figure>
+<h5 id="内置对象"><a href="#内置对象" class="headerlink" title="内置对象"></a>内置对象</h5><p>JavaScript 中还有一些内置对象，例如：</p>
+<ul>
+<li>String</li>
+<li>Boolean</li>
+<li>Number</li>
+<li>Object</li>
+<li>Function</li>
+<li>Array</li>
+<li>Date</li>
+<li>RegExp</li>
+<li>Error</li>
+</ul>
+<p>它们可以类比为 Java 中的 Class（但从 JavaScript 角度来说，它们只是一些可以当作构造函数的内置函数）。但是在使用 JavaScript 时，更为常用的方式是直接声明一个字面量，如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> str1 = <span class="string">"This is a string"</span>;</span><br><span class="line"><span class="keyword">const</span> str2 = <span class="keyword">new</span> <span class="built_in">String</span>(<span class="string">"This is a object"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">typeof</span> str1 === <span class="string">'string'</span>; <span class="comment">// true</span></span><br><span class="line"><span class="keyword">typeof</span> str2 === <span class="string">'object'</span>; <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">str1 <span class="keyword">instanceof</span> <span class="built_in">String</span>; <span class="comment">// false</span></span><br><span class="line">str2 <span class="keyword">instanceof</span> <span class="built_in">String</span>; <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call(str1); <span class="comment">// [object String]</span></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call(str2); <span class="comment">// [object String]</span></span><br></pre></td></tr></table></figure>
+<p>这里解释了字面量并非由 String 的构造函数得到的对象，实际上 str1 为何其表现形式和 str2 无任何不同（从字符串的操作的层面），是因为引擎会自动将字面量转换成其对应的对象类型，因此可以访问对应类型的属性和方法。</p>
+<h4 id="属性与方法"><a href="#属性与方法" class="headerlink" title="属性与方法"></a>属性与方法</h4><p>对象的内容是由一些存储在特定命名位置的值组成的，我们称之为属性（可类比指针来理解）。对于基础类型来说，其所存储的值对应一块固定的空间，不会动态改变；而对于对象这样的较为复杂的类型来说，它们存储的为一块内存区域的引用。</p>
+<p>通俗的来说，基础类型就像手机店货架上的手机壳，它们是实物，“所见即所得”；而复杂类型就像是手机店柜子内的高价手机，展示的是模型机，其象征这这一型号的所有手机，需要的时候通过此去对应仓库获取真机。</p>
+<h5 id="访问方式"><a href="#访问方式" class="headerlink" title="访问方式"></a>访问方式</h5><p>对象属性的访问方式分为两种，例如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123; <span class="attr">name</span>: <span class="number">1</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 属性访问</span></span><br><span class="line">obj.name</span><br><span class="line"></span><br><span class="line"><span class="comment">// 键访问</span></span><br><span class="line">obj[<span class="string">'name'</span>]</span><br></pre></td></tr></table></figure>
+<p>两种方式各有优劣，前者在写的时候较为方便，但是得满足标识符的命名规范，比较固定；后者的写法比较多样（ES6支持可计算属性名），缺点是没有前者直接。</p>
+<p>需要注意的是，属性名永远都是字符串。如果使用字符串之外的值作为属性名，那么其会先转换成字符串，例如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;&#125;;</span><br><span class="line">obj[<span class="literal">true</span>] = <span class="string">'boolean'</span>;</span><br><span class="line">obj[&#123;&#125;] = <span class="string">'object'</span>;</span><br><span class="line">obj[<span class="number">3</span>] = <span class="string">'number'</span>;</span><br><span class="line"></span><br><span class="line">obj[<span class="string">'true'</span>]; <span class="comment">// boolean</span></span><br><span class="line">obj[<span class="string">'[object object]'</span>]; <span class="comment">// object</span></span><br><span class="line">obj[<span class="string">'3'</span>]; <span class="comment">// number</span></span><br></pre></td></tr></table></figure>
+<h5 id="函数属性"><a href="#函数属性" class="headerlink" title="函数属性"></a>函数属性</h5><p>有时候对象中的属性为一个函数，我们习惯上称这样的属性为“函数的方法”（类比 C 语言）。然而从技术角度来说，在 JavaScript 中，函数永远也不会“属于”一个对象，因为 this 是动态绑定至对象上的（先前有写过这么一篇文章），函数与对象间的关系并不稳定，因此对象与函数最多也只能称作为间接关系。最为保险的说法可能是“函数”和“方法”在 JavaScript 中是可以互换的。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  foo: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">1</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 基本上可以等价于</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj1 = &#123;</span><br><span class="line">  foo: foo</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><p>我们知道，在 JS 中数组也是“对象”，但是相对于对象来说，数组有一套更为结构化的值存储机制（通过索引的方式），例如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"></span><br><span class="line">arr[<span class="number">0</span>]; <span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
+<p>由于数组也是一个对象，因此我们也可以给数组添加属性，如：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 沿用上例</span><br><span class="line">arr.bar = &apos;bar&apos;;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：如果试图像数组内添加一个属性，而属性“看起来”像一个数字（如字符串数子），那么它会变成一个数值下标</p>
+</blockquote>
+<h3 id="提升内容"><a href="#提升内容" class="headerlink" title="提升内容"></a>提升内容</h3><h4 id="属性描述符"><a href="#属性描述符" class="headerlink" title="属性描述符"></a>属性描述符</h4><p>最早接触到属性描述符的时候还是在读JS红宝书的时候，不过那时候不是很懂有啥用，随着接触的东西逐渐变多，源码也看了一部分，对属性描述符也有了一定的程度的理解。</p>
+<p>自 ES5 以来，JS 的所有属性都具备了属性描述符，通过 <code>Object.getOwnPropertyDescription(&lt;obj&gt;, &lt;prop&gt;)</code> 能够拿到对应属性的描述，包含内容如下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  value: <span class="string">'xxx'</span>, <span class="comment">// 值</span></span><br><span class="line">  writable: <span class="literal">true</span>, <span class="comment">// 是否可写（默认）</span></span><br><span class="line">  enumerable: <span class="literal">true</span>, <span class="comment">// 是否可枚举（默认）</span></span><br><span class="line">  configurable: <span class="literal">true</span> <span class="comment">// 是否可配置（默认）</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然，我们也可以通过 <code>Object.defineProperty(&lt;obj&gt;, &lt;prop&gt;, {/* */})</code> 来修改属性描述符。</p>
+<h5 id="writable"><a href="#writable" class="headerlink" title="writable"></a>writable</h5><p>writable 决定是否可以修改属性的值，如果设置为 false，那么修改属性值时会静默失效</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">'a'</span>, &#123;</span><br><span class="line">  enumerable: <span class="literal">true</span>,</span><br><span class="line">  configurable: <span class="literal">true</span>,</span><br><span class="line">  writable: <span class="literal">false</span>,</span><br><span class="line">  value: <span class="string">"static"</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">obj.a = <span class="string">'public'</span>;</span><br><span class="line"></span><br><span class="line">obj.a; <span class="comment">// static（严格模式下会报错）</span></span><br></pre></td></tr></table></figure>
+<p>然而，当配置中有配置 getter/setter 时，这个属性会被定义为“访问描述符”（与“数据描述符”相对），对于访问描述符来说， JavaScript 会忽略其 value 和 writable 属性（具体来说此），例如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  a: <span class="number">2</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">'a'</span>, &#123;</span><br><span class="line">  enumerable: <span class="literal">true</span>,</span><br><span class="line">  configurable: <span class="literal">true</span>,</span><br><span class="line">  <span class="keyword">get</span>() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">3</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">obj.a; <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
+<h5 id="configurable"><a href="#configurable" class="headerlink" title="configurable"></a>configurable</h5><p>configurable 决定对象的属性是否可配置。与 writable 不同，writable 控制的是对象属性值能否改变，而 configurable 配置的是属性描述符能否改变，即后者是单向的（某个对象的 configurable 设置为 false 后就无法将其再设置为 true 了）。</p>
+<p>除此以外，其还禁止删除此属性，如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  a: <span class="string">'static'</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">obj.a; <span class="comment">// 2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> obj.a;</span><br><span class="line">obj.a; <span class="comment">// undefined</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">'a'</span>, &#123;</span><br><span class="line">  enumerable: <span class="literal">true</span>,</span><br><span class="line">  configurable: <span class="literal">false</span>,</span><br><span class="line">  writable: <span class="literal">true</span>,</span><br><span class="line">  value: <span class="string">"static"</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">obj.a; <span class="comment">// 2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> obj.a;</span><br><span class="line">obj.a; <span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注： delete 仅是一个删除对象属性的操作，并非一个释放内存的工具</p>
+</blockquote>
+<blockquote>
+<p>特例：当 configurable 设置为 false 之后，writable 可由 true 更改为 false，但无法由 false 更改为 true。</p>
+</blockquote>
+<h5 id="Enumerable"><a href="#Enumerable" class="headerlink" title="Enumerable"></a>Enumerable</h5><p>顾名思义，此描述符控制的事属性是否会在遍历对象时，将其枚举。例如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  bar: <span class="number">1</span>,</span><br><span class="line">  foo: <span class="number">2</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">'c'</span>, &#123;</span><br><span class="line">  enumerable: <span class="literal">false</span>,</span><br><span class="line">  configurable: <span class="literal">true</span>,</span><br><span class="line">  writable: <span class="literal">true</span>,</span><br><span class="line">  value: <span class="number">3</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> obj) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(key, obj[key]); <span class="comment">// 没有 [c 3]</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="string">'c'</span> <span class="keyword">in</span> obj; <span class="comment">// true</span></span><br><span class="line">obj.hasOwnProperty(<span class="string">'c'</span>); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<p>for .. in 循环可以遍历对象的可枚举属性列表（包括[[Prototype]]链），而遍历属性的值我们通常用的是 for .. of，如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> value <span class="keyword">of</span> arr) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(value) <span class="comment">// 1, 2, 3</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>for .. of 首选会向被访问的对象请求一个迭代器对象，然后通过迭代器对象的 next() 方法来遍历返回值，数组内默认会带有迭代器，因此我们可以直接将 for .. of 运用至数组中。但是对象却没有，我么可以这样造一个自定义迭代器。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  a: <span class="number">1</span>,</span><br><span class="line">  b: <span class="number">2</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="built_in">Symbol</span>.iterator, &#123;</span><br><span class="line">  enumerable: <span class="literal">false</span>,</span><br><span class="line">  configurable: <span class="literal">true</span>,</span><br><span class="line">  writable: <span class="literal">false</span>,</span><br><span class="line">  value: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> self = <span class="keyword">this</span>;</span><br><span class="line">    <span class="keyword">let</span> idx = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">const</span> ks = <span class="built_in">Object</span>.keys(self);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      next: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        value: self[ks[idx++]],</span><br><span class="line">        done: (idx &gt; ks.length )</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>遍历数组下标使用的是数字顺序，但是遍历对象时其顺序是不确定的。因此在不同环境要想数据展现形式保持一致，那么一定不要相信任何观察到的顺序，因为它们是不可靠的。</p>
+</blockquote>
+<h4 id="不变性"><a href="#不变性" class="headerlink" title="不变性"></a>不变性</h4><h5 id="对象常量"><a href="#对象常量" class="headerlink" title="对象常量"></a>对象常量</h5><p>我们可以通过设置对象属性的 writable 来设置对象常量，这样能做到真正意义上的不可修改（类比 const 声明）</p>
+<h5 id="禁止扩展"><a href="#禁止扩展" class="headerlink" title="禁止扩展"></a>禁止扩展</h5><p>对象默认是可扩展的，加入想要禁止一个对象的扩展性，即不能后期新增属性，那么可以使用 <code>Object.preventExtensions(&lt;obj&gt;)</code></p>
+<h5 id="密封"><a href="#密封" class="headerlink" title="密封"></a>密封</h5><p><code>Object.seal(&lt;obj&gt;)</code> 会创建一个密封对象，其会在一个现有对象上调用 Object.preventExtensions() 并将所有的属性标记为 <code>configurable: false</code>。其不仅不能添加新属性，也不能重新配置或删除原有属性（可修改属性值）。</p>
+<h5 id="冻结"><a href="#冻结" class="headerlink" title="冻结"></a>冻结</h5><p><code>Object.freeze(&lt;obj&gt;)</code> 会创建一个冻结对象，其会在对象上调用 Object.seal() 并将所有的属性标记为 <code>writable: false</code>，这样就无法修改其值。</p>
+<blockquote>
+<p>注意：对象中引用的对象无法被密封和冻结，只有非引用对象受影响最为全面，并且是浅操作。</p>
+</blockquote>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><ul>
+<li>《你所不知道的 JavaScript》</li>
+</ul>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
       </tags>
   </entry>
   <entry>
@@ -786,6 +786,33 @@
       </tags>
   </entry>
   <entry>
+    <title>React 代码规范配置</title>
+    <url>/2020/03/29/React-%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近开始初步学习 React 的一些知识，毕竟宅家这么久，总得开始学习学习新的内容了。“工欲善其事，必先利其器”，因此今天主要是配置 VSCode 的 React 支持，折腾来折腾去，核心的配置大概就如文中所示了。</p>
+<a id="more"></a>
+<h3 id="插件依赖"><a href="#插件依赖" class="headerlink" title="插件依赖"></a>插件依赖</h3><ul>
+<li>Prettier （格式化插件）</li>
+<li>ESlint（格式化插件）</li>
+<li>ES7 React/Redux/GraphQL/React-Native snippets (快捷指令)</li>
+</ul>
+<blockquote>
+<p><strong>注：</strong> 此处为一些必须安装的插件，安装后配置才会生效</p>
+</blockquote>
+<h3 id="项目配置"><a href="#项目配置" class="headerlink" title="项目配置"></a>项目配置</h3><p>VSCode 有整体的 setting.json 配置和单项目配置，个人还是推荐单项目配置，毕竟自己的开发器可能开发不仅仅就一种语言的吧，因此还是建立如下文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">--</span><br><span class="line">|- .vscode</span><br><span class="line">      |- settings.json</span><br></pre></td></tr></table></figure>
+<p>然后 settings.json 内配置内容为：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 编辑器部分</span></span><br><span class="line">  <span class="attr">"editor.tabSize"</span>: <span class="number">2</span>,</span><br><span class="line">  <span class="attr">"editor.wordWrap"</span>: <span class="string">"on"</span>,</span><br><span class="line">  <span class="attr">"editor.formatOnSave"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"editor.renderWhitespace"</span>: <span class="string">"none"</span>,</span><br><span class="line">  <span class="attr">"editor.multiCursorModifier"</span>: <span class="string">"ctrlCmd"</span>,</span><br><span class="line">  <span class="attr">"editor.defaultFormatter"</span>: <span class="string">"esbenp.prettier-vscode"</span>, <span class="comment">// 默认启用的代码格式化插件</span></span><br><span class="line">  <span class="attr">"files.insertFinalNewline"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 代码配置</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="comment">// eslint 部分</span></span><br><span class="line">  <span class="attr">"eslint.run"</span>: <span class="string">"onSave"</span>,</span><br><span class="line">  <span class="attr">"eslint.format.enable"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"editor.codeActionsOnSave"</span>: &#123;</span><br><span class="line">    <span class="attr">"source.fixAll.eslint"</span>: <span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"eslint.validate"</span>: [</span><br><span class="line">    <span class="string">"typescriptreact"</span>,</span><br><span class="line">    <span class="string">"typescript"</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="样式文件配置"><a href="#样式文件配置" class="headerlink" title="样式文件配置"></a>样式文件配置</h3><p>因为项目使用的是 prettier 格式化插件，因此我们需要在根目录创建一个 .prettierrc 的文件，然后粘贴一下内容（从 ant design 拷贝过来的，之后根据使用习惯再做修改）</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"singleQuote"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"trailingComma"</span>: <span class="string">"all"</span>,</span><br><span class="line">  <span class="attr">"printWidth"</span>: <span class="number">100</span>,</span><br><span class="line">  <span class="attr">"proseWrap"</span>: <span class="string">"never"</span>,</span><br><span class="line">  <span class="attr">"arrowParens"</span>: <span class="string">"avoid"</span>,</span><br><span class="line">  <span class="attr">"overrides"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"files"</span>: <span class="string">".prettierrc"</span>,</span><br><span class="line">      <span class="attr">"options"</span>: &#123;</span><br><span class="line">        <span class="attr">"parser"</span>: <span class="string">"json"</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Env</category>
+      </categories>
+      <tags>
+        <tag>Env</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Mysql 的小技巧</title>
     <url>/2020/06/09/Mysql-%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>近期开始学习 Node 和 MySQL 相关的知识了，项目也开始从纯前端转向了“全栈”（刚刚起步）。起初还是挺痛苦的，特别是数据库设计和查询，大学学习的东西基本都还回去了，不过在一次次问题中也渐渐总结了些经验，这里就记录一下“初学者”难免会遇到的一些问题。</p>
@@ -874,33 +901,6 @@
 <li><a href="http://alloyteam.github.io/CodeGuide/" target="_blank" rel="noopener">Code Guide</a></li>
 <li><a href="https://cn.vuejs.org/v2/style-guide/" target="_blank" rel="noopener">风格指南</a></li>
 </ul>
-]]></content>
-      <categories>
-        <category>Env</category>
-      </categories>
-      <tags>
-        <tag>Env</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>React 代码规范配置</title>
-    <url>/2020/03/29/React-%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83%E9%85%8D%E7%BD%AE/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近开始初步学习 React 的一些知识，毕竟宅家这么久，总得开始学习学习新的内容了。“工欲善其事，必先利其器”，因此今天主要是配置 VSCode 的 React 支持，折腾来折腾去，核心的配置大概就如文中所示了。</p>
-<a id="more"></a>
-<h3 id="插件依赖"><a href="#插件依赖" class="headerlink" title="插件依赖"></a>插件依赖</h3><ul>
-<li>Prettier （格式化插件）</li>
-<li>ESlint（格式化插件）</li>
-<li>ES7 React/Redux/GraphQL/React-Native snippets (快捷指令)</li>
-</ul>
-<blockquote>
-<p><strong>注：</strong> 此处为一些必须安装的插件，安装后配置才会生效</p>
-</blockquote>
-<h3 id="项目配置"><a href="#项目配置" class="headerlink" title="项目配置"></a>项目配置</h3><p>VSCode 有整体的 setting.json 配置和单项目配置，个人还是推荐单项目配置，毕竟自己的开发器可能开发不仅仅就一种语言的吧，因此还是建立如下文件：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">--</span><br><span class="line">|- .vscode</span><br><span class="line">      |- settings.json</span><br></pre></td></tr></table></figure>
-<p>然后 settings.json 内配置内容为：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 编辑器部分</span></span><br><span class="line">  <span class="attr">"editor.tabSize"</span>: <span class="number">2</span>,</span><br><span class="line">  <span class="attr">"editor.wordWrap"</span>: <span class="string">"on"</span>,</span><br><span class="line">  <span class="attr">"editor.formatOnSave"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"editor.renderWhitespace"</span>: <span class="string">"none"</span>,</span><br><span class="line">  <span class="attr">"editor.multiCursorModifier"</span>: <span class="string">"ctrlCmd"</span>,</span><br><span class="line">  <span class="attr">"editor.defaultFormatter"</span>: <span class="string">"esbenp.prettier-vscode"</span>, <span class="comment">// 默认启用的代码格式化插件</span></span><br><span class="line">  <span class="attr">"files.insertFinalNewline"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 代码配置</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="comment">// eslint 部分</span></span><br><span class="line">  <span class="attr">"eslint.run"</span>: <span class="string">"onSave"</span>,</span><br><span class="line">  <span class="attr">"eslint.format.enable"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"editor.codeActionsOnSave"</span>: &#123;</span><br><span class="line">    <span class="attr">"source.fixAll.eslint"</span>: <span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"eslint.validate"</span>: [</span><br><span class="line">    <span class="string">"typescriptreact"</span>,</span><br><span class="line">    <span class="string">"typescript"</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="样式文件配置"><a href="#样式文件配置" class="headerlink" title="样式文件配置"></a>样式文件配置</h3><p>因为项目使用的是 prettier 格式化插件，因此我们需要在根目录创建一个 .prettierrc 的文件，然后粘贴一下内容（从 ant design 拷贝过来的，之后根据使用习惯再做修改）</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"singleQuote"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"trailingComma"</span>: <span class="string">"all"</span>,</span><br><span class="line">  <span class="attr">"printWidth"</span>: <span class="number">100</span>,</span><br><span class="line">  <span class="attr">"proseWrap"</span>: <span class="string">"never"</span>,</span><br><span class="line">  <span class="attr">"arrowParens"</span>: <span class="string">"avoid"</span>,</span><br><span class="line">  <span class="attr">"overrides"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"files"</span>: <span class="string">".prettierrc"</span>,</span><br><span class="line">      <span class="attr">"options"</span>: &#123;</span><br><span class="line">        <span class="attr">"parser"</span>: <span class="string">"json"</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>Env</category>
@@ -1494,53 +1494,6 @@
       </tags>
   </entry>
   <entry>
-    <title>关于 JS 中“继承”的写法</title>
-    <url>/2019/06/28/%E5%85%B3%E4%BA%8E-JS-%E4%B8%AD%E2%80%9C%E7%BB%A7%E6%89%BF%E2%80%9D%E7%9A%84%E5%86%99%E6%B3%95/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在巩固继承这部分知识时，突然想到早期分享时同事提出的一些疑问，即实现 JS 继承具体有那些方法。在经过一番调研后，此篇便是我所总结出的比较全面的方法。当然，文中记录的仅是一些基础的继承方法以及它们之间的的区别，以供参考。</p>
-<a id="more"></a>
-<h3 id="（原型）继承"><a href="#（原型）继承" class="headerlink" title="（原型）继承"></a>（原型）继承</h3><p>JavaScript 中有许多模拟类行为的方法，其中“继承”（更贴切的说法是委托）便是其中的一项，没有“继承”机制，JavaScript 中的类就是一个空架子。</p>
-<p>假如我们以此例作为继承的模板，归结下来总共有 5 种继承的写法。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 父类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Father</span>(<span class="params">age</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.age = age;</span><br><span class="line">&#125;</span><br><span class="line">Father.prototype.getAge = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.age;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 子类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Child</span>(<span class="params">age, size</span>) </span>&#123;</span><br><span class="line">    Father.call(<span class="keyword">this</span>, age);</span><br><span class="line">    <span class="keyword">this</span>.size = size;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 继承的实现，看下例 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 实例</span></span><br><span class="line"><span class="keyword">const</span> child = <span class="keyword">new</span> Child(<span class="number">28</span>, <span class="string">'small'</span>)</span><br></pre></td></tr></table></figure>
-<h4 id="隐式链接法"><a href="#隐式链接法" class="headerlink" title="隐式链接法"></a>隐式链接法</h4><p>ES6 之前比较非常规的写法是手动更改 <code>__proto__</code> 属性来最简化链式继承。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Child.prototype.__proto__ = Father.prototype</span><br></pre></td></tr></table></figure>
-<p>优点：操作很简便直接</p>
-<p>缺点：该方法并非标准，并且无法兼容所有浏览器，慎用。</p>
-<h4 id="直接引用法"><a href="#直接引用法" class="headerlink" title="直接引用法"></a>直接引用法</h4><p>直接将子类的 prototype 对象指向父类的 prototype 对象。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Child.prototype = Father.prototype;</span><br></pre></td></tr></table></figure>
-<p>优点：操作简单</p>
-<p>缺点： Child 的 prototype 属性修改会直接影响到父类，此写法其实相当于直接在父类进行修改，新创建一个子类有些多此一举。</p>
-<h4 id="实例化方法"><a href="#实例化方法" class="headerlink" title="实例化方法"></a>实例化方法</h4><p>子类的 prototype 属性为父类的实例对象，借由对象的 prototype 链来传递。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Child.prototype = <span class="keyword">new</span> Father();</span><br><span class="line"><span class="comment">// Child.prototype.constructor = Chlid;</span></span><br></pre></td></tr></table></figure>
-<p>优点：能基本满足“继承”的需求</p>
-<p>缺点：</p>
-<ol>
-<li>需要创建一个新对象，然后将旧对象（原本存在的 prototype 对象，带有 constructor）抛弃掉，不能直接修改默认的 prototype 对象。</li>
-<li>会产生副作用，比如：原型（prototype）上会有“脏”属性，本例的 prototype 上会有多余的 age 属性。</li>
-<li>必要时还得自己重写一下 Child 的 constructor 指向，如“寄生组合式继承”。</li>
-</ol>
-<blockquote>
-<p>“寄生组合式继承” 在 ES5 中为最佳写法，如果不考虑其稍微的复杂性。</p>
-</blockquote>
-<h4 id="对象构造法"><a href="#对象构造法" class="headerlink" title="对象构造法"></a>对象构造法</h4><p>通过 <code>Object.create</code> 方法来构造一个合适的关联对象。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Child.prototype = <span class="built_in">Object</span>.create(Father.prototype)</span><br><span class="line"><span class="comment">// Child.prototype.constructor = Chlid;</span></span><br></pre></td></tr></table></figure>
-<p>优点：在 ES6 之前的最佳之选，优于实例化方法。</p>
-<p>缺点：与实例化方法基本相同，但没有副作用。此外，其隐式 <code>__proto__</code> 链比实例化方法要多一层，链式查找方法相对会耗时长一点点，基本可忽略。</p>
-<h4 id="设置原型法"><a href="#设置原型法" class="headerlink" title="设置原型法"></a>设置原型法</h4><p>使用 ES6 的原型设置方法，此法在 ES6 环境为最佳之选，没有之一。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Object</span>.setPrototypeOf(Child.prototype, Father.prototype)</span><br></pre></td></tr></table></figure>
-<p>优点：能覆盖所有需求，清晰易懂，可读性强。</p>
-<p>缺点：性能比 <code>Object.create</code> 稍微差点，如果考虑性能的话可优先使用 <code>Object.create</code> 方法</p>
-<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><blockquote>
-<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/setPrototypeOf" target="_blank" rel="noopener">MDN</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>JavaScript</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>使用 vue-cli 发布一个完善的包</title>
     <url>/2019/07/11/%E4%BD%BF%E7%94%A8-vue-cli-%E5%8F%91%E5%B8%83%E4%B8%80%E4%B8%AA%E5%AE%8C%E5%96%84%E7%9A%84%E5%8C%85/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>其实先前有写过一篇《发布一个 vue 包》，不过对于“极简主义者”来说，该文章还是显得有些复杂，毕竟需要配置“复杂”的 webpack。那么有没有一种简单上手、开箱即用的方法呢？答案是有的，vue-cli 已经完美的考虑到了这些问题，此处就介绍如何使用 vue-cli 来搭建一个完整的发包环境。</p>
@@ -1648,6 +1601,53 @@
       </categories>
       <tags>
         <tag>Vue</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>关于 JS 中“继承”的写法</title>
+    <url>/2019/06/28/%E5%85%B3%E4%BA%8E-JS-%E4%B8%AD%E2%80%9C%E7%BB%A7%E6%89%BF%E2%80%9D%E7%9A%84%E5%86%99%E6%B3%95/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在巩固继承这部分知识时，突然想到早期分享时同事提出的一些疑问，即实现 JS 继承具体有那些方法。在经过一番调研后，此篇便是我所总结出的比较全面的方法。当然，文中记录的仅是一些基础的继承方法以及它们之间的的区别，以供参考。</p>
+<a id="more"></a>
+<h3 id="（原型）继承"><a href="#（原型）继承" class="headerlink" title="（原型）继承"></a>（原型）继承</h3><p>JavaScript 中有许多模拟类行为的方法，其中“继承”（更贴切的说法是委托）便是其中的一项，没有“继承”机制，JavaScript 中的类就是一个空架子。</p>
+<p>假如我们以此例作为继承的模板，归结下来总共有 5 种继承的写法。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 父类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Father</span>(<span class="params">age</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.age = age;</span><br><span class="line">&#125;</span><br><span class="line">Father.prototype.getAge = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.age;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 子类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Child</span>(<span class="params">age, size</span>) </span>&#123;</span><br><span class="line">    Father.call(<span class="keyword">this</span>, age);</span><br><span class="line">    <span class="keyword">this</span>.size = size;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 继承的实现，看下例 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 实例</span></span><br><span class="line"><span class="keyword">const</span> child = <span class="keyword">new</span> Child(<span class="number">28</span>, <span class="string">'small'</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="隐式链接法"><a href="#隐式链接法" class="headerlink" title="隐式链接法"></a>隐式链接法</h4><p>ES6 之前比较非常规的写法是手动更改 <code>__proto__</code> 属性来最简化链式继承。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Child.prototype.__proto__ = Father.prototype</span><br></pre></td></tr></table></figure>
+<p>优点：操作很简便直接</p>
+<p>缺点：该方法并非标准，并且无法兼容所有浏览器，慎用。</p>
+<h4 id="直接引用法"><a href="#直接引用法" class="headerlink" title="直接引用法"></a>直接引用法</h4><p>直接将子类的 prototype 对象指向父类的 prototype 对象。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Child.prototype = Father.prototype;</span><br></pre></td></tr></table></figure>
+<p>优点：操作简单</p>
+<p>缺点： Child 的 prototype 属性修改会直接影响到父类，此写法其实相当于直接在父类进行修改，新创建一个子类有些多此一举。</p>
+<h4 id="实例化方法"><a href="#实例化方法" class="headerlink" title="实例化方法"></a>实例化方法</h4><p>子类的 prototype 属性为父类的实例对象，借由对象的 prototype 链来传递。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Child.prototype = <span class="keyword">new</span> Father();</span><br><span class="line"><span class="comment">// Child.prototype.constructor = Chlid;</span></span><br></pre></td></tr></table></figure>
+<p>优点：能基本满足“继承”的需求</p>
+<p>缺点：</p>
+<ol>
+<li>需要创建一个新对象，然后将旧对象（原本存在的 prototype 对象，带有 constructor）抛弃掉，不能直接修改默认的 prototype 对象。</li>
+<li>会产生副作用，比如：原型（prototype）上会有“脏”属性，本例的 prototype 上会有多余的 age 属性。</li>
+<li>必要时还得自己重写一下 Child 的 constructor 指向，如“寄生组合式继承”。</li>
+</ol>
+<blockquote>
+<p>“寄生组合式继承” 在 ES5 中为最佳写法，如果不考虑其稍微的复杂性。</p>
+</blockquote>
+<h4 id="对象构造法"><a href="#对象构造法" class="headerlink" title="对象构造法"></a>对象构造法</h4><p>通过 <code>Object.create</code> 方法来构造一个合适的关联对象。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Child.prototype = <span class="built_in">Object</span>.create(Father.prototype)</span><br><span class="line"><span class="comment">// Child.prototype.constructor = Chlid;</span></span><br></pre></td></tr></table></figure>
+<p>优点：在 ES6 之前的最佳之选，优于实例化方法。</p>
+<p>缺点：与实例化方法基本相同，但没有副作用。此外，其隐式 <code>__proto__</code> 链比实例化方法要多一层，链式查找方法相对会耗时长一点点，基本可忽略。</p>
+<h4 id="设置原型法"><a href="#设置原型法" class="headerlink" title="设置原型法"></a>设置原型法</h4><p>使用 ES6 的原型设置方法，此法在 ES6 环境为最佳之选，没有之一。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Object</span>.setPrototypeOf(Child.prototype, Father.prototype)</span><br></pre></td></tr></table></figure>
+<p>优点：能覆盖所有需求，清晰易懂，可读性强。</p>
+<p>缺点：性能比 <code>Object.create</code> 稍微差点，如果考虑性能的话可优先使用 <code>Object.create</code> 方法</p>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><blockquote>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/setPrototypeOf" target="_blank" rel="noopener">MDN</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
       </tags>
   </entry>
   <entry>
@@ -2257,38 +2257,6 @@
       </tags>
   </entry>
   <entry>
-    <title>在 typescript 中添加 webworker</title>
-    <url>/2020/04/28/%E5%9C%A8-typescript-%E4%B8%AD%E6%B7%BB%E5%8A%A0-webworker/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近在做 Vue 项目时遇到一个读取 xlsx 文件的需求，考虑到文件可能比较大的情况，为了不让页面卡死，因此引入了 webworker，本来想着应该是很容易的事情，结果却并不是很简单，主要难在配置上，这里就记录一下配置时遇到的困难。</p>
-<a id="more"></a>
-<h3 id="配置-loader"><a href="#配置-loader" class="headerlink" title="配置 loader"></a>配置 loader</h3><p>因为是 ts 写的项目，因此查阅了一下引入 webworker 需要那些插件，因此首先需要配置的是 loader 文件了。</p>
-<ol>
-<li>安装 worker-loader</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yarn add worker-loader -D</span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>在 vue.config.js 内添加如下内容：</li>
-</ol>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  chainWebpack: <span class="function"><span class="params">config</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="comment">// 添加 worker-loader 支持</span></span><br><span class="line">    config.module</span><br><span class="line">      .rule(<span class="string">'webWorker'</span>)</span><br><span class="line">      .post()</span><br><span class="line">      .test(<span class="regexp">/\.worker\.(j|t)s$/</span>)</span><br><span class="line">      .use(<span class="string">'worker-loader'</span>)</span><br><span class="line">      .loader(<span class="string">'worker-loader'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ol start="3">
-<li>重启项目</li>
-</ol>
-<h3 id="worker-文件的写法"><a href="#worker-文件的写法" class="headerlink" title="worker 文件的写法"></a>worker 文件的写法</h3><p>在 ts 项目中，类型声明是很重要的一点，对于 worker 文件因为没有导出，在主进程中引入会很棘手，参考网上的例子，一般 worker 文件需要这么配置</p>
-<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 文件命名： xxx.worker.ts</span></span><br><span class="line"><span class="comment">// 创建 this 指针，或者配置 webpack 的 output 的 globalObject 属性</span></span><br><span class="line"><span class="keyword">const</span> _self: Worker = self <span class="keyword">as</span> <span class="built_in">any</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监听 message 事件</span></span><br><span class="line">_self.addEventListener(<span class="string">'message'</span>, <span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监听错误事件</span></span><br><span class="line">_self.addEventListener(<span class="string">'error'</span>, <span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(e.message);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
-<li><a href="http://www.ruanyifeng.com/blog/2018/07/web-worker.html" target="_blank" rel="noopener">Web Worker 使用教程</a></li>
-<li><a href="https://www.cnblogs.com/liuxianan/p/js-excel.html" target="_blank" rel="noopener">如何使用 JavaScript 实现纯前端读取和导出 excel 文件</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/83138304" target="_blank" rel="noopener">webpack + typescript 环境下配置</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Vue</category>
-      </categories>
-      <tags>
-        <tag>Vue</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>层叠上下文</title>
     <url>/2019/06/18/%E5%B1%82%E5%8F%A0%E4%B8%8A%E4%B8%8B%E6%96%87/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在做项目布局回顾时，思考到了一个当初比较犹豫的问题「flex 布局能否产生层叠/堆叠上下文」。在网上也参考了国内外很多有价值的文章，此处小结一下，算是对<strong>层叠上下文</strong>这一部分做一次较为全面的总结。</p>
@@ -2366,6 +2334,38 @@
       </categories>
       <tags>
         <tag>CSS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在 typescript 中添加 webworker</title>
+    <url>/2020/04/28/%E5%9C%A8-typescript-%E4%B8%AD%E6%B7%BB%E5%8A%A0-webworker/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近在做 Vue 项目时遇到一个读取 xlsx 文件的需求，考虑到文件可能比较大的情况，为了不让页面卡死，因此引入了 webworker，本来想着应该是很容易的事情，结果却并不是很简单，主要难在配置上，这里就记录一下配置时遇到的困难。</p>
+<a id="more"></a>
+<h3 id="配置-loader"><a href="#配置-loader" class="headerlink" title="配置 loader"></a>配置 loader</h3><p>因为是 ts 写的项目，因此查阅了一下引入 webworker 需要那些插件，因此首先需要配置的是 loader 文件了。</p>
+<ol>
+<li>安装 worker-loader</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yarn add worker-loader -D</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>在 vue.config.js 内添加如下内容：</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  chainWebpack: <span class="function"><span class="params">config</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="comment">// 添加 worker-loader 支持</span></span><br><span class="line">    config.module</span><br><span class="line">      .rule(<span class="string">'webWorker'</span>)</span><br><span class="line">      .post()</span><br><span class="line">      .test(<span class="regexp">/\.worker\.(j|t)s$/</span>)</span><br><span class="line">      .use(<span class="string">'worker-loader'</span>)</span><br><span class="line">      .loader(<span class="string">'worker-loader'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>重启项目</li>
+</ol>
+<h3 id="worker-文件的写法"><a href="#worker-文件的写法" class="headerlink" title="worker 文件的写法"></a>worker 文件的写法</h3><p>在 ts 项目中，类型声明是很重要的一点，对于 worker 文件因为没有导出，在主进程中引入会很棘手，参考网上的例子，一般 worker 文件需要这么配置</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 文件命名： xxx.worker.ts</span></span><br><span class="line"><span class="comment">// 创建 this 指针，或者配置 webpack 的 output 的 globalObject 属性</span></span><br><span class="line"><span class="keyword">const</span> _self: Worker = self <span class="keyword">as</span> <span class="built_in">any</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监听 message 事件</span></span><br><span class="line">_self.addEventListener(<span class="string">'message'</span>, <span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监听错误事件</span></span><br><span class="line">_self.addEventListener(<span class="string">'error'</span>, <span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(e.message);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
+<li><a href="http://www.ruanyifeng.com/blog/2018/07/web-worker.html" target="_blank" rel="noopener">Web Worker 使用教程</a></li>
+<li><a href="https://www.cnblogs.com/liuxianan/p/js-excel.html" target="_blank" rel="noopener">如何使用 JavaScript 实现纯前端读取和导出 excel 文件</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/83138304" target="_blank" rel="noopener">webpack + typescript 环境下配置</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Vue</category>
+      </categories>
+      <tags>
+        <tag>Vue</tag>
       </tags>
   </entry>
   <entry>
