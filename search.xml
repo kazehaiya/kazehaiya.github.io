@@ -1,69 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Docker 安装 nginx</title>
-    <url>/2020/03/11/Docker-%E5%AE%89%E8%A3%85-nginx/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>自学 Docker 系列，了解常用包的使用和配置安装，此篇记录 nginx 的安装</p>
-<a id="more"></a>
-<h3 id="安装配置"><a href="#安装配置" class="headerlink" title="安装配置"></a>安装配置</h3><p>下载 nginx</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker pull nginx:latest</span><br></pre></td></tr></table></figure>
-<p>普通运行</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run --name nginx -p 80:80 -d nginx</span><br></pre></td></tr></table></figure>
-<p>如果需要挂载在本地，则需要设置虚拟卷宗</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run --name nginx -p 80:80 -v /Users/saitane/Docker/nginx/nginx.conf:/etc/nginx/nginx.conf -v /Users/saitane/Docker/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf -v /Users/saitane/Docker/nginx/html:/usr/share/nginx/html -d nginx</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>此处我将 <code>nginx.conf</code>、<code>default.conf</code> 和 <code>html</code>静态文件夹 映射到本地的 nginx 文件夹内，之后就不用进入容器内配置文件以及繁琐的 <code>docker cp</code> 拷贝代码了，<strong>但得注意生成容器后需要将文件拷贝到本地</strong></p>
-</blockquote>
-<h3 id="服务器-nginx-安装"><a href="#服务器-nginx-安装" class="headerlink" title="服务器 nginx 安装"></a>服务器 nginx 安装</h3><p>除了 Docker 的安装方式，此处记录一下我在 centos 装 nginx 遇到的一些问题和解决方法。</p>
-<h4 id="安装-nginx"><a href="#安装-nginx" class="headerlink" title="安装 nginx"></a>安装 nginx</h4><p>centos 装 ngixn 先查看下是否有安装 nginx 的源</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum repolist</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果有安装会有这么一行信息</span></span><br><span class="line"><span class="comment"># 源标识                                               源名称</span></span><br><span class="line"><span class="comment"># ...</span></span><br><span class="line"><span class="comment"># nginx/x86_64                                         nginx repo</span></span><br><span class="line"><span class="comment"># ...</span></span><br></pre></td></tr></table></figure>
-<p>若没有安装源，则安装一下 nginx 的源</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">rpm -Uvh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm</span><br></pre></td></tr></table></figure>
-<h4 id="启动-nginx"><a href="#启动-nginx" class="headerlink" title="启动 nginx"></a>启动 nginx</h4><p>配置前先看一看是否有历史遗留的 nginx 服务</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">netstat -lntp | grep nginx</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如我这里就有一些安装的，但是部分没用却没有停止的服务，根据情况 kill 掉部分</span></span><br><span class="line"><span class="comment"># tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      14514/nginx: master</span></span><br><span class="line"><span class="comment"># tcp        0      0 0.0.0.0:440             0.0.0.0:*               LISTEN      3451/nginx: master</span></span><br><span class="line"><span class="comment"># tcp        0      0 0.0.0.0:8099            0.0.0.0:*               LISTEN      24166/nginx: master</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>如果需要深度清理残留 nginx 文件，<code>find / -name nginx</code> 根据情况来处理即可</p>
-</blockquote>
-<p>处理完成后，注册 nginx 服务</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 注册开机启动 nginx</span></span><br><span class="line">systemctl <span class="built_in">enable</span> nginx</span><br><span class="line"><span class="comment"># 启动 nginx</span></span><br><span class="line">service start nginx</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启指令： `service restart nginx`</span></span><br><span class="line"><span class="comment"># 停止指令： `service stop nginx`</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注意，更新 nginx 文件后需要重启 nginx</p>
-</blockquote>
-<p>然后 nginx 就启动成功了</p>
-<h4 id="配置-nginx"><a href="#配置-nginx" class="headerlink" title="配置 nginx"></a>配置 nginx</h4><p>yum 安装的 nginx 配置文件一般在 <code>/etc/nginx</code> 内，配置 <code>nginx.conf</code> 或者 <code>conf.d/default.conf</code> 即可，更多配置可以翻查下文档，这里就不介绍了。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 是在记不住就用这个命令查找，它会列举处所有地址</span></span><br><span class="line">whereis nginx</span><br></pre></td></tr></table></figure>
-<p>此处仅仅改了 root 文件夹的位置，方便项目构建</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># conf.d/default.conf</span></span><br><span class="line">location / &#123;</span><br><span class="line">  root   &lt;target-path&gt;;</span><br><span class="line">  index  index.html index.htm;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>便捷指令记录：</p>
-<ul>
-<li>查看服务器 IP 地址命令： <code>ifconfig -a</code></li>
-<li>查看端口是否占用： <code>lsof -i:&lt;端口&gt;</code></li>
-</ul>
-</blockquote>
-<h4 id="问题总结"><a href="#问题总结" class="headerlink" title="问题总结"></a>问题总结</h4><h5 id="nginx-反向代理替换规则"><a href="#nginx-反向代理替换规则" class="headerlink" title="nginx 反向代理替换规则"></a>nginx 反向代理替换规则</h5><p>代理地址是否添加尾部 ‘/‘ 会影响到路径的匹配，总结的规律如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">location ^~ /xxx/ &#123;</span><br><span class="line">  proxy_set_header Host             $host;</span><br><span class="line">  proxy_set_header X-Real-IP        $remote_addr;</span><br><span class="line">  proxy_pass http://127.0.0.1:1234/;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 此最终会被替换成： http://127.0.0.1:1234/</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">location ^~ /xxx/ &#123;</span><br><span class="line">  proxy_set_header Host             $host;</span><br><span class="line">  proxy_set_header X-Real-IP        $remote_addr;</span><br><span class="line">  proxy_pass http://127.0.0.1:1234;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 此最终会被替换成： http://127.0.0.1:1234/xxx/</span><br></pre></td></tr></table></figure>
-<h5 id="nginx-的-nginx-pid-丢失问题"><a href="#nginx-的-nginx-pid-丢失问题" class="headerlink" title="nginx 的 nginx.pid 丢失问题"></a>nginx 的 <code>nginx.pid</code> 丢失问题</h5><p>nginx 重启时有时候会丢失 pid 文件，特别是被强制杀掉进程的情况，这种情况下我们需要进入 nginx 的安装目录的 sbin 下重新启动 nginx：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># cd &lt;nginx-dir&gt;/sbin</span></span><br><span class="line">./nginx -c &lt;nginx.conf path&gt;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>防止此丢失问题发生，在更新 nginx 时尽量使用 nginx reload 来平滑重启，重载配置。</p>
-</blockquote>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
-<li><a href="https://www.cnblogs.com/larryzq/p/11009045.html" target="_blank" rel="noopener">CentOS 7 yum 安装 Nginx</a></li>
-<li><a href="https://www.jianshu.com/p/c1ce9eec5fb2" target="_blank" rel="noopener">Linux 彻底卸载 Nginx</a></li>
-<li><a href="https://www.runoob.com/linux/linux-comm-kill.html" target="_blank" rel="noopener">Linux kill 命令</a></li>
-<li><a href="https://www.cnblogs.com/happySmily/p/6003579.html" target="_blank" rel="noopener">nginx 重启报找不到 nginx.pid 的解决方法</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Docker</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Docker 安装 mysql</title>
     <url>/2020/03/11/Docker-%E5%AE%89%E8%A3%85-mysql/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>自学 Docker 系列，了解常用包的使用和配置安装，此篇记录 mysql 的安装</p>
@@ -148,6 +85,69 @@
 <h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
 <li><a href="https://www.runoob.com/docker/macos-docker-install.html" target="_blank" rel="noopener">MacOS Docker 安装</a></li>
 <li><a href="https://yeasy.gitbooks.io/docker_practice/" target="_blank" rel="noopener">Docker — 从入门到实践</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Docker 安装 nginx</title>
+    <url>/2020/03/11/Docker-%E5%AE%89%E8%A3%85-nginx/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>自学 Docker 系列，了解常用包的使用和配置安装，此篇记录 nginx 的安装</p>
+<a id="more"></a>
+<h3 id="安装配置"><a href="#安装配置" class="headerlink" title="安装配置"></a>安装配置</h3><p>下载 nginx</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker pull nginx:latest</span><br></pre></td></tr></table></figure>
+<p>普通运行</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run --name nginx -p 80:80 -d nginx</span><br></pre></td></tr></table></figure>
+<p>如果需要挂载在本地，则需要设置虚拟卷宗</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run --name nginx -p 80:80 -v /Users/saitane/Docker/nginx/nginx.conf:/etc/nginx/nginx.conf -v /Users/saitane/Docker/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf -v /Users/saitane/Docker/nginx/html:/usr/share/nginx/html -d nginx</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>此处我将 <code>nginx.conf</code>、<code>default.conf</code> 和 <code>html</code>静态文件夹 映射到本地的 nginx 文件夹内，之后就不用进入容器内配置文件以及繁琐的 <code>docker cp</code> 拷贝代码了，<strong>但得注意生成容器后需要将文件拷贝到本地</strong></p>
+</blockquote>
+<h3 id="服务器-nginx-安装"><a href="#服务器-nginx-安装" class="headerlink" title="服务器 nginx 安装"></a>服务器 nginx 安装</h3><p>除了 Docker 的安装方式，此处记录一下我在 centos 装 nginx 遇到的一些问题和解决方法。</p>
+<h4 id="安装-nginx"><a href="#安装-nginx" class="headerlink" title="安装 nginx"></a>安装 nginx</h4><p>centos 装 ngixn 先查看下是否有安装 nginx 的源</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum repolist</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果有安装会有这么一行信息</span></span><br><span class="line"><span class="comment"># 源标识                                               源名称</span></span><br><span class="line"><span class="comment"># ...</span></span><br><span class="line"><span class="comment"># nginx/x86_64                                         nginx repo</span></span><br><span class="line"><span class="comment"># ...</span></span><br></pre></td></tr></table></figure>
+<p>若没有安装源，则安装一下 nginx 的源</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">rpm -Uvh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm</span><br></pre></td></tr></table></figure>
+<h4 id="启动-nginx"><a href="#启动-nginx" class="headerlink" title="启动 nginx"></a>启动 nginx</h4><p>配置前先看一看是否有历史遗留的 nginx 服务</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">netstat -lntp | grep nginx</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如我这里就有一些安装的，但是部分没用却没有停止的服务，根据情况 kill 掉部分</span></span><br><span class="line"><span class="comment"># tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      14514/nginx: master</span></span><br><span class="line"><span class="comment"># tcp        0      0 0.0.0.0:440             0.0.0.0:*               LISTEN      3451/nginx: master</span></span><br><span class="line"><span class="comment"># tcp        0      0 0.0.0.0:8099            0.0.0.0:*               LISTEN      24166/nginx: master</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如果需要深度清理残留 nginx 文件，<code>find / -name nginx</code> 根据情况来处理即可</p>
+</blockquote>
+<p>处理完成后，注册 nginx 服务</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 注册开机启动 nginx</span></span><br><span class="line">systemctl <span class="built_in">enable</span> nginx</span><br><span class="line"><span class="comment"># 启动 nginx</span></span><br><span class="line">service start nginx</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启指令： `service restart nginx`</span></span><br><span class="line"><span class="comment"># 停止指令： `service stop nginx`</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意，更新 nginx 文件后需要重启 nginx</p>
+</blockquote>
+<p>然后 nginx 就启动成功了</p>
+<h4 id="配置-nginx"><a href="#配置-nginx" class="headerlink" title="配置 nginx"></a>配置 nginx</h4><p>yum 安装的 nginx 配置文件一般在 <code>/etc/nginx</code> 内，配置 <code>nginx.conf</code> 或者 <code>conf.d/default.conf</code> 即可，更多配置可以翻查下文档，这里就不介绍了。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 是在记不住就用这个命令查找，它会列举处所有地址</span></span><br><span class="line">whereis nginx</span><br></pre></td></tr></table></figure>
+<p>此处仅仅改了 root 文件夹的位置，方便项目构建</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># conf.d/default.conf</span></span><br><span class="line">location / &#123;</span><br><span class="line">  root   &lt;target-path&gt;;</span><br><span class="line">  index  index.html index.htm;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>便捷指令记录：</p>
+<ul>
+<li>查看服务器 IP 地址命令： <code>ifconfig -a</code></li>
+<li>查看端口是否占用： <code>lsof -i:&lt;端口&gt;</code></li>
+</ul>
+</blockquote>
+<h4 id="问题总结"><a href="#问题总结" class="headerlink" title="问题总结"></a>问题总结</h4><h5 id="nginx-反向代理替换规则"><a href="#nginx-反向代理替换规则" class="headerlink" title="nginx 反向代理替换规则"></a>nginx 反向代理替换规则</h5><p>代理地址是否添加尾部 ‘/‘ 会影响到路径的匹配，总结的规律如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">location ^~ /xxx/ &#123;</span><br><span class="line">  proxy_set_header Host             $host;</span><br><span class="line">  proxy_set_header X-Real-IP        $remote_addr;</span><br><span class="line">  proxy_pass http://127.0.0.1:1234/;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 此最终会被替换成： http://127.0.0.1:1234/</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">location ^~ /xxx/ &#123;</span><br><span class="line">  proxy_set_header Host             $host;</span><br><span class="line">  proxy_set_header X-Real-IP        $remote_addr;</span><br><span class="line">  proxy_pass http://127.0.0.1:1234;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 此最终会被替换成： http://127.0.0.1:1234/xxx/</span><br></pre></td></tr></table></figure>
+<h5 id="nginx-的-nginx-pid-丢失问题"><a href="#nginx-的-nginx-pid-丢失问题" class="headerlink" title="nginx 的 nginx.pid 丢失问题"></a>nginx 的 <code>nginx.pid</code> 丢失问题</h5><p>nginx 重启时有时候会丢失 pid 文件，特别是被强制杀掉进程的情况，这种情况下我们需要进入 nginx 的安装目录的 sbin 下重新启动 nginx：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># cd &lt;nginx-dir&gt;/sbin</span></span><br><span class="line">./nginx -c &lt;nginx.conf path&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>防止此丢失问题发生，在更新 nginx 时尽量使用 nginx reload 来平滑重启，重载配置。</p>
+</blockquote>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
+<li><a href="https://www.cnblogs.com/larryzq/p/11009045.html" target="_blank" rel="noopener">CentOS 7 yum 安装 Nginx</a></li>
+<li><a href="https://www.jianshu.com/p/c1ce9eec5fb2" target="_blank" rel="noopener">Linux 彻底卸载 Nginx</a></li>
+<li><a href="https://www.runoob.com/linux/linux-comm-kill.html" target="_blank" rel="noopener">Linux kill 命令</a></li>
+<li><a href="https://www.cnblogs.com/happySmily/p/6003579.html" target="_blank" rel="noopener">nginx 重启报找不到 nginx.pid 的解决方法</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -910,43 +910,6 @@
       </tags>
   </entry>
   <entry>
-    <title>git 环境配置</title>
-    <url>/2019/03/31/git-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>git 的环境安装已经有很多次了，虽然简单，但是文章的重点却并不在此，此篇是用来记录学习 git 的一些好的规范、方便的工具、常用的命令以及遇到的坑。</p>
-<a id="more"></a>
-<h3 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h3><h4 id="下载安装-git"><a href="#下载安装-git" class="headerlink" title="下载安装 git"></a>下载安装 git</h4><p><a href="https://git-scm.com/downloads" target="_blank" rel="noopener">git 下载地址</a></p>
-<h4 id="git-环境配置"><a href="#git-环境配置" class="headerlink" title="git 环境配置"></a>git 环境配置</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 设置用户名</span></span><br><span class="line">git config --global user.name <span class="string">"yourname"</span></span><br><span class="line"><span class="comment"># 设置邮箱</span></span><br><span class="line">git config --global user.email <span class="string">"youremail@example.com"</span></span><br></pre></td></tr></table></figure>
-<h4 id="git-commit-规范"><a href="#git-commit-规范" class="headerlink" title="git commit 规范"></a>git commit 规范</h4><p>用于说明 commit 的类型只允许一下 7 种：</p>
-<ul>
-<li>feat：新功能（feature）</li>
-<li>fix：修补bug</li>
-<li>docs：文档（documentation）</li>
-<li>style： 格式（不影响代码运行的变动）</li>
-<li>refactor：重构（即不是新增功能，也不是修改bug的代码变动）</li>
-<li>test：增加测试</li>
-<li>chore：构建过程或辅助工具的变动</li>
-</ul>
-<h4 id="git-常用命令"><a href="#git-常用命令" class="headerlink" title="git 常用命令"></a>git 常用命令</h4><p><img data-src="/images/git-command.jpg" alt="git命令"></p>
-<h4 id="git-使用的一些问题总结"><a href="#git-使用的一些问题总结" class="headerlink" title="git 使用的一些问题总结"></a>git 使用的一些问题总结</h4><h5 id="如何取消文件跟踪"><a href="#如何取消文件跟踪" class="headerlink" title="如何取消文件跟踪"></a>如何取消文件跟踪</h5><p><code>.gitignore</code> 文件会忽略其中记录的文件，不对其进行状态跟踪，但是对于已经跟踪的文件（即先前未添加至该文件内，后期再加入的）即使之后将其加入此 <code>.gitignore</code> 文件也不生效。</p>
-<p>原因： git 缓存使其继续追踪</p>
-<p>解决方法：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">## 单文件</span><br><span class="line">git rm --cache &lt;fileName&gt;</span><br><span class="line"></span><br><span class="line">## 全部</span><br><span class="line">git rm --cache .</span><br></pre></td></tr></table></figure></p>
-<h5 id="本地远程-tag-版本冲突问题"><a href="#本地远程-tag-版本冲突问题" class="headerlink" title="本地远程 tag 版本冲突问题"></a>本地远程 tag 版本冲突问题</h5><p>当自己打的 tag 标签与远程 tag 标签不同步时，无法正常使用 git pull –tags，此会报错提示 xxx 版本的 tag 本地与远程不统一，此 tag 拒绝被拉取覆盖（不影响其余的 tag），这回造成 VSCode 编辑器的 git 插件无法正常使用。</p>
-<p>解决方法：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git pull --tags -p -f</span><br><span class="line">## 补充</span><br><span class="line">本次仅做了强制本地覆盖并合并 tags</span><br><span class="line">git fetch --tags -h 有对应的指令详细说明</span><br></pre></td></tr></table></figure></p>
-<h3 id="git-学习推荐"><a href="#git-学习推荐" class="headerlink" title="git 学习推荐"></a>git 学习推荐</h3><ul>
-<li><a href="https://learngitbranching.js.org/" target="_blank" rel="noopener">可视化学习 git</a></li>
-</ul>
-<h3 id="相关引用"><a href="#相关引用" class="headerlink" title="相关引用"></a>相关引用</h3><blockquote>
-<p>git 命令图片源自 <a href="https://github.com/DickyQie/Tool-use" target="_blank" rel="noopener">https://github.com/DickyQie/Tool-use</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Env</category>
-      </categories>
-      <tags>
-        <tag>Git</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>iptables 端口转发配置</title>
     <url>/2020/07/14/iptables-%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91%E9%85%8D%E7%BD%AE/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>先前转载了一篇 iptables 的使用和配置的文章，但是凡事都得自己动手学习一下才能深入了解，因此本篇用来记录动手操作了一番后的一些配置心得。当然建议大家了解的时候读一读参考文章，特别是 <code>iptables 入门指南</code> 和 <code>iptables 详解</code>，能让你对 iptables 有更深入的理解。</p>
@@ -1032,6 +995,43 @@
       </categories>
       <tags>
         <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>git 环境配置</title>
+    <url>/2019/03/31/git-%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>git 的环境安装已经有很多次了，虽然简单，但是文章的重点却并不在此，此篇是用来记录学习 git 的一些好的规范、方便的工具、常用的命令以及遇到的坑。</p>
+<a id="more"></a>
+<h3 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h3><h4 id="下载安装-git"><a href="#下载安装-git" class="headerlink" title="下载安装 git"></a>下载安装 git</h4><p><a href="https://git-scm.com/downloads" target="_blank" rel="noopener">git 下载地址</a></p>
+<h4 id="git-环境配置"><a href="#git-环境配置" class="headerlink" title="git 环境配置"></a>git 环境配置</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 设置用户名</span></span><br><span class="line">git config --global user.name <span class="string">"yourname"</span></span><br><span class="line"><span class="comment"># 设置邮箱</span></span><br><span class="line">git config --global user.email <span class="string">"youremail@example.com"</span></span><br></pre></td></tr></table></figure>
+<h4 id="git-commit-规范"><a href="#git-commit-规范" class="headerlink" title="git commit 规范"></a>git commit 规范</h4><p>用于说明 commit 的类型只允许一下 7 种：</p>
+<ul>
+<li>feat：新功能（feature）</li>
+<li>fix：修补bug</li>
+<li>docs：文档（documentation）</li>
+<li>style： 格式（不影响代码运行的变动）</li>
+<li>refactor：重构（即不是新增功能，也不是修改bug的代码变动）</li>
+<li>test：增加测试</li>
+<li>chore：构建过程或辅助工具的变动</li>
+</ul>
+<h4 id="git-常用命令"><a href="#git-常用命令" class="headerlink" title="git 常用命令"></a>git 常用命令</h4><p><img data-src="/images/git-command.jpg" alt="git命令"></p>
+<h4 id="git-使用的一些问题总结"><a href="#git-使用的一些问题总结" class="headerlink" title="git 使用的一些问题总结"></a>git 使用的一些问题总结</h4><h5 id="如何取消文件跟踪"><a href="#如何取消文件跟踪" class="headerlink" title="如何取消文件跟踪"></a>如何取消文件跟踪</h5><p><code>.gitignore</code> 文件会忽略其中记录的文件，不对其进行状态跟踪，但是对于已经跟踪的文件（即先前未添加至该文件内，后期再加入的）即使之后将其加入此 <code>.gitignore</code> 文件也不生效。</p>
+<p>原因： git 缓存使其继续追踪</p>
+<p>解决方法：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">## 单文件</span><br><span class="line">git rm --cache &lt;fileName&gt;</span><br><span class="line"></span><br><span class="line">## 全部</span><br><span class="line">git rm --cache .</span><br></pre></td></tr></table></figure></p>
+<h5 id="本地远程-tag-版本冲突问题"><a href="#本地远程-tag-版本冲突问题" class="headerlink" title="本地远程 tag 版本冲突问题"></a>本地远程 tag 版本冲突问题</h5><p>当自己打的 tag 标签与远程 tag 标签不同步时，无法正常使用 git pull –tags，此会报错提示 xxx 版本的 tag 本地与远程不统一，此 tag 拒绝被拉取覆盖（不影响其余的 tag），这回造成 VSCode 编辑器的 git 插件无法正常使用。</p>
+<p>解决方法：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git pull --tags -p -f</span><br><span class="line">## 补充</span><br><span class="line">本次仅做了强制本地覆盖并合并 tags</span><br><span class="line">git fetch --tags -h 有对应的指令详细说明</span><br></pre></td></tr></table></figure></p>
+<h3 id="git-学习推荐"><a href="#git-学习推荐" class="headerlink" title="git 学习推荐"></a>git 学习推荐</h3><ul>
+<li><a href="https://learngitbranching.js.org/" target="_blank" rel="noopener">可视化学习 git</a></li>
+</ul>
+<h3 id="相关引用"><a href="#相关引用" class="headerlink" title="相关引用"></a>相关引用</h3><blockquote>
+<p>git 命令图片源自 <a href="https://github.com/DickyQie/Tool-use" target="_blank" rel="noopener">https://github.com/DickyQie/Tool-use</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Env</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
       </tags>
   </entry>
   <entry>
@@ -1438,6 +1438,62 @@
       </tags>
   </entry>
   <entry>
+    <title>使用 git submodule 来管理子模块</title>
+    <url>/2019/10/17/%E4%BD%BF%E7%94%A8-git-submodule-%E6%9D%A5%E7%AE%A1%E7%90%86%E5%AD%90%E6%A8%A1%E5%9D%97/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>近期在考虑项目拆分的过程中，对于公共组件的维护总共找到了两种方式，分别是：发布 npm 包与 <code>git submodule</code> 子模块管理。对于 npm 发包的方法这里我就不做赘述了（先前有写到过），而另一种 <code>git submodule</code> 的方法这里就详细介绍一下，对于不想使用发包的方式（比较繁琐）来维护子项目的 coder 来说，这种方式可以算是最为方便的了。</p>
+<a id="more"></a>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><p>有种情况我们经常会遇到：某个工作中的项目需要包含并使用另一个项目。也许是第三方库，或者你独立开发的，用于多个父项目的库。现在问题来了：你想要把它们当做两个独立的项目，同时又想在一个项目中使用另一个。</p>
+<p>我们举一个例子。假设你正在开发一个网站然后创建了 Atom 订阅。你决定使用一个库，而不是写自己的 Atom 生成代码。你可能不得不通过 CPAN 安装或 Ruby gem 来包含共享库中的代码，或者将源代码直接拷贝到自己的项目中。如果将这个库包含进来，那么无论用何种方式都很难定制它，部署则更加困难，因为你必须确保每一个客户端都包含该库。如果将代码复制到自己的项目中，那么你做的任何自定义修改都会使合并上游的改动变得困难。</p>
+<p>Git 通过子模块来解决这个问题。子模块允许你将一个 Git 仓库作为另一个 Git 仓库的子目录。它能让你将另一个仓库克隆到自己的项目中，同时还保持提交的独立。</p>
+<blockquote>
+<p>该部分直接引用官方的例子，就不造轮子了。</p>
+</blockquote>
+<h3 id="命令使用"><a href="#命令使用" class="headerlink" title="命令使用"></a>命令使用</h3><p>使用 <code>git submodule</code> 时，需要的一些命令有：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 当前项目文件名如不指定，则默认为仓库名</span></span><br><span class="line"><span class="comment"># 目标仓库路径可为远程仓库地址，也可为当前相对路径</span></span><br><span class="line">git submodule add &lt;目标仓库路径&gt; &lt;当前项目文件名&gt;</span><br><span class="line"><span class="comment"># 查看子模块状态</span></span><br><span class="line">git submodule (status)</span><br><span class="line"><span class="comment"># 将子模块与远程保持同步（会切换至一个临时分支）</span></span><br><span class="line">git submodule update --remote</span><br><span class="line"><span class="comment"># 将所有子模块都切换至 master 分支</span></span><br><span class="line">git submodule foreach <span class="string">'git checkout master'</span></span><br><span class="line"><span class="comment"># 将所有子模块同步远程更新</span></span><br><span class="line">git submodule foreach <span class="string">'git pull'</span></span><br><span class="line"><span class="comment"># 查看子模块追踪的内容信息</span></span><br><span class="line">git diff --cached --submodule</span><br></pre></td></tr></table></figure>
+<h3 id="初次添加仓库操作"><a href="#初次添加仓库操作" class="headerlink" title="初次添加仓库操作"></a>初次添加仓库操作</h3><p>作为添加者来说，子模块的添加是很简单的一件事，主要步骤如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 添加仓库</span></span><br><span class="line">git submodule add &lt;子模块仓库路径&gt; &lt;当前项目文件名&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 此时打印 git status 会显示 submodule 的一些信息</span></span><br><span class="line"><span class="comment"># .submodule 文件内存储的就是我们需要的映射信息了</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 提交更新并推送至远程</span></span><br><span class="line"><span class="comment"># 当仓库提交至远程时，子模块的内容并不会被带过去</span></span><br><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">"init submodule"</span></span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+<h3 id="拷贝远程仓库"><a href="#拷贝远程仓库" class="headerlink" title="拷贝远程仓库"></a>拷贝远程仓库</h3><p>拷贝远程带有子模块的项目需要稍微注意一点，那就是子模块需要额外的步骤才能将内容拷贝下来，具体步骤如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 克隆仓库</span></span><br><span class="line">git <span class="built_in">clone</span> &lt;远程仓库地址&gt;</span><br><span class="line"><span class="comment"># 此时子模块是没有内容的，所以</span></span><br><span class="line"><span class="comment"># 初始化本地配置文件</span></span><br><span class="line">git submodule init</span><br><span class="line"><span class="comment"># 配置文件有记录对应的 commit id，此将子模块文件同步至配置文件内记录的 id 处</span></span><br><span class="line"><span class="comment"># 注意： `git submodule update` 拿到的文件内容并不一定与子模块仓库的最新状态保持一致</span></span><br><span class="line"><span class="comment"># 因为它记录的为先前初始化时的版本，需要额外更新</span></span><br><span class="line">git submodule update</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>三步简化成一步的操作为： git clone &lt;远程仓库地址&gt; –recursive</p>
+</blockquote>
+<h3 id="更新子模块"><a href="#更新子模块" class="headerlink" title="更新子模块"></a>更新子模块</h3><p>更新的方法也有多种，最为基础的处理方式是：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 进入项目中的子模块内</span></span><br><span class="line"><span class="built_in">cd</span> &lt;child-module&gt;</span><br><span class="line"><span class="comment"># 拉取新内容</span></span><br><span class="line">git fetch</span><br><span class="line"><span class="comment"># 合并新内容</span></span><br><span class="line">git merge</span><br><span class="line"><span class="comment"># fetch 和 merge 可以简化为一步： git pull</span></span><br></pre></td></tr></table></figure>
+<p>当然，此做法比较繁杂，较为简便的处理方法是（无需进入子模块）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 添加 remote 会更新至远程项目的最新版本，否则是本地最新版本</span></span><br><span class="line">git submodule update --remote</span><br></pre></td></tr></table></figure>
+<p>Git 会自动进入子模块并更新它。但是该命令会默认假定你想要更新并检出子模块的 master 分支。简单的说，此时子模块会自动生成一个新临时分支，与远程的源保持一致，如果子模块内部有改动，想要迁回，那么将子模块的 branch 切回原来的分支即可。</p>
+<p>例如：子模块本来是 master 分支，后来远程子模块的源更新了，此时 <code>git submodule update --remote</code> 会将子模块分支切换成一个 hash id 分支。此时进入子模块目录，<code>git checkout master</code> 切回 master 分支，你会发现该 master 分支内容与执行 <code>update</code> 指令之前的是一致的，没有变动，但会提醒你远程的源已经更新了，需要手动 pull 一下。</p>
+<div class="note info">
+            <p>这样看来，这两种写法都没差啦～反正最后都得自己手动处理一下。</p>
+          </div>
+<p>对于包含多个子模块的项目来说，进入子模块一个个更新着实是很麻烦，批量更新可以使用 foreach，例如：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 同步最新的 head 指针，否则</span></span><br><span class="line">git submodule update --remote</span><br><span class="line"><span class="comment"># 将默认迁出的分支迁回 master，然后拉取更新</span></span><br><span class="line">git submodule foreach git checkout master</span><br><span class="line">git submodule foreach git pull</span><br></pre></td></tr></table></figure>
+<p>或者，如果知道更新了，可以省略掉前两步骤（前面步骤主要是为了 <code>git status</code> | <code>git submodules</code> 看有没有子模块变动），直接拉取就行，这样也不用再去切分支了。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git submodule foreach git pull</span><br></pre></td></tr></table></figure>
+<h3 id="更改子模块"><a href="#更改子模块" class="headerlink" title="更改子模块"></a>更改子模块</h3><p>前面对子模块的处理仅仅只是同步更新而已，这和使用 npm 包没啥区别，但毕竟是将子模块给弄进项目了，当个包放在那里用，那也太委屈了。其实在主项目内，我们还可以对子模块进行更新，还可以并发布其改动，这样就能节省很多时间和劳力了（前提是别改造得别人无法使用，变成私有代码库了）。</p>
+<p>这里仅介绍比较省时的操作，直接启动 merge ，我们可以用下面这个命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git submodule update --remote --merge</span><br></pre></td></tr></table></figure>
+<p>进入子模块后，我们就能和平常一样的合并冲突了。</p>
+<p>在主分支进行推送时，我们得保证当前分支的所有子模块都已经与远程一致（或者都落后，但不可 diverged），防止别的伙伴接受不到新的变动，因此推送的命令改为：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 这样 git 会进入到子模块中然后在推送主项目前推送了它。如果那个子模块因为某些原因推送失败，主项目也会推送失败</span></span><br><span class="line"><span class="comment"># 该方法暂未尝试，一直用的 foreach push，比较方便</span></span><br><span class="line">git push --recurse-submodules=on-demand</span><br></pre></td></tr></table></figure>
+<p><strong>注：</strong>如果出现了无法推送的情况，特别是远程分支为本地项目的情况，此时我们需要进入该远程分支，然后设置 ‘.git/config’ 文件，加上内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[receive]</span><br><span class="line">        denyCurrentBranch = false</span><br></pre></td></tr></table></figure>
+<p>这样就能 push 了。</p>
+<h3 id="删除子模块"><a href="#删除子模块" class="headerlink" title="删除子模块"></a>删除子模块</h3><p>删除子模块需要进行 2 步操作，首先得删除对应的 cache 缓存追踪，然后再删除对应的模块文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git rm --cached &lt;fileName&gt;</span><br><span class="line">rm --rf &lt;fileName&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
+<li><a href="https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E5%AD%90%E6%A8%A1%E5%9D%97" target="_blank" rel="noopener">Git 子模块</a></li>
+<li><a href="https://www.jianshu.com/p/9000cd49822c" target="_blank" rel="noopener">Git 子模块的管理和使用</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>使用 vue-cli 发布一个完善的包</title>
     <url>/2019/07/11/%E4%BD%BF%E7%94%A8-vue-cli-%E5%8F%91%E5%B8%83%E4%B8%80%E4%B8%AA%E5%AE%8C%E5%96%84%E7%9A%84%E5%8C%85/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>其实先前有写过一篇《发布一个 vue 包》，不过对于“极简主义者”来说，该文章还是显得有些复杂，毕竟需要配置“复杂”的 webpack。那么有没有一种简单上手、开箱即用的方法呢？答案是有的，vue-cli 已经完美的考虑到了这些问题，此处就介绍如何使用 vue-cli 来搭建一个完整的发包环境。</p>
@@ -1548,109 +1604,6 @@
       </tags>
   </entry>
   <entry>
-    <title>使用 git submodule 来管理子模块</title>
-    <url>/2019/10/17/%E4%BD%BF%E7%94%A8-git-submodule-%E6%9D%A5%E7%AE%A1%E7%90%86%E5%AD%90%E6%A8%A1%E5%9D%97/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>近期在考虑项目拆分的过程中，对于公共组件的维护总共找到了两种方式，分别是：发布 npm 包与 <code>git submodule</code> 子模块管理。对于 npm 发包的方法这里我就不做赘述了（先前有写到过），而另一种 <code>git submodule</code> 的方法这里就详细介绍一下，对于不想使用发包的方式（比较繁琐）来维护子项目的 coder 来说，这种方式可以算是最为方便的了。</p>
-<a id="more"></a>
-<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><p>有种情况我们经常会遇到：某个工作中的项目需要包含并使用另一个项目。也许是第三方库，或者你独立开发的，用于多个父项目的库。现在问题来了：你想要把它们当做两个独立的项目，同时又想在一个项目中使用另一个。</p>
-<p>我们举一个例子。假设你正在开发一个网站然后创建了 Atom 订阅。你决定使用一个库，而不是写自己的 Atom 生成代码。你可能不得不通过 CPAN 安装或 Ruby gem 来包含共享库中的代码，或者将源代码直接拷贝到自己的项目中。如果将这个库包含进来，那么无论用何种方式都很难定制它，部署则更加困难，因为你必须确保每一个客户端都包含该库。如果将代码复制到自己的项目中，那么你做的任何自定义修改都会使合并上游的改动变得困难。</p>
-<p>Git 通过子模块来解决这个问题。子模块允许你将一个 Git 仓库作为另一个 Git 仓库的子目录。它能让你将另一个仓库克隆到自己的项目中，同时还保持提交的独立。</p>
-<blockquote>
-<p>该部分直接引用官方的例子，就不造轮子了。</p>
-</blockquote>
-<h3 id="命令使用"><a href="#命令使用" class="headerlink" title="命令使用"></a>命令使用</h3><p>使用 <code>git submodule</code> 时，需要的一些命令有：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 当前项目文件名如不指定，则默认为仓库名</span></span><br><span class="line"><span class="comment"># 目标仓库路径可为远程仓库地址，也可为当前相对路径</span></span><br><span class="line">git submodule add &lt;目标仓库路径&gt; &lt;当前项目文件名&gt;</span><br><span class="line"><span class="comment"># 查看子模块状态</span></span><br><span class="line">git submodule (status)</span><br><span class="line"><span class="comment"># 将子模块与远程保持同步（会切换至一个临时分支）</span></span><br><span class="line">git submodule update --remote</span><br><span class="line"><span class="comment"># 将所有子模块都切换至 master 分支</span></span><br><span class="line">git submodule foreach <span class="string">'git checkout master'</span></span><br><span class="line"><span class="comment"># 将所有子模块同步远程更新</span></span><br><span class="line">git submodule foreach <span class="string">'git pull'</span></span><br><span class="line"><span class="comment"># 查看子模块追踪的内容信息</span></span><br><span class="line">git diff --cached --submodule</span><br></pre></td></tr></table></figure>
-<h3 id="初次添加仓库操作"><a href="#初次添加仓库操作" class="headerlink" title="初次添加仓库操作"></a>初次添加仓库操作</h3><p>作为添加者来说，子模块的添加是很简单的一件事，主要步骤如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 添加仓库</span></span><br><span class="line">git submodule add &lt;子模块仓库路径&gt; &lt;当前项目文件名&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 此时打印 git status 会显示 submodule 的一些信息</span></span><br><span class="line"><span class="comment"># .submodule 文件内存储的就是我们需要的映射信息了</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 提交更新并推送至远程</span></span><br><span class="line"><span class="comment"># 当仓库提交至远程时，子模块的内容并不会被带过去</span></span><br><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">"init submodule"</span></span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
-<h3 id="拷贝远程仓库"><a href="#拷贝远程仓库" class="headerlink" title="拷贝远程仓库"></a>拷贝远程仓库</h3><p>拷贝远程带有子模块的项目需要稍微注意一点，那就是子模块需要额外的步骤才能将内容拷贝下来，具体步骤如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 克隆仓库</span></span><br><span class="line">git <span class="built_in">clone</span> &lt;远程仓库地址&gt;</span><br><span class="line"><span class="comment"># 此时子模块是没有内容的，所以</span></span><br><span class="line"><span class="comment"># 初始化本地配置文件</span></span><br><span class="line">git submodule init</span><br><span class="line"><span class="comment"># 配置文件有记录对应的 commit id，此将子模块文件同步至配置文件内记录的 id 处</span></span><br><span class="line"><span class="comment"># 注意： `git submodule update` 拿到的文件内容并不一定与子模块仓库的最新状态保持一致</span></span><br><span class="line"><span class="comment"># 因为它记录的为先前初始化时的版本，需要额外更新</span></span><br><span class="line">git submodule update</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>三步简化成一步的操作为： git clone &lt;远程仓库地址&gt; –recursive</p>
-</blockquote>
-<h3 id="更新子模块"><a href="#更新子模块" class="headerlink" title="更新子模块"></a>更新子模块</h3><p>更新的方法也有多种，最为基础的处理方式是：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 进入项目中的子模块内</span></span><br><span class="line"><span class="built_in">cd</span> &lt;child-module&gt;</span><br><span class="line"><span class="comment"># 拉取新内容</span></span><br><span class="line">git fetch</span><br><span class="line"><span class="comment"># 合并新内容</span></span><br><span class="line">git merge</span><br><span class="line"><span class="comment"># fetch 和 merge 可以简化为一步： git pull</span></span><br></pre></td></tr></table></figure>
-<p>当然，此做法比较繁杂，较为简便的处理方法是（无需进入子模块）：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 添加 remote 会更新至远程项目的最新版本，否则是本地最新版本</span></span><br><span class="line">git submodule update --remote</span><br></pre></td></tr></table></figure>
-<p>Git 会自动进入子模块并更新它。但是该命令会默认假定你想要更新并检出子模块的 master 分支。简单的说，此时子模块会自动生成一个新临时分支，与远程的源保持一致，如果子模块内部有改动，想要迁回，那么将子模块的 branch 切回原来的分支即可。</p>
-<p>例如：子模块本来是 master 分支，后来远程子模块的源更新了，此时 <code>git submodule update --remote</code> 会将子模块分支切换成一个 hash id 分支。此时进入子模块目录，<code>git checkout master</code> 切回 master 分支，你会发现该 master 分支内容与执行 <code>update</code> 指令之前的是一致的，没有变动，但会提醒你远程的源已经更新了，需要手动 pull 一下。</p>
-<div class="note info">
-            <p>这样看来，这两种写法都没差啦～反正最后都得自己手动处理一下。</p>
-          </div>
-<p>对于包含多个子模块的项目来说，进入子模块一个个更新着实是很麻烦，批量更新可以使用 foreach，例如：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 同步最新的 head 指针，否则</span></span><br><span class="line">git submodule update --remote</span><br><span class="line"><span class="comment"># 将默认迁出的分支迁回 master，然后拉取更新</span></span><br><span class="line">git submodule foreach git checkout master</span><br><span class="line">git submodule foreach git pull</span><br></pre></td></tr></table></figure>
-<p>或者，如果知道更新了，可以省略掉前两步骤（前面步骤主要是为了 <code>git status</code> | <code>git submodules</code> 看有没有子模块变动），直接拉取就行，这样也不用再去切分支了。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git submodule foreach git pull</span><br></pre></td></tr></table></figure>
-<h3 id="更改子模块"><a href="#更改子模块" class="headerlink" title="更改子模块"></a>更改子模块</h3><p>前面对子模块的处理仅仅只是同步更新而已，这和使用 npm 包没啥区别，但毕竟是将子模块给弄进项目了，当个包放在那里用，那也太委屈了。其实在主项目内，我们还可以对子模块进行更新，还可以并发布其改动，这样就能节省很多时间和劳力了（前提是别改造得别人无法使用，变成私有代码库了）。</p>
-<p>这里仅介绍比较省时的操作，直接启动 merge ，我们可以用下面这个命令：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git submodule update --remote --merge</span><br></pre></td></tr></table></figure>
-<p>进入子模块后，我们就能和平常一样的合并冲突了。</p>
-<p>在主分支进行推送时，我们得保证当前分支的所有子模块都已经与远程一致（或者都落后，但不可 diverged），防止别的伙伴接受不到新的变动，因此推送的命令改为：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 这样 git 会进入到子模块中然后在推送主项目前推送了它。如果那个子模块因为某些原因推送失败，主项目也会推送失败</span></span><br><span class="line"><span class="comment"># 该方法暂未尝试，一直用的 foreach push，比较方便</span></span><br><span class="line">git push --recurse-submodules=on-demand</span><br></pre></td></tr></table></figure>
-<p><strong>注：</strong>如果出现了无法推送的情况，特别是远程分支为本地项目的情况，此时我们需要进入该远程分支，然后设置 ‘.git/config’ 文件，加上内容如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[receive]</span><br><span class="line">        denyCurrentBranch = false</span><br></pre></td></tr></table></figure>
-<p>这样就能 push 了。</p>
-<h3 id="删除子模块"><a href="#删除子模块" class="headerlink" title="删除子模块"></a>删除子模块</h3><p>删除子模块需要进行 2 步操作，首先得删除对应的 cache 缓存追踪，然后再删除对应的模块文件</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git rm --cached &lt;fileName&gt;</span><br><span class="line">rm --rf &lt;fileName&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
-<li><a href="https://git-scm.com/book/zh/v2/Git-%E5%B7%A5%E5%85%B7-%E5%AD%90%E6%A8%A1%E5%9D%97" target="_blank" rel="noopener">Git 子模块</a></li>
-<li><a href="https://www.jianshu.com/p/9000cd49822c" target="_blank" rel="noopener">Git 子模块的管理和使用</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Git</category>
-      </categories>
-      <tags>
-        <tag>Git</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>分析 Vue 的观察者模式（上）</title>
-    <url>/2019/10/10/%E5%88%86%E6%9E%90-Vue-%E7%9A%84%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%8A%EF%BC%89/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近又鼓起勇气鼓捣 vue 源码，然后不经意间瞅了瞅最早开始学习 vue 源码时跟着撸的一个 vue-observer 的实例，发现自己对于观察者模式还是有些不太明白。因此，在学习了《JavaScript 设计模式》的“观察者模式”一篇后，总算有了一点灵感。目前趁灵感还在，在此便记录下我的理解。</p>
-<a id="more"></a>
-<h3 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h3><p>什么是观察者模式呢？首先引用一下比较正规的说法：</p>
-<div class="note info">
-            <p>观察者模式：又被称作发布-订阅者模式或消息机制，定义了一种依赖关系，解决了主体对象与观察者之间功能的耦合。</p>
-          </div>
-<p>简单来说，观察者模式主要实现的是一种对于未来可能发生的事情做的一种消息订阅处理。DOM2 级事件中的 addEventListener 方法以及生活中的订报纸都基本上就是这种原理。</p>
-<p>首先我们得有发布者和订阅者，他们之间如何联系起来那就需要一个观察者平台。订阅者在观察者平台上向发布者添加订阅，待发布者在发布信息后，观察者平台获取到更新的信息后，给各个订阅者发提醒表示“你关注的发布者更新了文档哦～”，这样订阅者就能得到更新后的消息内容了。</p>
-<p>其实发布者和订阅者都很简单，关键点还是观察者这个中间平台的实现。我们最终想要的结果其实可简化为如下代码：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 观察者（平台）</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">observer</span>(<span class="params"></span>) </span>&#123; <span class="comment">/***/</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发布者（平台作者）</span></span><br><span class="line"><span class="keyword">const</span> publisher = &#123; <span class="attr">bookName</span>: <span class="string">'Hello World!'</span>, <span class="attr">content</span>: <span class="string">'This is a book'</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 订阅者（在平台上订阅某作者）</span></span><br><span class="line"><span class="keyword">const</span> subscriber = observer(publisher);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 之后 publisher 改变什么东西，observer 触发订阅的消息即可。</span></span><br></pre></td></tr></table></figure>
-<h3 id="简单的观察者"><a href="#简单的观察者" class="headerlink" title="简单的观察者"></a>简单的观察者</h3><p>前面分析到，观察者其实就是对于发布者和订阅者的一个中间平台，因此观察者所需要的能力包括：添加订阅者、消息推送和删除订阅者。先不考虑最终自动化处理发布订阅的流程以及删除操作，手动处理的大致流程为：</p>
-<ol>
-<li>平台上新增了一个订阅者，并订阅了一个发布者；</li>
-<li>发布者更改了自身的某些属性；</li>
-<li>平台通知订阅者，“你订阅的发布者更新了新内容”。</li>
-</ol>
-<p>因此我们可以简化一个观察者模型为：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Observer</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList = [];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 添加订阅方法</span></span><br><span class="line">  addSubscriber(subscribFunc) &#123;</span><br><span class="line">    <span class="keyword">if</span> (subscribFunc &amp;&amp; !<span class="keyword">this</span>.subscriberList.includes(subscribFunc)) &#123;</span><br><span class="line">      <span class="keyword">this</span>.subscriberList.push(subscribFunc);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发布者更新消息，触发所有的订阅方法</span></span><br><span class="line">  notify() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.forEach(<span class="function"><span class="params">subscribFunc</span> =&gt;</span> subscribFunc());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 观察者</span></span><br><span class="line"><span class="keyword">const</span> observer = <span class="keyword">new</span> Observer();</span><br><span class="line"><span class="comment">// 发布者</span></span><br><span class="line"><span class="keyword">const</span> publisher = &#123; <span class="attr">bookName</span>: <span class="string">'Hello'</span> &#125;</span><br><span class="line"><span class="comment">// 订阅者</span></span><br><span class="line"><span class="keyword">const</span> subscriber = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`The publisher your followed update the book <span class="subst">$&#123;publisher.bookName&#125;</span>`</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 订阅者订阅事件需要平台完成</span></span><br><span class="line">observer.addSubscriber(subscriber);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发布者更新消息</span></span><br><span class="line">publisher.bookName = <span class="string">'Hello World'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 平台根据订阅者设置的事件通知订阅者，你有新订阅信息</span></span><br><span class="line">observer.notify();</span><br></pre></td></tr></table></figure>
-<h3 id="稍复杂的观察者"><a href="#稍复杂的观察者" class="headerlink" title="稍复杂的观察者"></a>稍复杂的观察者</h3><p>前面基本上勾勒出了基本的观察者模型大致逻辑，虽然是纯“手动”操作，但是顺着这个机制走下去就没有太大问题。现在我们需要的是慢慢将“手动”转变为“自动”，而要实现这种转变则需要一些中间的封装，也就是中间的依赖类，此时我们的思路是这样的：</p>
-<ol>
-<li>为每个发布者生成一个对应的依赖收集对象（类比 Vue 中 data 返回的对象）</li>
-<li>为负责依赖收集的对象添加订阅者事件（类比 Vue 中的 methods 和 computed 内容）</li>
-<li>发布者更新内容，订阅者事件触发</li>
-</ol>
-<p>因为待依赖收集的对象总是动态变动的，因此我们还得维护一个全局的 target 对象来动态绑定当前变动的发布者，此时的代码可以抽象为：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> target = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList = [];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 添加订阅方法</span></span><br><span class="line">  depend() &#123;</span><br><span class="line">    <span class="keyword">if</span> (target &amp;&amp; !<span class="keyword">this</span>.subscriberList.includes(target)) &#123;</span><br><span class="line">      <span class="keyword">this</span>.subscriberList.push(target);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发布者更新消息，触发所有的订阅方法</span></span><br><span class="line">  notify() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.forEach(<span class="function"><span class="params">sub</span> =&gt;</span> sub());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 中间依赖的平台</span></span><br><span class="line"><span class="keyword">const</span> dep = <span class="keyword">new</span> Dep();</span><br><span class="line"><span class="comment">// 发布者（data 对象中的属性，为了方便处理，直接扩出来了，写成对象也行）</span></span><br><span class="line"><span class="keyword">let</span> bookName = <span class="string">"Hello World"</span>;</span><br><span class="line"><span class="keyword">let</span> bookContent = <span class="string">"This is a book"</span>;</span><br><span class="line"><span class="keyword">let</span> publishInfo = <span class="string">''</span>; <span class="comment">// 消息提示</span></span><br><span class="line"><span class="comment">// 绑定当前的订阅者（method 方法）</span></span><br><span class="line"><span class="keyword">const</span> target = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  publishInfo = <span class="string">`The book <span class="subst">$&#123;bookName&#125;</span>‘s content is <span class="subst">$&#123;bookContent&#125;</span>`</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 订阅者还未订阅信息</span></span><br><span class="line"><span class="built_in">console</span>.log(publishInfo); <span class="comment">// ‘’</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 订阅者在平台上添加订阅事件，并推送用户目前的最新信息</span></span><br><span class="line">dep.depend();</span><br><span class="line">target();</span><br><span class="line"><span class="built_in">console</span>.log(publishInfo) <span class="comment">// The book Hello World‘s content is This is a book</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// publisher 更新消息</span></span><br><span class="line">bookContent = <span class="string">'The content is "Hello World"'</span>;</span><br><span class="line"><span class="comment">// 平台还未处理前，原信息没有改变</span></span><br><span class="line"><span class="built_in">console</span>.log(publishInfo) <span class="comment">// The book Hello World‘s content is This is a book</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 平台观察到 publisher 更新内容了，更新了用户的通知信息</span></span><br><span class="line">dep.notify();</span><br><span class="line"><span class="comment">// 呈现更新后的信息</span></span><br><span class="line"><span class="built_in">console</span>.log(publishInfo) <span class="comment">// The book Hello World‘s content is The content is "Hello World"</span></span><br></pre></td></tr></table></figure>
-<p>与前面的相比，目前这一版的优点在于：</p>
-<ol>
-<li>每个发布者都有属于自己的小管家，而不是与各订阅者一一绑定（原绑定方式：发布者 -&gt; 平台 -&gt; 订阅者），方便消息推送管理；</li>
-<li>平台能动态绑定发布者（原来是通过订阅者显示绑定发布者）；</li>
-</ol>
-<p>但是目前还有一些缺陷，那就是：<strong>还没有实现动态的观察变化</strong></p>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
-<li><a href="https://mp.weixin.qq.com/s/Wm5-3hsqre7ft_f0YBnoeg" target="_blank" rel="noopener">以 Vue 为例，解释 JavaScript 的反应性</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Vue</category>
-      </categories>
-      <tags>
-        <tag>Vue</tag>
-        <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>关于 JS 中“继承”的写法</title>
     <url>/2019/06/28/%E5%85%B3%E4%BA%8E-JS-%E4%B8%AD%E2%80%9C%E7%BB%A7%E6%89%BF%E2%80%9D%E7%9A%84%E5%86%99%E6%B3%95/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在巩固继承这部分知识时，突然想到早期分享时同事提出的一些疑问，即实现 JS 继承具体有那些方法。在经过一番调研后，此篇便是我所总结出的比较全面的方法。当然，文中记录的仅是一些基础的继承方法以及它们之间的的区别，以供参考。</p>
@@ -1694,6 +1647,62 @@
         <category>JavaScript</category>
       </categories>
       <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>分析 Vue 的观察者模式（中）</title>
+    <url>/2019/10/11/%E5%88%86%E6%9E%90-Vue-%E7%9A%84%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%AD%EF%BC%89/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在上篇<a href="/2019/10/10/分析-Vue-的观察者模式（上）/" title="分析 Vue 的观察者模式（上）">分析 Vue 的观察者模式（上）</a>中，简单实现了“手动”版观察者模式，而在本篇中我们继续沿着该思路往下探索，看如何实现“自动”版的观察者。</p>
+<a id="more"></a>
+<h3 id="完善的观察者"><a href="#完善的观察者" class="headerlink" title="完善的观察者"></a>完善的观察者</h3><p>紧接着上文的思路，因为我们只是实现了 Dep 依赖（管家），却还没有对平台的观察处理方式优化，因此我们需要将此步骤给完善起来。</p>
+<p>首先，要实现发布者更新内容后自动触发订阅事件，那么我们需要的是对发布者内容改变的监听，ES5 中恰好有这么一种方法能满足我们的需求，那就是 <code>Object.defineProperty(...)</code>。其语法很简单，我们此处仅仅需要拦截 get 和 set 方法，大致写法为：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> data = &#123;</span><br><span class="line">  name: <span class="string">'test'</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(data, name, &#123;</span><br><span class="line">  <span class="keyword">get</span>() &#123;</span><br><span class="line">    <span class="keyword">return</span> data.name;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="keyword">set</span>(newVal) &#123;</span><br><span class="line">    <span class="comment">// 调用 setter 方法，不可直接赋值，否则会死循环</span></span><br><span class="line">    <span class="comment">// 错误写法 obj[key] = newVal</span></span><br><span class="line">    <span class="comment">// 可查看 Vue 中的 setter 获取</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>既然有了能够观测发布者的方法，那么对于对象变更后的监听就能自动化处理了，那么先前手动触发 <code>dep.depend()</code> 和 <code>dep.notify()</code> 函数的操作就能整合入 <code>Object.defineProperty</code> 内了。</p>
+<p>延续先前的逻辑，<code>dep.notify()</code> 方法执行都得在对象值变动之后，因此我们可以将此方法放入 set 函数内；而 <code>dep.depend()</code> 方法主要是将订阅者事件存储入自身的事件列表中，因此该方法执行一次就行，之后每次更新都触发 <code>notify</code> 来依次执行注册的函数即可。因此，在考虑只是传入简单对象的情况时，这阶段的代码思路大致是：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// （私人管家）依赖收集</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList = [];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 添加订阅方法</span></span><br><span class="line">  depend() &#123;</span><br><span class="line">    <span class="comment">// 此处添加对应订阅方法</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发布者更新消息</span></span><br><span class="line">  notify() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.forEach(<span class="function"><span class="params">sub</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 依次处理订阅的方法</span></span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// （发布者和管家的联系方式）监听器</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">observer</span>(<span class="params">data = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">Object</span>.keys(data).forEach(<span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> val = data[key];</span><br><span class="line">    <span class="keyword">const</span> dep = <span class="keyword">new</span> Dep();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(data, key, &#123;</span><br><span class="line">      <span class="keyword">get</span>() &#123;</span><br><span class="line">        <span class="comment">// get 时添加依赖，当有目标的时候才添加</span></span><br><span class="line">        <span class="keyword">if</span> (target) &#123;</span><br><span class="line">          dep.depend();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> val;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="keyword">set</span>(newVal) &#123;</span><br><span class="line">        <span class="keyword">if</span> (newVal === val) &#123;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// set 时触发更新</span></span><br><span class="line">        <span class="comment">// 此处用 setter 做变动，此处偷懒一下，不要直接赋值，会反复触发 set</span></span><br><span class="line">        val = newVal;</span><br><span class="line">        dep.notify();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么现在问题又有了。目前代码实现至此我们仅仅只是将发布者与其 Dep 依赖进行了关联，那么观察者又该如何将其获订阅者的事件与 Dep 存储的事件列表进行关联呢？从订阅者角度分析一下：</p>
+<ol>
+<li>订阅者决定好要订阅的内容（订阅者的函数）；</li>
+<li>订阅者在对应的观察者平台上注册事件，绑定发布者信息；</li>
+<li>观察者先联系到 Dep 管家，将订阅事件存放至管家处；</li>
+<li>待管家拿到了发布者新情报，则响应所有存储好的订阅者的订阅事件了。</li>
+</ol>
+<p>思路逐渐清晰，那么这么个流程我们可以简化为如下代码：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">target = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.sub = [];</span><br><span class="line">  &#125;</span><br><span class="line">  depend() &#123;</span><br><span class="line">    <span class="keyword">if</span> (target &amp;&amp; !<span class="keyword">this</span>.sub.includes(target)) &#123;</span><br><span class="line">      <span class="keyword">this</span>.sub.push(target);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  notify() &#123;</span><br><span class="line">    <span class="keyword">this</span>.sub.forEach(<span class="function"><span class="params">cb</span> =&gt;</span> cb());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">watcher</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">  target = callback;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 此处触发一下监听对象的 get 方法，将 callback 方法加入 Dep 依赖的订阅队列中</span></span><br><span class="line">  <span class="comment">// 然后清除掉 target，防止重复注册</span></span><br><span class="line"></span><br><span class="line">  target = <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">watcher(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 此处是订阅事件</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>这样我们就讲观察者的订阅方法和 Dep 依赖给绑定上了。考虑到 watcher 的通用性，这里写了一个加强版的 demo，如下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> target = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// （私人管家）依赖收集</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList = [];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 将当前的 watcher 加入 dep 中</span></span><br><span class="line">  addSub(watcher) &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.push(watcher)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 添加订阅方法</span></span><br><span class="line">  depend() &#123;</span><br><span class="line">    <span class="keyword">if</span> (target) &#123;</span><br><span class="line">      target.addDep(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发布者更新消息，触发所有的订阅方法</span></span><br><span class="line">  notify() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.forEach(<span class="function"><span class="params">sub</span> =&gt;</span> &#123;</span><br><span class="line">      sub.update();</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// （平台）观察者</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Watcher</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(data = &#123;&#125;, key = <span class="string">''</span>, cb = <span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;) &#123;</span><br><span class="line">    <span class="keyword">this</span>.cb = cb;</span><br><span class="line">    <span class="keyword">this</span>._data = data;</span><br><span class="line">    <span class="keyword">this</span>.key = key;</span><br><span class="line"></span><br><span class="line">    target = <span class="keyword">this</span>;</span><br><span class="line">    <span class="comment">// 触发 getter，存储本 watcher</span></span><br><span class="line">    <span class="keyword">this</span>.value = data[key];</span><br><span class="line">    <span class="comment">// 防止反复触发</span></span><br><span class="line">    target = <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  addDep(dep) &#123;</span><br><span class="line">    dep.addSub(<span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  update() &#123;</span><br><span class="line">    <span class="keyword">const</span> newVal = <span class="keyword">this</span>._data[<span class="keyword">this</span>.key];</span><br><span class="line">    <span class="keyword">this</span>.value = newVal;</span><br><span class="line">    <span class="keyword">this</span>.cb(newVal);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// （发布者和管家的联系方式）监听器</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">observer</span>(<span class="params">data = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">Object</span>.keys(data).forEach(<span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> val = data[key];</span><br><span class="line">    <span class="keyword">const</span> dep = <span class="keyword">new</span> Dep();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(data, key, &#123;</span><br><span class="line">      <span class="keyword">get</span>() &#123;</span><br><span class="line">        <span class="keyword">if</span> (target) &#123;</span><br><span class="line">          <span class="comment">// get 时添加依赖</span></span><br><span class="line">          dep.depend();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> val;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="keyword">set</span>(newVal) &#123;</span><br><span class="line">        <span class="keyword">if</span> (newVal === val) &#123;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// set 时触发更新</span></span><br><span class="line">        val = newVal;</span><br><span class="line">        dep.notify();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发布者</span></span><br><span class="line"><span class="keyword">const</span> publisher = &#123;</span><br><span class="line">  bookName: <span class="string">'book'</span>,</span><br><span class="line">  bookContent: <span class="string">'hello world'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 管家开始观测发布者</span></span><br><span class="line">observer(publisher);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 订阅者在平台上订阅发布者的部分信息</span></span><br><span class="line"><span class="keyword">new</span> Watcher(publisher, <span class="string">'bookName'</span>, name =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`new book name is <span class="subst">$&#123;name&#125;</span>`</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">new</span> Watcher(publisher, <span class="string">'bookContent'</span>, content =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`new book content is <span class="subst">$&#123;content&#125;</span>`</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发布者发布信息</span></span><br><span class="line">publisher.bookName = <span class="string">'new book'</span>;</span><br><span class="line">publisher.bookContent = <span class="string">'new content'</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="Vue-观察者的实现"><a href="#Vue-观察者的实现" class="headerlink" title="Vue 观察者的实现"></a>Vue 观察者的实现</h3><p>在看源码之前，首先让我们看看 Vue 的实现原理图：</p>
+<p><img data-src="/images/vue-observer.jpeg" alt="Reactive"></p>
+<p>先仅考虑 data 部分的观察者模式，我们可以看到大致步骤为：</p>
+<ol>
+<li>为发布者 data 做数据监听处理；</li>
+<li>为劫持方法添加 Dep 依赖收集，<code>get</code> 存储 target 目标，set 设置 target 目标；</li>
+<li>依赖收集触发后，触发 Watch 观察者，通知订阅者改变。</li>
+</ol>
+<p>因为流程图中只是详细展示了响应式部分的变动，为了便于大家更清楚的理解这部分的流程，所以这里先解释一下 Vue 中完整的流程：</p>
+<ol>
+<li>页面开始渲染，对 data 进行依赖收集；</li>
+<li>依赖收集完毕，开始监测订阅者的方法，并存储原值方便变更时的对比；</li>
+<li>因为依赖收集完毕，要存储原值则触发了 get 事件，此时添加 dep 依赖，将对应生成的 watcher 存储入依赖列表内</li>
+<li>页面渲染完成，用户触发页面某些点击事件（比如按钮）；</li>
+<li>点击事件绑定了某个 methods 方法，该 methods 方法使得 data 部分内容更新了；</li>
+<li>因为已经对 data 进行了依赖收集，触发了对应的 set 方法；</li>
+<li>set 方法对比新旧值发现值更新了，此时重新收集依赖新的值（特别是对象的情况），然后通知它的私有管家 Dep 进行更新；</li>
+<li>Dep 依赖开始遍历其所存储的数组，为该发布者的订阅者们发送消息，触发订阅事件。</li>
+<li>各订阅者事件触发 update 更新，此时便流转到 render 渲染，之后页面就更新啦！</li>
+</ol>
+<p>为了方便大家理解源码，这里手动实现了一个简单的 observer 模式，基本是按着源码的思路一点点撸出来的，注释很全，方便大家理解！</p>
+<ul>
+<li><a href="https://github.com/kazehaiya/vue-observe" target="_blank" rel="noopener">个人版 vue-observer 源码</a></li>
+</ul>
+<h3 id="源码地址"><a href="#源码地址" class="headerlink" title="源码地址"></a>源码地址</h3><p>所有的 demo 都写入仓库了，仓库地址为：<a href="https://github.com/kazehaiya/vue-observe" target="_blank" rel="noopener">传送门</a></p>
+]]></content>
+      <categories>
+        <category>Vue</category>
+      </categories>
+      <tags>
+        <tag>Vue</tag>
         <tag>JavaScript</tag>
       </tags>
   </entry>
@@ -1770,6 +1779,53 @@
       </categories>
       <tags>
         <tag>Vue</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>分析 Vue 的观察者模式（上）</title>
+    <url>/2019/10/10/%E5%88%86%E6%9E%90-Vue-%E7%9A%84%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%8A%EF%BC%89/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近又鼓起勇气鼓捣 vue 源码，然后不经意间瞅了瞅最早开始学习 vue 源码时跟着撸的一个 vue-observer 的实例，发现自己对于观察者模式还是有些不太明白。因此，在学习了《JavaScript 设计模式》的“观察者模式”一篇后，总算有了一点灵感。目前趁灵感还在，在此便记录下我的理解。</p>
+<a id="more"></a>
+<h3 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h3><p>什么是观察者模式呢？首先引用一下比较正规的说法：</p>
+<div class="note info">
+            <p>观察者模式：又被称作发布-订阅者模式或消息机制，定义了一种依赖关系，解决了主体对象与观察者之间功能的耦合。</p>
+          </div>
+<p>简单来说，观察者模式主要实现的是一种对于未来可能发生的事情做的一种消息订阅处理。DOM2 级事件中的 addEventListener 方法以及生活中的订报纸都基本上就是这种原理。</p>
+<p>首先我们得有发布者和订阅者，他们之间如何联系起来那就需要一个观察者平台。订阅者在观察者平台上向发布者添加订阅，待发布者在发布信息后，观察者平台获取到更新的信息后，给各个订阅者发提醒表示“你关注的发布者更新了文档哦～”，这样订阅者就能得到更新后的消息内容了。</p>
+<p>其实发布者和订阅者都很简单，关键点还是观察者这个中间平台的实现。我们最终想要的结果其实可简化为如下代码：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 观察者（平台）</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">observer</span>(<span class="params"></span>) </span>&#123; <span class="comment">/***/</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发布者（平台作者）</span></span><br><span class="line"><span class="keyword">const</span> publisher = &#123; <span class="attr">bookName</span>: <span class="string">'Hello World!'</span>, <span class="attr">content</span>: <span class="string">'This is a book'</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 订阅者（在平台上订阅某作者）</span></span><br><span class="line"><span class="keyword">const</span> subscriber = observer(publisher);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 之后 publisher 改变什么东西，observer 触发订阅的消息即可。</span></span><br></pre></td></tr></table></figure>
+<h3 id="简单的观察者"><a href="#简单的观察者" class="headerlink" title="简单的观察者"></a>简单的观察者</h3><p>前面分析到，观察者其实就是对于发布者和订阅者的一个中间平台，因此观察者所需要的能力包括：添加订阅者、消息推送和删除订阅者。先不考虑最终自动化处理发布订阅的流程以及删除操作，手动处理的大致流程为：</p>
+<ol>
+<li>平台上新增了一个订阅者，并订阅了一个发布者；</li>
+<li>发布者更改了自身的某些属性；</li>
+<li>平台通知订阅者，“你订阅的发布者更新了新内容”。</li>
+</ol>
+<p>因此我们可以简化一个观察者模型为：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Observer</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList = [];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 添加订阅方法</span></span><br><span class="line">  addSubscriber(subscribFunc) &#123;</span><br><span class="line">    <span class="keyword">if</span> (subscribFunc &amp;&amp; !<span class="keyword">this</span>.subscriberList.includes(subscribFunc)) &#123;</span><br><span class="line">      <span class="keyword">this</span>.subscriberList.push(subscribFunc);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发布者更新消息，触发所有的订阅方法</span></span><br><span class="line">  notify() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.forEach(<span class="function"><span class="params">subscribFunc</span> =&gt;</span> subscribFunc());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 观察者</span></span><br><span class="line"><span class="keyword">const</span> observer = <span class="keyword">new</span> Observer();</span><br><span class="line"><span class="comment">// 发布者</span></span><br><span class="line"><span class="keyword">const</span> publisher = &#123; <span class="attr">bookName</span>: <span class="string">'Hello'</span> &#125;</span><br><span class="line"><span class="comment">// 订阅者</span></span><br><span class="line"><span class="keyword">const</span> subscriber = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`The publisher your followed update the book <span class="subst">$&#123;publisher.bookName&#125;</span>`</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 订阅者订阅事件需要平台完成</span></span><br><span class="line">observer.addSubscriber(subscriber);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发布者更新消息</span></span><br><span class="line">publisher.bookName = <span class="string">'Hello World'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 平台根据订阅者设置的事件通知订阅者，你有新订阅信息</span></span><br><span class="line">observer.notify();</span><br></pre></td></tr></table></figure>
+<h3 id="稍复杂的观察者"><a href="#稍复杂的观察者" class="headerlink" title="稍复杂的观察者"></a>稍复杂的观察者</h3><p>前面基本上勾勒出了基本的观察者模型大致逻辑，虽然是纯“手动”操作，但是顺着这个机制走下去就没有太大问题。现在我们需要的是慢慢将“手动”转变为“自动”，而要实现这种转变则需要一些中间的封装，也就是中间的依赖类，此时我们的思路是这样的：</p>
+<ol>
+<li>为每个发布者生成一个对应的依赖收集对象（类比 Vue 中 data 返回的对象）</li>
+<li>为负责依赖收集的对象添加订阅者事件（类比 Vue 中的 methods 和 computed 内容）</li>
+<li>发布者更新内容，订阅者事件触发</li>
+</ol>
+<p>因为待依赖收集的对象总是动态变动的，因此我们还得维护一个全局的 target 对象来动态绑定当前变动的发布者，此时的代码可以抽象为：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> target = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList = [];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 添加订阅方法</span></span><br><span class="line">  depend() &#123;</span><br><span class="line">    <span class="keyword">if</span> (target &amp;&amp; !<span class="keyword">this</span>.subscriberList.includes(target)) &#123;</span><br><span class="line">      <span class="keyword">this</span>.subscriberList.push(target);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发布者更新消息，触发所有的订阅方法</span></span><br><span class="line">  notify() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.forEach(<span class="function"><span class="params">sub</span> =&gt;</span> sub());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 中间依赖的平台</span></span><br><span class="line"><span class="keyword">const</span> dep = <span class="keyword">new</span> Dep();</span><br><span class="line"><span class="comment">// 发布者（data 对象中的属性，为了方便处理，直接扩出来了，写成对象也行）</span></span><br><span class="line"><span class="keyword">let</span> bookName = <span class="string">"Hello World"</span>;</span><br><span class="line"><span class="keyword">let</span> bookContent = <span class="string">"This is a book"</span>;</span><br><span class="line"><span class="keyword">let</span> publishInfo = <span class="string">''</span>; <span class="comment">// 消息提示</span></span><br><span class="line"><span class="comment">// 绑定当前的订阅者（method 方法）</span></span><br><span class="line"><span class="keyword">const</span> target = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  publishInfo = <span class="string">`The book <span class="subst">$&#123;bookName&#125;</span>‘s content is <span class="subst">$&#123;bookContent&#125;</span>`</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 订阅者还未订阅信息</span></span><br><span class="line"><span class="built_in">console</span>.log(publishInfo); <span class="comment">// ‘’</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 订阅者在平台上添加订阅事件，并推送用户目前的最新信息</span></span><br><span class="line">dep.depend();</span><br><span class="line">target();</span><br><span class="line"><span class="built_in">console</span>.log(publishInfo) <span class="comment">// The book Hello World‘s content is This is a book</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// publisher 更新消息</span></span><br><span class="line">bookContent = <span class="string">'The content is "Hello World"'</span>;</span><br><span class="line"><span class="comment">// 平台还未处理前，原信息没有改变</span></span><br><span class="line"><span class="built_in">console</span>.log(publishInfo) <span class="comment">// The book Hello World‘s content is This is a book</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 平台观察到 publisher 更新内容了，更新了用户的通知信息</span></span><br><span class="line">dep.notify();</span><br><span class="line"><span class="comment">// 呈现更新后的信息</span></span><br><span class="line"><span class="built_in">console</span>.log(publishInfo) <span class="comment">// The book Hello World‘s content is The content is "Hello World"</span></span><br></pre></td></tr></table></figure>
+<p>与前面的相比，目前这一版的优点在于：</p>
+<ol>
+<li>每个发布者都有属于自己的小管家，而不是与各订阅者一一绑定（原绑定方式：发布者 -&gt; 平台 -&gt; 订阅者），方便消息推送管理；</li>
+<li>平台能动态绑定发布者（原来是通过订阅者显示绑定发布者）；</li>
+</ol>
+<p>但是目前还有一些缺陷，那就是：<strong>还没有实现动态的观察变化</strong></p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
+<li><a href="https://mp.weixin.qq.com/s/Wm5-3hsqre7ft_f0YBnoeg" target="_blank" rel="noopener">以 Vue 为例，解释 JavaScript 的反应性</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Vue</category>
+      </categories>
+      <tags>
+        <tag>Vue</tag>
+        <tag>JavaScript</tag>
       </tags>
   </entry>
   <entry>
@@ -2058,62 +2114,6 @@
       </categories>
       <tags>
         <tag>Env</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>分析 Vue 的观察者模式（中）</title>
-    <url>/2019/10/11/%E5%88%86%E6%9E%90-Vue-%E7%9A%84%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%AD%EF%BC%89/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在上篇<a href="/2019/10/10/分析-Vue-的观察者模式（上）/" title="分析 Vue 的观察者模式（上）">分析 Vue 的观察者模式（上）</a>中，简单实现了“手动”版观察者模式，而在本篇中我们继续沿着该思路往下探索，看如何实现“自动”版的观察者。</p>
-<a id="more"></a>
-<h3 id="完善的观察者"><a href="#完善的观察者" class="headerlink" title="完善的观察者"></a>完善的观察者</h3><p>紧接着上文的思路，因为我们只是实现了 Dep 依赖（管家），却还没有对平台的观察处理方式优化，因此我们需要将此步骤给完善起来。</p>
-<p>首先，要实现发布者更新内容后自动触发订阅事件，那么我们需要的是对发布者内容改变的监听，ES5 中恰好有这么一种方法能满足我们的需求，那就是 <code>Object.defineProperty(...)</code>。其语法很简单，我们此处仅仅需要拦截 get 和 set 方法，大致写法为：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> data = &#123;</span><br><span class="line">  name: <span class="string">'test'</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(data, name, &#123;</span><br><span class="line">  <span class="keyword">get</span>() &#123;</span><br><span class="line">    <span class="keyword">return</span> data.name;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="keyword">set</span>(newVal) &#123;</span><br><span class="line">    <span class="comment">// 调用 setter 方法，不可直接赋值，否则会死循环</span></span><br><span class="line">    <span class="comment">// 错误写法 obj[key] = newVal</span></span><br><span class="line">    <span class="comment">// 可查看 Vue 中的 setter 获取</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>既然有了能够观测发布者的方法，那么对于对象变更后的监听就能自动化处理了，那么先前手动触发 <code>dep.depend()</code> 和 <code>dep.notify()</code> 函数的操作就能整合入 <code>Object.defineProperty</code> 内了。</p>
-<p>延续先前的逻辑，<code>dep.notify()</code> 方法执行都得在对象值变动之后，因此我们可以将此方法放入 set 函数内；而 <code>dep.depend()</code> 方法主要是将订阅者事件存储入自身的事件列表中，因此该方法执行一次就行，之后每次更新都触发 <code>notify</code> 来依次执行注册的函数即可。因此，在考虑只是传入简单对象的情况时，这阶段的代码思路大致是：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// （私人管家）依赖收集</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList = [];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 添加订阅方法</span></span><br><span class="line">  depend() &#123;</span><br><span class="line">    <span class="comment">// 此处添加对应订阅方法</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发布者更新消息</span></span><br><span class="line">  notify() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.forEach(<span class="function"><span class="params">sub</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 依次处理订阅的方法</span></span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// （发布者和管家的联系方式）监听器</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">observer</span>(<span class="params">data = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">Object</span>.keys(data).forEach(<span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> val = data[key];</span><br><span class="line">    <span class="keyword">const</span> dep = <span class="keyword">new</span> Dep();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(data, key, &#123;</span><br><span class="line">      <span class="keyword">get</span>() &#123;</span><br><span class="line">        <span class="comment">// get 时添加依赖，当有目标的时候才添加</span></span><br><span class="line">        <span class="keyword">if</span> (target) &#123;</span><br><span class="line">          dep.depend();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> val;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="keyword">set</span>(newVal) &#123;</span><br><span class="line">        <span class="keyword">if</span> (newVal === val) &#123;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// set 时触发更新</span></span><br><span class="line">        <span class="comment">// 此处用 setter 做变动，此处偷懒一下，不要直接赋值，会反复触发 set</span></span><br><span class="line">        val = newVal;</span><br><span class="line">        dep.notify();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>那么现在问题又有了。目前代码实现至此我们仅仅只是将发布者与其 Dep 依赖进行了关联，那么观察者又该如何将其获订阅者的事件与 Dep 存储的事件列表进行关联呢？从订阅者角度分析一下：</p>
-<ol>
-<li>订阅者决定好要订阅的内容（订阅者的函数）；</li>
-<li>订阅者在对应的观察者平台上注册事件，绑定发布者信息；</li>
-<li>观察者先联系到 Dep 管家，将订阅事件存放至管家处；</li>
-<li>待管家拿到了发布者新情报，则响应所有存储好的订阅者的订阅事件了。</li>
-</ol>
-<p>思路逐渐清晰，那么这么个流程我们可以简化为如下代码：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">target = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.sub = [];</span><br><span class="line">  &#125;</span><br><span class="line">  depend() &#123;</span><br><span class="line">    <span class="keyword">if</span> (target &amp;&amp; !<span class="keyword">this</span>.sub.includes(target)) &#123;</span><br><span class="line">      <span class="keyword">this</span>.sub.push(target);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  notify() &#123;</span><br><span class="line">    <span class="keyword">this</span>.sub.forEach(<span class="function"><span class="params">cb</span> =&gt;</span> cb());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">watcher</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">  target = callback;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 此处触发一下监听对象的 get 方法，将 callback 方法加入 Dep 依赖的订阅队列中</span></span><br><span class="line">  <span class="comment">// 然后清除掉 target，防止重复注册</span></span><br><span class="line"></span><br><span class="line">  target = <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">watcher(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 此处是订阅事件</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>这样我们就讲观察者的订阅方法和 Dep 依赖给绑定上了。考虑到 watcher 的通用性，这里写了一个加强版的 demo，如下：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> target = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// （私人管家）依赖收集</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList = [];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 将当前的 watcher 加入 dep 中</span></span><br><span class="line">  addSub(watcher) &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.push(watcher)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 添加订阅方法</span></span><br><span class="line">  depend() &#123;</span><br><span class="line">    <span class="keyword">if</span> (target) &#123;</span><br><span class="line">      target.addDep(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发布者更新消息，触发所有的订阅方法</span></span><br><span class="line">  notify() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscriberList.forEach(<span class="function"><span class="params">sub</span> =&gt;</span> &#123;</span><br><span class="line">      sub.update();</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// （平台）观察者</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Watcher</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(data = &#123;&#125;, key = <span class="string">''</span>, cb = <span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;) &#123;</span><br><span class="line">    <span class="keyword">this</span>.cb = cb;</span><br><span class="line">    <span class="keyword">this</span>._data = data;</span><br><span class="line">    <span class="keyword">this</span>.key = key;</span><br><span class="line"></span><br><span class="line">    target = <span class="keyword">this</span>;</span><br><span class="line">    <span class="comment">// 触发 getter，存储本 watcher</span></span><br><span class="line">    <span class="keyword">this</span>.value = data[key];</span><br><span class="line">    <span class="comment">// 防止反复触发</span></span><br><span class="line">    target = <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  addDep(dep) &#123;</span><br><span class="line">    dep.addSub(<span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  update() &#123;</span><br><span class="line">    <span class="keyword">const</span> newVal = <span class="keyword">this</span>._data[<span class="keyword">this</span>.key];</span><br><span class="line">    <span class="keyword">this</span>.value = newVal;</span><br><span class="line">    <span class="keyword">this</span>.cb(newVal);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// （发布者和管家的联系方式）监听器</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">observer</span>(<span class="params">data = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">Object</span>.keys(data).forEach(<span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> val = data[key];</span><br><span class="line">    <span class="keyword">const</span> dep = <span class="keyword">new</span> Dep();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Object</span>.defineProperty(data, key, &#123;</span><br><span class="line">      <span class="keyword">get</span>() &#123;</span><br><span class="line">        <span class="keyword">if</span> (target) &#123;</span><br><span class="line">          <span class="comment">// get 时添加依赖</span></span><br><span class="line">          dep.depend();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> val;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="keyword">set</span>(newVal) &#123;</span><br><span class="line">        <span class="keyword">if</span> (newVal === val) &#123;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// set 时触发更新</span></span><br><span class="line">        val = newVal;</span><br><span class="line">        dep.notify();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发布者</span></span><br><span class="line"><span class="keyword">const</span> publisher = &#123;</span><br><span class="line">  bookName: <span class="string">'book'</span>,</span><br><span class="line">  bookContent: <span class="string">'hello world'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 管家开始观测发布者</span></span><br><span class="line">observer(publisher);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 订阅者在平台上订阅发布者的部分信息</span></span><br><span class="line"><span class="keyword">new</span> Watcher(publisher, <span class="string">'bookName'</span>, name =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`new book name is <span class="subst">$&#123;name&#125;</span>`</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">new</span> Watcher(publisher, <span class="string">'bookContent'</span>, content =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`new book content is <span class="subst">$&#123;content&#125;</span>`</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发布者发布信息</span></span><br><span class="line">publisher.bookName = <span class="string">'new book'</span>;</span><br><span class="line">publisher.bookContent = <span class="string">'new content'</span>;</span><br></pre></td></tr></table></figure>
-<h3 id="Vue-观察者的实现"><a href="#Vue-观察者的实现" class="headerlink" title="Vue 观察者的实现"></a>Vue 观察者的实现</h3><p>在看源码之前，首先让我们看看 Vue 的实现原理图：</p>
-<p><img data-src="/images/vue-observer.jpeg" alt="Reactive"></p>
-<p>先仅考虑 data 部分的观察者模式，我们可以看到大致步骤为：</p>
-<ol>
-<li>为发布者 data 做数据监听处理；</li>
-<li>为劫持方法添加 Dep 依赖收集，<code>get</code> 存储 target 目标，set 设置 target 目标；</li>
-<li>依赖收集触发后，触发 Watch 观察者，通知订阅者改变。</li>
-</ol>
-<p>因为流程图中只是详细展示了响应式部分的变动，为了便于大家更清楚的理解这部分的流程，所以这里先解释一下 Vue 中完整的流程：</p>
-<ol>
-<li>页面开始渲染，对 data 进行依赖收集；</li>
-<li>依赖收集完毕，开始监测订阅者的方法，并存储原值方便变更时的对比；</li>
-<li>因为依赖收集完毕，要存储原值则触发了 get 事件，此时添加 dep 依赖，将对应生成的 watcher 存储入依赖列表内</li>
-<li>页面渲染完成，用户触发页面某些点击事件（比如按钮）；</li>
-<li>点击事件绑定了某个 methods 方法，该 methods 方法使得 data 部分内容更新了；</li>
-<li>因为已经对 data 进行了依赖收集，触发了对应的 set 方法；</li>
-<li>set 方法对比新旧值发现值更新了，此时重新收集依赖新的值（特别是对象的情况），然后通知它的私有管家 Dep 进行更新；</li>
-<li>Dep 依赖开始遍历其所存储的数组，为该发布者的订阅者们发送消息，触发订阅事件。</li>
-<li>各订阅者事件触发 update 更新，此时便流转到 render 渲染，之后页面就更新啦！</li>
-</ol>
-<p>为了方便大家理解源码，这里手动实现了一个简单的 observer 模式，基本是按着源码的思路一点点撸出来的，注释很全，方便大家理解！</p>
-<ul>
-<li><a href="https://github.com/kazehaiya/vue-observe" target="_blank" rel="noopener">个人版 vue-observer 源码</a></li>
-</ul>
-<h3 id="源码地址"><a href="#源码地址" class="headerlink" title="源码地址"></a>源码地址</h3><p>所有的 demo 都写入仓库了，仓库地址为：<a href="https://github.com/kazehaiya/vue-observe" target="_blank" rel="noopener">传送门</a></p>
-]]></content>
-      <categories>
-        <category>Vue</category>
-      </categories>
-      <tags>
-        <tag>Vue</tag>
-        <tag>JavaScript</tag>
       </tags>
   </entry>
   <entry>
