@@ -17,14 +17,14 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"kazehaiya.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"monocy.site","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="前言最近又鼓起勇气鼓捣 vue 源码，然后不经意间瞅了瞅最早开始学习 vue 源码时跟着撸的一个 vue-observer 的实例，发现自己对于观察者模式还是有些不太明白。因此，在学习了《JavaScript 设计模式》的“观察者模式”一篇后，总算有了一点灵感。目前趁灵感还在，在此便记录下我的理解。">
 <meta name="keywords" content="Vue,JavaScript">
 <meta property="og:type" content="article">
 <meta property="og:title" content="分析 Vue 的观察者模式（上）">
-<meta property="og:url" content="https://kazehaiya.github.io/2019/10/10/分析-Vue-的观察者模式（上）/index.html">
+<meta property="og:url" content="https://monocy.site/2019/10/10/分析-Vue-的观察者模式（上）/index.html">
 <meta property="og:site_name" content="沐光">
 <meta property="og:description" content="前言最近又鼓起勇气鼓捣 vue 源码，然后不经意间瞅了瞅最早开始学习 vue 源码时跟着撸的一个 vue-observer 的实例，发现自己对于观察者模式还是有些不太明白。因此，在学习了《JavaScript 设计模式》的“观察者模式”一篇后，总算有了一点灵感。目前趁灵感还在，在此便记录下我的理解。">
 <meta property="og:locale" content="zh-CN">
@@ -33,7 +33,7 @@
 <meta name="twitter:title" content="分析 Vue 的观察者模式（上）">
 <meta name="twitter:description" content="前言最近又鼓起勇气鼓捣 vue 源码，然后不经意间瞅了瞅最早开始学习 vue 源码时跟着撸的一个 vue-observer 的实例，发现自己对于观察者模式还是有些不太明白。因此，在学习了《JavaScript 设计模式》的“观察者模式”一篇后，总算有了一点灵感。目前趁灵感还在，在此便记录下我的理解。">
 
-<link rel="canonical" href="https://kazehaiya.github.io/2019/10/10/分析-Vue-的观察者模式（上）/">
+<link rel="canonical" href="https://monocy.site/2019/10/10/分析-Vue-的观察者模式（上）/">
 
 
 <script id="page-configurations">
@@ -193,7 +193,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://kazehaiya.github.io/2019/10/10/分析-Vue-的观察者模式（上）/">
+    <link itemprop="mainEntityOfPage" href="https://monocy.site/2019/10/10/分析-Vue-的观察者模式（上）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -316,7 +316,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://kazehaiya.github.io/2019/10/10/分析-Vue-的观察者模式（上）/" title="分析 Vue 的观察者模式（上）">https://kazehaiya.github.io/2019/10/10/分析-Vue-的观察者模式（上）/</a>
+    <a href="https://monocy.site/2019/10/10/分析-Vue-的观察者模式（上）/" title="分析 Vue 的观察者模式（上）">https://monocy.site/2019/10/10/分析-Vue-的观察者模式（上）/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -493,10 +493,12 @@
         
 
         
+  <div class="beian"><a href="https://beian.miit.gov.cn" rel="noopener" target="_blank">京ICP备2020036147号 </a>
+  </div>
 
 <div class="copyright">
   
-  &copy; 
+  &copy; 2018 – 
   <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-dragon"></i>
