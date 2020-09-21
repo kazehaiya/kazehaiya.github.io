@@ -1291,7 +1291,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #12344b;
+  background: #1bb595;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -1491,7 +1491,7 @@ pre .javascript .function {
   font-size: 0.8125em;
 }
 .footer {
-  color: #999;
+  color: #fff;
   font-size: 0.875em;
   padding: 20px 0;
 }
@@ -1541,6 +1541,10 @@ pre .javascript .function {
 .powered-by,
 .theme-info {
   display: inline-block;
+}
+.beian > a {
+  color: #fff;
+  border-color: #fff;
 }
 @-moz-keyframes iconAnimate {
   0%, 100% {

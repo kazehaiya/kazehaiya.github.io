@@ -20,20 +20,20 @@
     var CONFIG = {"hostname":"monocy.site","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="前言在巩固继承这部分知识时，突然想到早期分享时同事提出的一些疑问，即实现 JS 继承具体有那些方法。在经过一番调研后，此篇便是我所总结出的比较全面的方法。当然，文中记录的仅是一些基础的继承方法以及它们之间的的区别，以供参考。">
+  <meta name="description" content="前言变量提升这个问题不论是以前还是现在，总是作为面试常考题型出现，因为 ES6 的新特性的推行，对于 var 所导致的变量提升问题在项目中就很少存在了。但是为什么 let、const 能解决这个变量提升的问题呢，静下心来品一品，其实还是有很多内容可以学到的。">
 <meta name="keywords" content="JavaScript">
 <meta property="og:type" content="article">
-<meta property="og:title" content="关于 JS 中“继承”的写法">
-<meta property="og:url" content="https://monocy.site/2019/06/28/关于-JS-中“继承”的写法/index.html">
+<meta property="og:title" content="变量提升完全解读">
+<meta property="og:url" content="https://monocy.site/2020/09/21/变量提升完全解读/index.html">
 <meta property="og:site_name" content="沐光">
-<meta property="og:description" content="前言在巩固继承这部分知识时，突然想到早期分享时同事提出的一些疑问，即实现 JS 继承具体有那些方法。在经过一番调研后，此篇便是我所总结出的比较全面的方法。当然，文中记录的仅是一些基础的继承方法以及它们之间的的区别，以供参考。">
+<meta property="og:description" content="前言变量提升这个问题不论是以前还是现在，总是作为面试常考题型出现，因为 ES6 的新特性的推行，对于 var 所导致的变量提升问题在项目中就很少存在了。但是为什么 let、const 能解决这个变量提升的问题呢，静下心来品一品，其实还是有很多内容可以学到的。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-08-16T09:34:09.000Z">
+<meta property="og:updated_time" content="2020-09-21T13:27:34.883Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="关于 JS 中“继承”的写法">
-<meta name="twitter:description" content="前言在巩固继承这部分知识时，突然想到早期分享时同事提出的一些疑问，即实现 JS 继承具体有那些方法。在经过一番调研后，此篇便是我所总结出的比较全面的方法。当然，文中记录的仅是一些基础的继承方法以及它们之间的的区别，以供参考。">
+<meta name="twitter:title" content="变量提升完全解读">
+<meta name="twitter:description" content="前言变量提升这个问题不论是以前还是现在，总是作为面试常考题型出现，因为 ES6 的新特性的推行，对于 var 所导致的变量提升问题在项目中就很少存在了。但是为什么 let、const 能解决这个变量提升的问题呢，静下心来品一品，其实还是有很多内容可以学到的。">
 
-<link rel="canonical" href="https://monocy.site/2019/06/28/关于-JS-中“继承”的写法/">
+<link rel="canonical" href="https://monocy.site/2020/09/21/变量提升完全解读/">
 
 
 <script id="page-configurations">
@@ -46,7 +46,7 @@
   };
 </script>
 
-  <title>关于 JS 中“继承”的写法 | 沐光</title>
+  <title>变量提升完全解读 | 沐光</title>
   
 
 
@@ -193,7 +193,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://monocy.site/2019/06/28/关于-JS-中“继承”的写法/">
+    <link itemprop="mainEntityOfPage" href="https://monocy.site/2020/09/21/变量提升完全解读/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -206,7 +206,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          关于 JS 中“继承”的写法
+          变量提升完全解读
         </h1>
 
         <div class="post-meta">
@@ -215,7 +215,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-16 17:34:09" itemprop="dateModified" datetime="2020-08-16T17:34:09+08:00">2020-08-16</time>
+                <time title="修改时间：2020-09-21 21:27:34" itemprop="dateModified" datetime="2020-09-21T21:27:34+08:00">2020-09-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -236,8 +236,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2019/06/28/关于-JS-中“继承”的写法/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2019/06/28/关于-JS-中“继承”的写法/" itemprop="commentCount"></span>
+    <a title="valine" href="/2020/09/21/变量提升完全解读/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/09/21/变量提升完全解读/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -247,7 +247,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>926</span>
+              <span>793</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -266,42 +266,48 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在巩固继承这部分知识时，突然想到早期分享时同事提出的一些疑问，即实现 JS 继承具体有那些方法。在经过一番调研后，此篇便是我所总结出的比较全面的方法。当然，文中记录的仅是一些基础的继承方法以及它们之间的的区别，以供参考。</p>
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>变量提升这个问题不论是以前还是现在，总是作为面试常考题型出现，因为 ES6 的新特性的推行，对于 <code>var</code> 所导致的变量提升问题在项目中就很少存在了。但是为什么 <code>let</code>、<code>const</code> 能解决这个变量提升的问题呢，静下心来品一品，其实还是有很多内容可以学到的。</p>
 <a id="more"></a>
-<h3 id="（原型）继承"><a href="#（原型）继承" class="headerlink" title="（原型）继承"></a>（原型）继承</h3><p>JavaScript 中有许多模拟类行为的方法，其中“继承”（更贴切的说法是委托）便是其中的一项，没有“继承”机制，JavaScript 中的类就是一个空架子。</p>
-<p>假如我们以此例作为继承的模板，归结下来总共有 5 种继承的写法。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 父类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Father</span>(<span class="params">age</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.age = age;</span><br><span class="line">&#125;</span><br><span class="line">Father.prototype.getAge = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.age;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 子类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Child</span>(<span class="params">age, size</span>) </span>&#123;</span><br><span class="line">    Father.call(<span class="keyword">this</span>, age);</span><br><span class="line">    <span class="keyword">this</span>.size = size;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 继承的实现，看下例 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 实例</span></span><br><span class="line"><span class="keyword">const</span> child = <span class="keyword">new</span> Child(<span class="number">28</span>, <span class="string">'small'</span>)</span><br></pre></td></tr></table></figure>
-<h4 id="隐式链接法"><a href="#隐式链接法" class="headerlink" title="隐式链接法"></a>隐式链接法</h4><p>ES6 之前比较非常规的写法是手动更改 <code>__proto__</code> 属性来最简化链式继承。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Child.prototype.__proto__ = Father.prototype</span><br></pre></td></tr></table></figure>
-<p>优点：操作很简便直接</p>
-<p>缺点：该方法并非标准，并且无法兼容所有浏览器，慎用。</p>
-<h4 id="直接引用法"><a href="#直接引用法" class="headerlink" title="直接引用法"></a>直接引用法</h4><p>直接将子类的 prototype 对象指向父类的 prototype 对象。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Child.prototype = Father.prototype;</span><br></pre></td></tr></table></figure>
-<p>优点：操作简单</p>
-<p>缺点： Child 的 prototype 属性修改会直接影响到父类，此写法其实相当于直接在父类进行修改，新创建一个子类有些多此一举。</p>
-<h4 id="实例化方法"><a href="#实例化方法" class="headerlink" title="实例化方法"></a>实例化方法</h4><p>子类的 prototype 属性为父类的实例对象，借由对象的 prototype 链来传递。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Child.prototype = <span class="keyword">new</span> Father();</span><br><span class="line"><span class="comment">// Child.prototype.constructor = Chlid;</span></span><br></pre></td></tr></table></figure>
-<p>优点：能基本满足“继承”的需求</p>
-<p>缺点：</p>
-<ol>
-<li>需要创建一个新对象，然后将旧对象（原本存在的 prototype 对象，带有 constructor）抛弃掉，不能直接修改默认的 prototype 对象。</li>
-<li>会产生副作用，比如：原型（prototype）上会有“脏”属性，本例的 prototype 上会有多余的 age 属性。</li>
-<li>必要时还得自己重写一下 Child 的 constructor 指向，如“寄生组合式继承”。</li>
-</ol>
+<h3 id="变量提升的本质"><a href="#变量提升的本质" class="headerlink" title="变量提升的本质"></a>变量提升的本质</h3><p>首先为什么会有变量提升？先前在<a href="/2019/05/19/深入了解-this/" title="深入了解 this">深入了解 this</a>一文中有简单提到过：“JS 因为是运行时编译的，会粗略的提取变量声明，因此会有变量提升”。在变量提升后，当程序执行到对应行在进行赋值操作，因此大概流出如下：</p>
+<ul>
+<li>变量声明提升</li>
+<li>函数声明提升（已经指向了函数声明的内存块）</li>
+<li>变量赋值</li>
+</ul>
+<p>这也就解释了为什么函数和变量一起提升，但是在后面使用的时候，结果都会是函数。</p>
 <blockquote>
-<p>“寄生组合式继承” 在 ES5 中为最佳写法，如果不考虑其稍微的复杂性。</p>
+<p>小结：变量声明的提升优于函数声明的提升。</p>
 </blockquote>
-<h4 id="对象构造法"><a href="#对象构造法" class="headerlink" title="对象构造法"></a>对象构造法</h4><p>通过 <code>Object.create</code> 方法来构造一个合适的关联对象。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Child.prototype = <span class="built_in">Object</span>.create(Father.prototype)</span><br><span class="line"><span class="comment">// Child.prototype.constructor = Chlid;</span></span><br></pre></td></tr></table></figure>
-<p>优点：在 ES6 之前的最佳之选，优于实例化方法。</p>
-<p>缺点：与实例化方法基本相同，但没有副作用。此外，其隐式 <code>__proto__</code> 链比实例化方法要多一层，链式查找方法相对会耗时长一点点，基本可忽略。</p>
-<h4 id="设置原型法"><a href="#设置原型法" class="headerlink" title="设置原型法"></a>设置原型法</h4><p>使用 ES6 的原型设置方法，此法在 ES6 环境为最佳之选，没有之一。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span>.setPrototypeOf(Child.prototype, Father.prototype)</span><br></pre></td></tr></table></figure>
-<p>优点：能覆盖所有需求，清晰易懂，可读性强。</p>
-<p>缺点：性能比 <code>Object.create</code> 稍微差点，如果考虑性能的话可优先使用 <code>Object.create</code> 方法</p>
-<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><blockquote>
-<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/setPrototypeOf" target="_blank" rel="noopener">MDN</a></p>
+<h3 id="变量提升的位置"><a href="#变量提升的位置" class="headerlink" title="变量提升的位置"></a>变量提升的位置</h3><p>其实变量提升的问题除了提升的顺序外，另一个就是提升的位置了。其实这个只需要记住 JS 中有哪些作用域了。在 ES6 之前，JS 的作用域仅有两个：</p>
+<ul>
+<li>函数作用域</li>
+<li>全局作用域</li>
+</ul>
+<p>在引入 ES6 后有新增了一个 <code>块级作用域</code>。在变量提升时，其声明仅仅能够提升到当前作用域的最顶端（具体原因可查阅第二篇参考文章）。所以在确定了作用域的情况下，结合提升的顺序，我们就能很明确的了解到变量的顺序了。</p>
+<blockquote>
+<p>小结：JS 仅有 <code>全局作用域</code>、<code>函数作用域</code> 和 <code>块级作用域</code>。</p>
 </blockquote>
+<h3 id="小试牛刀"><a href="#小试牛刀" class="headerlink" title="小试牛刀"></a>小试牛刀</h3><p>在作用域和变量提升顺序都清楚的情况下，跟着思路过一道题加深一下印象：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(bb); <span class="comment">// function bb() &#123; console.log('change'); &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> aa = <span class="number">123</span>;</span><br><span class="line"><span class="keyword">var</span> bb = <span class="string">'string'</span>;</span><br><span class="line"><span class="keyword">let</span> cc = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bb</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'change'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> ee = dd = [];</span><br><span class="line">  cc = <span class="string">'new String'</span>;</span><br><span class="line">&#125;)();</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(aa); <span class="comment">// 123</span></span><br><span class="line"><span class="built_in">console</span>.log(bb); <span class="comment">// 'string'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> aa;</span><br><span class="line"><span class="keyword">var</span> bb = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'who am I'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(aa); <span class="comment">// 123</span></span><br><span class="line"><span class="built_in">console</span>.log(bb); <span class="comment">// "function bb() &#123; console.log('who am I'); &#125;"</span></span><br><span class="line"><span class="built_in">console</span>.log(cc); <span class="comment">// 'new String'</span></span><br><span class="line"><span class="built_in">console</span>.log(dd); <span class="comment">// []</span></span><br><span class="line"><span class="built_in">console</span>.log(ee); <span class="comment">// Error: ee is not defined</span></span><br></pre></td></tr></table></figure>
+<p>这里又几个注意的小细节：</p>
+<ol>
+<li>JS 赋值操作为“自右向左”进行的</li>
+<li>JS 取值操作取最近的一次赋值的值</li>
+<li>未声明的变量会报错，而非 undefined</li>
+</ol>
+<p>参考一下处理后的结构（建议开两个页面分屏看）：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> aa = <span class="literal">undefined</span>;</span><br><span class="line"><span class="keyword">var</span> bb = <span class="literal">undefined</span>;</span><br><span class="line"><span class="keyword">let</span> cc; <span class="comment">// 仅声明，产生临时索取（取不到值）</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bb</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'change'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(bb);  <span class="comment">// function bb() &#123; console.log('change'); &#125;</span></span><br><span class="line"></span><br><span class="line">aa = <span class="number">123</span>;</span><br><span class="line">bb = <span class="string">'string'</span>;</span><br><span class="line">cc = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// console.log(dd) // Error: ee is not defined</span></span><br><span class="line"></span><br><span class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> ee = <span class="literal">undefined</span>;</span><br><span class="line">  dd; <span class="comment">// 无声明默认挂在到 window 了（此时才挂载上 window 的，前面拿不到）</span></span><br><span class="line"></span><br><span class="line">  dd = [];</span><br><span class="line">  ee = dd;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 能拿到上级作用域中的 cc 变量</span></span><br><span class="line">  cc = <span class="string">'new String'</span>;</span><br><span class="line">&#125;)();</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(aa); <span class="comment">// 123</span></span><br><span class="line"><span class="built_in">console</span>.log(bb); <span class="comment">// 'string'</span></span><br><span class="line"></span><br><span class="line">bb = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'who am I'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(aa); <span class="comment">// 123</span></span><br><span class="line"><span class="built_in">console</span>.log(bb); <span class="comment">// "function bb() &#123; console.log('who am I'); &#125;"</span></span><br><span class="line"><span class="built_in">console</span>.log(cc); <span class="comment">// 'new String'</span></span><br><span class="line"><span class="built_in">console</span>.log(dd); <span class="comment">// []</span></span><br><span class="line"><span class="built_in">console</span>.log(ee); <span class="comment">// Error: ee is not defined</span></span><br></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>遇到变量提升相关问题时，只需关注一下几点基本都能解答上来：</p>
+<ul>
+<li>变量所在作用域位置；</li>
+<li>区分函数提升和变量提升，取 console 时最近的一次赋值位置；</li>
+<li>小心全局变量声明的陷阱；</li>
+<li>无变量声明的情况下，打印会报错；</li>
+</ul>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
+<li><a href="https://blog.csdn.net/qq_24839991/article/details/80199693" target="_blank" rel="noopener">js 为什么会进行变量提升（词法分析）</a></li>
+<li><a href="https://blog.csdn.net/Riona_cheng/article/details/107099094" target="_blank" rel="noopener">JS 变量的执行环境和生命周期</a></li>
+</ul>
 
     </div>
 
@@ -317,7 +323,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://monocy.site/2019/06/28/关于-JS-中“继承”的写法/" title="关于 JS 中“继承”的写法">https://monocy.site/2019/06/28/关于-JS-中“继承”的写法/</a>
+    <a href="https://monocy.site/2020/09/21/变量提升完全解读/" title="变量提升完全解读">https://monocy.site/2020/09/21/变量提升完全解读/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -338,13 +344,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2019/06/18/层叠上下文/" rel="prev" title="层叠上下文">
-      <i class="fa fa-chevron-left"></i> 层叠上下文
+    <a href="/2020/08/26/Mac-环境配置/" rel="prev" title="Mac 环境配置">
+      <i class="fa fa-chevron-left"></i> Mac 环境配置
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2019/07/07/由-shims-vue-d-ts-引发的思考/" rel="next" title="由 shims-vue.d.ts 引发的思考">
-      由 shims-vue.d.ts 引发的思考 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -404,7 +407,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#（原型）继承"><span class="nav-number">2.</span> <span class="nav-text">（原型）继承</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#隐式链接法"><span class="nav-number">2.1.</span> <span class="nav-text">隐式链接法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#直接引用法"><span class="nav-number">2.2.</span> <span class="nav-text">直接引用法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实例化方法"><span class="nav-number">2.3.</span> <span class="nav-text">实例化方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对象构造法"><span class="nav-number">2.4.</span> <span class="nav-text">对象构造法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置原型法"><span class="nav-number">2.5.</span> <span class="nav-text">设置原型法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文档"><span class="nav-number">3.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#变量提升的本质"><span class="nav-number">2.</span> <span class="nav-text">变量提升的本质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#变量提升的位置"><span class="nav-number">3.</span> <span class="nav-text">变量提升的位置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小试牛刀"><span class="nav-number">4.</span> <span class="nav-text">小试牛刀</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文章"><span class="nav-number">6.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
