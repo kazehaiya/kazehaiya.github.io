@@ -20,20 +20,20 @@
     var CONFIG = {"hostname":"monocy.site","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="前言最近在做 Vue 项目时遇到一个读取 xlsx 文件的需求，考虑到文件可能比较大的情况，为了不让页面卡死，因此引入了 webworker，本来想着应该是很容易的事情，结果却并不是很简单，主要难在配置上，这里就记录一下配置时遇到的困难。">
-<meta name="keywords" content="Vue">
+  <meta name="description" content="前言ES6 的 Promise 可以拓展很多比较好的调度算法，比如最近碰到的一个让人眼前一亮的简单任务调度实现的题目，这里我记录一下我的思考和实现。">
+<meta name="keywords" content="JavaScript">
 <meta property="og:type" content="article">
-<meta property="og:title" content="在 typescript 中添加 webworker">
-<meta property="og:url" content="https://monocy.site/2020/04/28/在-typescript-中添加-webworker/index.html">
+<meta property="og:title" content="记一次任务调度算法题">
+<meta property="og:url" content="https://monocy.site/2020/09/22/记一次任务调度算法题/index.html">
 <meta property="og:site_name" content="沐光">
-<meta property="og:description" content="前言最近在做 Vue 项目时遇到一个读取 xlsx 文件的需求，考虑到文件可能比较大的情况，为了不让页面卡死，因此引入了 webworker，本来想着应该是很容易的事情，结果却并不是很简单，主要难在配置上，这里就记录一下配置时遇到的困难。">
+<meta property="og:description" content="前言ES6 的 Promise 可以拓展很多比较好的调度算法，比如最近碰到的一个让人眼前一亮的简单任务调度实现的题目，这里我记录一下我的思考和实现。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-08-16T09:34:09.000Z">
+<meta property="og:updated_time" content="2020-09-22T09:03:41.759Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="在 typescript 中添加 webworker">
-<meta name="twitter:description" content="前言最近在做 Vue 项目时遇到一个读取 xlsx 文件的需求，考虑到文件可能比较大的情况，为了不让页面卡死，因此引入了 webworker，本来想着应该是很容易的事情，结果却并不是很简单，主要难在配置上，这里就记录一下配置时遇到的困难。">
+<meta name="twitter:title" content="记一次任务调度算法题">
+<meta name="twitter:description" content="前言ES6 的 Promise 可以拓展很多比较好的调度算法，比如最近碰到的一个让人眼前一亮的简单任务调度实现的题目，这里我记录一下我的思考和实现。">
 
-<link rel="canonical" href="https://monocy.site/2020/04/28/在-typescript-中添加-webworker/">
+<link rel="canonical" href="https://monocy.site/2020/09/22/记一次任务调度算法题/">
 
 
 <script id="page-configurations">
@@ -46,7 +46,7 @@
   };
 </script>
 
-  <title>在 typescript 中添加 webworker | 沐光</title>
+  <title>记一次任务调度算法题 | 沐光</title>
   
 
 
@@ -193,7 +193,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://monocy.site/2020/04/28/在-typescript-中添加-webworker/">
+    <link itemprop="mainEntityOfPage" href="https://monocy.site/2020/09/22/记一次任务调度算法题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -206,7 +206,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          在 typescript 中添加 webworker
+          记一次任务调度算法题
         </h1>
 
         <div class="post-meta">
@@ -215,7 +215,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-16 17:34:09" itemprop="dateModified" datetime="2020-08-16T17:34:09+08:00">2020-08-16</time>
+                <time title="修改时间：2020-09-22 17:03:41" itemprop="dateModified" datetime="2020-09-22T17:03:41+08:00">2020-09-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -223,7 +223,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/vue/" itemprop="url" rel="index"><span itemprop="name">Vue</span></a>
+                  <a href="/categories/javascript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
                 </span>
             </span>
 
@@ -236,8 +236,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2020/04/28/在-typescript-中添加-webworker/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/04/28/在-typescript-中添加-webworker/" itemprop="commentCount"></span>
+    <a title="valine" href="/2020/09/22/记一次任务调度算法题/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/09/22/记一次任务调度算法题/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -247,7 +247,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>372</span>
+              <span>243</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -266,27 +266,18 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近在做 Vue 项目时遇到一个读取 xlsx 文件的需求，考虑到文件可能比较大的情况，为了不让页面卡死，因此引入了 webworker，本来想着应该是很容易的事情，结果却并不是很简单，主要难在配置上，这里就记录一下配置时遇到的困难。</p>
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>ES6 的 Promise 可以拓展很多比较好的调度算法，比如最近碰到的一个让人眼前一亮的简单任务调度实现的题目，这里我记录一下我的思考和实现。</p>
 <a id="more"></a>
-<h3 id="配置-loader"><a href="#配置-loader" class="headerlink" title="配置 loader"></a>配置 loader</h3><p>因为是 ts 写的项目，因此查阅了一下引入 webworker 需要那些插件，因此首先需要配置的是 loader 文件了。</p>
-<ol>
-<li>安装 worker-loader</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add worker-loader -D</span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>在 vue.config.js 内添加如下内容：</li>
-</ol>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  chainWebpack: <span class="function"><span class="params">config</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="comment">// 添加 worker-loader 支持</span></span><br><span class="line">    config.module</span><br><span class="line">      .rule(<span class="string">'webWorker'</span>)</span><br><span class="line">      .post()</span><br><span class="line">      .test(<span class="regexp">/\.worker\.(j|t)s$/</span>)</span><br><span class="line">      .use(<span class="string">'worker-loader'</span>)</span><br><span class="line">      .loader(<span class="string">'worker-loader'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ol start="3">
-<li>重启项目</li>
-</ol>
-<h3 id="worker-文件的写法"><a href="#worker-文件的写法" class="headerlink" title="worker 文件的写法"></a>worker 文件的写法</h3><p>在 ts 项目中，类型声明是很重要的一点，对于 worker 文件因为没有导出，在主进程中引入会很棘手，参考网上的例子，一般 worker 文件需要这么配置</p>
-<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 文件命名： xxx.worker.ts</span></span><br><span class="line"><span class="comment">// 创建 this 指针，或者配置 webpack 的 output 的 globalObject 属性</span></span><br><span class="line"><span class="keyword">const</span> _self: Worker = self <span class="keyword">as</span> <span class="built_in">any</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监听 message 事件</span></span><br><span class="line">_self.addEventListener(<span class="string">'message'</span>, <span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监听错误事件</span></span><br><span class="line">_self.addEventListener(<span class="string">'error'</span>, <span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(e.message);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
-<li><a href="http://www.ruanyifeng.com/blog/2018/07/web-worker.html" target="_blank" rel="noopener">Web Worker 使用教程</a></li>
-<li><a href="https://www.cnblogs.com/liuxianan/p/js-excel.html" target="_blank" rel="noopener">如何使用 JavaScript 实现纯前端读取和导出 excel 文件</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/83138304" target="_blank" rel="noopener">webpack + typescript 环境下配置</a></li>
+<h3 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Scheduler</span> </span>&#123;</span><br><span class="line">  add(promiseCreator) &#123;</span><br><span class="line">    <span class="comment">// 代码部分</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> scheduler = <span class="keyword">new</span> Scheduler();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">addTask</span>(<span class="params">time, order</span>) </span>&#123;</span><br><span class="line">  scheduler.add(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">res, rej</span>) =&gt;</span> &#123;</span><br><span class="line">      setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'order'</span>, order);</span><br><span class="line">        res();</span><br><span class="line">      &#125;, time);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">addTask(<span class="number">1000</span>, <span class="string">'1'</span>);</span><br><span class="line">addTask(<span class="number">500</span>, <span class="string">'2'</span>);</span><br><span class="line">addTask(<span class="number">300</span>, <span class="string">'3'</span>);</span><br><span class="line">addTask(<span class="number">400</span>, <span class="string">'4'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 结果要求 order 为： 2、3、1、4</span></span><br></pre></td></tr></table></figure>
+<h3 id="思路-amp-题解"><a href="#思路-amp-题解" class="headerlink" title="思路&amp;题解"></a>思路&amp;题解</h3><blockquote>
+<p>分析：</p>
+<ul>
+<li>从结果来看，因为每次只能执行俩异步函数，因此数组处理逻辑大致为“队列”</li>
+<li>从 scheduler 的链式调用可发现每次返回的都是 Promise 函数</li>
 </ul>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">Scheduler</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>() &#123;</span><br><span class="line">      <span class="keyword">this</span>.eventList = [];</span><br><span class="line">      <span class="keyword">this</span>.used = <span class="number">0</span>;</span><br><span class="line">      <span class="keyword">this</span>.currentPos = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    add(promiseCreator) &#123;</span><br><span class="line">      <span class="keyword">this</span>.eventList.push(promiseCreator);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 执行任务</span></span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve(<span class="keyword">this</span>.excute());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    excute() &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.used &lt; <span class="number">2</span> &amp;&amp; <span class="keyword">this</span>.currentPos &lt; <span class="keyword">this</span>.eventList.length) &#123;</span><br><span class="line">        <span class="keyword">this</span>.used++;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> currentFunc = <span class="keyword">this</span>.eventList[<span class="keyword">this</span>.currentPos++];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve(currentFunc()).then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">          <span class="keyword">this</span>.used--;</span><br><span class="line">          <span class="comment">// 每次执行完查看是否继续执行后面的内容</span></span><br><span class="line">          <span class="keyword">this</span>.excute();</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> scheduler = <span class="keyword">new</span> Scheduler();</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">addTask</span>(<span class="params">time, order</span>) </span>&#123;</span><br><span class="line">    scheduler.add(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">res, rej</span>) =&gt;</span> &#123;</span><br><span class="line">        setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">          <span class="built_in">console</span>.log(<span class="string">'order'</span>, order);</span><br><span class="line">          res();</span><br><span class="line">        &#125;, time);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  addTask(<span class="number">1000</span>, <span class="string">'1'</span>);</span><br><span class="line">  addTask(<span class="number">500</span>, <span class="string">'2'</span>);</span><br><span class="line">  addTask(<span class="number">300</span>, <span class="string">'3'</span>);</span><br><span class="line">  addTask(<span class="number">400</span>, <span class="string">'4'</span>);</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>其实题目考察的是对于 Promise 函数以及链式调用的理解，了解过 Promise 实现机制其实在琢磨此题时还是有那么一点头痛，只要关键的类递归函数部分琢磨清楚了，整体也不是很难。</p>
 
     </div>
 
@@ -302,7 +293,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://monocy.site/2020/04/28/在-typescript-中添加-webworker/" title="在 typescript 中添加 webworker">https://monocy.site/2020/04/28/在-typescript-中添加-webworker/</a>
+    <a href="https://monocy.site/2020/09/22/记一次任务调度算法题/" title="记一次任务调度算法题">https://monocy.site/2020/09/22/记一次任务调度算法题/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -314,7 +305,7 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/vue/" rel="tag"><i class="fa fa-tag"></i> Vue</a>
+              <a href="/tags/javascript/" rel="tag"><i class="fa fa-tag"></i> JavaScript</a>
           </div>
 
         
@@ -323,13 +314,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/04/14/重习-typescript/" rel="prev" title="重习 typescript">
-      <i class="fa fa-chevron-left"></i> 重习 typescript
+    <a href="/2020/09/21/变量提升完全解读/" rel="prev" title="变量提升完全解读">
+      <i class="fa fa-chevron-left"></i> 变量提升完全解读
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/06/09/Mysql-的小技巧/" rel="next" title="Mysql 的小技巧">
-      Mysql 的小技巧 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -389,7 +377,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置-loader"><span class="nav-number">2.</span> <span class="nav-text">配置 loader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#worker-文件的写法"><span class="nav-number">3.</span> <span class="nav-text">worker 文件的写法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文章"><span class="nav-number">4.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#题目"><span class="nav-number">2.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#思路-amp-题解"><span class="nav-number">3.</span> <span class="nav-text">思路&amp;题解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
