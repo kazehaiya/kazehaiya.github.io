@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"monocy.site","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言这次面试因为有比较明确的目标，想去 阿里、美团、快手、头条 等大公司提升提升自己，因此在准备了一番后，依次面了对应的公司。此处主要是总结一下当时面试遇到的一些问题，看看对于 2 年前端经验的人面试官们到底需要怎样的能力，以及部分问题的解体的思路。  注：面试一定得表现的自然，轻松自然、说话流畅自信会更容易通过面试！">
+<meta name="keywords" content="blog">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2020 年大厂面试总结">
+<meta property="og:url" content="https://monocy.site/2020/10/24/2020-年大厂面试总结/index.html">
+<meta property="og:site_name" content="沐光">
+<meta property="og:description" content="前言这次面试因为有比较明确的目标，想去 阿里、美团、快手、头条 等大公司提升提升自己，因此在准备了一番后，依次面了对应的公司。此处主要是总结一下当时面试遇到的一些问题，看看对于 2 年前端经验的人面试官们到底需要怎样的能力，以及部分问题的解体的思路。  注：面试一定得表现的自然，轻松自然、说话流畅自信会更容易通过面试！">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-10-25T12:31:28.339Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="2020 年大厂面试总结">
+<meta name="twitter:description" content="前言这次面试因为有比较明确的目标，想去 阿里、美团、快手、头条 等大公司提升提升自己，因此在准备了一番后，依次面了对应的公司。此处主要是总结一下当时面试遇到的一些问题，看看对于 2 年前端经验的人面试官们到底需要怎样的能力，以及部分问题的解体的思路。  注：面试一定得表现的自然，轻松自然、说话流畅自信会更容易通过面试！">
+
+<link rel="canonical" href="https://monocy.site/2020/10/24/2020-年大厂面试总结/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>2020 年大厂面试总结 | 沐光</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">沐光</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录在前端之路的点点滴滴</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">13</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">13</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">50</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/kazehaiya" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://monocy.site/2020/10/24/2020-年大厂面试总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Caiyin">
+      <meta itemprop="description" content="Just do IT!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="沐光">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          2020 年大厂面试总结
+        </h1>
+
+        <div class="post-meta">
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-25 20:31:28" itemprop="dateModified" datetime="2020-10-25T20:31:28+08:00">2020-10-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/other/" itemprop="url" rel="index"><span itemprop="name">Other</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/10/24/2020-年大厂面试总结/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/10/24/2020-年大厂面试总结/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>这次面试因为有比较明确的目标，想去 阿里、美团、快手、头条 等大公司提升提升自己，因此在准备了一番后，依次面了对应的公司。此处主要是总结一下当时面试遇到的一些问题，看看对于 2 年前端经验的人面试官们到底需要怎样的能力，以及部分问题的解体的思路。</p>
+<blockquote>
+<p>注：面试一定得表现的自然，轻松自然、说话流畅自信会更容易通过面试！</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="CSS-部分"><a href="#CSS-部分" class="headerlink" title="CSS 部分"></a>CSS 部分</h3><p>在我面试时，遇到的 CSS 相关问题很少，大概掌握两个问题即可。</p>
+<blockquote>
+<p>更多 CSS 相关面试题可查阅： <a href="https://juejin.im/post/6844904117819850765" target="_blank" rel="noopener">CSS 知识点整理</a></p>
+</blockquote>
+<h4 id="1-水平居中布局"><a href="#1-水平居中布局" class="headerlink" title="1. 水平居中布局"></a>1. 水平居中布局</h4><p>这个算是经典中的经典题了，之前我也总结过一篇 <a href="/2019/04/27/水平垂直居中/" title="水平垂直居中">水平垂直居中</a> 的文章，网上同样也有很多相关的题目，这里就不赘述了。</p>
+<p>当然，这个问题问出来只能算是一个引子，于此引出的问题还包括：</p>
+<ul>
+<li>flex 相关知识</li>
+<li>translate 字体模糊问题</li>
+</ul>
+<blockquote>
+<p>相关文章：</p>
+<ul>
+<li><a href="http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html" target="_blank" rel="noopener">Flex 布局教程：语法篇</a></li>
+<li><a href="https://www.cnblogs.com/surfaces/p/4360031.html" target="_blank" rel="noopener">translateZ 字体模糊问题</a></li>
+<li><a href="https://www.cnblogs.com/milo-wjh/p/6364138.html" target="_blank" rel="noopener">transform 使用导致元素内字体出现模糊的坑</a></li>
+</ul>
+</blockquote>
+<h4 id="2-BFC-问题"><a href="#2-BFC-问题" class="headerlink" title="2. BFC 问题"></a>2. BFC 问题</h4><p>该部分也是老生长谈的内容，可参考我之前总结的文章 <a href="/2019/05/03/浅谈-BFC/" title="浅谈 BFC">浅谈 BFC</a>，这里也不做赘述了。</p>
+<p>面试出 CSS 的问题可以说基本上就这么俩，不会有过多其余的细节考察（除非校招生），重点还是在 JavaScript、算法和项目经验上。</p>
+<h3 id="JavaScript-部分"><a href="#JavaScript-部分" class="headerlink" title="JavaScript 部分"></a>JavaScript 部分</h3><p>JS 部分面试也基本和网上的面经差异不大，除非像头条、阿里部分会考察一些偏原理性的问题外，其余的基本是 ES6 外加一两道 JS 题，大致有如下内容：</p>
+<h4 id="1-ES6～11-新特性"><a href="#1-ES6～11-新特性" class="headerlink" title="1. ES6～11 新特性"></a>1. ES6～11 新特性</h4><p>该部分的问题基本上和 <a href="https://es6.ruanyifeng.com/" target="_blank" rel="noopener">ES6 入门教程</a> 没太多出入，把网上那部分知识啃完，然后项目中多撸撸基本上没问题，比较重点的是这么几个：</p>
+<ul>
+<li>从 let、const 问到 闭包函数，最后到 作用域 相关内容</li>
+<li>原型链 与 Class</li>
+<li>Promise 与 代码执行顺序</li>
+<li>ES Module 与 CommonJs 差异</li>
+<li>箭头函数 与 this 相关问题</li>
+</ul>
+<p>像 Proxy、解构、Set、Map、对象数组等的扩展 问题之类的，问的频率很小，我是没有被问到过。</p>
+<blockquote>
+<p>相关文章：</p>
+<ul>
+<li><a href="https://segmentfault.com/a/1190000023356598" target="_blank" rel="noopener">深入理解 JavaScript 闭包之什么是闭包</a></li>
+</ul>
+</blockquote>
+<h4 id="2-bind-和-apply-call-的区别，实现一个-bind"><a href="#2-bind-和-apply-call-的区别，实现一个-bind" class="headerlink" title="2. bind 和 apply/call 的区别，实现一个 bind"></a>2. bind 和 apply/call 的区别，实现一个 bind</h4><p>根本区别是 bind 返回一个函数，绑定时不执行，调用时执行；后者直接执行。</p>
+<blockquote>
+<p>参考<a href="https://github.com/kazehaiya/interview-problems" target="_blank" rel="noopener">面试题题解</a></p>
+</blockquote>
+<h4 id="3-实现一个任务调度函数"><a href="#3-实现一个任务调度函数" class="headerlink" title="3. 实现一个任务调度函数"></a>3. 实现一个任务调度函数</h4><p>这部分考察对 Promise 的理解，只要知道“当异步函数处理完获得了返回的结果后，再调用下一个任务”这个逻辑后，题目就很好解开了。</p>
+<blockquote>
+<p>参考<a href="https://github.com/kazehaiya/interview-problems" target="_blank" rel="noopener">面试题题解</a></p>
+</blockquote>
+<h4 id="4-实现一个-JSONP"><a href="#4-实现一个-JSONP" class="headerlink" title="4. 实现一个 JSONP"></a>4. 实现一个 JSONP</h4><p>这个问题我当时没写出来，但是和面试官说明了思路（刷题刷漏了）。JSONP 的思路是 script 脚本不受跨域限制，因此后端将返回内容通过 JSON 拼接到 script 链接函数内后，前端拿到 script 脚本就会触发全局函数执行（提请注册的一个 callback 函数）。</p>
+<blockquote>
+<p>参考<a href="https://github.com/kazehaiya/interview-problems" target="_blank" rel="noopener">面试题题解</a></p>
+</blockquote>
+<h4 id="5-实现-excel-的字符串坐标转数组"><a href="#5-实现-excel-的字符串坐标转数组" class="headerlink" title="5. 实现 excel 的字符串坐标转数组"></a>5. 实现 excel 的字符串坐标转数组</h4><p>这个面试题是我觉得最简单的一个，主要是考察简单的正则以及进制转换。只要知道“10 进制转 N 进制”以及“N 进制转 10 进制”的逻辑，该题不难解。</p>
+<blockquote>
+<p>参考<a href="https://github.com/kazehaiya/interview-problems" target="_blank" rel="noopener">面试题题解</a></p>
+</blockquote>
+<p>大致都是一些不是特别难的手写代码的题目，更多手写代码的题目可参考 <a href="https://wangyaxing.cn/blog/jsCode/" target="_blank" rel="noopener">手写代码系列</a></p>
+<h4 id="6-为什么提前调用-let-声明的变量会报错"><a href="#6-为什么提前调用-let-声明的变量会报错" class="headerlink" title="6. 为什么提前调用 let 声明的变量会报错"></a>6. 为什么提前调用 let 声明的变量会报错</h4><p>这个得回答到 let 会创建一个局部块，因为从 ES6 之后就有了块级作用域了，作用域外的变量无法调用到作用域内的变量，因此在 JS 第一次解析代码的时候，这东西不会弄到全局环境中，在它之前调用时，通过 RHS 查询就无法查到，于是就报错了。</p>
+<blockquote>
+<p>可参阅 <a href="https://blog.csdn.net/weixin_44145258/article/details/107456897" target="_blank" rel="noopener">let 和 var 的区别</a></p>
+</blockquote>
+<h3 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h3><p>这部分我也遇到过一些，解释过只会很浅的使用，然后面到的问题主要为一下两个。Node 深挖也会挖出很多内容，比如：V8 和 Chrome 浏览器内核的 V8 有什么区别，事件循环的区别等等，最好准备准备。</p>
+<h4 id="1-解释一下，什么是-Event-Loop"><a href="#1-解释一下，什么是-Event-Loop" class="headerlink" title="1. 解释一下，什么是 Event Loop"></a>1. 解释一下，什么是 Event Loop</h4><p>其实这个只要答道 “异步非阻塞模式” 以及解释一下 宏任务、微任务、同步任务 的个人理解基本上能过，当然越标准越好，因为这个学习 Node 的最基本的知识。</p>
+<blockquote>
+<p>可参阅</p>
+<ul>
+<li><a href="https://segmentfault.com/a/1190000016278115" target="_blank" rel="noopener">带你彻底弄懂 Event Loop</a></li>
+<li><a href="https://segmentfault.com/a/1190000022805523" target="_blank" rel="noopener">JavaScript中的Event Loop（事件循环）机制</a></li>
+</ul>
+</blockquote>
+<h4 id="2-npm-的理解"><a href="#2-npm-的理解" class="headerlink" title="2. npm 的理解"></a>2. npm 的理解</h4><p>该部分主要还是对 node_modules 的一些变化和问题进行考察，以及 lock 文件的理解，解释清除这个就没什么问题了。</p>
+<ul>
+<li>可参阅 <a href="https://blog.csdn.net/qiwoo_weekly/article/details/103839779" target="_blank" rel="noopener">npm install 原理分析</a></li>
+</ul>
+<h4 id="3-npm-发布时版本号的问题"><a href="#3-npm-发布时版本号的问题" class="headerlink" title="3. npm 发布时版本号的问题"></a>3. npm 发布时版本号的问题</h4><p>emmm，这部分解释一下项目不同程度的修改该怎么升级版本号即可，举个例子：</p>
+<p>项目从 v1.0.0 升级版本</p>
+<ul>
+<li>改了个组件的小 bug： v1.0.1</li>
+<li>更新了一个组件的函数，新增了一些组件： v1.1.0</li>
+<li>组件库从支持 Vue 变为支持 React 了： v2.0.0</li>
+</ul>
+<h3 id="算法题"><a href="#算法题" class="headerlink" title="算法题"></a>算法题</h3><p>因为前端对算法不是很严，除了头条有些神经质以外，其余的只需要稍微刷刷 leetcode 上的简单算法题（主要刷刷 二叉树 的题），基本上没问题。</p>
+<p>算法题的重点基本上在二叉树上，因为可以用数组来模拟，然后就是堆和动态规划。</p>
+<p>推荐刷题思路为：</p>
+<ul>
+<li>基础排序算法</li>
+<li>数组相关算法</li>
+<li>二叉树的算法题</li>
+<li>堆和动态规划</li>
+</ul>
+<p>一般刷简单的就行了。</p>
+<blockquote>
+<p><a href="https://leetcode-cn.com/problemset/all/" target="_blank" rel="noopener">leetcode 传送门</a></p>
+</blockquote>
+<h3 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h3><p>HTTP 方便主要还是考察状态码、缓存和浏览器的渲染流程，稍微深一点的就是如为什么 TCP 慢、DNS 解析相关、首部压缩算法 等。</p>
+<h4 id="浏览器渲染（从输入url到页面渲染的完成过程）"><a href="#浏览器渲染（从输入url到页面渲染的完成过程）" class="headerlink" title="浏览器渲染（从输入url到页面渲染的完成过程）"></a>浏览器渲染（从输入url到页面渲染的完成过程）</h4><p>这个题其实问的挺多的，简单描述一下整体流程：</p>
+<ol>
+<li>DNS 解析域名得到 IP；（浏览器缓存 -&gt; 本地缓存 -&gt; DNS服务器 -&gt; 根服务器）</li>
+<li>拿到服务器地址，与服务器建立连接，3 次握手；</li>
+<li>获取并解析 html 文件，开始构建 CSSTree 和 DomTree；</li>
+<li>合成 RenderTree 并在页面布局；</li>
+<li>页面绘制；</li>
+<li>离开页面，4 次挥手</li>
+</ol>
+<p>这里面也会细扣一些内容，比如<code>DNS 怎么解析的</code>、<code>3 次握手 和 4 次挥手分别做了什么</code></p>
+<h4 id="304-与缓存"><a href="#304-与缓存" class="headerlink" title="304 与缓存"></a>304 与缓存</h4><p>该部分网上查阅资料即可。</p>
+<blockquote>
+<p>参阅 <a href="https://juejin.im/post/6844903512946507790" target="_blank" rel="noopener">https://juejin.im/post/6844903512946507790</a></p>
+</blockquote>
+<h4 id="HTTP、HTTPS、HTTP2、HTTP3-和-WebSocket"><a href="#HTTP、HTTPS、HTTP2、HTTP3-和-WebSocket" class="headerlink" title="HTTP、HTTPS、HTTP2、HTTP3 和 WebSocket"></a>HTTP、HTTPS、HTTP2、HTTP3 和 WebSocket</h4><p>这些知识基本上是一套走的，多查阅文章即可。因为我掌握的也不是很多，仅是浅浅谈了一些内容以及部分实现，这些网上基本都能找到，想和面试官谈笑风生的话最好还是研究研究。</p>
+<p>我遇到的问题包括：</p>
+<ul>
+<li>HTTP 和 HTTPS 有什么不同</li>
+<li>HTTP2 有哪些新特性，与 HTTP1.1 相比有什么优势</li>
+<li>HTTP2 的加密流程能描述一下吗</li>
+<li>HTTP3 你有了解吗，与 HTTP2 相比有什么优势</li>
+<li>卡尼项目中有用到 Websocket，你能说说它有什么好处吗</li>
+</ul>
+<blockquote>
+<p>参阅</p>
+<ul>
+<li><a href="https://juejin.im/post/6844904135137951758" target="_blank" rel="noopener">HTTP2 与 HTTP3 新特性一览</a></li>
+<li><a href="https://juejin.im/post/6844903667569541133" target="_blank" rel="noopener">HTTP2 详解</a></li>
+<li><a href="https://juejin.im/post/6857287743966281736#heading-73" target="_blank" rel="noopener">巩固你的 HTTP 知识体系</a></li>
+</ul>
+</blockquote>
+<h4 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h4><ul>
+<li>正向代理和反向代理</li>
+<li>负载均衡和实现方式，优缺点</li>
+<li>gzip 首部压缩</li>
+</ul>
+<h3 id="Webpack"><a href="#Webpack" class="headerlink" title="Webpack"></a>Webpack</h3><p>这部分内容在前端面试时也是加分项，开发点基础插件，了解下 Webpack 编译后的内容和源码相关的内容，开发点简单的包，基础扎实巩固。</p>
+<blockquote>
+<p>更多 Webpack<br>问题可参阅：<a href="https://www.cnblogs.com/gaoht/p/11310365.html" target="_blank" rel="noopener">关于webpack的面试题</a></p>
+</blockquote>
+<h4 id="1-webpack-主要是用来解决什么问题的"><a href="#1-webpack-主要是用来解决什么问题的" class="headerlink" title="1. webpack 主要是用来解决什么问题的"></a>1. webpack 主要是用来解决什么问题的</h4><p>核心思路：</p>
+<ul>
+<li>JS 的模块化开发</li>
+<li>打包构建为一个整体</li>
+</ul>
+<p>其实抓住“模块化”来回答即可，可以简单说一下 webpack 的由来原因，但主要还是因为 JS 的模块化开发方式。</p>
+<h4 id="2-plugins-和-loader-的区别"><a href="#2-plugins-和-loader-的区别" class="headerlink" title="2. plugins 和 loader 的区别"></a>2. plugins 和 loader 的区别</h4><ul>
+<li>Loader: 主要用于使 Webpack 将非 JS 文件转化为 JS 文件</li>
+<li>Plugins: 主要用于解决 Loader 无法解决的事，用于辅助，如：压缩、打包 等</li>
+</ul>
+<h4 id="3-Webpack-的-Loader-和-Plugins-的开发思想"><a href="#3-Webpack-的-Loader-和-Plugins-的开发思想" class="headerlink" title="3. Webpack 的 Loader 和 Plugins 的开发思想"></a>3. Webpack 的 Loader 和 Plugins 的开发思想</h4><p>这部分我没回答上来，没开发过，可参考一下对应文章。</p>
+<h4 id="4-了解过-Webpack-原理吗，能简单介绍一下吗"><a href="#4-了解过-Webpack-原理吗，能简单介绍一下吗" class="headerlink" title="4. 了解过 Webpack 原理吗，能简单介绍一下吗"></a>4. 了解过 Webpack 原理吗，能简单介绍一下吗</h4><p>同样没回答上来。</p>
+<h4 id="5-做过哪些-Webpack-的性能优化"><a href="#5-做过哪些-Webpack-的性能优化" class="headerlink" title="5. 做过哪些 Webpack 的性能优化"></a>5. 做过哪些 Webpack 的性能优化</h4><p>因为了解过 Vue Plugins 部分的编写，也做过一点点 DllPlugins 的编写，将这些给面试官说了</p>
+<ul>
+<li>DllPlugins 预打包</li>
+<li>部分 ES6 模块的 TreeShaking</li>
+<li>分析包体积，然后部分插件按需引用</li>
+</ul>
+<h4 id="6-有做过包的开发吗，能描述一下开发思路"><a href="#6-有做过包的开发吗，能描述一下开发思路" class="headerlink" title="6. 有做过包的开发吗，能描述一下开发思路"></a>6. 有做过包的开发吗，能描述一下开发思路</h4><p>介绍了一下当初写 npm 包时的一些思想：</p>
+<ul>
+<li>Library 打包和按需打包</li>
+<li>类似 Element-ui 的项目结构的划分</li>
+<li>文档的一些设计和建设思路</li>
+<li>组件的一些编写思路</li>
+</ul>
+<h3 id="TypeScript"><a href="#TypeScript" class="headerlink" title="TypeScript"></a>TypeScript</h3><p>这部分也是加分项，以前有过 Java 基础这部分应该问题不大，熟读官网，学习下装饰器的编写，一般也没什么太难的内容。</p>
+<blockquote>
+<p>更多内容可以参阅 <a href="https://segmentfault.com/a/1190000010969537?utm_source=tag-newest" target="_blank" rel="noopener">Typescript 面试问题</a></p>
+</blockquote>
+<h4 id="1-interface-和-type-有什么区别，它们能互相继承吗"><a href="#1-interface-和-type-有什么区别，它们能互相继承吗" class="headerlink" title="1. interface 和 type 有什么区别，它们能互相继承吗"></a>1. interface 和 type 有什么区别，它们能互相继承吗</h4><ul>
+<li>interface 不能声明基本类型，type 可以；</li>
+<li>type 无法 extends，但能通过交叉继承（&amp;）来实现继承；</li>
+<li>interface 能够合并声明；</li>
+</ul>
+<p>interface 能 extends type，type 也能交叉继承（&amp;） interface，它们也能自己继承自己。</p>
+<blockquote>
+<p>可参阅： <a href="https://juejin.im/post/6844903749501059085" target="_blank" rel="noopener">interface VS type</a></p>
+</blockquote>
+<h4 id="2-namespace-和-module-区别"><a href="#2-namespace-和-module-区别" class="headerlink" title="2. namespace 和 module 区别"></a>2. namespace 和 module 区别</h4><p>简单来说，namespace 相当于包名，module 相当于文件，官方不推荐用 module 了。主要解决多文件命名冲突问题，目前我在项目内仅 vuex 部分使用，一处声明，多处使用。</p>
+<h4 id="3-TypeScript-优缺点"><a href="#3-TypeScript-优缺点" class="headerlink" title="3. TypeScript 优缺点"></a>3. TypeScript 优缺点</h4><p>这部分仁者见仁，智者见智，我总结的一些：</p>
+<ul>
+<li>前期开发时间成本大，后期维护方便</li>
+<li>合作开发方便，规范性强</li>
+<li>组件潜在问题前期容易暴露出来，隐藏错误少</li>
+<li>装饰器开发模式很便捷</li>
+</ul>
+<blockquote>
+<p>这里不会装饰器的尽量不要谈这方面的内容，但这部分算是 TS 的重点部分，建议补补。</p>
+</blockquote>
+<h3 id="框架相关"><a href="#框架相关" class="headerlink" title="框架相关"></a>框架相关</h3><p>框架因为我这边是学习 Vue 相关的内容，了解部分源码的知识，这部分深挖一点准没错，基本问题网上能找到，这里就列举一些：</p>
+<ul>
+<li>Vue 的 数组 是怎么监听变化的？（原生方法重写）</li>
+<li>简单的 Observer 函数能实现一个吗？（Object.defineProperty）</li>
+<li>如果不用 Vue 组件能实现 EventBus 吗？（可以，观察者模式）</li>
+<li>Vue 组件通讯的方式？（$emit、prop、provider、eventbus、vuex 等）</li>
+<li>watch 和 computed 区别？（是否偏计算属性，是否缓存值）</li>
+<li>Vue 生命周期是什么？（官网图有）</li>
+<li>Vue3 有哪些新特性？（proxy、函数式风格等）</li>
+<li>Diff 算法？（动态规划找节点树、patch 补丁判断是否更新节点、更新）</li>
+</ul>
+<h3 id="项目相关"><a href="#项目相关" class="headerlink" title="项目相关"></a>项目相关</h3><p>其实面试题在整个面试环节中仅仅在一面碰的较多，二面会稍微提到一部分（一般是算法），后面基本上都是问项目相关的内容了。这部分不太好描述，大概的一些问题如下：</p>
+<ul>
+<li>简单解释一下你的项目？（描述需要精简、流畅、项目间是否有关联、项目开发的目的）</li>
+<li>项目中遇到最难的问题，你是怎么解决的？（有把握的，最好是可以体现自身在解决问题时能凸显价值的）</li>
+<li>你对 xxx 项目的理解，怎么设计的？（最好近期开发的项目拿来说，比较熟，需要熟知整体流畅）</li>
+<li>开发哪个项目时是你感觉收获最大的，为什么？（能凸显个人能力的项目）</li>
+<li>你为什么要换工作？（自己思考清除原因，一定得清晰）</li>
+<li>你有什么个人的职业规划吗？（自己之后的发展思路，提前想明白）</li>
+<li>你觉得你的优势是什么？（很关键，千万不要说什么有潜力之类的话，基本差评，得凸显自己的价值：能独立开发项目、能带团队、善于沟通等等）</li>
+</ul>
+<blockquote>
+<p>当然面试时结结巴巴的就不要说自己善于沟通了……</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Caiyin
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://monocy.site/2020/10/24/2020-年大厂面试总结/" title="2020 年大厂面试总结">https://monocy.site/2020/10/24/2020-年大厂面试总结/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/09/22/记一次任务调度算法题/" rel="prev" title="记一次任务调度算法题">
+      <i class="fa fa-chevron-left"></i> 记一次任务调度算法题
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSS-部分"><span class="nav-number">2.</span> <span class="nav-text">CSS 部分</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-水平居中布局"><span class="nav-number">2.1.</span> <span class="nav-text">1. 水平居中布局</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-BFC-问题"><span class="nav-number">2.2.</span> <span class="nav-text">2. BFC 问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JavaScript-部分"><span class="nav-number">3.</span> <span class="nav-text">JavaScript 部分</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-ES6～11-新特性"><span class="nav-number">3.1.</span> <span class="nav-text">1. ES6～11 新特性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-bind-和-apply-call-的区别，实现一个-bind"><span class="nav-number">3.2.</span> <span class="nav-text">2. bind 和 apply/call 的区别，实现一个 bind</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-实现一个任务调度函数"><span class="nav-number">3.3.</span> <span class="nav-text">3. 实现一个任务调度函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-实现一个-JSONP"><span class="nav-number">3.4.</span> <span class="nav-text">4. 实现一个 JSONP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-实现-excel-的字符串坐标转数组"><span class="nav-number">3.5.</span> <span class="nav-text">5. 实现 excel 的字符串坐标转数组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-为什么提前调用-let-声明的变量会报错"><span class="nav-number">3.6.</span> <span class="nav-text">6. 为什么提前调用 let 声明的变量会报错</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Node"><span class="nav-number">4.</span> <span class="nav-text">Node</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-解释一下，什么是-Event-Loop"><span class="nav-number">4.1.</span> <span class="nav-text">1. 解释一下，什么是 Event Loop</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-npm-的理解"><span class="nav-number">4.2.</span> <span class="nav-text">2. npm 的理解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-npm-发布时版本号的问题"><span class="nav-number">4.3.</span> <span class="nav-text">3. npm 发布时版本号的问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法题"><span class="nav-number">5.</span> <span class="nav-text">算法题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP"><span class="nav-number">6.</span> <span class="nav-text">HTTP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#浏览器渲染（从输入url到页面渲染的完成过程）"><span class="nav-number">6.1.</span> <span class="nav-text">浏览器渲染（从输入url到页面渲染的完成过程）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#304-与缓存"><span class="nav-number">6.2.</span> <span class="nav-text">304 与缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTP、HTTPS、HTTP2、HTTP3-和-WebSocket"><span class="nav-number">6.3.</span> <span class="nav-text">HTTP、HTTPS、HTTP2、HTTP3 和 WebSocket</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Nginx"><span class="nav-number">6.4.</span> <span class="nav-text">Nginx</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Webpack"><span class="nav-number">7.</span> <span class="nav-text">Webpack</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-webpack-主要是用来解决什么问题的"><span class="nav-number">7.1.</span> <span class="nav-text">1. webpack 主要是用来解决什么问题的</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-plugins-和-loader-的区别"><span class="nav-number">7.2.</span> <span class="nav-text">2. plugins 和 loader 的区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Webpack-的-Loader-和-Plugins-的开发思想"><span class="nav-number">7.3.</span> <span class="nav-text">3. Webpack 的 Loader 和 Plugins 的开发思想</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-了解过-Webpack-原理吗，能简单介绍一下吗"><span class="nav-number">7.4.</span> <span class="nav-text">4. 了解过 Webpack 原理吗，能简单介绍一下吗</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-做过哪些-Webpack-的性能优化"><span class="nav-number">7.5.</span> <span class="nav-text">5. 做过哪些 Webpack 的性能优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-有做过包的开发吗，能描述一下开发思路"><span class="nav-number">7.6.</span> <span class="nav-text">6. 有做过包的开发吗，能描述一下开发思路</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TypeScript"><span class="nav-number">8.</span> <span class="nav-text">TypeScript</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-interface-和-type-有什么区别，它们能互相继承吗"><span class="nav-number">8.1.</span> <span class="nav-text">1. interface 和 type 有什么区别，它们能互相继承吗</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-namespace-和-module-区别"><span class="nav-number">8.2.</span> <span class="nav-text">2. namespace 和 module 区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-TypeScript-优缺点"><span class="nav-number">8.3.</span> <span class="nav-text">3. TypeScript 优缺点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#框架相关"><span class="nav-number">9.</span> <span class="nav-text">框架相关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#项目相关"><span class="nav-number">10.</span> <span class="nav-text">项目相关</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Caiyin"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Caiyin</p>
+  <div class="site-description" itemprop="description">Just do IT!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/kazehaiya" title="GitHub → https://github.com/kazehaiya" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:c763416559@163.com" title="Mail → mailto:c763416559@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/Nora_Monocy" title="Weibo → https://weibo.com/Nora_Monocy" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://liujinkai.com/" title="http://liujinkai.com/" rel="noopener" target="_blank">凯凯刘</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://weekly.75team.com/" title="https://weekly.75team.com/" rel="noopener" target="_blank">奇舞周刊</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://75.team/post/list" title="https://75.team/post/list" rel="noopener" target="_blank">奇舞团博客</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://tech.meituan.com/" title="https://tech.meituan.com/" rel="noopener" target="_blank">美团技术团队</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://tech.youzan.com/" title="https://tech.youzan.com/" rel="noopener" target="_blank">有赞技术团队</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn" rel="noopener" target="_blank">京ICP备2020036147号-1 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-dragon"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Caiyin</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">81k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:14</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-pjax@0/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : true,
+      notify     : true,
+      appId      : 'GkgJm97N3UFm2mRb1eFcP2dn-gzGzoHsz',
+      appKey     : 'kJ8tYUUkX4ifhWha8rjnxWS8',
+      placeholder: "请不要吝惜你的笔头，来说点什么吧！",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+    </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/Epsilon2.1.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true,"scale":0.5},"react":{"opacity":0.7},"log":false});</script></body>
+</html>
