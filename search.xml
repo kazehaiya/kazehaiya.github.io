@@ -250,128 +250,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Chales 安装配置</title>
-    <url>/2021/01/09/Chales-%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近做到一些 H5 相关的内容开发，因为需要手机端的登陆 Cookie 信息，因此需要通过 Charles 抓包来获取 Cookie。安装虽然很简单，但是有几个比较坑的点着实花费了我不少时间，这里做一下记录。</p>
-<a id="more"></a>
-<h3 id="安装下载"><a href="#安装下载" class="headerlink" title="安装下载"></a>安装下载</h3><p>下载直接去<a href="https://www.charlesproxy.com/latest-release/download.do" target="_blank" rel="noopener">官网</a>下载即可（特别慢，能科学上网的尽量科学），下载完后有 30 天的试用期，可以尝试在<a href="https://www.charles.ren/" target="_blank" rel="noopener">Charles授权码在线生成网站</a>上生成 Charles 码，或者用如下激活码试试：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">name:   https://zhile.io</span><br><span class="line">key:    48891cf209c6d32bf4</span><br></pre></td></tr></table></figure>
-<h3 id="配置代理"><a href="#配置代理" class="headerlink" title="配置代理"></a>配置代理</h3><h4 id="http-解析配置"><a href="#http-解析配置" class="headerlink" title="http 解析配置"></a>http 解析配置</h4><p>打开 <code>Proxy -&gt; Proxy Settings</code>，勾选上 <code>Enable transparent HTTP proxying</code> 即可，<code>Sockets</code> 部分可根据自己情况配置：</p>
-<p><img data-src="/images/proxy-config.jpg" alt="Proxy 配置"></p>
-<p>这样本机的 http 请求就能解析了。</p>
-<h4 id="https-解析配置"><a href="#https-解析配置" class="headerlink" title="https 解析配置"></a>https 解析配置</h4><p>打开 <code>Proxy -&gt; SSL Proxying Settings</code>，勾选上 <code>Enable SSL Proxying</code>，然后添加 <code>*:443</code> 配置，用于拦截所有的 https 请求：</p>
-<p><img data-src="/images/ssl-config.jpg" alt="SSL 配置"></p>
-<h3 id="配置证书"><a href="#配置证书" class="headerlink" title="配置证书"></a>配置证书</h3><h4 id="1-配置-Mac-证书"><a href="#1-配置-Mac-证书" class="headerlink" title="1. 配置 Mac 证书"></a>1. 配置 Mac 证书</h4><p>特别是对于第一次安装 Charles 的人来说，这一步很容易忽略掉：</p>
-<p><img data-src="/images/install-certificate.jpg" alt="安装证书"></p>
-<p>证书安装完后其默认是不生效的，我们需要将其生效才能真正安装完：</p>
-<p><img data-src="/images/confirm-certificate.jpg" alt="证书生效"></p>
-<h4 id="2-iOS-证书安装"><a href="#2-iOS-证书安装" class="headerlink" title="2. iOS 证书安装"></a>2. iOS 证书安装</h4><p>除了电脑证书外，手机端的证书也比较重要，可以一并安装。这里需要注意一下，<strong>确保手机和电脑连接的是同一局域网内</strong>。</p>
-<p>【1】 首先需要配置手机连接的局域网代理（iOS 是连接的网络的 i 图标 -&gt; 配置代理，改成手动）：</p>
-<ul>
-<li>服务器： Mac 的 ip 地址</li>
-<li>端口： 配置 <code>Proxy Settings</code> 时的 8888 端口（根据自己的设置进行配置）</li>
-</ul>
-<blockquote>
-<p>⚠️ ：配置后 Mac 会出来一个弹框（默认为 Deny），此处一定得注意点击 Allow</p>
-</blockquote>
-<p><img data-src="/images/iOS-config.jpg" alt="iOS 配置"></p>
-<p>【2】 下载手机端的证书，Safari 打开如下地址： <code>https://chls.pro/ssl</code>，此处会提示你安装证书，点击安装即可。</p>
-<p>安装后需要在两个地方进行配置：</p>
-<ul>
-<li><ol>
-<li>进人<code>通用 -&gt; 描述文件与设备管理</code>，安装刚下载的描述文件</li>
-</ol>
-</li>
-<li><ol start="2">
-<li>进入<code>通用 -&gt; 关于本机 -&gt; 证书信任设置</code>，开启刚刚新增证书的信任</li>
-</ol>
-</li>
-</ul>
-<blockquote>
-<p>⚠️ ：以上俩步缺少一个可能导致手机端无法上网，Charles 拦截乱码信息</p>
-</blockquote>
-<h3 id="其它问题"><a href="#其它问题" class="headerlink" title="其它问题"></a>其它问题</h3><h4 id="Charles-拦截不到浏览器请求"><a href="#Charles-拦截不到浏览器请求" class="headerlink" title="Charles 拦截不到浏览器请求"></a>Charles 拦截不到浏览器请求</h4><p>如果配置完成后 Charles 仍然拦截不到浏览器请求，请查看 Chrome 插件是否开启了 vpn 插件，一般开启后就拦截不到了。</p>
-<h4 id="配置手机代理时不小心点了-Deny"><a href="#配置手机代理时不小心点了-Deny" class="headerlink" title="配置手机代理时不小心点了 Deny"></a>配置手机代理时不小心点了 Deny</h4><p>点了 Deny 不要紧，手动将代理的 IP 地址填上即可，添加代理地址的路径为： <code>Proxy -&gt; Access Control Settings</code></p>
-<blockquote>
-<p>注意，添加的地址为最终代理的地址，一般 App 都是用所代理的电脑 IP（即配置局域网代理时填写的 IP）</p>
-</blockquote>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
-<li><a href="https://blog.csdn.net/windy135/article/details/79086270" target="_blank" rel="noopener">Mac 下配置 Charles，安装证书</a></li>
-<li><a href="https://mp.weixin.qq.com/s/9qRcbhW_lW9CMd0hjaT51A" target="_blank" rel="noopener">Charles 常用功能</a></li>
-<li><a href="https://www.jianshu.com/p/3ffd4d2ab37c" target="_blank" rel="noopener">细说 Charles 配置 HTTPS 代理的乱码问题</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Env</category>
-      </categories>
-      <tags>
-        <tag>Env</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Docker 安装 nginx</title>
-    <url>/2020/03/11/Docker-%E5%AE%89%E8%A3%85-nginx/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>自学 Docker 系列，了解常用包的使用和配置安装，此篇记录 nginx 的安装</p>
-<a id="more"></a>
-<h3 id="安装配置"><a href="#安装配置" class="headerlink" title="安装配置"></a>安装配置</h3><p>下载 nginx</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker pull nginx:latest</span><br></pre></td></tr></table></figure>
-<p>普通运行</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run --name nginx -p 80:80 -d nginx</span><br></pre></td></tr></table></figure>
-<p>如果需要挂载在本地，则需要设置虚拟卷宗</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run --name nginx -p 80:80 -v /Users/saitane/Docker/nginx/nginx.conf:/etc/nginx/nginx.conf -v /Users/saitane/Docker/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf -v /Users/saitane/Docker/nginx/html:/usr/share/nginx/html -d nginx</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>此处我将 <code>nginx.conf</code>、<code>default.conf</code> 和 <code>html</code>静态文件夹 映射到本地的 nginx 文件夹内，之后就不用进入容器内配置文件以及繁琐的 <code>docker cp</code> 拷贝代码了，<strong>但得注意生成容器后需要将文件拷贝到本地</strong></p>
-</blockquote>
-<h3 id="服务器-nginx-安装"><a href="#服务器-nginx-安装" class="headerlink" title="服务器 nginx 安装"></a>服务器 nginx 安装</h3><p>除了 Docker 的安装方式，此处记录一下我在 centos 装 nginx 遇到的一些问题和解决方法。</p>
-<h4 id="安装-nginx"><a href="#安装-nginx" class="headerlink" title="安装 nginx"></a>安装 nginx</h4><p>centos 装 ngixn 先查看下是否有安装 nginx 的源</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum repolist</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果有安装会有这么一行信息</span></span><br><span class="line"><span class="comment"># 源标识                                               源名称</span></span><br><span class="line"><span class="comment"># ...</span></span><br><span class="line"><span class="comment"># nginx/x86_64                                         nginx repo</span></span><br><span class="line"><span class="comment"># ...</span></span><br></pre></td></tr></table></figure>
-<p>若没有安装源，则安装一下 nginx 的源</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">rpm -Uvh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm</span><br></pre></td></tr></table></figure>
-<h4 id="启动-nginx"><a href="#启动-nginx" class="headerlink" title="启动 nginx"></a>启动 nginx</h4><p>配置前先看一看是否有历史遗留的 nginx 服务</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">netstat -lntp | grep nginx</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如我这里就有一些安装的，但是部分没用却没有停止的服务，根据情况 kill 掉部分</span></span><br><span class="line"><span class="comment"># tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      14514/nginx: master</span></span><br><span class="line"><span class="comment"># tcp        0      0 0.0.0.0:440             0.0.0.0:*               LISTEN      3451/nginx: master</span></span><br><span class="line"><span class="comment"># tcp        0      0 0.0.0.0:8099            0.0.0.0:*               LISTEN      24166/nginx: master</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>如果需要深度清理残留 nginx 文件，<code>find / -name nginx</code> 根据情况来处理即可</p>
-</blockquote>
-<p>处理完成后，注册 nginx 服务</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 注册开机启动 nginx</span></span><br><span class="line">systemctl <span class="built_in">enable</span> nginx</span><br><span class="line"><span class="comment"># 启动 nginx</span></span><br><span class="line">service start nginx</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启指令： `service restart nginx`</span></span><br><span class="line"><span class="comment"># 停止指令： `service stop nginx`</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注意，更新 nginx 文件后需要重启 nginx</p>
-</blockquote>
-<p>然后 nginx 就启动成功了</p>
-<h4 id="配置-nginx"><a href="#配置-nginx" class="headerlink" title="配置 nginx"></a>配置 nginx</h4><p>yum 安装的 nginx 配置文件一般在 <code>/etc/nginx</code> 内，配置 <code>nginx.conf</code> 或者 <code>conf.d/default.conf</code> 即可，更多配置可以翻查下文档，这里就不介绍了。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 是在记不住就用这个命令查找，它会列举处所有地址</span></span><br><span class="line">whereis nginx</span><br></pre></td></tr></table></figure>
-<p>此处仅仅改了 root 文件夹的位置，方便项目构建</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># conf.d/default.conf</span></span><br><span class="line">location / &#123;</span><br><span class="line">  root   &lt;target-path&gt;;</span><br><span class="line">  index  index.html index.htm;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>便捷指令记录：</p>
-<ul>
-<li>查看服务器 IP 地址命令： <code>ifconfig -a</code></li>
-<li>查看端口是否占用： <code>lsof -i:&lt;端口&gt;</code></li>
-</ul>
-</blockquote>
-<h4 id="问题总结"><a href="#问题总结" class="headerlink" title="问题总结"></a>问题总结</h4><h5 id="nginx-反向代理替换规则"><a href="#nginx-反向代理替换规则" class="headerlink" title="nginx 反向代理替换规则"></a>nginx 反向代理替换规则</h5><p>代理地址是否添加尾部 ‘/‘ 会影响到路径的匹配，总结的规律如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">location ^~ /xxx/ &#123;</span><br><span class="line">  proxy_set_header Host             $host;</span><br><span class="line">  proxy_set_header X-Real-IP        $remote_addr;</span><br><span class="line">  proxy_pass http://127.0.0.1:1234/;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 此最终会被替换成： http://127.0.0.1:1234/</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">location ^~ /xxx/ &#123;</span><br><span class="line">  proxy_set_header Host             $host;</span><br><span class="line">  proxy_set_header X-Real-IP        $remote_addr;</span><br><span class="line">  proxy_pass http://127.0.0.1:1234;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 此最终会被替换成： http://127.0.0.1:1234/xxx/</span><br></pre></td></tr></table></figure>
-<h5 id="nginx-的-nginx-pid-丢失问题"><a href="#nginx-的-nginx-pid-丢失问题" class="headerlink" title="nginx 的 nginx.pid 丢失问题"></a>nginx 的 <code>nginx.pid</code> 丢失问题</h5><p>nginx 重启时有时候会丢失 pid 文件，特别是被强制杀掉进程的情况，这种情况下我们需要进入 nginx 的安装目录的 sbin 下重新启动 nginx：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># cd &lt;nginx-dir&gt;/sbin</span></span><br><span class="line">./nginx -c &lt;nginx.conf path&gt;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>防止此丢失问题发生，在更新 nginx 时尽量使用 nginx reload 来平滑重启，重载配置。</p>
-</blockquote>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
-<li><a href="https://www.cnblogs.com/larryzq/p/11009045.html" target="_blank" rel="noopener">CentOS 7 yum 安装 Nginx</a></li>
-<li><a href="https://www.jianshu.com/p/c1ce9eec5fb2" target="_blank" rel="noopener">Linux 彻底卸载 Nginx</a></li>
-<li><a href="https://www.runoob.com/linux/linux-comm-kill.html" target="_blank" rel="noopener">Linux kill 命令</a></li>
-<li><a href="https://www.cnblogs.com/happySmily/p/6003579.html" target="_blank" rel="noopener">nginx 重启报找不到 nginx.pid 的解决方法</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Docker</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Docker 安装笔记</title>
     <url>/2019/12/14/Docker-%E5%AE%89%E8%A3%85%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>不知不觉已经快过 2 个月了，这期间由于项目变更，再加上遇到了一些生活上的波折，基本上没太多心思花在博文的编写了。好不容易稍微有点时间了，立马开始写上一篇，记录一下最近折腾配置的环境。</p>
@@ -601,6 +479,156 @@
       </tags>
   </entry>
   <entry>
+    <title>Chales 安装配置</title>
+    <url>/2021/01/09/Chales-%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近做到一些 H5 相关的内容开发，因为需要手机端的登陆 Cookie 信息，因此需要通过 Charles 抓包来获取 Cookie。安装虽然很简单，但是有几个比较坑的点着实花费了我不少时间，这里做一下记录。</p>
+<a id="more"></a>
+<h3 id="安装下载"><a href="#安装下载" class="headerlink" title="安装下载"></a>安装下载</h3><p>下载直接去<a href="https://www.charlesproxy.com/latest-release/download.do" target="_blank" rel="noopener">官网</a>下载即可（特别慢，能科学上网的尽量科学），下载完后有 30 天的试用期，可以尝试在<a href="https://www.charles.ren/" target="_blank" rel="noopener">Charles授权码在线生成网站</a>上生成 Charles 码，或者用如下激活码试试：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">name:   https://zhile.io</span><br><span class="line">key:    48891cf209c6d32bf4</span><br></pre></td></tr></table></figure>
+<h3 id="配置代理"><a href="#配置代理" class="headerlink" title="配置代理"></a>配置代理</h3><h4 id="http-解析配置"><a href="#http-解析配置" class="headerlink" title="http 解析配置"></a>http 解析配置</h4><p>打开 <code>Proxy -&gt; Proxy Settings</code>，勾选上 <code>Enable transparent HTTP proxying</code> 即可，<code>Sockets</code> 部分可根据自己情况配置：</p>
+<p><img data-src="/images/proxy-config.jpg" alt="Proxy 配置"></p>
+<p>这样本机的 http 请求就能解析了。</p>
+<h4 id="https-解析配置"><a href="#https-解析配置" class="headerlink" title="https 解析配置"></a>https 解析配置</h4><p>打开 <code>Proxy -&gt; SSL Proxying Settings</code>，勾选上 <code>Enable SSL Proxying</code>，然后添加 <code>*:443</code> 配置，用于拦截所有的 https 请求：</p>
+<p><img data-src="/images/ssl-config.jpg" alt="SSL 配置"></p>
+<h3 id="配置证书"><a href="#配置证书" class="headerlink" title="配置证书"></a>配置证书</h3><h4 id="1-配置-Mac-证书"><a href="#1-配置-Mac-证书" class="headerlink" title="1. 配置 Mac 证书"></a>1. 配置 Mac 证书</h4><p>特别是对于第一次安装 Charles 的人来说，这一步很容易忽略掉：</p>
+<p><img data-src="/images/install-certificate.jpg" alt="安装证书"></p>
+<p>证书安装完后其默认是不生效的，我们需要将其生效才能真正安装完：</p>
+<p><img data-src="/images/confirm-certificate.jpg" alt="证书生效"></p>
+<h4 id="2-iOS-证书安装"><a href="#2-iOS-证书安装" class="headerlink" title="2. iOS 证书安装"></a>2. iOS 证书安装</h4><p>除了电脑证书外，手机端的证书也比较重要，可以一并安装。这里需要注意一下，<strong>确保手机和电脑连接的是同一局域网内</strong>。</p>
+<p>【1】 首先需要配置手机连接的局域网代理（iOS 是连接的网络的 i 图标 -&gt; 配置代理，改成手动）：</p>
+<ul>
+<li>服务器： Mac 的 ip 地址</li>
+<li>端口： 配置 <code>Proxy Settings</code> 时的 8888 端口（根据自己的设置进行配置）</li>
+</ul>
+<blockquote>
+<p>⚠️ ：配置后 Mac 会出来一个弹框（默认为 Deny），此处一定得注意点击 Allow</p>
+</blockquote>
+<p><img data-src="/images/iOS-config.jpg" alt="iOS 配置"></p>
+<p>【2】 下载手机端的证书，Safari 打开如下地址： <code>https://chls.pro/ssl</code>，此处会提示你安装证书，点击安装即可。</p>
+<p>安装后需要在两个地方进行配置：</p>
+<ul>
+<li><ol>
+<li>进人<code>通用 -&gt; 描述文件与设备管理</code>，安装刚下载的描述文件</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>进入<code>通用 -&gt; 关于本机 -&gt; 证书信任设置</code>，开启刚刚新增证书的信任</li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<p>⚠️ ：以上俩步缺少一个可能导致手机端无法上网，Charles 拦截乱码信息</p>
+</blockquote>
+<h3 id="其它问题"><a href="#其它问题" class="headerlink" title="其它问题"></a>其它问题</h3><h4 id="Charles-拦截不到浏览器请求"><a href="#Charles-拦截不到浏览器请求" class="headerlink" title="Charles 拦截不到浏览器请求"></a>Charles 拦截不到浏览器请求</h4><p>如果配置完成后 Charles 仍然拦截不到浏览器请求，请查看 Chrome 插件是否开启了 vpn 插件，一般开启后就拦截不到了。</p>
+<h4 id="配置手机代理时不小心点了-Deny"><a href="#配置手机代理时不小心点了-Deny" class="headerlink" title="配置手机代理时不小心点了 Deny"></a>配置手机代理时不小心点了 Deny</h4><p>点了 Deny 不要紧，手动将代理的 IP 地址填上即可，添加代理地址的路径为： <code>Proxy -&gt; Access Control Settings</code></p>
+<blockquote>
+<p>注意，添加的地址为最终代理的地址，一般 App 都是用所代理的电脑 IP（即配置局域网代理时填写的 IP）</p>
+</blockquote>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
+<li><a href="https://blog.csdn.net/windy135/article/details/79086270" target="_blank" rel="noopener">Mac 下配置 Charles，安装证书</a></li>
+<li><a href="https://mp.weixin.qq.com/s/9qRcbhW_lW9CMd0hjaT51A" target="_blank" rel="noopener">Charles 常用功能</a></li>
+<li><a href="https://www.jianshu.com/p/3ffd4d2ab37c" target="_blank" rel="noopener">细说 Charles 配置 HTTPS 代理的乱码问题</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Env</category>
+      </categories>
+      <tags>
+        <tag>Env</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JavaScript 对象</title>
+    <url>/2019/06/06/JavaScript-%E5%AF%B9%E8%B1%A1/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>对象是 JavaScript 的七种主要类型中的一种（string、boolean、number、null、undefined、symbol、object），也是这七种主要类型中最为复杂的一种类型，了解对象对学习 JavaScript、了解 <code>this</code>和作用域链，以及之后的“类”的概念都十分重要，而此篇就从边边角角来介绍 JavaScript 中的<strong>对象</strong>。</p>
+<a id="more"></a>
+<h3 id="基础内容"><a href="#基础内容" class="headerlink" title="基础内容"></a>基础内容</h3><h4 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h4><p>对象写法有两种：声明（文字）形式和构造形式。（一般很少使用构造形式）</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 声明文字形式</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 构造形式</span></span><br><span class="line"><span class="keyword">const</span> obj = <span class="keyword">new</span> <span class="built_in">Object</span>();</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>写法区别：声明文字形式能传递更多的键/值，构造形式得一个个的添加。</p>
+</blockquote>
+<h4 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h4><p>为什么要单独强调<strong>类型</strong>？因为在最开始，我也是认为 JS 中万物接对象，其实不然，像我们所熟悉的简单基本类型（string、boolean、undefined、null和number）就并非对象（字面量形式）。函数就是对象的一个子类型（技术角度来说即“可调用的对象”）；同样的，数组也是，只不过是具备一些额外的行为。</p>
+<blockquote>
+<p><code>typeof null === &#39;object&#39;</code> 是语言本身的 bug，在 JavaScript 中二进制前三位都为 0 的话会被判断为 <code>object</code> ，由于 null 的二进制表示是全 0，因此在做类型判读时会出现“误判”的问题。</p>
+</blockquote>
+<p>基础类型与对象类型的主要区别就是对象的生存期，使用 new 操作符创建的引用类型的实例，在执行流离开当前作用域之前都一直保存在内存中，而自基本类型则只存在于一行代码的执行瞬间，然后立即被销毁，这意味着我们不能在运行时为基本类型添加属性和方法。如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> name = <span class="string">'ConardLi'</span>;</span><br><span class="line">name.color = <span class="string">'red'</span>;</span><br><span class="line"><span class="built_in">console</span>.log(name.color); <span class="comment">// undefined</span></span><br></pre></td></tr></table></figure>
+<h5 id="内置对象"><a href="#内置对象" class="headerlink" title="内置对象"></a>内置对象</h5><p>JavaScript 中还有一些内置对象，例如：</p>
+<ul>
+<li>String</li>
+<li>Boolean</li>
+<li>Number</li>
+<li>Object</li>
+<li>Function</li>
+<li>Array</li>
+<li>Date</li>
+<li>RegExp</li>
+<li>Error</li>
+</ul>
+<p>它们可以类比为 Java 中的 Class（但从 JavaScript 角度来说，它们只是一些可以当作构造函数的内置函数）。但是在使用 JavaScript 时，更为常用的方式是直接声明一个字面量，如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> str1 = <span class="string">"This is a string"</span>;</span><br><span class="line"><span class="keyword">const</span> str2 = <span class="keyword">new</span> <span class="built_in">String</span>(<span class="string">"This is a object"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">typeof</span> str1 === <span class="string">'string'</span>; <span class="comment">// true</span></span><br><span class="line"><span class="keyword">typeof</span> str2 === <span class="string">'object'</span>; <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">str1 <span class="keyword">instanceof</span> <span class="built_in">String</span>; <span class="comment">// false</span></span><br><span class="line">str2 <span class="keyword">instanceof</span> <span class="built_in">String</span>; <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call(str1); <span class="comment">// [object String]</span></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call(str2); <span class="comment">// [object String]</span></span><br></pre></td></tr></table></figure>
+<p>这里解释了字面量并非由 String 的构造函数得到的对象，实际上 str1 为何其表现形式和 str2 无任何不同（从字符串的操作的层面），是因为引擎会自动将字面量转换成其对应的对象类型，因此可以访问对应类型的属性和方法。</p>
+<h4 id="属性与方法"><a href="#属性与方法" class="headerlink" title="属性与方法"></a>属性与方法</h4><p>对象的内容是由一些存储在特定命名位置的值组成的，我们称之为属性（可类比指针来理解）。对于基础类型来说，其所存储的值对应一块固定的空间，不会动态改变；而对于对象这样的较为复杂的类型来说，它们存储的为一块内存区域的引用。</p>
+<p>通俗的来说，基础类型就像手机店货架上的手机壳，它们是实物，“所见即所得”；而复杂类型就像是手机店柜子内的高价手机，展示的是模型机，其象征这这一型号的所有手机，需要的时候通过此去对应仓库获取真机。</p>
+<h5 id="访问方式"><a href="#访问方式" class="headerlink" title="访问方式"></a>访问方式</h5><p>对象属性的访问方式分为两种，例如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123; <span class="attr">name</span>: <span class="number">1</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 属性访问</span></span><br><span class="line">obj.name</span><br><span class="line"></span><br><span class="line"><span class="comment">// 键访问</span></span><br><span class="line">obj[<span class="string">'name'</span>]</span><br></pre></td></tr></table></figure>
+<p>两种方式各有优劣，前者在写的时候较为方便，但是得满足标识符的命名规范，比较固定；后者的写法比较多样（ES6支持可计算属性名），缺点是没有前者直接。</p>
+<p>需要注意的是，属性名永远都是字符串。如果使用字符串之外的值作为属性名，那么其会先转换成字符串，例如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;&#125;;</span><br><span class="line">obj[<span class="literal">true</span>] = <span class="string">'boolean'</span>;</span><br><span class="line">obj[&#123;&#125;] = <span class="string">'object'</span>;</span><br><span class="line">obj[<span class="number">3</span>] = <span class="string">'number'</span>;</span><br><span class="line"></span><br><span class="line">obj[<span class="string">'true'</span>]; <span class="comment">// boolean</span></span><br><span class="line">obj[<span class="string">'[object object]'</span>]; <span class="comment">// object</span></span><br><span class="line">obj[<span class="string">'3'</span>]; <span class="comment">// number</span></span><br></pre></td></tr></table></figure>
+<h5 id="函数属性"><a href="#函数属性" class="headerlink" title="函数属性"></a>函数属性</h5><p>有时候对象中的属性为一个函数，我们习惯上称这样的属性为“函数的方法”（类比 C 语言）。然而从技术角度来说，在 JavaScript 中，函数永远也不会“属于”一个对象，因为 this 是动态绑定至对象上的（先前有写过这么一篇文章），函数与对象间的关系并不稳定，因此对象与函数最多也只能称作为间接关系。最为保险的说法可能是“函数”和“方法”在 JavaScript 中是可以互换的。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  foo: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">1</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 基本上可以等价于</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj1 = &#123;</span><br><span class="line">  foo: foo</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><p>我们知道，在 JS 中数组也是“对象”，但是相对于对象来说，数组有一套更为结构化的值存储机制（通过索引的方式），例如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"></span><br><span class="line">arr[<span class="number">0</span>]; <span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
+<p>由于数组也是一个对象，因此我们也可以给数组添加属性，如：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 沿用上例</span><br><span class="line">arr.bar = &apos;bar&apos;;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：如果试图像数组内添加一个属性，而属性“看起来”像一个数字（如字符串数子），那么它会变成一个数值下标</p>
+</blockquote>
+<h3 id="提升内容"><a href="#提升内容" class="headerlink" title="提升内容"></a>提升内容</h3><h4 id="属性描述符"><a href="#属性描述符" class="headerlink" title="属性描述符"></a>属性描述符</h4><p>最早接触到属性描述符的时候还是在读JS红宝书的时候，不过那时候不是很懂有啥用，随着接触的东西逐渐变多，源码也看了一部分，对属性描述符也有了一定的程度的理解。</p>
+<p>自 ES5 以来，JS 的所有属性都具备了属性描述符，通过 <code>Object.getOwnPropertyDescription(&lt;obj&gt;, &lt;prop&gt;)</code> 能够拿到对应属性的描述，包含内容如下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  value: <span class="string">'xxx'</span>, <span class="comment">// 值</span></span><br><span class="line">  writable: <span class="literal">true</span>, <span class="comment">// 是否可写（默认）</span></span><br><span class="line">  enumerable: <span class="literal">true</span>, <span class="comment">// 是否可枚举（默认）</span></span><br><span class="line">  configurable: <span class="literal">true</span> <span class="comment">// 是否可配置（默认）</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然，我们也可以通过 <code>Object.defineProperty(&lt;obj&gt;, &lt;prop&gt;, {/* */})</code> 来修改属性描述符。</p>
+<h5 id="writable"><a href="#writable" class="headerlink" title="writable"></a>writable</h5><p>writable 决定是否可以修改属性的值，如果设置为 false，那么修改属性值时会静默失效</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">'a'</span>, &#123;</span><br><span class="line">  enumerable: <span class="literal">true</span>,</span><br><span class="line">  configurable: <span class="literal">true</span>,</span><br><span class="line">  writable: <span class="literal">false</span>,</span><br><span class="line">  value: <span class="string">"static"</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">obj.a = <span class="string">'public'</span>;</span><br><span class="line"></span><br><span class="line">obj.a; <span class="comment">// static（严格模式下会报错）</span></span><br></pre></td></tr></table></figure>
+<p>然而，当配置中有配置 getter/setter 时，这个属性会被定义为“访问描述符”（与“数据描述符”相对），对于访问描述符来说， JavaScript 会忽略其 value 和 writable 属性（具体来说此），例如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  a: <span class="number">2</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">'a'</span>, &#123;</span><br><span class="line">  enumerable: <span class="literal">true</span>,</span><br><span class="line">  configurable: <span class="literal">true</span>,</span><br><span class="line">  <span class="keyword">get</span>() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">3</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">obj.a; <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
+<h5 id="configurable"><a href="#configurable" class="headerlink" title="configurable"></a>configurable</h5><p>configurable 决定对象的属性是否可配置。与 writable 不同，writable 控制的是对象属性值能否改变，而 configurable 配置的是属性描述符能否改变，即后者是单向的（某个对象的 configurable 设置为 false 后就无法将其再设置为 true 了）。</p>
+<p>除此以外，其还禁止删除此属性，如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  a: <span class="string">'static'</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">obj.a; <span class="comment">// 2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> obj.a;</span><br><span class="line">obj.a; <span class="comment">// undefined</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">'a'</span>, &#123;</span><br><span class="line">  enumerable: <span class="literal">true</span>,</span><br><span class="line">  configurable: <span class="literal">false</span>,</span><br><span class="line">  writable: <span class="literal">true</span>,</span><br><span class="line">  value: <span class="string">"static"</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">obj.a; <span class="comment">// 2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> obj.a;</span><br><span class="line">obj.a; <span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注： delete 仅是一个删除对象属性的操作，并非一个释放内存的工具</p>
+</blockquote>
+<blockquote>
+<p>特例：当 configurable 设置为 false 之后，writable 可由 true 更改为 false，但无法由 false 更改为 true。</p>
+</blockquote>
+<h5 id="Enumerable"><a href="#Enumerable" class="headerlink" title="Enumerable"></a>Enumerable</h5><p>顾名思义，此描述符控制的事属性是否会在遍历对象时，将其枚举。例如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  bar: <span class="number">1</span>,</span><br><span class="line">  foo: <span class="number">2</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">'c'</span>, &#123;</span><br><span class="line">  enumerable: <span class="literal">false</span>,</span><br><span class="line">  configurable: <span class="literal">true</span>,</span><br><span class="line">  writable: <span class="literal">true</span>,</span><br><span class="line">  value: <span class="number">3</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> obj) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(key, obj[key]); <span class="comment">// 没有 [c 3]</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="string">'c'</span> <span class="keyword">in</span> obj; <span class="comment">// true</span></span><br><span class="line">obj.hasOwnProperty(<span class="string">'c'</span>); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<p>for .. in 循环可以遍历对象的可枚举属性列表（包括[[Prototype]]链），而遍历属性的值我们通常用的是 for .. of，如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> value <span class="keyword">of</span> arr) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(value) <span class="comment">// 1, 2, 3</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>for .. of 首选会向被访问的对象请求一个迭代器对象，然后通过迭代器对象的 next() 方法来遍历返回值，数组内默认会带有迭代器，因此我们可以直接将 for .. of 运用至数组中。但是对象却没有，我么可以这样造一个自定义迭代器。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  a: <span class="number">1</span>,</span><br><span class="line">  b: <span class="number">2</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="built_in">Symbol</span>.iterator, &#123;</span><br><span class="line">  enumerable: <span class="literal">false</span>,</span><br><span class="line">  configurable: <span class="literal">true</span>,</span><br><span class="line">  writable: <span class="literal">false</span>,</span><br><span class="line">  value: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> self = <span class="keyword">this</span>;</span><br><span class="line">    <span class="keyword">let</span> idx = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">const</span> ks = <span class="built_in">Object</span>.keys(self);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      next: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        value: self[ks[idx++]],</span><br><span class="line">        done: (idx &gt; ks.length )</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>遍历数组下标使用的是数字顺序，但是遍历对象时其顺序是不确定的。因此在不同环境要想数据展现形式保持一致，那么一定不要相信任何观察到的顺序，因为它们是不可靠的。</p>
+</blockquote>
+<h4 id="不变性"><a href="#不变性" class="headerlink" title="不变性"></a>不变性</h4><h5 id="对象常量"><a href="#对象常量" class="headerlink" title="对象常量"></a>对象常量</h5><p>我们可以通过设置对象属性的 writable 来设置对象常量，这样能做到真正意义上的不可修改（类比 const 声明）</p>
+<h5 id="禁止扩展"><a href="#禁止扩展" class="headerlink" title="禁止扩展"></a>禁止扩展</h5><p>对象默认是可扩展的，加入想要禁止一个对象的扩展性，即不能后期新增属性，那么可以使用 <code>Object.preventExtensions(&lt;obj&gt;)</code></p>
+<h5 id="密封"><a href="#密封" class="headerlink" title="密封"></a>密封</h5><p><code>Object.seal(&lt;obj&gt;)</code> 会创建一个密封对象，其会在一个现有对象上调用 Object.preventExtensions() 并将所有的属性标记为 <code>configurable: false</code>。其不仅不能添加新属性，也不能重新配置或删除原有属性（可修改属性值）。</p>
+<h5 id="冻结"><a href="#冻结" class="headerlink" title="冻结"></a>冻结</h5><p><code>Object.freeze(&lt;obj&gt;)</code> 会创建一个冻结对象，其会在对象上调用 Object.seal() 并将所有的属性标记为 <code>writable: false</code>，这样就无法修改其值。</p>
+<blockquote>
+<p>注意：对象中引用的对象无法被密封和冻结，只有非引用对象受影响最为全面，并且是浅操作。</p>
+</blockquote>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><ul>
+<li>《你所不知道的 JavaScript》</li>
+</ul>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>JSX 语法总结</title>
     <url>/2019/09/01/JSX-%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近着手编写 JSON 可视化部分的内容，由于此部分需要基于基础组件进行封装，Vue 的 JSX 的写法用的比较频繁，此处就记录我目前所能总结出的 JSX 的写法，以做备忘。</p>
@@ -695,94 +723,98 @@
       </tags>
   </entry>
   <entry>
-    <title>JavaScript 对象</title>
-    <url>/2019/06/06/JavaScript-%E5%AF%B9%E8%B1%A1/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>对象是 JavaScript 的七种主要类型中的一种（string、boolean、number、null、undefined、symbol、object），也是这七种主要类型中最为复杂的一种类型，了解对象对学习 JavaScript、了解 <code>this</code>和作用域链，以及之后的“类”的概念都十分重要，而此篇就从边边角角来介绍 JavaScript 中的<strong>对象</strong>。</p>
+    <title>Docker 安装 nginx</title>
+    <url>/2020/03/11/Docker-%E5%AE%89%E8%A3%85-nginx/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>自学 Docker 系列，了解常用包的使用和配置安装，此篇记录 nginx 的安装</p>
 <a id="more"></a>
-<h3 id="基础内容"><a href="#基础内容" class="headerlink" title="基础内容"></a>基础内容</h3><h4 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h4><p>对象写法有两种：声明（文字）形式和构造形式。（一般很少使用构造形式）</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 声明文字形式</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 构造形式</span></span><br><span class="line"><span class="keyword">const</span> obj = <span class="keyword">new</span> <span class="built_in">Object</span>();</span><br></pre></td></tr></table></figure>
+<h3 id="安装配置"><a href="#安装配置" class="headerlink" title="安装配置"></a>安装配置</h3><p>下载 nginx</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker pull nginx:latest</span><br></pre></td></tr></table></figure>
+<p>普通运行</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run --name nginx -p 80:80 -d nginx</span><br></pre></td></tr></table></figure>
+<p>如果需要挂载在本地，则需要设置虚拟卷宗</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run --name nginx -p 80:80 -v /Users/saitane/Docker/nginx/nginx.conf:/etc/nginx/nginx.conf -v /Users/saitane/Docker/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf -v /Users/saitane/Docker/nginx/html:/usr/share/nginx/html -d nginx</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>写法区别：声明文字形式能传递更多的键/值，构造形式得一个个的添加。</p>
+<p>此处我将 <code>nginx.conf</code>、<code>default.conf</code> 和 <code>html</code>静态文件夹 映射到本地的 nginx 文件夹内，之后就不用进入容器内配置文件以及繁琐的 <code>docker cp</code> 拷贝代码了，<strong>但得注意生成容器后需要将文件拷贝到本地</strong></p>
 </blockquote>
-<h4 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h4><p>为什么要单独强调<strong>类型</strong>？因为在最开始，我也是认为 JS 中万物接对象，其实不然，像我们所熟悉的简单基本类型（string、boolean、undefined、null和number）就并非对象（字面量形式）。函数就是对象的一个子类型（技术角度来说即“可调用的对象”）；同样的，数组也是，只不过是具备一些额外的行为。</p>
+<h3 id="服务器-nginx-安装"><a href="#服务器-nginx-安装" class="headerlink" title="服务器 nginx 安装"></a>服务器 nginx 安装</h3><p>除了 Docker 的安装方式，此处记录一下我在 centos 装 nginx 遇到的一些问题和解决方法。</p>
+<h4 id="安装-nginx"><a href="#安装-nginx" class="headerlink" title="安装 nginx"></a>安装 nginx</h4><p>centos 装 ngixn 先查看下是否有安装 nginx 的源</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum repolist</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果有安装会有这么一行信息</span></span><br><span class="line"><span class="comment"># 源标识                                               源名称</span></span><br><span class="line"><span class="comment"># ...</span></span><br><span class="line"><span class="comment"># nginx/x86_64                                         nginx repo</span></span><br><span class="line"><span class="comment"># ...</span></span><br></pre></td></tr></table></figure>
+<p>若没有安装源，则安装一下 nginx 的源</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">rpm -Uvh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm</span><br></pre></td></tr></table></figure>
+<h4 id="启动-nginx"><a href="#启动-nginx" class="headerlink" title="启动 nginx"></a>启动 nginx</h4><p>配置前先看一看是否有历史遗留的 nginx 服务</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">netstat -lntp | grep nginx</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如我这里就有一些安装的，但是部分没用却没有停止的服务，根据情况 kill 掉部分</span></span><br><span class="line"><span class="comment"># tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      14514/nginx: master</span></span><br><span class="line"><span class="comment"># tcp        0      0 0.0.0.0:440             0.0.0.0:*               LISTEN      3451/nginx: master</span></span><br><span class="line"><span class="comment"># tcp        0      0 0.0.0.0:8099            0.0.0.0:*               LISTEN      24166/nginx: master</span></span><br></pre></td></tr></table></figure>
 <blockquote>
-<p><code>typeof null === &#39;object&#39;</code> 是语言本身的 bug，在 JavaScript 中二进制前三位都为 0 的话会被判断为 <code>object</code> ，由于 null 的二进制表示是全 0，因此在做类型判读时会出现“误判”的问题。</p>
+<p>如果需要深度清理残留 nginx 文件，<code>find / -name nginx</code> 根据情况来处理即可</p>
 </blockquote>
-<p>基础类型与对象类型的主要区别就是对象的生存期，使用 new 操作符创建的引用类型的实例，在执行流离开当前作用域之前都一直保存在内存中，而自基本类型则只存在于一行代码的执行瞬间，然后立即被销毁，这意味着我们不能在运行时为基本类型添加属性和方法。如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> name = <span class="string">'ConardLi'</span>;</span><br><span class="line">name.color = <span class="string">'red'</span>;</span><br><span class="line"><span class="built_in">console</span>.log(name.color); <span class="comment">// undefined</span></span><br></pre></td></tr></table></figure>
-<h5 id="内置对象"><a href="#内置对象" class="headerlink" title="内置对象"></a>内置对象</h5><p>JavaScript 中还有一些内置对象，例如：</p>
+<p>处理完成后，注册 nginx 服务</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 注册开机启动 nginx</span></span><br><span class="line">systemctl <span class="built_in">enable</span> nginx</span><br><span class="line"><span class="comment"># 启动 nginx</span></span><br><span class="line">service start nginx</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启指令： `service restart nginx`</span></span><br><span class="line"><span class="comment"># 停止指令： `service stop nginx`</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意，更新 nginx 文件后需要重启 nginx</p>
+</blockquote>
+<p>然后 nginx 就启动成功了</p>
+<h4 id="配置-nginx"><a href="#配置-nginx" class="headerlink" title="配置 nginx"></a>配置 nginx</h4><p>yum 安装的 nginx 配置文件一般在 <code>/etc/nginx</code> 内，配置 <code>nginx.conf</code> 或者 <code>conf.d/default.conf</code> 即可，更多配置可以翻查下文档，这里就不介绍了。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 是在记不住就用这个命令查找，它会列举处所有地址</span></span><br><span class="line">whereis nginx</span><br></pre></td></tr></table></figure>
+<p>此处仅仅改了 root 文件夹的位置，方便项目构建</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># conf.d/default.conf</span></span><br><span class="line">location / &#123;</span><br><span class="line">  root   &lt;target-path&gt;;</span><br><span class="line">  index  index.html index.htm;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>便捷指令记录：</p>
 <ul>
-<li>String</li>
-<li>Boolean</li>
-<li>Number</li>
-<li>Object</li>
-<li>Function</li>
-<li>Array</li>
-<li>Date</li>
-<li>RegExp</li>
-<li>Error</li>
+<li>查看服务器 IP 地址命令： <code>ifconfig -a</code></li>
+<li>查看端口是否占用： <code>lsof -i:&lt;端口&gt;</code></li>
 </ul>
-<p>它们可以类比为 Java 中的 Class（但从 JavaScript 角度来说，它们只是一些可以当作构造函数的内置函数）。但是在使用 JavaScript 时，更为常用的方式是直接声明一个字面量，如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> str1 = <span class="string">"This is a string"</span>;</span><br><span class="line"><span class="keyword">const</span> str2 = <span class="keyword">new</span> <span class="built_in">String</span>(<span class="string">"This is a object"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">typeof</span> str1 === <span class="string">'string'</span>; <span class="comment">// true</span></span><br><span class="line"><span class="keyword">typeof</span> str2 === <span class="string">'object'</span>; <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line">str1 <span class="keyword">instanceof</span> <span class="built_in">String</span>; <span class="comment">// false</span></span><br><span class="line">str2 <span class="keyword">instanceof</span> <span class="built_in">String</span>; <span class="comment">// true</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call(str1); <span class="comment">// [object String]</span></span><br><span class="line"><span class="built_in">Object</span>.prototype.toString.call(str2); <span class="comment">// [object String]</span></span><br></pre></td></tr></table></figure>
-<p>这里解释了字面量并非由 String 的构造函数得到的对象，实际上 str1 为何其表现形式和 str2 无任何不同（从字符串的操作的层面），是因为引擎会自动将字面量转换成其对应的对象类型，因此可以访问对应类型的属性和方法。</p>
-<h4 id="属性与方法"><a href="#属性与方法" class="headerlink" title="属性与方法"></a>属性与方法</h4><p>对象的内容是由一些存储在特定命名位置的值组成的，我们称之为属性（可类比指针来理解）。对于基础类型来说，其所存储的值对应一块固定的空间，不会动态改变；而对于对象这样的较为复杂的类型来说，它们存储的为一块内存区域的引用。</p>
-<p>通俗的来说，基础类型就像手机店货架上的手机壳，它们是实物，“所见即所得”；而复杂类型就像是手机店柜子内的高价手机，展示的是模型机，其象征这这一型号的所有手机，需要的时候通过此去对应仓库获取真机。</p>
-<h5 id="访问方式"><a href="#访问方式" class="headerlink" title="访问方式"></a>访问方式</h5><p>对象属性的访问方式分为两种，例如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123; <span class="attr">name</span>: <span class="number">1</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 属性访问</span></span><br><span class="line">obj.name</span><br><span class="line"></span><br><span class="line"><span class="comment">// 键访问</span></span><br><span class="line">obj[<span class="string">'name'</span>]</span><br></pre></td></tr></table></figure>
-<p>两种方式各有优劣，前者在写的时候较为方便，但是得满足标识符的命名规范，比较固定；后者的写法比较多样（ES6支持可计算属性名），缺点是没有前者直接。</p>
-<p>需要注意的是，属性名永远都是字符串。如果使用字符串之外的值作为属性名，那么其会先转换成字符串，例如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;&#125;;</span><br><span class="line">obj[<span class="literal">true</span>] = <span class="string">'boolean'</span>;</span><br><span class="line">obj[&#123;&#125;] = <span class="string">'object'</span>;</span><br><span class="line">obj[<span class="number">3</span>] = <span class="string">'number'</span>;</span><br><span class="line"></span><br><span class="line">obj[<span class="string">'true'</span>]; <span class="comment">// boolean</span></span><br><span class="line">obj[<span class="string">'[object object]'</span>]; <span class="comment">// object</span></span><br><span class="line">obj[<span class="string">'3'</span>]; <span class="comment">// number</span></span><br></pre></td></tr></table></figure>
-<h5 id="函数属性"><a href="#函数属性" class="headerlink" title="函数属性"></a>函数属性</h5><p>有时候对象中的属性为一个函数，我们习惯上称这样的属性为“函数的方法”（类比 C 语言）。然而从技术角度来说，在 JavaScript 中，函数永远也不会“属于”一个对象，因为 this 是动态绑定至对象上的（先前有写过这么一篇文章），函数与对象间的关系并不稳定，因此对象与函数最多也只能称作为间接关系。最为保险的说法可能是“函数”和“方法”在 JavaScript 中是可以互换的。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  foo: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="number">1</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 基本上可以等价于</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj1 = &#123;</span><br><span class="line">  foo: foo</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><p>我们知道，在 JS 中数组也是“对象”，但是相对于对象来说，数组有一套更为结构化的值存储机制（通过索引的方式），例如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"></span><br><span class="line">arr[<span class="number">0</span>]; <span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
-<p>由于数组也是一个对象，因此我们也可以给数组添加属性，如：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// 沿用上例</span><br><span class="line">arr.bar = &apos;bar&apos;;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注意：如果试图像数组内添加一个属性，而属性“看起来”像一个数字（如字符串数子），那么它会变成一个数值下标</p>
 </blockquote>
-<h3 id="提升内容"><a href="#提升内容" class="headerlink" title="提升内容"></a>提升内容</h3><h4 id="属性描述符"><a href="#属性描述符" class="headerlink" title="属性描述符"></a>属性描述符</h4><p>最早接触到属性描述符的时候还是在读JS红宝书的时候，不过那时候不是很懂有啥用，随着接触的东西逐渐变多，源码也看了一部分，对属性描述符也有了一定的程度的理解。</p>
-<p>自 ES5 以来，JS 的所有属性都具备了属性描述符，通过 <code>Object.getOwnPropertyDescription(&lt;obj&gt;, &lt;prop&gt;)</code> 能够拿到对应属性的描述，包含内容如下：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  value: <span class="string">'xxx'</span>, <span class="comment">// 值</span></span><br><span class="line">  writable: <span class="literal">true</span>, <span class="comment">// 是否可写（默认）</span></span><br><span class="line">  enumerable: <span class="literal">true</span>, <span class="comment">// 是否可枚举（默认）</span></span><br><span class="line">  configurable: <span class="literal">true</span> <span class="comment">// 是否可配置（默认）</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>当然，我们也可以通过 <code>Object.defineProperty(&lt;obj&gt;, &lt;prop&gt;, {/* */})</code> 来修改属性描述符。</p>
-<h5 id="writable"><a href="#writable" class="headerlink" title="writable"></a>writable</h5><p>writable 决定是否可以修改属性的值，如果设置为 false，那么修改属性值时会静默失效</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">'a'</span>, &#123;</span><br><span class="line">  enumerable: <span class="literal">true</span>,</span><br><span class="line">  configurable: <span class="literal">true</span>,</span><br><span class="line">  writable: <span class="literal">false</span>,</span><br><span class="line">  value: <span class="string">"static"</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">obj.a = <span class="string">'public'</span>;</span><br><span class="line"></span><br><span class="line">obj.a; <span class="comment">// static（严格模式下会报错）</span></span><br></pre></td></tr></table></figure>
-<p>然而，当配置中有配置 getter/setter 时，这个属性会被定义为“访问描述符”（与“数据描述符”相对），对于访问描述符来说， JavaScript 会忽略其 value 和 writable 属性（具体来说此），例如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  a: <span class="number">2</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">'a'</span>, &#123;</span><br><span class="line">  enumerable: <span class="literal">true</span>,</span><br><span class="line">  configurable: <span class="literal">true</span>,</span><br><span class="line">  <span class="keyword">get</span>() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">3</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">obj.a; <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
-<h5 id="configurable"><a href="#configurable" class="headerlink" title="configurable"></a>configurable</h5><p>configurable 决定对象的属性是否可配置。与 writable 不同，writable 控制的是对象属性值能否改变，而 configurable 配置的是属性描述符能否改变，即后者是单向的（某个对象的 configurable 设置为 false 后就无法将其再设置为 true 了）。</p>
-<p>除此以外，其还禁止删除此属性，如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  a: <span class="string">'static'</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">obj.a; <span class="comment">// 2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> obj.a;</span><br><span class="line">obj.a; <span class="comment">// undefined</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">'a'</span>, &#123;</span><br><span class="line">  enumerable: <span class="literal">true</span>,</span><br><span class="line">  configurable: <span class="literal">false</span>,</span><br><span class="line">  writable: <span class="literal">true</span>,</span><br><span class="line">  value: <span class="string">"static"</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">obj.a; <span class="comment">// 2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> obj.a;</span><br><span class="line">obj.a; <span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
+<h4 id="问题总结"><a href="#问题总结" class="headerlink" title="问题总结"></a>问题总结</h4><h5 id="nginx-反向代理替换规则"><a href="#nginx-反向代理替换规则" class="headerlink" title="nginx 反向代理替换规则"></a>nginx 反向代理替换规则</h5><p>代理地址是否添加尾部 ‘/‘ 会影响到路径的匹配，总结的规律如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">location ^~ /xxx/ &#123;</span><br><span class="line">  proxy_set_header Host             $host;</span><br><span class="line">  proxy_set_header X-Real-IP        $remote_addr;</span><br><span class="line">  proxy_pass http://127.0.0.1:1234/;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 此最终会被替换成： http://127.0.0.1:1234/</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">location ^~ /xxx/ &#123;</span><br><span class="line">  proxy_set_header Host             $host;</span><br><span class="line">  proxy_set_header X-Real-IP        $remote_addr;</span><br><span class="line">  proxy_pass http://127.0.0.1:1234;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 此最终会被替换成： http://127.0.0.1:1234/xxx/</span><br></pre></td></tr></table></figure>
+<h5 id="nginx-的-nginx-pid-丢失问题"><a href="#nginx-的-nginx-pid-丢失问题" class="headerlink" title="nginx 的 nginx.pid 丢失问题"></a>nginx 的 <code>nginx.pid</code> 丢失问题</h5><p>nginx 重启时有时候会丢失 pid 文件，特别是被强制杀掉进程的情况，这种情况下我们需要进入 nginx 的安装目录的 sbin 下重新启动 nginx：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># cd &lt;nginx-dir&gt;/sbin</span></span><br><span class="line">./nginx -c &lt;nginx.conf path&gt;</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>注： delete 仅是一个删除对象属性的操作，并非一个释放内存的工具</p>
+<p>防止此丢失问题发生，在更新 nginx 时尽量使用 nginx reload 来平滑重启，重载配置。</p>
 </blockquote>
-<blockquote>
-<p>特例：当 configurable 设置为 false 之后，writable 可由 true 更改为 false，但无法由 false 更改为 true。</p>
-</blockquote>
-<h5 id="Enumerable"><a href="#Enumerable" class="headerlink" title="Enumerable"></a>Enumerable</h5><p>顾名思义，此描述符控制的事属性是否会在遍历对象时，将其枚举。例如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  bar: <span class="number">1</span>,</span><br><span class="line">  foo: <span class="number">2</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">'c'</span>, &#123;</span><br><span class="line">  enumerable: <span class="literal">false</span>,</span><br><span class="line">  configurable: <span class="literal">true</span>,</span><br><span class="line">  writable: <span class="literal">true</span>,</span><br><span class="line">  value: <span class="number">3</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> obj) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(key, obj[key]); <span class="comment">// 没有 [c 3]</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="string">'c'</span> <span class="keyword">in</span> obj; <span class="comment">// true</span></span><br><span class="line">obj.hasOwnProperty(<span class="string">'c'</span>); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
-<p>for .. in 循环可以遍历对象的可枚举属性列表（包括[[Prototype]]链），而遍历属性的值我们通常用的是 for .. of，如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> value <span class="keyword">of</span> arr) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(value) <span class="comment">// 1, 2, 3</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>for .. of 首选会向被访问的对象请求一个迭代器对象，然后通过迭代器对象的 next() 方法来遍历返回值，数组内默认会带有迭代器，因此我们可以直接将 for .. of 运用至数组中。但是对象却没有，我么可以这样造一个自定义迭代器。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  a: <span class="number">1</span>,</span><br><span class="line">  b: <span class="number">2</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="built_in">Symbol</span>.iterator, &#123;</span><br><span class="line">  enumerable: <span class="literal">false</span>,</span><br><span class="line">  configurable: <span class="literal">true</span>,</span><br><span class="line">  writable: <span class="literal">false</span>,</span><br><span class="line">  value: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> self = <span class="keyword">this</span>;</span><br><span class="line">    <span class="keyword">let</span> idx = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">const</span> ks = <span class="built_in">Object</span>.keys(self);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      next: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        value: self[ks[idx++]],</span><br><span class="line">        done: (idx &gt; ks.length )</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>遍历数组下标使用的是数字顺序，但是遍历对象时其顺序是不确定的。因此在不同环境要想数据展现形式保持一致，那么一定不要相信任何观察到的顺序，因为它们是不可靠的。</p>
-</blockquote>
-<h4 id="不变性"><a href="#不变性" class="headerlink" title="不变性"></a>不变性</h4><h5 id="对象常量"><a href="#对象常量" class="headerlink" title="对象常量"></a>对象常量</h5><p>我们可以通过设置对象属性的 writable 来设置对象常量，这样能做到真正意义上的不可修改（类比 const 声明）</p>
-<h5 id="禁止扩展"><a href="#禁止扩展" class="headerlink" title="禁止扩展"></a>禁止扩展</h5><p>对象默认是可扩展的，加入想要禁止一个对象的扩展性，即不能后期新增属性，那么可以使用 <code>Object.preventExtensions(&lt;obj&gt;)</code></p>
-<h5 id="密封"><a href="#密封" class="headerlink" title="密封"></a>密封</h5><p><code>Object.seal(&lt;obj&gt;)</code> 会创建一个密封对象，其会在一个现有对象上调用 Object.preventExtensions() 并将所有的属性标记为 <code>configurable: false</code>。其不仅不能添加新属性，也不能重新配置或删除原有属性（可修改属性值）。</p>
-<h5 id="冻结"><a href="#冻结" class="headerlink" title="冻结"></a>冻结</h5><p><code>Object.freeze(&lt;obj&gt;)</code> 会创建一个冻结对象，其会在对象上调用 Object.seal() 并将所有的属性标记为 <code>writable: false</code>，这样就无法修改其值。</p>
-<blockquote>
-<p>注意：对象中引用的对象无法被密封和冻结，只有非引用对象受影响最为全面，并且是浅操作。</p>
-</blockquote>
-<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><ul>
-<li>《你所不知道的 JavaScript》</li>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
+<li><a href="https://www.cnblogs.com/larryzq/p/11009045.html" target="_blank" rel="noopener">CentOS 7 yum 安装 Nginx</a></li>
+<li><a href="https://www.jianshu.com/p/c1ce9eec5fb2" target="_blank" rel="noopener">Linux 彻底卸载 Nginx</a></li>
+<li><a href="https://www.runoob.com/linux/linux-comm-kill.html" target="_blank" rel="noopener">Linux kill 命令</a></li>
+<li><a href="https://www.cnblogs.com/happySmily/p/6003579.html" target="_blank" rel="noopener">nginx 重启报找不到 nginx.pid 的解决方法</a></li>
 </ul>
 ]]></content>
       <categories>
-        <category>JavaScript</category>
+        <category>Docker</category>
       </categories>
       <tags>
-        <tag>JavaScript</tag>
+        <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mac 指令学习</title>
+    <url>/2020/01/19/Mac-%E6%8C%87%E4%BB%A4%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近在研究可视化编辑器部分的内容，同时借此机会学习学习 node 相关的知识。然而在学习的过程中，发现好不容易申请下来的测试机却不会用，是时候该补充补充 linux 相关的知识了！</p>
+<blockquote>
+<p>该文档持续完善，争取每周一个指令</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="grep-命令"><a href="#grep-命令" class="headerlink" title="grep 命令"></a><code>grep</code> 命令</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 获取对应文件内的内容</span></span><br><span class="line"><span class="comment">## -n 表示加上行号，file 支持 * 通配符</span></span><br><span class="line">grep -n &lt;content&gt; &lt;file&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="du-命令"><a href="#du-命令" class="headerlink" title="du 命令"></a><code>du</code> 命令</h3><p>du 命令用于显示目录或文件的大小</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看文件深度为 n 的所有文件大小</span></span><br><span class="line"><span class="comment"># n=0 时为该文件大小</span></span><br><span class="line">du -d &lt;depth &gt;= 0&gt; -h &lt;file-path&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="tar-命令"><a href="#tar-命令" class="headerlink" title="tar 命令"></a><code>tar</code> 命令</h3><p>tar 是用来建立，还原备份文件的工具程序，它可以加入，解开备份文件内的文件。可以用来做文件压缩</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># touch a.c</span></span><br><span class="line"><span class="comment"># 压缩 a.c文件为 test.tar.gz</span></span><br><span class="line">tar -czvf test.tar.gz a.c</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出压缩文件中的内容</span></span><br><span class="line">tar -tzvf test.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解压缩</span></span><br><span class="line">tar -xzvf test.tar.gz</span><br></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li>-v：显示过程；</li>
+<li>-c 建立新的备份文件；</li>
+<li>-z：gzip 处理备份文件；</li>
+<li>-x：从备份文件中还原文件；</li>
+<li>-t：列出文件内容</li>
+</ul>
+</blockquote>
+<h3 id="which-指令"><a href="#which-指令" class="headerlink" title="which 指令"></a>which 指令</h3><p>其主要用途是定位程序在系统的哪个位置，使用方法很简单</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">which &lt;target1&gt; &lt;target2&gt;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Env</category>
+      </categories>
+      <tags>
+        <tag>Env</tag>
       </tags>
   </entry>
   <entry>
@@ -920,29 +952,189 @@
       </tags>
   </entry>
   <entry>
-    <title>Mac 指令学习</title>
-    <url>/2020/01/19/Mac-%E6%8C%87%E4%BB%A4%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近在研究可视化编辑器部分的内容，同时借此机会学习学习 node 相关的知识。然而在学习的过程中，发现好不容易申请下来的测试机却不会用，是时候该补充补充 linux 相关的知识了！</p>
-<blockquote>
-<p>该文档持续完善，争取每周一个指令</p>
-</blockquote>
+    <title>React Hook 初学记录</title>
+    <url>/2020/12/05/React-Hook-%E5%88%9D%E5%AD%A6%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>此篇为我从 Vue 转 React，初学 React Hook 的一些记录，记录一些写法和注意项。</p>
 <a id="more"></a>
-<h3 id="grep-命令"><a href="#grep-命令" class="headerlink" title="grep 命令"></a><code>grep</code> 命令</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 获取对应文件内的内容</span></span><br><span class="line"><span class="comment">## -n 表示加上行号，file 支持 * 通配符</span></span><br><span class="line">grep -n &lt;content&gt; &lt;file&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="du-命令"><a href="#du-命令" class="headerlink" title="du 命令"></a><code>du</code> 命令</h3><p>du 命令用于显示目录或文件的大小</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看文件深度为 n 的所有文件大小</span></span><br><span class="line"><span class="comment"># n=0 时为该文件大小</span></span><br><span class="line">du -d &lt;depth &gt;= 0&gt; -h &lt;file-path&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="tar-命令"><a href="#tar-命令" class="headerlink" title="tar 命令"></a><code>tar</code> 命令</h3><p>tar 是用来建立，还原备份文件的工具程序，它可以加入，解开备份文件内的文件。可以用来做文件压缩</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># touch a.c</span></span><br><span class="line"><span class="comment"># 压缩 a.c文件为 test.tar.gz</span></span><br><span class="line">tar -czvf test.tar.gz a.c</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出压缩文件中的内容</span></span><br><span class="line">tar -tzvf test.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解压缩</span></span><br><span class="line">tar -xzvf test.tar.gz</span><br></pre></td></tr></table></figure>
+<h3 id="useState"><a href="#useState" class="headerlink" title="useState"></a>useState</h3><p>此 hook 相当于 Vue 中 Date 函数返回的对象的值，返回一个数组：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// state: 对应的值</span></span><br><span class="line"><span class="comment">// setState: 更新改值的函数</span></span><br><span class="line"><span class="comment">// initialState: 初始化值</span></span><br><span class="line"><span class="keyword">const</span> [state, setState] = useState(initialState);</span><br></pre></td></tr></table></figure>
+<p><code>useState</code> 的两种写法：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 对于简单值可直接设置</span></span><br><span class="line">useState(initVal);</span><br><span class="line"><span class="comment">// 对于复杂的操作，可使用函数处理</span></span><br><span class="line">useState(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// initVal 仅在初始化渲染时起作用</span></span><br><span class="line">  <span class="keyword">const</span> initVal = complexFunc(props)</span><br><span class="line">  <span class="keyword">return</span> initVal;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p><code>setState</code> 有两种使用方式：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 直接设置新值</span></span><br><span class="line">setState(newVal);</span><br><span class="line"><span class="comment">// 基于旧值操作获得新值</span></span><br><span class="line">setState(<span class="function">(<span class="params">preVal</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">return</span> newVal;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="useEffect"><a href="#useEffect" class="headerlink" title="useEffect"></a>useEffect</h3><p>此 hook 相当于 Vue 的 updated 钩子，其会在<strong>组件渲染到屏幕之后延迟执行（会保证在任何新的渲染前执行）</strong>，也可以配置让其<strong>仅在某些值改变的时候</strong>执行：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// return 方法用于清楚一些副作用函数（如：removeEventListener）</span></span><br><span class="line"><span class="comment">// 注：不能传入异步函数</span></span><br><span class="line">useEffect(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  someFunc();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    someClearFunc();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在某些值改变的情况下执行</span></span><br><span class="line"><span class="comment">// 注意：没有 someVal 时改 hook 仅会在初始化时执行</span></span><br><span class="line">useEffect(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  someFunc();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    someClearFunc();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, [someVal])</span><br></pre></td></tr></table></figure>
 <blockquote>
-<ul>
-<li>-v：显示过程；</li>
-<li>-c 建立新的备份文件；</li>
-<li>-z：gzip 处理备份文件；</li>
-<li>-x：从备份文件中还原文件；</li>
-<li>-t：列出文件内容</li>
-</ul>
+<p>如果需要在所有 DOM 变动之后同步调用 effect，则需要使用到 <code>useLayoutEffect</code>，但推荐一开始时优先使用 <code>useEffect</code> 方法。</p>
 </blockquote>
-<h3 id="which-指令"><a href="#which-指令" class="headerlink" title="which 指令"></a>which 指令</h3><p>其主要用途是定位程序在系统的哪个位置，使用方法很简单</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">which &lt;target1&gt; &lt;target2&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>若要从服务端渲染的 HTML 中排除依赖布局 effect 的组件，可以通过使用 <code>showChild &amp;&amp; &lt;Child /&gt;</code> 进行条件渲染，并使用 <code>useEffect(() =&gt; { setShowChild(true); }, [])</code> 延迟展示组件。这样，在客户端渲染完成之前，UI 就不会像之前那样显示错乱了。（如<strong>弹框组件</strong>初始化问题）</p>
+</blockquote>
+<h3 id="useContext"><a href="#useContext" class="headerlink" title="useContext"></a>useContext</h3><p>可以理解为 Vue 的 Provide/Inject 钩子（不是 ProvideReactive/InjectReactive）:</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> MyContext = React.createContext(<span class="comment">/* default value */</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">App</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;MyContext.Provider value=&#123;themes.dark&#125;&gt;</span><br><span class="line">      <span class="comment">// Components</span></span><br><span class="line">    &lt;<span class="regexp">/MyContext.Provider&gt;</span></span><br><span class="line"><span class="regexp">  );</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">useContext(MyContext)</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Provider 内如果绑定了 value（即使是 undefined）,<code>default value</code> 也不会生效</p>
+</blockquote>
+<h3 id="useReducer"><a href="#useReducer" class="headerlink" title="useReducer"></a>useReducer</h3><p>简化版的 <code>Redux</code>，与 <code>useState</code> 的区别是需要配置 reducer 函数，处理不同 type 的操作。</p>
+<blockquote>
+<p>项目开发可能使用的不是很多，不做过多记录</p>
+</blockquote>
+<h3 id="useCallback"><a href="#useCallback" class="headerlink" title="useCallback"></a>useCallback</h3><p>可以理解成 Vue 的 <code>computed</code> 钩子，不过其记录的是函数，使其仅在依赖项变更时才更新函数。当依赖参数不经常变时，可以优化子组件的渲染（返回的是子组件）。</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 依赖项数组不会作为参数传给回调函数</span></span><br><span class="line"><span class="keyword">const</span> memoizedCallback = useCallback(</span><br><span class="line">  () =&gt; &#123; doSomething(a, b); &#125;,</span><br><span class="line">  [a, b],</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>此 hook <code>useCallback(fn, deps)</code> 相当于 <code>useMemo(() =&gt; fn, deps)</code>。<br><strong>注：滥用的话不仅不会提升性能，反而会降低性能。</strong></p>
+</blockquote>
+<h3 id="useMemo"><a href="#useMemo" class="headerlink" title="useMemo"></a>useMemo</h3><p>相当于 Vue 的 <code>computed</code> 钩子了，有助于避免在每次渲染时都进行高开销的计算。</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> memoizedValue = useMemo(<span class="function"><span class="params">()</span> =&gt;</span> computeExpensiveValue(a, b), [a, b]);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>传入 <code>useMemo</code> 的函数会在渲染期间执行。请不要在这个函数内部执行与渲染无关的操作，诸如副作用这类的操作属于 <code>useEffect</code> 的适用范畴，而不是 <code>useMemo</code>。<br>大致流程：Dom 变更 -&gt; useMemo -&gt; 所有 Dom 渲染完成 -&gt; useEffect</p>
+</blockquote>
+<h3 id="useRef"><a href="#useRef" class="headerlink" title="useRef"></a>useRef</h3><p>可以理解成 Vue 的 <code>Ref</code> 钩子，但是其不仅仅局限于保存 DOM 节点，其 <code>.current</code> 属性中可以保存一个可变值。</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> refContainer = useRef(initialValue);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p> <code>useRef()</code> 和自建一个 <code>{current: ...}</code> 对象的唯一区别是，<code>useRef</code> 会在每次渲染时返回同一个 ref 对象。<br><strong>注：</strong> 当 ref 对象内容发生变化时，<code>useRef</code> 并<em>不会</em>通知你。变更 <code>.current</code> 属性不会引发组件重新渲染。</p>
+</blockquote>
+<h3 id="useImperativeHandle"><a href="#useImperativeHandle" class="headerlink" title="useImperativeHandle"></a>useImperativeHandle</h3><p>增强版 <code>useRef</code>，可以自定义设置在使用 <code>ref</code> 时需要暴露给父组件的实例值，且<code>useImperativeHandle</code> 应当与 <code>forwardRef</code> 一起使用：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 基本方法</span></span><br><span class="line">useImperativeHandle(ref, createHandle, [deps]);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 实例</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">FancyInput</span>(<span class="params">props, ref</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> inputRef = useRef();</span><br><span class="line">  useImperativeHandle(ref, <span class="function"><span class="params">()</span> =&gt;</span> (&#123;</span><br><span class="line">    focus: <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      inputRef.current.focus();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;));</span><br><span class="line">  <span class="keyword">return</span> &lt;input ref=&#123;inputRef&#125; ... /&gt;;</span><br><span class="line">&#125;</span><br><span class="line">FancyInput = forwardRef(FancyInput);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在大多数情况下，应当避免使用 ref 这样的命令式代码，可考虑使用 <code>useImperativeHandle</code> 做一层属性上的封装。</p>
+</blockquote>
+<h3 id="useLayoutEffect"><a href="#useLayoutEffect" class="headerlink" title="useLayoutEffect"></a>useLayoutEffect</h3><p>它会在所有的 DOM 变更之后<strong>同步</strong>调用 effect，在浏览器执行绘制之前，<code>useLayoutEffect</code> 内部的更新计划将被同步刷新。</p>
+<blockquote>
+<p>尽可能使用标准的 <code>useEffect</code> 以避免阻塞视觉更新。<br><code>useLayoutEffect</code> 与 <code>componentDidMount</code>、<code>componentDidUpdate</code> 的调用阶段是一样的。</p>
+</blockquote>
+<h3 id="useDebugValue"><a href="#useDebugValue" class="headerlink" title="useDebugValue"></a>useDebugValue</h3><p><code>useDebugValue</code> 可用于在 React 开发者工具中显示自定义 hook 的标签。</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">useFriendStatus</span>(<span class="params">friendID</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> [isOnline, setIsOnline] = useState(<span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 在开发者工具中的这个 Hook 旁边显示标签</span></span><br><span class="line">  <span class="comment">// e.g. "FriendStatus: Online"</span></span><br><span class="line">  useDebugValue(isOnline ? <span class="string">'Online'</span> : <span class="string">'Offline'</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> isOnline;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>不推荐你向每个自定义 Hook 添加 debug 值。当它作为共享库的一部分时才最有价值。</p>
+</blockquote>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><ul>
+<li><a href="https://react.docschina.org/docs/hooks-intro.html" target="_blank" rel="noopener">Hook 简介</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>React</category>
+      </categories>
+      <tags>
+        <tag>React</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mysql 的小技巧</title>
+    <url>/2020/06/09/Mysql-%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>近期开始学习 Node 和 MySQL 相关的知识了，项目也开始从纯前端转向了“全栈”（刚刚起步）。起初还是挺痛苦的，特别是数据库设计和查询，大学学习的东西基本都还回去了，不过在一次次问题中也渐渐总结了些经验，这里就记录一下“初学者”难免会遇到的一些问题。</p>
+<a id="more"></a>
+<h3 id="设置默认值"><a href="#设置默认值" class="headerlink" title="设置默认值"></a>设置默认值</h3><p>其实先处理模型，然后再根据模型建库和表，基本上没什么太大问题（毕竟都是可视化操作，不写 SQL 代码生成了）。不过，在可视化建表的过程中，有时候为了图快往往容易忽视一些配置，如：</p>
+<ul>
+<li>int 的默认值部分配置</li>
+</ul>
+<p><img data-src="/images/mysql-int-type.jpg" alt="int 类型"></p>
+<ul>
+<li>datetime 默认值部分配置</li>
+</ul>
+<p><img data-src="/images/mysql-datetime-type.jpg" alt="datetime 类型"></p>
+<p>根据情况配置对应默认值可以减少代码内的部分重复操作，如：</p>
+<ul>
+<li>配置 <code>create_time</code> 默认值为 <code>CURRENT_TIMESTAMP</code>， 那么每次新增时就可以不用带上时间戳了。</li>
+<li>配置 <code>modify_time</code> 默认值勾选上 “根据当前时间戳更新”，那么每次编辑时可以不用去配置修改时间，对于重复数据操作会比较方便。</li>
+</ul>
+<h3 id="日期更新"><a href="#日期更新" class="headerlink" title="日期更新"></a>日期更新</h3><p>当然，也有情况是需要在进行某些操作后，更新其它数据的一些信息，这之中比较麻烦的是“日期”相关的操作，在网上也没找到比较合适的博文来解决。这里在翻查了 Mysql 的一些函数，顺利解决了这么一个问题，修改数据时间的 <code>sql</code> 为：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">update</span> xxx_table</span><br><span class="line"><span class="keyword">set</span> xxx_time = <span class="keyword">CURRENT_TIMESTAMP</span>()</span><br><span class="line"><span class="keyword">where</span> xxx_id = <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>配合 <code>mysql</code> 的时间函数能比较方便的处理时间相关的操作。</p>
+<h3 id="ALTER-和-UPDATE-区别"><a href="#ALTER-和-UPDATE-区别" class="headerlink" title="ALTER 和 UPDATE 区别"></a>ALTER 和 UPDATE 区别</h3><p>最开始写 <code>sql</code> 时，总是习惯性的使用 <code>ALTER</code>，毕竟是 <code>ALTER</code> 是修改的意思嘛。实际上这两个区别很大，<code>ALTER</code> 是修改表结构的，而 <code>UPDATE</code> 是更新表数据信息的。因此在平时对数据进行 CRUD 时，记住使用 <code>UPDATE</code> 即可。这里记录一下：</p>
+<ul>
+<li><code>ALTER</code>、<code>DROP</code> 是结构上的更新和删除</li>
+<li><code>UPDATE</code>、<code>DELETE</code> 是数据上的更新和删除</li>
+</ul>
+<h3 id="group-concat-的长度限制"><a href="#group-concat-的长度限制" class="headerlink" title="group_concat 的长度限制"></a><code>group_concat</code> 的长度限制</h3><p>在做函数聚合处理时，会经常使用到 <code>group_concat</code> 函数对字段进行聚合，但是 mysql 默认对聚合的字串设有长度限制（没记错的话应该是 1024）,这会导致在取值的时候对于比较长的字段就直接被截取掉了，还比较难发现问题。</p>
+<p>对于自己的数据库，我们可以使用如下命令查看默认长度：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">'group_concat_max_len'</span>;</span><br></pre></td></tr></table></figure>
+<p>如果要修改其长度限制的话，有两种方法：</p>
+<p><strong>（1）更改 Mysql 配置文件</strong><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 在配置文件中加入如下内容：</span><br><span class="line">group_concat_max_len = 1024000</span><br></pre></td></tr></table></figure></p>
+<p><strong>（2）在 Navicat 内运行如下命令</strong><br><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">set</span> <span class="keyword">global</span> group_concat_max_len = <span class="number">1024000</span>;</span><br><span class="line"><span class="keyword">set</span> <span class="keyword">session</span> group_concat_max_len = <span class="number">1024000</span>;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意： 该方法缺点是重启服务后设置失效</p>
+</blockquote>
+<h3 id="mysql-连接阻塞问题"><a href="#mysql-连接阻塞问题" class="headerlink" title="mysql 连接阻塞问题"></a>mysql 连接阻塞问题</h3><p>最近遇到搭建的测试环境报错，查看日志发现是 mysql 的 max_connect_errors 报错导致服务器 ip 被禁止连接 mysql。但是自己通过 navcat 能够连接上数据库，查了下原因，发现应该是中间有一版本的代码部署后，node 代码数据库连接部分配置失误，导致错误连接数过大，ip 被禁止连接 mysql 了，针对不同情况有不同的解决方法，这里都列举出来：</p>
+<h4 id="max-connect-errors-值过小，容易出错"><a href="#max-connect-errors-值过小，容易出错" class="headerlink" title="max_connect_errors 值过小，容易出错"></a>max_connect_errors 值过小，容易出错</h4><p>通过 navicat 连接上 mysql，查询一下 mysql 的 <code>max_connect_errors</code> 属性是否值过小，较小时代码更新过程中容易产生 max_connect_errors 错误导致 mysql 连接不上，查询并更新方法如下：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查询连接数</span></span><br><span class="line"><span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">'%max_connect_errors%'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置连接数</span></span><br><span class="line"><span class="keyword">set</span> <span class="keyword">global</span> max_connect_errors = <span class="number">1000</span>;</span><br></pre></td></tr></table></figure>
+<h4 id="累计连接错误数超出"><a href="#累计连接错误数超出" class="headerlink" title="累计连接错误数超出"></a>累计连接错误数超出</h4><p>如果查询到的 <code>max_connect_errors</code> 数值已经比较大了，但是仍然报 <code>max_connect_errors</code> 超出的错误，那么应该是 mysql 的错误连接累计数量超出了，此时需要清空一下 <code>max_connect_errors</code> 数，在 navicat 的查询中输入：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">flush</span> <span class="keyword">hosts</span>;</span><br></pre></td></tr></table></figure>
+<h4 id="mysql-的-max-connect-errors-重启后变小"><a href="#mysql-的-max-connect-errors-重启后变小" class="headerlink" title="mysql 的 max_connect_errors 重启后变小"></a>mysql 的 <code>max_connect_errors</code> 重启后变小</h4><p>因为 mysql 重启后会重新读取 mysql 的 conf 文件，如果不想每次重启 mysql 都需要重新更改 <code>max_connect_errors</code> 数值，那么需要修改一下 my.cnf 文件，将一下内容的值改改</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">max_connect_errors = 1000</span><br></pre></td></tr></table></figure>
+<h3 id="insert-数据重复问题"><a href="#insert-数据重复问题" class="headerlink" title="insert 数据重复问题"></a>insert 数据重复问题</h3><p>在插入数据时，有时候会碰到插入的数据重复，因此可以使用 <code>insert ... update ...</code> 语句来进行插入/更新。</p>
+<p>使用语法大致如下：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> target_table(unique_col1, col2, col3)</span><br><span class="line"><span class="keyword">values</span> (val1, valb, valc), (val1, val2, val3)</span><br><span class="line"><span class="keyword">on</span> <span class="keyword">duplicate</span> <span class="keyword">key</span> <span class="keyword">update</span></span><br><span class="line">  col2 = <span class="keyword">values</span>(col2),</span><br><span class="line">  col3 = <span class="keyword">values</span>(col3)</span><br></pre></td></tr></table></figure>
+<p>意思可理解为这样：</p>
+<ul>
+<li>当插入的 unique_col1 值不存在时，进行新增操作，其值分别对应为：(val1、val2、val3)</li>
+<li>当插入的 unique_col1 值存在时，进行更新操作，分别更新 col2 和 col3 的值为传入 values 组对应的 val2 和 val3</li>
+</ul>
+<blockquote>
+<p>注意，唯一值重复时，后面的数据会覆盖前面的数据内容（即只取最新数据）</p>
+</blockquote>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><ul>
+<li><a href="https://www.runoob.com/mysql/mysql-functions.html" target="_blank" rel="noopener">MySQL 函数</a></li>
+<li><a href="https://blog.csdn.net/weixin_39469127/article/details/93768427" target="_blank" rel="noopener">MySQL中 insert into … on duplicate key update … values() 的使用笔记</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Mysql</category>
+      </categories>
+      <tags>
+        <tag>Mysql</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>React 代码规范配置</title>
+    <url>/2020/03/29/React-%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近开始初步学习 React 的一些知识，毕竟宅家这么久，总得开始学习学习新的内容了。“工欲善其事，必先利其器”，因此今天主要是配置 VSCode 的 React 支持，折腾来折腾去，核心的配置大概就如文中所示了。</p>
+<a id="more"></a>
+<h3 id="插件依赖"><a href="#插件依赖" class="headerlink" title="插件依赖"></a>插件依赖</h3><ul>
+<li>Prettier （格式化插件）</li>
+<li>ESlint（格式化插件）</li>
+<li>ES7 React/Redux/GraphQL/React-Native snippets (快捷指令)</li>
+</ul>
+<blockquote>
+<p><strong>注：</strong> 此处为一些必须安装的插件，安装后配置才会生效</p>
+</blockquote>
+<h3 id="项目配置"><a href="#项目配置" class="headerlink" title="项目配置"></a>项目配置</h3><p>VSCode 有整体的 setting.json 配置和单项目配置，个人还是推荐单项目配置，毕竟自己的开发器可能开发不仅仅就一种语言的吧，因此还是建立如下文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">--</span><br><span class="line">|- .vscode</span><br><span class="line">      |- settings.json</span><br></pre></td></tr></table></figure>
+<p>然后 settings.json 内配置内容为：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 编辑器部分</span></span><br><span class="line">  <span class="attr">"editor.tabSize"</span>: <span class="number">2</span>,</span><br><span class="line">  <span class="attr">"editor.wordWrap"</span>: <span class="string">"on"</span>,</span><br><span class="line">  <span class="attr">"editor.formatOnSave"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"editor.renderWhitespace"</span>: <span class="string">"none"</span>,</span><br><span class="line">  <span class="attr">"editor.multiCursorModifier"</span>: <span class="string">"ctrlCmd"</span>,</span><br><span class="line">  <span class="attr">"editor.defaultFormatter"</span>: <span class="string">"esbenp.prettier-vscode"</span>, <span class="comment">// 默认启用的代码格式化插件</span></span><br><span class="line">  <span class="attr">"files.insertFinalNewline"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 代码配置</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="comment">// eslint 部分</span></span><br><span class="line">  <span class="attr">"eslint.run"</span>: <span class="string">"onSave"</span>,</span><br><span class="line">  <span class="attr">"eslint.format.enable"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"editor.codeActionsOnSave"</span>: &#123;</span><br><span class="line">    <span class="attr">"source.fixAll.eslint"</span>: <span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"eslint.validate"</span>: [</span><br><span class="line">    <span class="string">"typescriptreact"</span>,</span><br><span class="line">    <span class="string">"typescript"</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="样式文件配置"><a href="#样式文件配置" class="headerlink" title="样式文件配置"></a>样式文件配置</h3><p>因为项目使用的是 prettier 格式化插件，因此我们需要在根目录创建一个 .prettierrc 的文件，然后粘贴一下内容（从 ant design 拷贝过来的，之后根据使用习惯再做修改）</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"singleQuote"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"trailingComma"</span>: <span class="string">"all"</span>,</span><br><span class="line">  <span class="attr">"printWidth"</span>: <span class="number">100</span>,</span><br><span class="line">  <span class="attr">"proseWrap"</span>: <span class="string">"never"</span>,</span><br><span class="line">  <span class="attr">"arrowParens"</span>: <span class="string">"avoid"</span>,</span><br><span class="line">  <span class="attr">"overrides"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"files"</span>: <span class="string">".prettierrc"</span>,</span><br><span class="line">      <span class="attr">"options"</span>: &#123;</span><br><span class="line">        <span class="attr">"parser"</span>: <span class="string">"json"</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Env</category>
+      </categories>
+      <tags>
+        <tag>Env</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Vue 代码规范配置</title>
+    <url>/2019/08/23/Vue-%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>工欲善其事，必先利其器。一个好的规范能使的团队开发的效率提升一倍，因此，一个好的规范对于一个团队来说是必不可少的。此处记录我为所在团队维护的一套前端规范相关的配置。</p>
+<a id="more"></a>
+<h3 id="VSCode-配置"><a href="#VSCode-配置" class="headerlink" title="VSCode 配置"></a>VSCode 配置</h3><p>在项目根目录下新建一个 .vscode 文件夹，然后在该文件内创建一个 settings.json 文件，粘贴以下内容即可：</p>
+<blockquote>
+<p>注意：该部分配置需要安装两个必须的 VSCode 插件： Vetur 和 ESLint。</p>
+</blockquote>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 编辑器部分</span></span><br><span class="line">  <span class="attr">"editor.tabSize"</span>: <span class="number">2</span>,</span><br><span class="line">  <span class="attr">"editor.fontSize"</span>: <span class="number">15</span>,</span><br><span class="line">  <span class="attr">"editor.wordWrap"</span>: <span class="string">"on"</span>,</span><br><span class="line">  <span class="attr">"editor.formatOnSave"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"editor.renderWhitespace"</span>: <span class="string">"none"</span>,</span><br><span class="line">  <span class="attr">"editor.multiCursorModifier"</span>: <span class="string">"ctrlCmd"</span>,</span><br><span class="line">  <span class="attr">"editor.defaultFormatter"</span>: <span class="string">"octref.vetur"</span>,</span><br><span class="line">  <span class="attr">"editor.codeActionsOnSave"</span>: &#123;</span><br><span class="line">    <span class="attr">"source.fixAll"</span>: <span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"files.insertFinalNewline"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 代码配置</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="comment">// eslint 部分</span></span><br><span class="line">  <span class="attr">"eslint.run"</span>: <span class="string">"onSave"</span>,</span><br><span class="line">  <span class="attr">"eslint.validate"</span>: [</span><br><span class="line">    <span class="string">"typescriptreact"</span>,</span><br><span class="line">    <span class="string">"typescript"</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="comment">// vetur 部分</span></span><br><span class="line">  <span class="attr">"vetur.format.defaultFormatter.css"</span>: <span class="string">"prettier"</span>,</span><br><span class="line">  <span class="attr">"vetur.format.defaultFormatter.less"</span>: <span class="string">"prettier"</span>,</span><br><span class="line">  <span class="attr">"vetur.format.defaultFormatter.js"</span>: <span class="string">"vscode-typescript"</span>,</span><br><span class="line">  <span class="attr">"vetur.format.defaultFormatter.ts"</span>: <span class="string">"vscode-typescript"</span>,</span><br><span class="line">  <span class="attr">"vetur.format.defaultFormatter.html"</span>: <span class="string">"prettyhtml"</span>,</span><br><span class="line">  <span class="attr">"vetur.format.defaultFormatterOptions"</span>: &#123;</span><br><span class="line">    <span class="attr">"prettyhtml"</span>: &#123;</span><br><span class="line">      <span class="attr">"printWidth"</span>: <span class="number">75</span>,</span><br><span class="line">      <span class="attr">"singleQuote"</span>: <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="ESlint-配置"><a href="#ESlint-配置" class="headerlink" title="ESlint 配置"></a>ESlint 配置</h3><p>此处配置的 ESlint 为 TS 环境下的 typescript-eslint 的配置。配置文件为：<code>.eslintrc.js</code>。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  root: <span class="literal">true</span>,</span><br><span class="line">  env: &#123;</span><br><span class="line">    browser: <span class="literal">true</span>,</span><br><span class="line">    commonjs: <span class="literal">true</span>,</span><br><span class="line">    es6: <span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  parserOptions: &#123;</span><br><span class="line">    parser: <span class="string">'@typescript-eslint/parser'</span>,</span><br><span class="line">    sourceType: <span class="string">'module'</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  extends: [</span><br><span class="line">    <span class="string">'plugin:vue/essential'</span>,</span><br><span class="line">    <span class="string">'@vue/standard'</span>,</span><br><span class="line">    <span class="string">'@vue/typescript'</span>,</span><br><span class="line">  ],</span><br><span class="line">  rules: &#123;</span><br><span class="line">    <span class="string">'no-var'</span>: <span class="string">'error'</span>,</span><br><span class="line">    <span class="string">'arrow-parens'</span>: <span class="string">'off'</span>,</span><br><span class="line">    <span class="string">"semi"</span>: <span class="string">"off"</span>,</span><br><span class="line">    <span class="string">"@typescript-eslint/semi"</span>: [<span class="string">"error"</span>],</span><br><span class="line">    <span class="string">'eol-last'</span>: <span class="string">'off'</span>,</span><br><span class="line">    <span class="string">'@typescript-eslint/no-unused-vars'</span>: [</span><br><span class="line">      <span class="string">'error'</span>,</span><br><span class="line">      &#123;</span><br><span class="line">        vars: <span class="string">'local'</span>,</span><br><span class="line">        args: <span class="string">'none'</span>,</span><br><span class="line">        ignoreRestSiblings: <span class="literal">true</span></span><br><span class="line">      &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">'generator-star-spacing'</span>: <span class="string">'off'</span>,</span><br><span class="line">    <span class="string">'camelcase'</span>: [<span class="string">'error'</span>, &#123; <span class="attr">properties</span>: <span class="string">'never'</span> &#125;],</span><br><span class="line">    <span class="string">'space-before-function-paren'</span>: [<span class="string">'error'</span>, &#123; <span class="attr">anonymous</span>: <span class="string">'always'</span>, <span class="attr">named</span>: <span class="string">'never'</span> &#125;],</span><br><span class="line">    <span class="string">'no-console'</span>: process.env.NODE_ENV === <span class="string">'production'</span> ? <span class="string">'error'</span> : <span class="string">'off'</span>,</span><br><span class="line">    <span class="string">'no-debugger'</span>: process.env.NODE_ENV === <span class="string">'production'</span> ? <span class="string">'error'</span> : <span class="string">'off'</span>,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="tsconfig-json-配置"><a href="#tsconfig-json-配置" class="headerlink" title="tsconfig.json 配置"></a>tsconfig.json 配置</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"compilerOptions"</span>: &#123;</span><br><span class="line">    <span class="string">"allowSyntheticDefaultImports"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"baseUrl"</span>: <span class="string">"."</span>,</span><br><span class="line">    <span class="string">"checkJs"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">"esModuleInterop"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"importHelpers"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"experimentalDecorators"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"jsx"</span>: <span class="string">"preserve"</span>,</span><br><span class="line">    <span class="string">"jsxFactory"</span>: <span class="string">"h"</span>,</span><br><span class="line">    <span class="string">"lib"</span>: [</span><br><span class="line">      <span class="string">"esnext"</span>,</span><br><span class="line">      <span class="string">"dom"</span>,</span><br><span class="line">      <span class="string">"dom.iterable"</span>,</span><br><span class="line">      <span class="string">"scripthost"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="string">"module"</span>: <span class="string">"esnext"</span>,</span><br><span class="line">    <span class="string">"moduleResolution"</span>: <span class="string">"node"</span>,</span><br><span class="line">    <span class="string">"paths"</span>: &#123;</span><br><span class="line">      <span class="string">"@/*"</span>: [</span><br><span class="line">        <span class="string">"src/*"</span></span><br><span class="line">      ]</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">"pretty"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"sourceMap"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"strict"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"target"</span>: <span class="string">"esnext"</span>,</span><br><span class="line">    <span class="string">"types"</span>: [</span><br><span class="line">      <span class="string">"webpack-env"</span></span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">"include"</span>: [</span><br><span class="line">    <span class="string">"src/**/*.ts"</span>,</span><br><span class="line">    <span class="string">"src/**/*.tsx"</span>,</span><br><span class="line">    <span class="string">"src/**/*.vue"</span>,</span><br><span class="line">    <span class="string">"tests/**/*.ts"</span>,</span><br><span class="line">    <span class="string">"tests/**/*.tsx"</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="string">"exclude"</span>: [</span><br><span class="line">    <span class="string">"node_modules"</span>,</span><br><span class="line">    <span class="string">"public"</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>相关依赖（项目由非 TS -&gt; TS）：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"devDependencies"</span>: &#123;</span><br><span class="line">    <span class="attr">"@babel/core"</span>: <span class="string">"^7.0.0-0"</span>,</span><br><span class="line">    <span class="attr">"@babel/plugin-syntax-jsx"</span>: <span class="string">"^7.2.0"</span>,</span><br><span class="line">    <span class="attr">"@vue/cli-plugin-babel"</span>: <span class="string">"^3.7.0"</span>,</span><br><span class="line">    <span class="attr">"@vue/cli-plugin-eslint"</span>: <span class="string">"^3.0.5"</span>,</span><br><span class="line">    <span class="attr">"@vue/cli-plugin-typescript"</span>: <span class="string">"^3.8.1"</span>,</span><br><span class="line">    <span class="attr">"@vue/cli-service"</span>: <span class="string">"^3.0.5"</span>,</span><br><span class="line">    <span class="attr">"@vue/eslint-config-standard"</span>: <span class="string">"^4.0.0"</span>,</span><br><span class="line">    <span class="attr">"@vue/eslint-config-typescript"</span>: <span class="string">"^4.0.0"</span>,</span><br><span class="line">    <span class="attr">"babel-eslint"</span>: <span class="string">"^10.0.1"</span>,</span><br><span class="line">    <span class="attr">"eslint"</span>: <span class="string">"^5.8.0"</span>,</span><br><span class="line">    <span class="attr">"eslint-plugin-vue"</span>: <span class="string">"^5.0.0-0"</span>,</span><br><span class="line">    <span class="attr">"typescript"</span>: <span class="string">"^3.4.3"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Stylelint-配置"><a href="#Stylelint-配置" class="headerlink" title="Stylelint 配置"></a>Stylelint 配置</h3><p>此部分规范 css 和 less 语法，配置文件为： <code>stylelint.config.js</code>。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  extends: <span class="string">'stylelint-config-standard'</span>,</span><br><span class="line">  ignoreFiles: [</span><br><span class="line">    <span class="string">'**/*.js'</span>,</span><br><span class="line">    <span class="string">'**/*.md'</span>,</span><br><span class="line">    <span class="string">'**/*.png'</span>,</span><br><span class="line">    <span class="string">'**/*.json'</span></span><br><span class="line">  ],</span><br><span class="line">  rules: &#123;</span><br><span class="line">    <span class="string">'indentation'</span>: <span class="number">2</span>,</span><br><span class="line">    <span class="string">'color-hex-case'</span>: <span class="string">'lower'</span>,</span><br><span class="line">    <span class="string">'string-quotes'</span>: <span class="string">'single'</span>,</span><br><span class="line">    <span class="string">'color-hex-length'</span>: <span class="string">'long'</span>,</span><br><span class="line">    <span class="string">'number-leading-zero'</span>: <span class="string">'never'</span>,</span><br><span class="line">    <span class="string">'rule-empty-line-before'</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="string">'no-descending-specificity'</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="string">'no-missing-end-of-source-newline'</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">'selector-pseudo-element-colon-notation'</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="string">'selector-list-comma-newline-after'</span>: <span class="string">'always-multi-line'</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>相关依赖：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"devDependencies"</span>: &#123;</span><br><span class="line">    <span class="attr">"stylelint"</span>: <span class="string">"^10.1.0"</span>,</span><br><span class="line">    <span class="attr">"stylelint-config-standard"</span>: <span class="string">"^18.3.0"</span>,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="规范参考"><a href="#规范参考" class="headerlink" title="规范参考"></a>规范参考</h3><ul>
+<li><a href="http://alloyteam.github.io/CodeGuide/" target="_blank" rel="noopener">Code Guide</a></li>
+<li><a href="https://cn.vuejs.org/v2/style-guide/" target="_blank" rel="noopener">风格指南</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>Env</category>
@@ -1052,198 +1244,6 @@
 <li><a href="https://www.cnblogs.com/heqiuyu/articles/7519803.html" target="_blank" rel="noopener">给vim配置 solarized 主题颜色</a></li>
 <li><a href="https://www.cnblogs.com/monsterdev/p/11166720.html" target="_blank" rel="noopener">Oh-My-Zsh 的配置与使用</a></li>
 <li><a href="https://blog.csdn.net/thatway_wp/article/details/79442177" target="_blank" rel="noopener">mac下 iterm 配色、半透明与样式设置</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Env</category>
-      </categories>
-      <tags>
-        <tag>Env</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Mysql 的小技巧</title>
-    <url>/2020/06/09/Mysql-%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>近期开始学习 Node 和 MySQL 相关的知识了，项目也开始从纯前端转向了“全栈”（刚刚起步）。起初还是挺痛苦的，特别是数据库设计和查询，大学学习的东西基本都还回去了，不过在一次次问题中也渐渐总结了些经验，这里就记录一下“初学者”难免会遇到的一些问题。</p>
-<a id="more"></a>
-<h3 id="设置默认值"><a href="#设置默认值" class="headerlink" title="设置默认值"></a>设置默认值</h3><p>其实先处理模型，然后再根据模型建库和表，基本上没什么太大问题（毕竟都是可视化操作，不写 SQL 代码生成了）。不过，在可视化建表的过程中，有时候为了图快往往容易忽视一些配置，如：</p>
-<ul>
-<li>int 的默认值部分配置</li>
-</ul>
-<p><img data-src="/images/mysql-int-type.jpg" alt="int 类型"></p>
-<ul>
-<li>datetime 默认值部分配置</li>
-</ul>
-<p><img data-src="/images/mysql-datetime-type.jpg" alt="datetime 类型"></p>
-<p>根据情况配置对应默认值可以减少代码内的部分重复操作，如：</p>
-<ul>
-<li>配置 <code>create_time</code> 默认值为 <code>CURRENT_TIMESTAMP</code>， 那么每次新增时就可以不用带上时间戳了。</li>
-<li>配置 <code>modify_time</code> 默认值勾选上 “根据当前时间戳更新”，那么每次编辑时可以不用去配置修改时间，对于重复数据操作会比较方便。</li>
-</ul>
-<h3 id="日期更新"><a href="#日期更新" class="headerlink" title="日期更新"></a>日期更新</h3><p>当然，也有情况是需要在进行某些操作后，更新其它数据的一些信息，这之中比较麻烦的是“日期”相关的操作，在网上也没找到比较合适的博文来解决。这里在翻查了 Mysql 的一些函数，顺利解决了这么一个问题，修改数据时间的 <code>sql</code> 为：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">update</span> xxx_table</span><br><span class="line"><span class="keyword">set</span> xxx_time = <span class="keyword">CURRENT_TIMESTAMP</span>()</span><br><span class="line"><span class="keyword">where</span> xxx_id = <span class="number">1</span></span><br></pre></td></tr></table></figure>
-<p>配合 <code>mysql</code> 的时间函数能比较方便的处理时间相关的操作。</p>
-<h3 id="ALTER-和-UPDATE-区别"><a href="#ALTER-和-UPDATE-区别" class="headerlink" title="ALTER 和 UPDATE 区别"></a>ALTER 和 UPDATE 区别</h3><p>最开始写 <code>sql</code> 时，总是习惯性的使用 <code>ALTER</code>，毕竟是 <code>ALTER</code> 是修改的意思嘛。实际上这两个区别很大，<code>ALTER</code> 是修改表结构的，而 <code>UPDATE</code> 是更新表数据信息的。因此在平时对数据进行 CRUD 时，记住使用 <code>UPDATE</code> 即可。这里记录一下：</p>
-<ul>
-<li><code>ALTER</code>、<code>DROP</code> 是结构上的更新和删除</li>
-<li><code>UPDATE</code>、<code>DELETE</code> 是数据上的更新和删除</li>
-</ul>
-<h3 id="group-concat-的长度限制"><a href="#group-concat-的长度限制" class="headerlink" title="group_concat 的长度限制"></a><code>group_concat</code> 的长度限制</h3><p>在做函数聚合处理时，会经常使用到 <code>group_concat</code> 函数对字段进行聚合，但是 mysql 默认对聚合的字串设有长度限制（没记错的话应该是 1024）,这会导致在取值的时候对于比较长的字段就直接被截取掉了，还比较难发现问题。</p>
-<p>对于自己的数据库，我们可以使用如下命令查看默认长度：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">'group_concat_max_len'</span>;</span><br></pre></td></tr></table></figure>
-<p>如果要修改其长度限制的话，有两种方法：</p>
-<p><strong>（1）更改 Mysql 配置文件</strong><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 在配置文件中加入如下内容：</span><br><span class="line">group_concat_max_len = 1024000</span><br></pre></td></tr></table></figure></p>
-<p><strong>（2）在 Navicat 内运行如下命令</strong><br><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">set</span> <span class="keyword">global</span> group_concat_max_len = <span class="number">1024000</span>;</span><br><span class="line"><span class="keyword">set</span> <span class="keyword">session</span> group_concat_max_len = <span class="number">1024000</span>;</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>注意： 该方法缺点是重启服务后设置失效</p>
-</blockquote>
-<h3 id="mysql-连接阻塞问题"><a href="#mysql-连接阻塞问题" class="headerlink" title="mysql 连接阻塞问题"></a>mysql 连接阻塞问题</h3><p>最近遇到搭建的测试环境报错，查看日志发现是 mysql 的 max_connect_errors 报错导致服务器 ip 被禁止连接 mysql。但是自己通过 navcat 能够连接上数据库，查了下原因，发现应该是中间有一版本的代码部署后，node 代码数据库连接部分配置失误，导致错误连接数过大，ip 被禁止连接 mysql 了，针对不同情况有不同的解决方法，这里都列举出来：</p>
-<h4 id="max-connect-errors-值过小，容易出错"><a href="#max-connect-errors-值过小，容易出错" class="headerlink" title="max_connect_errors 值过小，容易出错"></a>max_connect_errors 值过小，容易出错</h4><p>通过 navicat 连接上 mysql，查询一下 mysql 的 <code>max_connect_errors</code> 属性是否值过小，较小时代码更新过程中容易产生 max_connect_errors 错误导致 mysql 连接不上，查询并更新方法如下：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查询连接数</span></span><br><span class="line"><span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">'%max_connect_errors%'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置连接数</span></span><br><span class="line"><span class="keyword">set</span> <span class="keyword">global</span> max_connect_errors = <span class="number">1000</span>;</span><br></pre></td></tr></table></figure>
-<h4 id="累计连接错误数超出"><a href="#累计连接错误数超出" class="headerlink" title="累计连接错误数超出"></a>累计连接错误数超出</h4><p>如果查询到的 <code>max_connect_errors</code> 数值已经比较大了，但是仍然报 <code>max_connect_errors</code> 超出的错误，那么应该是 mysql 的错误连接累计数量超出了，此时需要清空一下 <code>max_connect_errors</code> 数，在 navicat 的查询中输入：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">flush</span> <span class="keyword">hosts</span>;</span><br></pre></td></tr></table></figure>
-<h4 id="mysql-的-max-connect-errors-重启后变小"><a href="#mysql-的-max-connect-errors-重启后变小" class="headerlink" title="mysql 的 max_connect_errors 重启后变小"></a>mysql 的 <code>max_connect_errors</code> 重启后变小</h4><p>因为 mysql 重启后会重新读取 mysql 的 conf 文件，如果不想每次重启 mysql 都需要重新更改 <code>max_connect_errors</code> 数值，那么需要修改一下 my.cnf 文件，将一下内容的值改改</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">max_connect_errors = 1000</span><br></pre></td></tr></table></figure>
-<h3 id="insert-数据重复问题"><a href="#insert-数据重复问题" class="headerlink" title="insert 数据重复问题"></a>insert 数据重复问题</h3><p>在插入数据时，有时候会碰到插入的数据重复，因此可以使用 <code>insert ... update ...</code> 语句来进行插入/更新。</p>
-<p>使用语法大致如下：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> target_table(unique_col1, col2, col3)</span><br><span class="line"><span class="keyword">values</span> (val1, valb, valc), (val1, val2, val3)</span><br><span class="line"><span class="keyword">on</span> <span class="keyword">duplicate</span> <span class="keyword">key</span> <span class="keyword">update</span></span><br><span class="line">  col2 = <span class="keyword">values</span>(col2),</span><br><span class="line">  col3 = <span class="keyword">values</span>(col3)</span><br></pre></td></tr></table></figure>
-<p>意思可理解为这样：</p>
-<ul>
-<li>当插入的 unique_col1 值不存在时，进行新增操作，其值分别对应为：(val1、val2、val3)</li>
-<li>当插入的 unique_col1 值存在时，进行更新操作，分别更新 col2 和 col3 的值为传入 values 组对应的 val2 和 val3</li>
-</ul>
-<blockquote>
-<p>注意，唯一值重复时，后面的数据会覆盖前面的数据内容（即只取最新数据）</p>
-</blockquote>
-<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><ul>
-<li><a href="https://www.runoob.com/mysql/mysql-functions.html" target="_blank" rel="noopener">MySQL 函数</a></li>
-<li><a href="https://blog.csdn.net/weixin_39469127/article/details/93768427" target="_blank" rel="noopener">MySQL中 insert into … on duplicate key update … values() 的使用笔记</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Mysql</category>
-      </categories>
-      <tags>
-        <tag>Mysql</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>React Hook 初学记录</title>
-    <url>/2020/12/05/React-Hook-%E5%88%9D%E5%AD%A6%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>此篇为我从 Vue 转 React，初学 React Hook 的一些记录，记录一些写法和注意项。</p>
-<a id="more"></a>
-<h3 id="useState"><a href="#useState" class="headerlink" title="useState"></a>useState</h3><p>此 hook 相当于 Vue 中 Date 函数返回的对象的值，返回一个数组：</p>
-<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// state: 对应的值</span></span><br><span class="line"><span class="comment">// setState: 更新改值的函数</span></span><br><span class="line"><span class="comment">// initialState: 初始化值</span></span><br><span class="line"><span class="keyword">const</span> [state, setState] = useState(initialState);</span><br></pre></td></tr></table></figure>
-<p><code>useState</code> 的两种写法：</p>
-<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 对于简单值可直接设置</span></span><br><span class="line">useState(initVal);</span><br><span class="line"><span class="comment">// 对于复杂的操作，可使用函数处理</span></span><br><span class="line">useState(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// initVal 仅在初始化渲染时起作用</span></span><br><span class="line">  <span class="keyword">const</span> initVal = complexFunc(props)</span><br><span class="line">  <span class="keyword">return</span> initVal;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p><code>setState</code> 有两种使用方式：</p>
-<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 直接设置新值</span></span><br><span class="line">setState(newVal);</span><br><span class="line"><span class="comment">// 基于旧值操作获得新值</span></span><br><span class="line">setState(<span class="function">(<span class="params">preVal</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">return</span> newVal;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<h3 id="useEffect"><a href="#useEffect" class="headerlink" title="useEffect"></a>useEffect</h3><p>此 hook 相当于 Vue 的 updated 钩子，其会在<strong>组件渲染到屏幕之后延迟执行（会保证在任何新的渲染前执行）</strong>，也可以配置让其<strong>仅在某些值改变的时候</strong>执行：</p>
-<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// return 方法用于清楚一些副作用函数（如：removeEventListener）</span></span><br><span class="line"><span class="comment">// 注：不能传入异步函数</span></span><br><span class="line">useEffect(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  someFunc();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    someClearFunc();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在某些值改变的情况下执行</span></span><br><span class="line"><span class="comment">// 注意：没有 someVal 时改 hook 仅会在初始化时执行</span></span><br><span class="line">useEffect(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  someFunc();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    someClearFunc();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, [someVal])</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>如果需要在所有 DOM 变动之后同步调用 effect，则需要使用到 <code>useLayoutEffect</code>，但推荐一开始时优先使用 <code>useEffect</code> 方法。</p>
-</blockquote>
-<blockquote>
-<p>若要从服务端渲染的 HTML 中排除依赖布局 effect 的组件，可以通过使用 <code>showChild &amp;&amp; &lt;Child /&gt;</code> 进行条件渲染，并使用 <code>useEffect(() =&gt; { setShowChild(true); }, [])</code> 延迟展示组件。这样，在客户端渲染完成之前，UI 就不会像之前那样显示错乱了。（如<strong>弹框组件</strong>初始化问题）</p>
-</blockquote>
-<h3 id="useContext"><a href="#useContext" class="headerlink" title="useContext"></a>useContext</h3><p>可以理解为 Vue 的 Provide/Inject 钩子（不是 ProvideReactive/InjectReactive）:</p>
-<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> MyContext = React.createContext(<span class="comment">/* default value */</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">App</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;MyContext.Provider value=&#123;themes.dark&#125;&gt;</span><br><span class="line">      <span class="comment">// Components</span></span><br><span class="line">    &lt;<span class="regexp">/MyContext.Provider&gt;</span></span><br><span class="line"><span class="regexp">  );</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">useContext(MyContext)</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>Provider 内如果绑定了 value（即使是 undefined）,<code>default value</code> 也不会生效</p>
-</blockquote>
-<h3 id="useReducer"><a href="#useReducer" class="headerlink" title="useReducer"></a>useReducer</h3><p>简化版的 <code>Redux</code>，与 <code>useState</code> 的区别是需要配置 reducer 函数，处理不同 type 的操作。</p>
-<blockquote>
-<p>项目开发可能使用的不是很多，不做过多记录</p>
-</blockquote>
-<h3 id="useCallback"><a href="#useCallback" class="headerlink" title="useCallback"></a>useCallback</h3><p>可以理解成 Vue 的 <code>computed</code> 钩子，不过其记录的是函数，使其仅在依赖项变更时才更新函数。当依赖参数不经常变时，可以优化子组件的渲染（返回的是子组件）。</p>
-<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 依赖项数组不会作为参数传给回调函数</span></span><br><span class="line"><span class="keyword">const</span> memoizedCallback = useCallback(</span><br><span class="line">  () =&gt; &#123; doSomething(a, b); &#125;,</span><br><span class="line">  [a, b],</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>此 hook <code>useCallback(fn, deps)</code> 相当于 <code>useMemo(() =&gt; fn, deps)</code>。<br><strong>注：滥用的话不仅不会提升性能，反而会降低性能。</strong></p>
-</blockquote>
-<h3 id="useMemo"><a href="#useMemo" class="headerlink" title="useMemo"></a>useMemo</h3><p>相当于 Vue 的 <code>computed</code> 钩子了，有助于避免在每次渲染时都进行高开销的计算。</p>
-<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> memoizedValue = useMemo(<span class="function"><span class="params">()</span> =&gt;</span> computeExpensiveValue(a, b), [a, b]);</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>传入 <code>useMemo</code> 的函数会在渲染期间执行。请不要在这个函数内部执行与渲染无关的操作，诸如副作用这类的操作属于 <code>useEffect</code> 的适用范畴，而不是 <code>useMemo</code>。<br>大致流程：Dom 变更 -&gt; useMemo -&gt; 所有 Dom 渲染完成 -&gt; useEffect</p>
-</blockquote>
-<h3 id="useRef"><a href="#useRef" class="headerlink" title="useRef"></a>useRef</h3><p>可以理解成 Vue 的 <code>Ref</code> 钩子，但是其不仅仅局限于保存 DOM 节点，其 <code>.current</code> 属性中可以保存一个可变值。</p>
-<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> refContainer = useRef(initialValue);</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p> <code>useRef()</code> 和自建一个 <code>{current: ...}</code> 对象的唯一区别是，<code>useRef</code> 会在每次渲染时返回同一个 ref 对象。<br><strong>注：</strong> 当 ref 对象内容发生变化时，<code>useRef</code> 并<em>不会</em>通知你。变更 <code>.current</code> 属性不会引发组件重新渲染。</p>
-</blockquote>
-<h3 id="useImperativeHandle"><a href="#useImperativeHandle" class="headerlink" title="useImperativeHandle"></a>useImperativeHandle</h3><p>增强版 <code>useRef</code>，可以自定义设置在使用 <code>ref</code> 时需要暴露给父组件的实例值，且<code>useImperativeHandle</code> 应当与 <code>forwardRef</code> 一起使用：</p>
-<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 基本方法</span></span><br><span class="line">useImperativeHandle(ref, createHandle, [deps]);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 实例</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">FancyInput</span>(<span class="params">props, ref</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> inputRef = useRef();</span><br><span class="line">  useImperativeHandle(ref, <span class="function"><span class="params">()</span> =&gt;</span> (&#123;</span><br><span class="line">    focus: <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      inputRef.current.focus();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;));</span><br><span class="line">  <span class="keyword">return</span> &lt;input ref=&#123;inputRef&#125; ... /&gt;;</span><br><span class="line">&#125;</span><br><span class="line">FancyInput = forwardRef(FancyInput);</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>在大多数情况下，应当避免使用 ref 这样的命令式代码，可考虑使用 <code>useImperativeHandle</code> 做一层属性上的封装。</p>
-</blockquote>
-<h3 id="useLayoutEffect"><a href="#useLayoutEffect" class="headerlink" title="useLayoutEffect"></a>useLayoutEffect</h3><p>它会在所有的 DOM 变更之后<strong>同步</strong>调用 effect，在浏览器执行绘制之前，<code>useLayoutEffect</code> 内部的更新计划将被同步刷新。</p>
-<blockquote>
-<p>尽可能使用标准的 <code>useEffect</code> 以避免阻塞视觉更新。<br><code>useLayoutEffect</code> 与 <code>componentDidMount</code>、<code>componentDidUpdate</code> 的调用阶段是一样的。</p>
-</blockquote>
-<h3 id="useDebugValue"><a href="#useDebugValue" class="headerlink" title="useDebugValue"></a>useDebugValue</h3><p><code>useDebugValue</code> 可用于在 React 开发者工具中显示自定义 hook 的标签。</p>
-<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">useFriendStatus</span>(<span class="params">friendID</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> [isOnline, setIsOnline] = useState(<span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 在开发者工具中的这个 Hook 旁边显示标签</span></span><br><span class="line">  <span class="comment">// e.g. "FriendStatus: Online"</span></span><br><span class="line">  useDebugValue(isOnline ? <span class="string">'Online'</span> : <span class="string">'Offline'</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> isOnline;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>不推荐你向每个自定义 Hook 添加 debug 值。当它作为共享库的一部分时才最有价值。</p>
-</blockquote>
-<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><ul>
-<li><a href="https://react.docschina.org/docs/hooks-intro.html" target="_blank" rel="noopener">Hook 简介</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>React</category>
-      </categories>
-      <tags>
-        <tag>React</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>React 代码规范配置</title>
-    <url>/2020/03/29/React-%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83%E9%85%8D%E7%BD%AE/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近开始初步学习 React 的一些知识，毕竟宅家这么久，总得开始学习学习新的内容了。“工欲善其事，必先利其器”，因此今天主要是配置 VSCode 的 React 支持，折腾来折腾去，核心的配置大概就如文中所示了。</p>
-<a id="more"></a>
-<h3 id="插件依赖"><a href="#插件依赖" class="headerlink" title="插件依赖"></a>插件依赖</h3><ul>
-<li>Prettier （格式化插件）</li>
-<li>ESlint（格式化插件）</li>
-<li>ES7 React/Redux/GraphQL/React-Native snippets (快捷指令)</li>
-</ul>
-<blockquote>
-<p><strong>注：</strong> 此处为一些必须安装的插件，安装后配置才会生效</p>
-</blockquote>
-<h3 id="项目配置"><a href="#项目配置" class="headerlink" title="项目配置"></a>项目配置</h3><p>VSCode 有整体的 setting.json 配置和单项目配置，个人还是推荐单项目配置，毕竟自己的开发器可能开发不仅仅就一种语言的吧，因此还是建立如下文件：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">--</span><br><span class="line">|- .vscode</span><br><span class="line">      |- settings.json</span><br></pre></td></tr></table></figure>
-<p>然后 settings.json 内配置内容为：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 编辑器部分</span></span><br><span class="line">  <span class="attr">"editor.tabSize"</span>: <span class="number">2</span>,</span><br><span class="line">  <span class="attr">"editor.wordWrap"</span>: <span class="string">"on"</span>,</span><br><span class="line">  <span class="attr">"editor.formatOnSave"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"editor.renderWhitespace"</span>: <span class="string">"none"</span>,</span><br><span class="line">  <span class="attr">"editor.multiCursorModifier"</span>: <span class="string">"ctrlCmd"</span>,</span><br><span class="line">  <span class="attr">"editor.defaultFormatter"</span>: <span class="string">"esbenp.prettier-vscode"</span>, <span class="comment">// 默认启用的代码格式化插件</span></span><br><span class="line">  <span class="attr">"files.insertFinalNewline"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 代码配置</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="comment">// eslint 部分</span></span><br><span class="line">  <span class="attr">"eslint.run"</span>: <span class="string">"onSave"</span>,</span><br><span class="line">  <span class="attr">"eslint.format.enable"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"editor.codeActionsOnSave"</span>: &#123;</span><br><span class="line">    <span class="attr">"source.fixAll.eslint"</span>: <span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"eslint.validate"</span>: [</span><br><span class="line">    <span class="string">"typescriptreact"</span>,</span><br><span class="line">    <span class="string">"typescript"</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="样式文件配置"><a href="#样式文件配置" class="headerlink" title="样式文件配置"></a>样式文件配置</h3><p>因为项目使用的是 prettier 格式化插件，因此我们需要在根目录创建一个 .prettierrc 的文件，然后粘贴一下内容（从 ant design 拷贝过来的，之后根据使用习惯再做修改）</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"singleQuote"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"trailingComma"</span>: <span class="string">"all"</span>,</span><br><span class="line">  <span class="attr">"printWidth"</span>: <span class="number">100</span>,</span><br><span class="line">  <span class="attr">"proseWrap"</span>: <span class="string">"never"</span>,</span><br><span class="line">  <span class="attr">"arrowParens"</span>: <span class="string">"avoid"</span>,</span><br><span class="line">  <span class="attr">"overrides"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"files"</span>: <span class="string">".prettierrc"</span>,</span><br><span class="line">      <span class="attr">"options"</span>: &#123;</span><br><span class="line">        <span class="attr">"parser"</span>: <span class="string">"json"</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Env</category>
-      </categories>
-      <tags>
-        <tag>Env</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Vue 代码规范配置</title>
-    <url>/2019/08/23/Vue-%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83%E9%85%8D%E7%BD%AE/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>工欲善其事，必先利其器。一个好的规范能使的团队开发的效率提升一倍，因此，一个好的规范对于一个团队来说是必不可少的。此处记录我为所在团队维护的一套前端规范相关的配置。</p>
-<a id="more"></a>
-<h3 id="VSCode-配置"><a href="#VSCode-配置" class="headerlink" title="VSCode 配置"></a>VSCode 配置</h3><p>在项目根目录下新建一个 .vscode 文件夹，然后在该文件内创建一个 settings.json 文件，粘贴以下内容即可：</p>
-<blockquote>
-<p>注意：该部分配置需要安装两个必须的 VSCode 插件： Vetur 和 ESLint。</p>
-</blockquote>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 编辑器部分</span></span><br><span class="line">  <span class="attr">"editor.tabSize"</span>: <span class="number">2</span>,</span><br><span class="line">  <span class="attr">"editor.fontSize"</span>: <span class="number">15</span>,</span><br><span class="line">  <span class="attr">"editor.wordWrap"</span>: <span class="string">"on"</span>,</span><br><span class="line">  <span class="attr">"editor.formatOnSave"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">"editor.renderWhitespace"</span>: <span class="string">"none"</span>,</span><br><span class="line">  <span class="attr">"editor.multiCursorModifier"</span>: <span class="string">"ctrlCmd"</span>,</span><br><span class="line">  <span class="attr">"editor.defaultFormatter"</span>: <span class="string">"octref.vetur"</span>,</span><br><span class="line">  <span class="attr">"editor.codeActionsOnSave"</span>: &#123;</span><br><span class="line">    <span class="attr">"source.fixAll"</span>: <span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"files.insertFinalNewline"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 代码配置</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="comment">// eslint 部分</span></span><br><span class="line">  <span class="attr">"eslint.run"</span>: <span class="string">"onSave"</span>,</span><br><span class="line">  <span class="attr">"eslint.validate"</span>: [</span><br><span class="line">    <span class="string">"typescriptreact"</span>,</span><br><span class="line">    <span class="string">"typescript"</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="comment">// vetur 部分</span></span><br><span class="line">  <span class="attr">"vetur.format.defaultFormatter.css"</span>: <span class="string">"prettier"</span>,</span><br><span class="line">  <span class="attr">"vetur.format.defaultFormatter.less"</span>: <span class="string">"prettier"</span>,</span><br><span class="line">  <span class="attr">"vetur.format.defaultFormatter.js"</span>: <span class="string">"vscode-typescript"</span>,</span><br><span class="line">  <span class="attr">"vetur.format.defaultFormatter.ts"</span>: <span class="string">"vscode-typescript"</span>,</span><br><span class="line">  <span class="attr">"vetur.format.defaultFormatter.html"</span>: <span class="string">"prettyhtml"</span>,</span><br><span class="line">  <span class="attr">"vetur.format.defaultFormatterOptions"</span>: &#123;</span><br><span class="line">    <span class="attr">"prettyhtml"</span>: &#123;</span><br><span class="line">      <span class="attr">"printWidth"</span>: <span class="number">75</span>,</span><br><span class="line">      <span class="attr">"singleQuote"</span>: <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="ESlint-配置"><a href="#ESlint-配置" class="headerlink" title="ESlint 配置"></a>ESlint 配置</h3><p>此处配置的 ESlint 为 TS 环境下的 typescript-eslint 的配置。配置文件为：<code>.eslintrc.js</code>。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  root: <span class="literal">true</span>,</span><br><span class="line">  env: &#123;</span><br><span class="line">    browser: <span class="literal">true</span>,</span><br><span class="line">    commonjs: <span class="literal">true</span>,</span><br><span class="line">    es6: <span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  parserOptions: &#123;</span><br><span class="line">    parser: <span class="string">'@typescript-eslint/parser'</span>,</span><br><span class="line">    sourceType: <span class="string">'module'</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  extends: [</span><br><span class="line">    <span class="string">'plugin:vue/essential'</span>,</span><br><span class="line">    <span class="string">'@vue/standard'</span>,</span><br><span class="line">    <span class="string">'@vue/typescript'</span>,</span><br><span class="line">  ],</span><br><span class="line">  rules: &#123;</span><br><span class="line">    <span class="string">'no-var'</span>: <span class="string">'error'</span>,</span><br><span class="line">    <span class="string">'arrow-parens'</span>: <span class="string">'off'</span>,</span><br><span class="line">    <span class="string">"semi"</span>: <span class="string">"off"</span>,</span><br><span class="line">    <span class="string">"@typescript-eslint/semi"</span>: [<span class="string">"error"</span>],</span><br><span class="line">    <span class="string">'eol-last'</span>: <span class="string">'off'</span>,</span><br><span class="line">    <span class="string">'@typescript-eslint/no-unused-vars'</span>: [</span><br><span class="line">      <span class="string">'error'</span>,</span><br><span class="line">      &#123;</span><br><span class="line">        vars: <span class="string">'local'</span>,</span><br><span class="line">        args: <span class="string">'none'</span>,</span><br><span class="line">        ignoreRestSiblings: <span class="literal">true</span></span><br><span class="line">      &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">'generator-star-spacing'</span>: <span class="string">'off'</span>,</span><br><span class="line">    <span class="string">'camelcase'</span>: [<span class="string">'error'</span>, &#123; <span class="attr">properties</span>: <span class="string">'never'</span> &#125;],</span><br><span class="line">    <span class="string">'space-before-function-paren'</span>: [<span class="string">'error'</span>, &#123; <span class="attr">anonymous</span>: <span class="string">'always'</span>, <span class="attr">named</span>: <span class="string">'never'</span> &#125;],</span><br><span class="line">    <span class="string">'no-console'</span>: process.env.NODE_ENV === <span class="string">'production'</span> ? <span class="string">'error'</span> : <span class="string">'off'</span>,</span><br><span class="line">    <span class="string">'no-debugger'</span>: process.env.NODE_ENV === <span class="string">'production'</span> ? <span class="string">'error'</span> : <span class="string">'off'</span>,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h3 id="tsconfig-json-配置"><a href="#tsconfig-json-配置" class="headerlink" title="tsconfig.json 配置"></a>tsconfig.json 配置</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"compilerOptions"</span>: &#123;</span><br><span class="line">    <span class="string">"allowSyntheticDefaultImports"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"baseUrl"</span>: <span class="string">"."</span>,</span><br><span class="line">    <span class="string">"checkJs"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">"esModuleInterop"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"importHelpers"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"experimentalDecorators"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"jsx"</span>: <span class="string">"preserve"</span>,</span><br><span class="line">    <span class="string">"jsxFactory"</span>: <span class="string">"h"</span>,</span><br><span class="line">    <span class="string">"lib"</span>: [</span><br><span class="line">      <span class="string">"esnext"</span>,</span><br><span class="line">      <span class="string">"dom"</span>,</span><br><span class="line">      <span class="string">"dom.iterable"</span>,</span><br><span class="line">      <span class="string">"scripthost"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="string">"module"</span>: <span class="string">"esnext"</span>,</span><br><span class="line">    <span class="string">"moduleResolution"</span>: <span class="string">"node"</span>,</span><br><span class="line">    <span class="string">"paths"</span>: &#123;</span><br><span class="line">      <span class="string">"@/*"</span>: [</span><br><span class="line">        <span class="string">"src/*"</span></span><br><span class="line">      ]</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">"pretty"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"sourceMap"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"strict"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"target"</span>: <span class="string">"esnext"</span>,</span><br><span class="line">    <span class="string">"types"</span>: [</span><br><span class="line">      <span class="string">"webpack-env"</span></span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">"include"</span>: [</span><br><span class="line">    <span class="string">"src/**/*.ts"</span>,</span><br><span class="line">    <span class="string">"src/**/*.tsx"</span>,</span><br><span class="line">    <span class="string">"src/**/*.vue"</span>,</span><br><span class="line">    <span class="string">"tests/**/*.ts"</span>,</span><br><span class="line">    <span class="string">"tests/**/*.tsx"</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="string">"exclude"</span>: [</span><br><span class="line">    <span class="string">"node_modules"</span>,</span><br><span class="line">    <span class="string">"public"</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>相关依赖（项目由非 TS -&gt; TS）：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"devDependencies"</span>: &#123;</span><br><span class="line">    <span class="attr">"@babel/core"</span>: <span class="string">"^7.0.0-0"</span>,</span><br><span class="line">    <span class="attr">"@babel/plugin-syntax-jsx"</span>: <span class="string">"^7.2.0"</span>,</span><br><span class="line">    <span class="attr">"@vue/cli-plugin-babel"</span>: <span class="string">"^3.7.0"</span>,</span><br><span class="line">    <span class="attr">"@vue/cli-plugin-eslint"</span>: <span class="string">"^3.0.5"</span>,</span><br><span class="line">    <span class="attr">"@vue/cli-plugin-typescript"</span>: <span class="string">"^3.8.1"</span>,</span><br><span class="line">    <span class="attr">"@vue/cli-service"</span>: <span class="string">"^3.0.5"</span>,</span><br><span class="line">    <span class="attr">"@vue/eslint-config-standard"</span>: <span class="string">"^4.0.0"</span>,</span><br><span class="line">    <span class="attr">"@vue/eslint-config-typescript"</span>: <span class="string">"^4.0.0"</span>,</span><br><span class="line">    <span class="attr">"babel-eslint"</span>: <span class="string">"^10.0.1"</span>,</span><br><span class="line">    <span class="attr">"eslint"</span>: <span class="string">"^5.8.0"</span>,</span><br><span class="line">    <span class="attr">"eslint-plugin-vue"</span>: <span class="string">"^5.0.0-0"</span>,</span><br><span class="line">    <span class="attr">"typescript"</span>: <span class="string">"^3.4.3"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="Stylelint-配置"><a href="#Stylelint-配置" class="headerlink" title="Stylelint 配置"></a>Stylelint 配置</h3><p>此部分规范 css 和 less 语法，配置文件为： <code>stylelint.config.js</code>。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  extends: <span class="string">'stylelint-config-standard'</span>,</span><br><span class="line">  ignoreFiles: [</span><br><span class="line">    <span class="string">'**/*.js'</span>,</span><br><span class="line">    <span class="string">'**/*.md'</span>,</span><br><span class="line">    <span class="string">'**/*.png'</span>,</span><br><span class="line">    <span class="string">'**/*.json'</span></span><br><span class="line">  ],</span><br><span class="line">  rules: &#123;</span><br><span class="line">    <span class="string">'indentation'</span>: <span class="number">2</span>,</span><br><span class="line">    <span class="string">'color-hex-case'</span>: <span class="string">'lower'</span>,</span><br><span class="line">    <span class="string">'string-quotes'</span>: <span class="string">'single'</span>,</span><br><span class="line">    <span class="string">'color-hex-length'</span>: <span class="string">'long'</span>,</span><br><span class="line">    <span class="string">'number-leading-zero'</span>: <span class="string">'never'</span>,</span><br><span class="line">    <span class="string">'rule-empty-line-before'</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="string">'no-descending-specificity'</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="string">'no-missing-end-of-source-newline'</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">'selector-pseudo-element-colon-notation'</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="string">'selector-list-comma-newline-after'</span>: <span class="string">'always-multi-line'</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>相关依赖：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"devDependencies"</span>: &#123;</span><br><span class="line">    <span class="attr">"stylelint"</span>: <span class="string">"^10.1.0"</span>,</span><br><span class="line">    <span class="attr">"stylelint-config-standard"</span>: <span class="string">"^18.3.0"</span>,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="规范参考"><a href="#规范参考" class="headerlink" title="规范参考"></a>规范参考</h3><ul>
-<li><a href="http://alloyteam.github.io/CodeGuide/" target="_blank" rel="noopener">Code Guide</a></li>
-<li><a href="https://cn.vuejs.org/v2/style-guide/" target="_blank" rel="noopener">风格指南</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -3240,43 +3240,6 @@
       </tags>
   </entry>
   <entry>
-    <title>背景水印与 MutationObserver</title>
-    <url>/2020/08/05/%E8%83%8C%E6%99%AF%E6%B0%B4%E5%8D%B0%E4%B8%8E-MutationObserver/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>因为项目需要配置背景水印，仅呈现背景水印这并没有什么难度，但是问题是当背景水印部分的代码通过什么原因被干掉了（例如：打开控制台，给背景水印部分代码加上 <code>display: none</code>），需要检测这个变化重新将水印更新会原状，emmmm，这就有的折腾了。于是乎就发现了 <code>MutationObserver</code> 方法，在此简单笔记一下。</p>
-<a id="more"></a>
-<h3 id="MutationObserver-作用"><a href="#MutationObserver-作用" class="headerlink" title="MutationObserver 作用"></a>MutationObserver 作用</h3><p>简单来说，该方法就是用来监听 Dom 变化的，Dom 的任何微小变动它都能接受得到。引用一下阮老师对 <code>Mutation Observer</code> 的特点的描述：</p>
-<blockquote>
-<ul>
-<li>它等待所有脚本任务完成后，才会运行（即异步触发方式）</li>
-<li>它把 DOM 变动记录封装成一个数组进行处理，而不是一条条个别处理 DOM 变动。</li>
-<li>它既可以观察 DOM 的所有类型变动，也可以指定只观察某一类变动。</li>
-</ul>
-</blockquote>
-<p>因此在父级元素上挂在一个 MutationObserver 事件监听方法，不就可以做到对背景水印元素变动的监听了么！</p>
-<h3 id="背景水印的解决思路"><a href="#背景水印的解决思路" class="headerlink" title="背景水印的解决思路"></a>背景水印的解决思路</h3><p>由于是公司内部代码，这里就不做粘贴了，仅说明一下水印的解决思路。</p>
-<ul>
-<li>检测 DOM 上是否存在水印节点，不存在则新增水印节点</li>
-<li>为水印节点新增 Mutation Observer 方法，观察其对应属性变化，更新监听</li>
-</ul>
-<p>配合 Vue 的逻辑则是编写一个 vue 的全局指令，做到动态更新即可。</p>
-<h3 id="MutationObserver-示例"><a href="#MutationObserver-示例" class="headerlink" title="MutationObserver 示例"></a>MutationObserver 示例</h3><p>该例子只是对 <code>Mutation Observer API</code> 的学习例子，仅供参考。</p>
-<blockquote>
-<p><a href="https://github.com/kazehaiya/mutation-observer-demo" target="_blank" rel="noopener">传送门</a></p>
-</blockquote>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/MutationObserver" target="_blank" rel="noopener">MDN MutationObserver</a></li>
-<li><a href="https://javascript.ruanyifeng.com/dom/mutationobserver.html#toc0" target="_blank" rel="noopener">Mutation Observer API</a></li>
-<li><a href="https://juejin.im/post/6844904065059536909" target="_blank" rel="noopener">MutationObserver 与 ResizeObserver</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>JavaScript</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>由 shims-vue.d.ts 引发的思考</title>
     <url>/2019/07/07/%E7%94%B1-shims-vue-d-ts-%E5%BC%95%E5%8F%91%E7%9A%84%E6%80%9D%E8%80%83/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>由于项目近期进行 ts 迁移，作为第一个吃螃蟹的人，踩过了不少坑。迁移过程中遇到的大大小小的问题基本上都解决了，但是对于 shims-vue.d.ts 文件的命名以及其内的模块声明始终找不到比较贴切的解释。沉下心来读了些外网资料，总算是有点“豁开云雾见青天”的感觉了。此处就记录我对于 ts 全局模块声明的一些思考以及一些 ts 项目迁移遇到的坑。</p>
@@ -3354,6 +3317,43 @@
       </tags>
   </entry>
   <entry>
+    <title>背景水印与 MutationObserver</title>
+    <url>/2020/08/05/%E8%83%8C%E6%99%AF%E6%B0%B4%E5%8D%B0%E4%B8%8E-MutationObserver/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>因为项目需要配置背景水印，仅呈现背景水印这并没有什么难度，但是问题是当背景水印部分的代码通过什么原因被干掉了（例如：打开控制台，给背景水印部分代码加上 <code>display: none</code>），需要检测这个变化重新将水印更新会原状，emmmm，这就有的折腾了。于是乎就发现了 <code>MutationObserver</code> 方法，在此简单笔记一下。</p>
+<a id="more"></a>
+<h3 id="MutationObserver-作用"><a href="#MutationObserver-作用" class="headerlink" title="MutationObserver 作用"></a>MutationObserver 作用</h3><p>简单来说，该方法就是用来监听 Dom 变化的，Dom 的任何微小变动它都能接受得到。引用一下阮老师对 <code>Mutation Observer</code> 的特点的描述：</p>
+<blockquote>
+<ul>
+<li>它等待所有脚本任务完成后，才会运行（即异步触发方式）</li>
+<li>它把 DOM 变动记录封装成一个数组进行处理，而不是一条条个别处理 DOM 变动。</li>
+<li>它既可以观察 DOM 的所有类型变动，也可以指定只观察某一类变动。</li>
+</ul>
+</blockquote>
+<p>因此在父级元素上挂在一个 MutationObserver 事件监听方法，不就可以做到对背景水印元素变动的监听了么！</p>
+<h3 id="背景水印的解决思路"><a href="#背景水印的解决思路" class="headerlink" title="背景水印的解决思路"></a>背景水印的解决思路</h3><p>由于是公司内部代码，这里就不做粘贴了，仅说明一下水印的解决思路。</p>
+<ul>
+<li>检测 DOM 上是否存在水印节点，不存在则新增水印节点</li>
+<li>为水印节点新增 Mutation Observer 方法，观察其对应属性变化，更新监听</li>
+</ul>
+<p>配合 Vue 的逻辑则是编写一个 vue 的全局指令，做到动态更新即可。</p>
+<h3 id="MutationObserver-示例"><a href="#MutationObserver-示例" class="headerlink" title="MutationObserver 示例"></a>MutationObserver 示例</h3><p>该例子只是对 <code>Mutation Observer API</code> 的学习例子，仅供参考。</p>
+<blockquote>
+<p><a href="https://github.com/kazehaiya/mutation-observer-demo" target="_blank" rel="noopener">传送门</a></p>
+</blockquote>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/MutationObserver" target="_blank" rel="noopener">MDN MutationObserver</a></li>
+<li><a href="https://javascript.ruanyifeng.com/dom/mutationobserver.html#toc0" target="_blank" rel="noopener">Mutation Observer API</a></li>
+<li><a href="https://juejin.im/post/6844904065059536909" target="_blank" rel="noopener">MutationObserver 与 ResizeObserver</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>记 JS 对象属性顺序</title>
     <url>/2019/10/09/%E8%AE%B0-JS-%E5%AF%B9%E8%B1%A1%E5%B1%9E%E6%80%A7%E9%A1%BA%E5%BA%8F/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>早期与后台对接接口时，让后台区分开数组与对象的传递参数，对于为什么也仅仅只是知道对象遍历顺序无法像数组一样得到保证，具体是怎么个规则还是不太了解。最近在学习了解 <code>Reflect</code> 部分知识时，正好又看到了对象属性排序部分的内容，因此做个笔记记录下来，用作备忘。</p>
@@ -3386,6 +3386,31 @@
 <h3 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h3><ul>
 <li><a href="http://w3help.org/zh-cn/causes/SJ9011" target="_blank" rel="noopener">Chrome Opera 中 for-in 语句遍历出对象属性的顺序与定义的不同</a></li>
 </ul>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>记一次任务调度算法题</title>
+    <url>/2020/09/22/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95%E9%A2%98/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>ES6 的 Promise 可以拓展很多比较好的调度算法，比如最近碰到的一个让人眼前一亮的简单任务调度实现的题目，这里我记录一下我的思考和实现。</p>
+<a id="more"></a>
+<h3 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Scheduler</span> </span>&#123;</span><br><span class="line">  add(promiseCreator) &#123;</span><br><span class="line">    <span class="comment">// 代码部分</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> scheduler = <span class="keyword">new</span> Scheduler();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">addTask</span>(<span class="params">time, order</span>) </span>&#123;</span><br><span class="line">  scheduler.add(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">res, rej</span>) =&gt;</span> &#123;</span><br><span class="line">      setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'order'</span>, order);</span><br><span class="line">        res();</span><br><span class="line">      &#125;, time);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">addTask(<span class="number">1000</span>, <span class="string">'1'</span>);</span><br><span class="line">addTask(<span class="number">500</span>, <span class="string">'2'</span>);</span><br><span class="line">addTask(<span class="number">300</span>, <span class="string">'3'</span>);</span><br><span class="line">addTask(<span class="number">400</span>, <span class="string">'4'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 结果要求 order 为： 2、3、1、4</span></span><br></pre></td></tr></table></figure>
+<h3 id="思路-amp-题解"><a href="#思路-amp-题解" class="headerlink" title="思路&amp;题解"></a>思路&amp;题解</h3><blockquote>
+<p>分析：</p>
+<ul>
+<li>从结果来看，因为每次只能执行俩异步函数，因此数组处理逻辑大致为“队列”</li>
+<li>从 scheduler 的链式调用可发现每次返回的都是 Promise 函数</li>
+</ul>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">Scheduler</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>() &#123;</span><br><span class="line">      <span class="keyword">this</span>.eventList = [];</span><br><span class="line">      <span class="keyword">this</span>.used = <span class="number">0</span>;</span><br><span class="line">      <span class="keyword">this</span>.currentPos = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    add(promiseCreator) &#123;</span><br><span class="line">      <span class="keyword">this</span>.eventList.push(promiseCreator);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 执行任务</span></span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve(<span class="keyword">this</span>.excute());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    excute() &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.used &lt; <span class="number">2</span> &amp;&amp; <span class="keyword">this</span>.currentPos &lt; <span class="keyword">this</span>.eventList.length) &#123;</span><br><span class="line">        <span class="keyword">this</span>.used++;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> currentFunc = <span class="keyword">this</span>.eventList[<span class="keyword">this</span>.currentPos++];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve(currentFunc()).then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">          <span class="keyword">this</span>.used--;</span><br><span class="line">          <span class="comment">// 每次执行完查看是否继续执行后面的内容</span></span><br><span class="line">          <span class="keyword">this</span>.excute();</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> scheduler = <span class="keyword">new</span> Scheduler();</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">addTask</span>(<span class="params">time, order</span>) </span>&#123;</span><br><span class="line">    scheduler.add(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">res, rej</span>) =&gt;</span> &#123;</span><br><span class="line">        setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">          <span class="built_in">console</span>.log(<span class="string">'order'</span>, order);</span><br><span class="line">          res();</span><br><span class="line">        &#125;, time);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  addTask(<span class="number">1000</span>, <span class="string">'1'</span>);</span><br><span class="line">  addTask(<span class="number">500</span>, <span class="string">'2'</span>);</span><br><span class="line">  addTask(<span class="number">300</span>, <span class="string">'3'</span>);</span><br><span class="line">  addTask(<span class="number">400</span>, <span class="string">'4'</span>);</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+<h3 id="难度提升"><a href="#难度提升" class="headerlink" title="难度提升"></a>难度提升</h3><p>先前的打印都是在 addTask 函数内部的，假如没有这个 <code>addTask</code> 函数，而且获取的函数结果需要在 then 链中打印出来，这个改怎么重写这个类。题解如下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">Scheduler</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(maxUsed = 2) &#123;</span><br><span class="line">      <span class="keyword">this</span>.eventList = [];</span><br><span class="line">      <span class="keyword">this</span>.used = <span class="number">0</span>;</span><br><span class="line">      <span class="keyword">this</span>.maxUsed = maxUsed;</span><br><span class="line">      <span class="keyword">this</span>.currentPos = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    add(timeout, val) &#123;</span><br><span class="line">      <span class="keyword">const</span> excute = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (</span><br><span class="line">          <span class="keyword">this</span>.currentPos &lt; <span class="keyword">this</span>.eventList.length &amp;&amp;</span><br><span class="line">          <span class="keyword">this</span>.used &lt; <span class="keyword">this</span>.maxUsed</span><br><span class="line">        ) &#123;</span><br><span class="line">          <span class="keyword">const</span> tarData = <span class="keyword">this</span>.eventList[<span class="keyword">this</span>.currentPos++];</span><br><span class="line">          <span class="keyword">const</span> &#123; res, rej, timeout, val &#125; = tarData;</span><br><span class="line">          <span class="keyword">this</span>.used++;</span><br><span class="line"></span><br><span class="line">          <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">            setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">              resolve(val);</span><br><span class="line">            &#125;, timeout);</span><br><span class="line">          &#125;)</span><br><span class="line">            .then(res, rej)</span><br><span class="line">            .finally(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">              <span class="keyword">this</span>.used--;</span><br><span class="line">              excute();</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 执行任务</span></span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">res, rej</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">this</span>.eventList.push(&#123;</span><br><span class="line">          res,</span><br><span class="line">          rej,</span><br><span class="line">          timeout,</span><br><span class="line">          val,</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> excute();</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> scheduler = <span class="keyword">new</span> Scheduler();</span><br><span class="line"></span><br><span class="line">  scheduler.add(<span class="number">1000</span>, <span class="string">'1'</span>).then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(res);</span><br><span class="line">  &#125;);</span><br><span class="line">  scheduler.add(<span class="number">500</span>, <span class="string">'2'</span>).then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(res);</span><br><span class="line">  &#125;);</span><br><span class="line">  scheduler.add(<span class="number">300</span>, <span class="string">'3'</span>).then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(res);</span><br><span class="line">  &#125;);</span><br><span class="line">  scheduler.add(<span class="number">400</span>, <span class="string">'4'</span>).then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(res);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>其实题目考察的是对于 Promise 函数以及链式调用的理解，了解过 Promise 实现机制其实在琢磨此题时还是有那么一点头痛，只要关键的类递归函数部分琢磨清楚了，整体也不是很难。</p>
 ]]></content>
       <categories>
         <category>JavaScript</category>
@@ -3445,31 +3470,6 @@
 <li><a href="https://dorey.github.io/JavaScript-Equality-Table/" target="_blank" rel="noopener">JavaScript 中的相等比较</a></li>
 <li><a href="https://yanhaijing.com/es5/#about" target="_blank" rel="noopener">ES5 规范中文文档</a></li>
 </ul>
-]]></content>
-      <categories>
-        <category>JavaScript</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>记一次任务调度算法题</title>
-    <url>/2020/09/22/%E8%AE%B0%E4%B8%80%E6%AC%A1%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6%E7%AE%97%E6%B3%95%E9%A2%98/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>ES6 的 Promise 可以拓展很多比较好的调度算法，比如最近碰到的一个让人眼前一亮的简单任务调度实现的题目，这里我记录一下我的思考和实现。</p>
-<a id="more"></a>
-<h3 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Scheduler</span> </span>&#123;</span><br><span class="line">  add(promiseCreator) &#123;</span><br><span class="line">    <span class="comment">// 代码部分</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> scheduler = <span class="keyword">new</span> Scheduler();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">addTask</span>(<span class="params">time, order</span>) </span>&#123;</span><br><span class="line">  scheduler.add(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">res, rej</span>) =&gt;</span> &#123;</span><br><span class="line">      setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'order'</span>, order);</span><br><span class="line">        res();</span><br><span class="line">      &#125;, time);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">addTask(<span class="number">1000</span>, <span class="string">'1'</span>);</span><br><span class="line">addTask(<span class="number">500</span>, <span class="string">'2'</span>);</span><br><span class="line">addTask(<span class="number">300</span>, <span class="string">'3'</span>);</span><br><span class="line">addTask(<span class="number">400</span>, <span class="string">'4'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 结果要求 order 为： 2、3、1、4</span></span><br></pre></td></tr></table></figure>
-<h3 id="思路-amp-题解"><a href="#思路-amp-题解" class="headerlink" title="思路&amp;题解"></a>思路&amp;题解</h3><blockquote>
-<p>分析：</p>
-<ul>
-<li>从结果来看，因为每次只能执行俩异步函数，因此数组处理逻辑大致为“队列”</li>
-<li>从 scheduler 的链式调用可发现每次返回的都是 Promise 函数</li>
-</ul>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">Scheduler</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>() &#123;</span><br><span class="line">      <span class="keyword">this</span>.eventList = [];</span><br><span class="line">      <span class="keyword">this</span>.used = <span class="number">0</span>;</span><br><span class="line">      <span class="keyword">this</span>.currentPos = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    add(promiseCreator) &#123;</span><br><span class="line">      <span class="keyword">this</span>.eventList.push(promiseCreator);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 执行任务</span></span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve(<span class="keyword">this</span>.excute());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    excute() &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.used &lt; <span class="number">2</span> &amp;&amp; <span class="keyword">this</span>.currentPos &lt; <span class="keyword">this</span>.eventList.length) &#123;</span><br><span class="line">        <span class="keyword">this</span>.used++;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> currentFunc = <span class="keyword">this</span>.eventList[<span class="keyword">this</span>.currentPos++];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve(currentFunc()).then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">          <span class="keyword">this</span>.used--;</span><br><span class="line">          <span class="comment">// 每次执行完查看是否继续执行后面的内容</span></span><br><span class="line">          <span class="keyword">this</span>.excute();</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> scheduler = <span class="keyword">new</span> Scheduler();</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">addTask</span>(<span class="params">time, order</span>) </span>&#123;</span><br><span class="line">    scheduler.add(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">res, rej</span>) =&gt;</span> &#123;</span><br><span class="line">        setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">          <span class="built_in">console</span>.log(<span class="string">'order'</span>, order);</span><br><span class="line">          res();</span><br><span class="line">        &#125;, time);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  addTask(<span class="number">1000</span>, <span class="string">'1'</span>);</span><br><span class="line">  addTask(<span class="number">500</span>, <span class="string">'2'</span>);</span><br><span class="line">  addTask(<span class="number">300</span>, <span class="string">'3'</span>);</span><br><span class="line">  addTask(<span class="number">400</span>, <span class="string">'4'</span>);</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
-<h3 id="难度提升"><a href="#难度提升" class="headerlink" title="难度提升"></a>难度提升</h3><p>先前的打印都是在 addTask 函数内部的，假如没有这个 <code>addTask</code> 函数，而且获取的函数结果需要在 then 链中打印出来，这个改怎么重写这个类。题解如下：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">Scheduler</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>(maxUsed = 2) &#123;</span><br><span class="line">      <span class="keyword">this</span>.eventList = [];</span><br><span class="line">      <span class="keyword">this</span>.used = <span class="number">0</span>;</span><br><span class="line">      <span class="keyword">this</span>.maxUsed = maxUsed;</span><br><span class="line">      <span class="keyword">this</span>.currentPos = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    add(timeout, val) &#123;</span><br><span class="line">      <span class="keyword">const</span> excute = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (</span><br><span class="line">          <span class="keyword">this</span>.currentPos &lt; <span class="keyword">this</span>.eventList.length &amp;&amp;</span><br><span class="line">          <span class="keyword">this</span>.used &lt; <span class="keyword">this</span>.maxUsed</span><br><span class="line">        ) &#123;</span><br><span class="line">          <span class="keyword">const</span> tarData = <span class="keyword">this</span>.eventList[<span class="keyword">this</span>.currentPos++];</span><br><span class="line">          <span class="keyword">const</span> &#123; res, rej, timeout, val &#125; = tarData;</span><br><span class="line">          <span class="keyword">this</span>.used++;</span><br><span class="line"></span><br><span class="line">          <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">            setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">              resolve(val);</span><br><span class="line">            &#125;, timeout);</span><br><span class="line">          &#125;)</span><br><span class="line">            .then(res, rej)</span><br><span class="line">            .finally(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">              <span class="keyword">this</span>.used--;</span><br><span class="line">              excute();</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 执行任务</span></span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">res, rej</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">this</span>.eventList.push(&#123;</span><br><span class="line">          res,</span><br><span class="line">          rej,</span><br><span class="line">          timeout,</span><br><span class="line">          val,</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> excute();</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> scheduler = <span class="keyword">new</span> Scheduler();</span><br><span class="line"></span><br><span class="line">  scheduler.add(<span class="number">1000</span>, <span class="string">'1'</span>).then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(res);</span><br><span class="line">  &#125;);</span><br><span class="line">  scheduler.add(<span class="number">500</span>, <span class="string">'2'</span>).then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(res);</span><br><span class="line">  &#125;);</span><br><span class="line">  scheduler.add(<span class="number">300</span>, <span class="string">'3'</span>).then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(res);</span><br><span class="line">  &#125;);</span><br><span class="line">  scheduler.add(<span class="number">400</span>, <span class="string">'4'</span>).then(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(res);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
-<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>其实题目考察的是对于 Promise 函数以及链式调用的理解，了解过 Promise 实现机制其实在琢磨此题时还是有那么一点头痛，只要关键的类递归函数部分琢磨清楚了，整体也不是很难。</p>
 ]]></content>
       <categories>
         <category>JavaScript</category>
