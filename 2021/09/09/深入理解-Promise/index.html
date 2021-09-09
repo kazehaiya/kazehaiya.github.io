@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"monocy.site","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言对于前端开发者们来说，ES6 的学习已经成为必然，其中的 Promise 更是频繁出没于各大面试题，因此了解 Promise 已经不能简简单单的会用，更需要深入原理。《ES6 入门教程》其中对 Promise 的讲解已经能满足业务场景的需要，来源和基础使用此篇就不做赘述，只是记录一下 Promise 的一些边角知识和我的一些心得体会。">
+<meta name="keywords" content="JavaScript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解 Promise">
+<meta property="og:url" content="https://monocy.site/2021/09/09/深入理解-Promise/index.html">
+<meta property="og:site_name" content="沐光">
+<meta property="og:description" content="前言对于前端开发者们来说，ES6 的学习已经成为必然，其中的 Promise 更是频繁出没于各大面试题，因此了解 Promise 已经不能简简单单的会用，更需要深入原理。《ES6 入门教程》其中对 Promise 的讲解已经能满足业务场景的需要，来源和基础使用此篇就不做赘述，只是记录一下 Promise 的一些边角知识和我的一些心得体会。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-09-09T14:29:47.861Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入理解 Promise">
+<meta name="twitter:description" content="前言对于前端开发者们来说，ES6 的学习已经成为必然，其中的 Promise 更是频繁出没于各大面试题，因此了解 Promise 已经不能简简单单的会用，更需要深入原理。《ES6 入门教程》其中对 Promise 的讲解已经能满足业务场景的需要，来源和基础使用此篇就不做赘述，只是记录一下 Promise 的一些边角知识和我的一些心得体会。">
+
+<link rel="canonical" href="https://monocy.site/2021/09/09/深入理解-Promise/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>深入理解 Promise | 沐光</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">沐光</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录在前端之路的点点滴滴</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">14</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">15</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">58</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/kazehaiya" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://monocy.site/2021/09/09/深入理解-Promise/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Caiyin">
+      <meta itemprop="description" content="Just do IT!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="沐光">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          深入理解 Promise
+        </h1>
+
+        <div class="post-meta">
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-09-09 22:29:47" itemprop="dateModified" datetime="2021-09-09T22:29:47+08:00">2021-09-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/09/09/深入理解-Promise/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/09/09/深入理解-Promise/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>对于前端开发者们来说，ES6 的学习已经成为必然，其中的 <code>Promise</code> 更是频繁出没于各大面试题，因此了解 <code>Promise</code> 已经不能简简单单的会用，更需要深入原理。<a href="https://es6.ruanyifeng.com/" target="_blank" rel="noopener">《ES6 入门教程》</a>其中对 <code>Promise</code> 的讲解已经能满足业务场景的需要，来源和基础使用此篇就不做赘述，只是记录一下 <code>Promise</code> 的一些边角知识和我的一些心得体会。</p>
+<a id="more"></a>
+<h3 id="事件循环"><a href="#事件循环" class="headerlink" title="事件循环"></a>事件循环</h3><p>深入了解 <code>Promise</code> 之前，我们需要对 JavaScript 的“事件循环（Event Loop）”机制有一定的了解。那么什么是“事件循环”呢？这个如果细说的话又能开一个系列，这里只简单的描述一下。</p>
+<p>在 JavaScript 中任务分为两种：<strong>宏任务（Task）</strong>、<strong>微任务（MicroTask）</strong>。在主线程运行的时候，<strong>同步任务</strong>会直接运行，<strong>异步任务</strong>则会根据其类型分别进入“<u>宏任务队列</u>”和“<u>微任务队列</u>”，在<strong>同步任务</strong>执行完毕后，会先清空“<u>微任务队列</u>”，然后再清空“<u>宏任务队列</u>”，其大致的运行图如下：</p>
+<p><img data-src="/images/chrome_event_loop.png" alt="Chrom_Event_Loop"></p>
+<blockquote>
+<p>⚠️ 注意：一般情况下，异步任务都是按顺序依次执行，但同样也存在一些“插队”执行的现象，特别是两异步任务同时执行的情况下，因处理时间的不同可能会出现意料之外的结果。</p>
+<p>『图片引用自博客：<a href="https://www.cnblogs.com/weiyongchao/p/13766429.html』" target="_blank" rel="noopener">https://www.cnblogs.com/weiyongchao/p/13766429.html』</a></p>
+</blockquote>
+<h3 id="案例简析"><a href="#案例简析" class="headerlink" title="案例简析"></a>案例简析</h3><p>了解了“事件循环”后，我们基本明白了 JavaScript 代码的执行机制，<code>Promise</code> 在其中扮演的是一个“微任务”，基于此，我们分析几个案例来一步步了解 <code>Promise</code>。</p>
+<h4 id="Promise-状态"><a href="#Promise-状态" class="headerlink" title="Promise 状态"></a>Promise 状态</h4><p>众所周知，<code>Promise</code> 有三种状态：<code>pending</code>、<code>fulfilled</code> 和 <code>rejected</code>，代码尝试如下：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> p = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">res, rej</span>) =&gt;</span> &#123;</span><br><span class="line">  setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    res();</span><br><span class="line">  &#125;, <span class="number">3000</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(p);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Promise</span>.resolve());</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Promise</span>.reject());</span><br><span class="line"></span><br><span class="line"><span class="comment">// 浏览器中运行结果：</span></span><br><span class="line"><span class="comment">// Promise &#123; &lt;pending&gt; &#125;</span></span><br><span class="line"><span class="comment">// Promise &#123;&lt;fulfilled&gt;: undefined&#125;</span></span><br><span class="line"><span class="comment">// Promise &#123;&#123;&lt;rejected&gt;: undefined&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+<h4 id="Promise-内的执行函数是同步任务"><a href="#Promise-内的执行函数是同步任务" class="headerlink" title="Promise 内的执行函数是同步任务"></a>Promise 内的执行函数是同步任务</h4><p>很多新手容易弄混的部分是“Promise 是异步函数，因此它初始化传入的执行函数属于异步任务”，同样用代码来解释：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">'start'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> p = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">res, rej</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'working...'</span>);</span><br><span class="line">  res();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'end'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 浏览器中的运行结果：</span></span><br><span class="line"><span class="comment">// start</span></span><br><span class="line"><span class="comment">// working...</span></span><br><span class="line"><span class="comment">// end</span></span><br></pre></td></tr></table></figure>
+<h4 id="Promise-状态不可逆"><a href="#Promise-状态不可逆" class="headerlink" title="Promise 状态不可逆"></a>Promise 状态不可逆</h4><p>除了最开始的 <code>pending</code> 态外，一旦转变为 <code>fulfilled</code> 或 <code>rejected</code> 状态后，其状态就不会再改变了：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> p = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">res, rej</span>) =&gt;</span> &#123;</span><br><span class="line">  res(<span class="number">1</span>);</span><br><span class="line">  rej(<span class="number">2</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(p);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 浏览器中的运行结果：</span></span><br><span class="line"><span class="comment">// Promise &#123;&lt;fulfilled&gt;: 1&#125;</span></span><br></pre></td></tr></table></figure>
+<h4 id="then-链返回的是新-Promise-对象"><a href="#then-链返回的是新-Promise-对象" class="headerlink" title="then 链返回的是新 Promise 对象"></a><code>then</code> 链返回的是新 Promise 对象</h4><p><code>then</code> 链中，无论你返回什么内容，它都会给你给你包装一个 <code>Promise</code> 的外壳：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> p = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">res, rej</span>) =&gt;</span> &#123;</span><br><span class="line">  res();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(p.then());</span><br><span class="line"><span class="built_in">console</span>.log(p.then(<span class="function"><span class="params">()</span> =&gt;</span> <span class="number">1</span>));</span><br><span class="line"><span class="built_in">console</span>.log(</span><br><span class="line">  p.then(</span><br><span class="line">    () =&gt;</span><br><span class="line">      <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">res, rej</span>) =&gt;</span> &#123;</span><br><span class="line">        res();</span><br><span class="line">      &#125;),</span><br><span class="line">  ),</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 浏览器中的运行结果：</span></span><br><span class="line"><span class="comment">// Promise &#123;&lt;pending&gt;&#125;</span></span><br><span class="line"><span class="comment">// Promise &#123;&lt;pending&gt;&#125;</span></span><br><span class="line"><span class="comment">// Promise &#123;&lt;pending&gt;&#125;</span></span><br></pre></td></tr></table></figure>
+<p><code>then</code> 链有两个函数，第二个 <code>onReject</code> 函数如果有设置，那么其后续会返回至 <code>fulfilled</code> 状态链：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">res, rej</span>) =&gt;</span> &#123;</span><br><span class="line">  rej(<span class="number">1</span>);</span><br><span class="line">&#125;)</span><br><span class="line">  .then(</span><br><span class="line">    res =&gt; &#123;&#125;,</span><br><span class="line">    rej =&gt; &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'err'</span>, rej);</span><br><span class="line">      <span class="comment">// return 2</span></span><br><span class="line">    &#125;,</span><br><span class="line">  )</span><br><span class="line">  .then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'success'</span>, res);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 浏览器中的运行结果：</span></span><br><span class="line"><span class="comment">// err 1</span></span><br><span class="line"><span class="comment">// success undefined</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>⚠️ 注意：在日常开发中不要设置 <code>then</code> 链的 <code>onReject</code> 函数，说不定那天就因为常规思维而被它给坑了 (<em>´∇ ｀</em>)。</p>
+</blockquote>
+<h4 id="then-链是可透传的"><a href="#then-链是可透传的" class="headerlink" title="then 链是可透传的"></a><code>then</code> 链是可透传的</h4><p>当 <code>then</code> 链内的内容为非函数的情况下，其会将上一个 <code>Promise</code> 的结果和状态传递给下一个函数：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Promise</span>.resolve(<span class="string">'start'</span>)</span><br><span class="line">  .then(<span class="built_in">console</span>.log(<span class="string">'pass'</span>))</span><br><span class="line">  .then(<span class="function"><span class="params">res</span> =&gt;</span> <span class="built_in">console</span>.log(res));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 浏览器中的运行结果：</span></span><br><span class="line"><span class="comment">// pass</span></span><br><span class="line"><span class="comment">// start</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>【<strong>小贴士</strong>】其实工作中经常会用到这个特性，比如 <code>then</code> 链默认不写第二个函数，从而使用 <code>catch</code> 在 <code>then</code> 链末尾单独对错误进行处理，当然 <code>catch</code> 的返回值默认也是 <code>fulfilled</code> 状态哟。</p>
+<p>【拓展】<code>finally</code> 效果与“<code>then</code> 链透传”一致，仅多了内部函数执行，感兴趣的可自行尝试一下～</p>
+</blockquote>
+<h3 id="案例深入"><a href="#案例深入" class="headerlink" title="案例深入"></a>案例深入</h3><h4 id="嵌套-Promise，then-链返回非-Promise-结果"><a href="#嵌套-Promise，then-链返回非-Promise-结果" class="headerlink" title="嵌套 Promise，then 链返回非 Promise 结果"></a>嵌套 <code>Promise</code>，<code>then</code> 链返回非 <code>Promise</code> 结果</h4><p>刚刚聊的都是较为基础的例子，想要捋清 <code>Promise</code> 的知识可能还需要一些稍有难度的案例，这样才能加深对它的印象。那么看一下这个嵌套 <code>Promise</code> 的例子，弄懂了它，基本上就能对 <code>Promise</code> 有一定的理解了，不会被大多数的面试题给难住：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Promise</span>.resolve()</span><br><span class="line">  .then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'1-1'</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">res, rej</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'1-2'</span>);</span><br><span class="line">      res();</span><br><span class="line">    &#125;)</span><br><span class="line">      .then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'1-3'</span>);</span><br><span class="line">      &#125;)</span><br><span class="line">      .then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'1-4'</span>);</span><br><span class="line">      &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="string">'Anything except promise func, also no "return"'</span>;</span><br><span class="line">  &#125;)</span><br><span class="line">  .then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'2-1'</span>);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+<p>这里注意到，我们在第一个 then 链内调用了一个新的 <code>Promise</code> 方法，但没有返回值，那么运行的结果会是顺序执行吗？在浏览器上运行得到的结果为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1-1</span><br><span class="line">1-2</span><br><span class="line">1-3</span><br><span class="line">2-1</span><br><span class="line">1-4</span><br></pre></td></tr></table></figure>
+<p>可以看到 “2-1” 在 “1-4” 之前打印了，可这又是为什么呢？让我们一步步分析来看：</p>
+<ul>
+<li>【Step1】<code>then</code> 链先打印 <code>1-1</code>，然后进入 <code>Promise</code> 函数内；</li>
+<li>【Step2】打印 <code>Promise</code> 内部的 <code>1-2</code>，执行 <code>resolve</code> 函数，并将紧接着的 <code>then</code> 链存入<strong>微任务事件队列</strong>；</li>
+<li>【Step3】跳出 <code>Promise</code> 并运行至 <code>then</code> 链结尾，无返回值，默认 <code>resolve</code> 处理<strong>并将下一个 <code>then</code> 链存入微任务队列</strong>；</li>
+<li>【Step4】此时微任务队列有俩微任务，依次执行处理，后续内容就是依次打印 <code>1-3</code> 和 <code>2-1</code> ，最后再打印 <code>1-4</code> 了；</li>
+</ul>
+<p>微任务队列内容变化如下：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** 每步微任务队列内容 */</span> <span class="comment">// 【Step 1】[	then(() =&gt; &#123;		console.log('1-1');  		new Promise((res, rej) =&gt; &#123;      console.log('1-2');      res();    &#125;).then(() =&gt; &#123;      console.log('1-3');    &#125;).then(() =&gt; &#123;      console.log('1-4');    &#125;);	&#125;)  .then(() =&gt; &#123;  	console.log('2-1');	&#125;)]// 【Step2】[	then(() =&gt; &#123; console.log('1-3'); &#125;)  	.then(() =&gt; &#123; console.log('1-4'); &#125;),	then(() =&gt; &#123; console.log('2-1'); &#125;)]// 【Step3】[	then(() =&gt; &#123; console.log('1-4'); &#125;)]</span></span><br></pre></td></tr></table></figure>
+<p>从此结果我们可以了解到，在无返回值的情况下最好不要在内部处理别的 <code>Promise</code> 函数并接上 <code>then</code> 链来达到步骤控制，很容易会出现一些意想不到的问题。在业务中，很容易就会写出这样的代码，如：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 加入 http 是封装好的 Axios 文件const initFunc = async () =&gt; &#123;  // 等初始化  await http.post('getInfo').then(info =&gt; &#123;    const &#123; userId, userRightIds &#125; = info;    // 获取用户信息    http.post('getUserInfo', &#123;userId&#125;).then(() =&gt; &#123;      // 处理用户信息    &#125;);    // 获取用户信息    http.post('getRightList', &#123;userRightIds&#125;).then(() =&gt; &#123;      // 处理权限信息    &#125;);  &#125;);    // 初始化后处理别的事  // ...（电脑前，为什么没拿到权限数据和用户信息？？？弄个 setTimeout 吧）&#125;</span></span><br></pre></td></tr></table></figure>
+<p>模拟请求的代码如下：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">test</span> (<span class="params"></span>) </span>&#123;  <span class="keyword">let</span> testVal = <span class="number">1</span>;  <span class="keyword">await</span> <span class="built_in">Promise</span>.resolve().then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;    <span class="comment">// 加长 then 链模拟请求的耗时    Promise.resolve().then().then().then().then().then().then(() =&gt; &#123;      testVal = 2;    &#125;)  &#125;)  console.log(testVal)&#125;test();// 结果是：1</span></span><br></pre></td></tr></table></figure>
+<p>所以，业务代码内尽量不要嵌套写 <code>Promise</code>，用 <code>async/await</code> 拆拆，或者每个内部 <code>Promise</code> 函数加上对应的 <code>async/await</code> 方法令其执行完再做其它操作，这样就不会写出 bug 了。</p>
+<h4 id="嵌套-Promise，then-链返回-Promise-结果"><a href="#嵌套-Promise，then-链返回-Promise-结果" class="headerlink" title="嵌套 Promise，then 链返回 Promise 结果"></a>嵌套 <code>Promise</code>，<code>then</code> 链返回 <code>Promise</code> 结果</h4><p>当然，嵌套 <code>Promise</code> 也是有坑存在的，说不定那天面试也会面到，当然项目内是不会出现这种写法的（有的话那么需要问问是谁面他进来的，同时还得考虑考虑是否继续和他共事），返回 <code>Promise</code> 结果的例子咱先不看，先分解一下，看如下例子：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Promise</span>.resolve()</span><br><span class="line">  .then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'1-1'</span>);</span><br><span class="line">  &#125;)</span><br><span class="line">  .then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'1-2'</span>);</span><br><span class="line">  &#125;)</span><br><span class="line">  .then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'1-3'</span>);</span><br><span class="line">  &#125;);</span><br><span class="line"><span class="built_in">Promise</span>.resolve()</span><br><span class="line">  .then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'2-1'</span>);</span><br><span class="line">  &#125;)</span><br><span class="line">  .then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'2-2'</span>);</span><br><span class="line">  &#125;)</span><br><span class="line">  .then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'2-3'</span>);</span><br><span class="line">  &#125;); <span class="comment">// 浏览器结果为（就不换行输出了）：// 1-1   2-1   1-2   2-2   1-3   2-3</span></span><br></pre></td></tr></table></figure>
+<p>这结果想必难不倒大家，可以很轻松的解答出来，那么再代入嵌套的例子看看，应该就好分析了：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Promise</span>.resolve()	.then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;  	<span class="comment">// 别名: then1   	Promise.resolve()      .then(() =&gt; &#123; console.log('1-1'); &#125;)      .then(() =&gt; &#123; console.log('1-2'); &#125;)      .then(() =&gt; &#123; console.log('1-3'); &#125;);    // 别名 then2   	return Promise.resolve()      .then(() =&gt; &#123; console.log('2-1'); &#125;)      .then(() =&gt; &#123; console.log('2-2'); &#125;)      .then(() =&gt; &#123; console.log('2-3'); &#125;);	&#125;)	// 别名 then3	.then(() =&gt; &#123;  	console.log('3-1')	&#125;);// 浏览器结果为（就不换行输出了）：// 1-1   2-1   1-2   2-2   1-3   2-3    3-1</span></span><br></pre></td></tr></table></figure>
+<p>因为 <code>then3</code> 依赖 <code>then2</code> 的状态改变，而 <code>then2</code> 又需要和 <code>then1</code> 抢<u>微任务队列</u>的资源，因此返回的结果就是交替的结果，<code>3-1</code> 最后打印。</p>
+<p><strong>但是</strong>，我们把 <code>then2</code> 链精简一下，只留一个 <code>2-1</code>，按道理来说 <code>3-1</code> 应该在 <code>1-2</code> 之后打印的，但实际结果如下：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Promise</span>.resolve()	.then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;  	<span class="comment">// 别名: then1   	Promise.resolve()      .then(() =&gt; &#123; console.log('1-1'); &#125;)      .then(() =&gt; &#123; console.log('1-2'); &#125;)      .then(() =&gt; &#123; console.log('1-3'); &#125;);    // 别名 then2   	return Promise.resolve()      .then(() =&gt; &#123; console.log('2-1'); &#125;);	&#125;)	// 别名 then3	.then(() =&gt; &#123;  	console.log('3-1')	&#125;);// 浏览器结果为（就不换行输出了）：// 1-1   2-1   1-2   1-3   3-1</span></span><br></pre></td></tr></table></figure>
+<p>为什么和预测结果不一样了呢？其实此问题的问题点并不在 <code>Promise</code> 身上，听我一一分析。</p>
+<p><strong>首先</strong>，在 <code>then2</code> 打印 <code>2-1</code> 后，其会返回一个新的 <code>Promise</code> 对象放入<u>微任务队列</u>，它的返回值为 <code>undefined</code></p>
+<p><strong>然后</strong> <code>then1</code> 打印 <code>1-2</code> 并将 <code>1-3</code> 所在 <code>then</code> 链传入</p>
+<p><strong>紧接着</strong> 这个返回值为 <code>undefiend</code> 的 <code>Promise</code> 对象执行，然后返回一个 <code>undefiend</code> 值，这就回到上面返回值为非 <code>Promise</code> 的情形了，紧接着 <code>then3</code> 就放入了<u>微任务队列</u></p>
+<p><strong>在看</strong>微任务队列，发现 <code>then3</code> 就在 <code>then1</code> 那最后一个链之后，那结果就呼之欲出了。</p>
+<p>代码解如下：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">【Step1】[  <span class="comment">// then1  then(() =&gt; &#123; console.log('1-1'); &#125;)  	.then(() =&gt; &#123; console.log('1-2'); &#125;)  	.then(() =&gt; &#123; console.log('1-3'); &#125;),  // then2  then(() =&gt; &#123; console.log('2-1'); &#125;)]【Step2】[  // then1  then(() =&gt; &#123; console.log('1-2'); &#125;)  	.then(() =&gt; &#123; console.log('1-3'); &#125;),  // then2 的 then 链会返回一个 Promise 对象  Promise.resolve(undefined)]【Step3】[  then(() =&gt; &#123; console.log('1-3'); &#125;),  then(() =&gt; &#123; console.log('3-1'); &#125;)]</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>此需要注意的是，<code>then</code> 链处理返回结果为 <code>Promise</code> 类型时，其会多一个 <code>Promise.resolve(undefined)</code> 的隐藏链。</p>
+</blockquote>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
+<li><a href="http://malcolmyu.github.io/malnote/2015/06/12/Promises-A-Plus/" target="_blank" rel="noopener">Promise A+ 规范</a></li>
+<li><a href="https://juejin.cn/post/6844903993412583431" target="_blank" rel="noopener">Promise 注册微任务和执行过程</a></li>
+<li><a href="https://juejin.cn/post/6844903764202094606" target="_blank" rel="noopener">一次弄懂 Event Loop（彻底解决此类面试问题）</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/100682415" target="_blank" rel="noopener">动图学 JavaScript 之：事件循环（Event Loop）</a></li>
+<li><a href="https://www.cnblogs.com/weiyongchao/p/13766429.html" target="_blank" rel="noopener">【图解】浏览器及 nodeJS 中的 EventLoop 事件循环机制</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Caiyin
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://monocy.site/2021/09/09/深入理解-Promise/" title="深入理解 Promise">https://monocy.site/2021/09/09/深入理解-Promise/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"><i class="fa fa-tag"></i> JavaScript</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/06/30/Node-简单脚手架构建/" rel="prev" title="Node 简单脚手架构建">
+      <i class="fa fa-chevron-left"></i> Node 简单脚手架构建
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事件循环"><span class="nav-number">2.</span> <span class="nav-text">事件循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#案例简析"><span class="nav-number">3.</span> <span class="nav-text">案例简析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Promise-状态"><span class="nav-number">3.1.</span> <span class="nav-text">Promise 状态</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Promise-内的执行函数是同步任务"><span class="nav-number">3.2.</span> <span class="nav-text">Promise 内的执行函数是同步任务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Promise-状态不可逆"><span class="nav-number">3.3.</span> <span class="nav-text">Promise 状态不可逆</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#then-链返回的是新-Promise-对象"><span class="nav-number">3.4.</span> <span class="nav-text">then 链返回的是新 Promise 对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#then-链是可透传的"><span class="nav-number">3.5.</span> <span class="nav-text">then 链是可透传的</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#案例深入"><span class="nav-number">4.</span> <span class="nav-text">案例深入</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#嵌套-Promise，then-链返回非-Promise-结果"><span class="nav-number">4.1.</span> <span class="nav-text">嵌套 Promise，then 链返回非 Promise 结果</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#嵌套-Promise，then-链返回-Promise-结果"><span class="nav-number">4.2.</span> <span class="nav-text">嵌套 Promise，then 链返回 Promise 结果</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文章"><span class="nav-number">5.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Caiyin"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Caiyin</p>
+  <div class="site-description" itemprop="description">Just do IT!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">58</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/kazehaiya" title="GitHub → https://github.com/kazehaiya" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:c763416559@163.com" title="Mail → mailto:c763416559@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/Nora_Monocy" title="Weibo → https://weibo.com/Nora_Monocy" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://liujinkai.com/" title="http://liujinkai.com/" rel="noopener" target="_blank">凯凯刘</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://weekly.75team.com/" title="https://weekly.75team.com/" rel="noopener" target="_blank">奇舞周刊</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://75.team/post/list" title="https://75.team/post/list" rel="noopener" target="_blank">奇舞团博客</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://tech.meituan.com/" title="https://tech.meituan.com/" rel="noopener" target="_blank">美团技术团队</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://tech.youzan.com/" title="https://tech.youzan.com/" rel="noopener" target="_blank">有赞技术团队</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn" rel="noopener" target="_blank">京ICP备2020036147号-1 </a>
+      <img src="/images/beian.png" style="display: inline-block;"><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42011702000651" rel="noopener" target="_blank">鄂公网安备 42011702000651 号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-dragon"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Caiyin</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">92k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:24</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-pjax@0/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : true,
+      notify     : true,
+      appId      : 'GkgJm97N3UFm2mRb1eFcP2dn-gzGzoHsz',
+      appKey     : 'kJ8tYUUkX4ifhWha8rjnxWS8',
+      placeholder: "请不要吝惜你的笔头，来说点什么吧！",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+    </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/Epsilon2.1.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true,"scale":0.5},"react":{"opacity":0.7},"log":false});</script></body>
+</html>
