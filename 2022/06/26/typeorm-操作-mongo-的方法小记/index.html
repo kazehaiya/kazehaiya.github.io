@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"monocy.site","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="1. 前言此篇文章用于记录使用 Typeorm 操作 MongoDB 的方法，方便后续再次使用时有记录总结，防止下次碰到类似问题时有得费心思查询思路。  mongodb 版本：3.7.3 typeorm 版本：0.2.45 @types/mongodb：3.6">
+<meta name="keywords" content="Node">
+<meta property="og:type" content="article">
+<meta property="og:title" content="typeorm 操作 mongo 的方法小记">
+<meta property="og:url" content="https://monocy.site/2022/06/26/typeorm-操作-mongo-的方法小记/index.html">
+<meta property="og:site_name" content="沐光">
+<meta property="og:description" content="1. 前言此篇文章用于记录使用 Typeorm 操作 MongoDB 的方法，方便后续再次使用时有记录总结，防止下次碰到类似问题时有得费心思查询思路。  mongodb 版本：3.7.3 typeorm 版本：0.2.45 @types/mongodb：3.6">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2022-06-26T10:07:30.138Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="typeorm 操作 mongo 的方法小记">
+<meta name="twitter:description" content="1. 前言此篇文章用于记录使用 Typeorm 操作 MongoDB 的方法，方便后续再次使用时有记录总结，防止下次碰到类似问题时有得费心思查询思路。  mongodb 版本：3.7.3 typeorm 版本：0.2.45 @types/mongodb：3.6">
+
+<link rel="canonical" href="https://monocy.site/2022/06/26/typeorm-操作-mongo-的方法小记/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>typeorm 操作 mongo 的方法小记 | 沐光</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">沐光</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录在前端之路的点点滴滴</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">14</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">15</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">60</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/kazehaiya" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://monocy.site/2022/06/26/typeorm-操作-mongo-的方法小记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="蔡胤">
+      <meta itemprop="description" content="Just do IT!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="沐光">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          typeorm 操作 mongo 的方法小记
+        </h1>
+
+        <div class="post-meta">
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-06-26 18:07:30" itemprop="dateModified" datetime="2022-06-26T18:07:30+08:00">2022-06-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Node/" itemprop="url" rel="index"><span itemprop="name">Node</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2022/06/26/typeorm-操作-mongo-的方法小记/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/06/26/typeorm-操作-mongo-的方法小记/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h2><p>此篇文章用于记录使用 <code>Typeorm</code> 操作 <code>MongoDB</code> 的方法，方便后续再次使用时有记录总结，防止下次碰到类似问题时有得费心思查询思路。</p>
+<ul>
+<li><code>mongodb 版本</code>：<code>3.7.3</code></li>
+<li><code>typeorm 版本</code>：<code>0.2.45</code></li>
+<li><code>@types/mongodb</code>：<code>3.6</code></li>
+</ul>
+<a id="more"></a>
+<h2 id="2-了解-ObjectID"><a href="#2-了解-ObjectID" class="headerlink" title="2. 了解 ObjectID"></a>2. 了解 ObjectID</h2><p>特性：</p>
+<ul>
+<li>总体上为递增的顺序；</li>
+<li>可以通过 <code>ObjectID</code> 获取时间信息；</li>
+<li>JS 比对 <code>ObjectID</code> 时需要调用它的 <code>toString</code> 方法；</li>
+</ul>
+<blockquote>
+<p><a href="https://mongoing.com/all-about-objectid" target="_blank" rel="noopener">关于 <code>ObjectId</code> 的问题总结</a></p>
+</blockquote>
+<h2 id="3-操作方法"><a href="#3-操作方法" class="headerlink" title="3. 操作方法"></a>3. 操作方法</h2><h3 id="3-1-基础查询"><a href="#3-1-基础查询" class="headerlink" title="3.1 基础查询"></a>3.1 基础查询</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">常用的 <code>mongo</code> 的操作符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>$in</code> &amp; <code>$nin</code></td>
+<td>数组匹配（<code>$in</code>：匹配在数组内的； <code>$nin</code>：匹配不在数组内的）</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>$or</code> &amp; <code>$nor</code></td>
+<td>或操作符（<code>$or</code>：匹配满足任一条件的； <code>$nor</code>：匹配任一条件均不满足的）</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>$eq</code> &amp; <code>$ne</code></td>
+<td>相等匹配（<code>$eq</code>：等于； <code>$ne</code>：不等于）</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>$gt</code> &amp; <code>$lt</code></td>
+<td>大小匹配（<code>$gt</code>：大于； <code>$lt</code>：小于）</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>$not</code></td>
+<td>非操作符（需要配合别的操作符使用）</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>$and</code></td>
+<td>与操作符（<code>$and</code>：匹配满足所有条件的）</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// $in 示例</span></span><br><span class="line"><span class="keyword">const</span> demoArr = [<span class="string">'aaa'</span>, <span class="string">'bbb'</span>];</span><br><span class="line">repo.find(&#123;</span><br><span class="line">  where: &#123;</span><br><span class="line">    name: &#123; $<span class="keyword">in</span>: demoArr &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// $or 示例（$nor、$and、$nin 同理）</span></span><br><span class="line"><span class="keyword">const</span> demoReg = <span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">'some fuzzy str'</span>);</span><br><span class="line">repo.find(&#123;</span><br><span class="line">  where: &#123;</span><br><span class="line">    $or: [&#123; name: demoReg &#125;, &#123; address: demoReg &#125;],</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// $eq 示例（$ne 同理）</span></span><br><span class="line">repo.find(&#123;</span><br><span class="line">  where: &#123;</span><br><span class="line">    name: &#123;</span><br><span class="line">      $eq: <span class="string">'测试'</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// $gt 示例（$lt 同理）</span></span><br><span class="line">repo.find(&#123;</span><br><span class="line">  where: &#123;</span><br><span class="line">    age: &#123;</span><br><span class="line">      $gt: <span class="number">12</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// $not 示例</span></span><br><span class="line">repo.find(&#123;</span><br><span class="line">  where: &#123;</span><br><span class="line">    age: &#123;</span><br><span class="line">      $not: &#123; $gt: <span class="number">12</span> &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>当然，<code>typeorm</code> 也为我们简化了一部分的操作写法，特别是简单的匹配查询时，我们可以直接这么写：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 查询多条数据（返回数组）</span></span><br><span class="line">repo.find(&#123;</span><br><span class="line">  id: <span class="keyword">new</span> ObjectID(<span class="string">'tar hex str'</span>),</span><br><span class="line">  name: <span class="string">'123'</span>,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 查询单条数据</span></span><br><span class="line">repo.findOne(&#123; id: <span class="keyword">new</span> ObjectID(<span class="string">'tar hex str'</span>) &#125;);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>⚠️ 注：批量查询数据，需要根据 <code>ObjectID</code> 查询的时候，需要 <code>new ObjectID(str)</code> 来生成对应的类型才可查询，可能和版本问题有关。</p>
+</blockquote>
+<h3 id="3-2-级联查询"><a href="#3-2-级联查询" class="headerlink" title="3.2 级联查询"></a>3.2 级联查询</h3><p>这里的“级联查询”包括两部分的操作：“单表聚合”、“多表联查”。</p>
+<h4 id="3-2-1-单表聚合"><a href="#3-2-1-单表聚合" class="headerlink" title="3.2.1 单表聚合"></a>3.2.1 单表聚合</h4><blockquote>
+<p>⚠️ 注：表格内容引自后面 “参考文章 - 6”</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">常用管道</th>
+<th style="text-align:left">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>$group</code></td>
+<td style="text-align:left">将 collection 中的 document 分组，可用于统计结果</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>$match</code></td>
+<td style="text-align:left">过滤数据，只输出符合结果的文档</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>$project</code></td>
+<td style="text-align:left">修改输入文档的结构（例如重命名，增加、删除字段，创建结算结果等）</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>$sort</code></td>
+<td style="text-align:left">将结果进行排序后输出</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>$limit</code></td>
+<td style="text-align:left">限制管道输出的结果个数</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>$skip</code></td>
+<td style="text-align:left">跳过制定数量的结果，并且返回剩下的结果</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>$unwind</code></td>
+<td style="text-align:left">将数组类型的字段进行拆分</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 一般操作方法</span></span><br><span class="line"><span class="keyword">const</span> result = <span class="keyword">await</span> repo</span><br><span class="line">  .aggregate([</span><br><span class="line">    <span class="comment">// 先匹配需要的内容</span></span><br><span class="line">    &#123; $match: &#123; id: <span class="keyword">new</span> ObjectID(xxx) &#125; &#125;,</span><br><span class="line">    <span class="comment">// 然后聚合</span></span><br><span class="line">    &#123;</span><br><span class="line">      $group: &#123;</span><br><span class="line">        <span class="comment">// 通过 id 聚合</span></span><br><span class="line">        id: <span class="string">'$id'</span>,</span><br><span class="line">        <span class="comment">// 自定义 content 内容</span></span><br><span class="line">        content: &#123;</span><br><span class="line">          <span class="comment">// 批量取值并重命名</span></span><br><span class="line">          $push: &#123;</span><br><span class="line">            name: <span class="string">'$name'</span>,</span><br><span class="line">            new_age: <span class="string">'$age'</span>,</span><br><span class="line">          &#125;,</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 其它控制……</span></span><br><span class="line">  ])</span><br><span class="line">  .next();</span><br></pre></td></tr></table></figure>
+<h4 id="3-2-2-多表联查"><a href="#3-2-2-多表联查" class="headerlink" title="3.2.2 多表联查"></a>3.2.2 多表联查</h4><p>多表联查我们需要用到的是 <code>$lookup</code> 操作符，此操作符内容如下：</p>
+<ul>
+<li><code>from</code>：目标表</li>
+<li><code>localField</code>：当前表的匹配字段</li>
+<li><code>foreignField</code>：目标表的匹配字段</li>
+<li><code>as</code>：输出的集合名称</li>
+</ul>
+<blockquote>
+<p>⚠️ 注：这里的 <code>localField</code> 与 <code>foreignField</code> 就是两表关联的外键，注意别填反了。</p>
+</blockquote>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 示例</span></span><br><span class="line"><span class="keyword">const</span> data = <span class="keyword">await</span> <span class="keyword">this</span>.user</span><br><span class="line">  .aggregate([</span><br><span class="line">    &#123; $match: &#123; name: <span class="string">'wahaha'</span> &#125; &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      $lookup: &#123;</span><br><span class="line">        <span class="keyword">from</span>: <span class="string">'photo'</span>,</span><br><span class="line">        localField: <span class="string">'id'</span>,</span><br><span class="line">        foreignField: <span class="string">'user_id'</span>,</span><br><span class="line">        <span class="keyword">as</span>: <span class="string">'photo_list'</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      $lookup: &#123;</span><br><span class="line">        <span class="keyword">from</span>: <span class="string">'family'</span>,</span><br><span class="line">        localField: <span class="string">'id'</span>,</span><br><span class="line">        foreignField: <span class="string">'user_id'</span>,</span><br><span class="line">        <span class="keyword">as</span>: <span class="string">'families'</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">  ])</span><br><span class="line">  .next();</span><br></pre></td></tr></table></figure>
+<h3 id="3-3-新增操作"><a href="#3-3-新增操作" class="headerlink" title="3.3 新增操作"></a>3.3 新增操作</h3><p>使用 <code>Typeorm</code> 操作 <code>mongodb</code> 的新增能力有三种方法：<code>save</code>、<code>insertOne</code>、<code>insertMany</code>，一般我们使用 <code>save</code> 方法。它们之间稍微有一些区别：</p>
+<h4 id="3-3-1-save-方法"><a href="#3-3-1-save-方法" class="headerlink" title="3.3.1 save 方法"></a>3.3.1 <code>save</code> 方法</h4><p><code>save</code> 方法比较简单，直接将新增参数放入即可，支持自动生成 <code>主键</code>、<code>新增时间</code>、<code>更新时间</code>，它同时支持插入单条数据 &amp; 多条数据。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 插入单条数据</span></span><br><span class="line"><span class="keyword">this</span>.repo.save(&#123;</span><br><span class="line">  <span class="comment">// 新增的参数</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 批量插入数据</span></span><br><span class="line"><span class="keyword">this</span>.repo.save([</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">// 新增的参数</span></span><br><span class="line">  &#125;,</span><br><span class="line">]);</span><br></pre></td></tr></table></figure>
+<h4 id="3-3-2-insertOne-方法"><a href="#3-3-2-insertOne-方法" class="headerlink" title="3.3.2 insertOne 方法"></a>3.3.2 <code>insertOne</code> 方法</h4><p><code>insertOne</code> 方法为 <code>save</code> 的单条数据操作版，但它只支持自动生成 <code>主键</code>，在项目使用上可优先使用 <code>save</code> 方法。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.repo.insertOne(&#123;</span><br><span class="line">  <span class="comment">// 新增的参数</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h4 id="3-3-3-insertMany-方法"><a href="#3-3-3-insertMany-方法" class="headerlink" title="3.3.3 insertMany 方法"></a>3.3.3 <code>insertMany</code> 方法</h4><p><code>insertMany</code> 方法为 <code>save</code> 的多条数据操作版，但它只支持自动生成 <code>主键</code>，在项目使用上可优先使用 <code>save</code> 方法。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.repo.insertMany([</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">// 新增的参数</span></span><br><span class="line">  &#125;,</span><br><span class="line">]);</span><br></pre></td></tr></table></figure>
+<h3 id="3-4-删除操作"><a href="#3-4-删除操作" class="headerlink" title="3.4 删除操作"></a>3.4 删除操作</h3><p>删除方法基本都使用 <code>delete</code> 方法，使用方法基本按照 <code>TS</code> 定义去操作即可：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 可单、批量删除</span></span><br><span class="line">repo.delete(xxx);</span><br></pre></td></tr></table></figure>
+<h3 id="3-5-更新操作"><a href="#3-5-更新操作" class="headerlink" title="3.5 更新操作"></a>3.5 更新操作</h3><p>更新操作也有多种：<code>update</code>、<code>updateOne</code>、<code>updateMany</code>，基本和 find 差不多，用的较多的基本是 <code>update</code> 方法，属于综合性更新。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">repo.update(tarId, &#123;</span><br><span class="line">  modify_time: <span class="keyword">new</span> <span class="built_in">Date</span>(),</span><br><span class="line">  <span class="comment">// 待更新的内容</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>⚠️ 注：<code>typeorm</code> 更新 <code>mongodb</code> 时不会自动更新时间，需要手动补充时间的更新内容。</p>
+</blockquote>
+<h2 id="4-参考文档"><a href="#4-参考文档" class="headerlink" title="4. 参考文档"></a>4. 参考文档</h2><ol>
+<li><a href="http://www.manongjc.com/detail/31-ipwxvemvjscyfqt.html" target="_blank" rel="noopener">MongoDB $not 实例讲解</a></li>
+<li><a href="http://t.zoukankan.com/laifu-p-3635298.html" target="_blank" rel="noopener">对多个字段同时查询</a></li>
+<li><a href="https://orkhan.gitbook.io/typeorm/docs/mongodb#mongodb-support" target="_blank" rel="noopener">typeorm mongodb</a></li>
+<li><a href="https://stackoverflow.com/questions/46720962/typeorm-findbyid-doesnt-work-with-mongodb" target="_blank" rel="noopener">TypeORM FindById doesn’t work with MongoDB</a></li>
+<li><a href="https://blog.csdn.net/qq_39263663/article/details/80459833" target="_blank" rel="noopener">MongoDB 中的 aggregate() 方法</a></li>
+<li><a href="https://blog.csdn.net/ycclydy/article/details/120861374" target="_blank" rel="noopener">mongoDB 中聚合(aggregate)的具体使用</a></li>
+<li><a href="https://www.cnblogs.com/xuliuzai/p/10055535.html" target="_blank" rel="noopener">详解 MongoDB 中的多表关联查询（$lookup）</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>蔡胤
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://monocy.site/2022/06/26/typeorm-操作-mongo-的方法小记/" title="typeorm 操作 mongo 的方法小记">https://monocy.site/2022/06/26/typeorm-操作-mongo-的方法小记/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Node/" rel="tag"><i class="fa fa-tag"></i> Node</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/06/26/React-18-简介/" rel="prev" title="React 18 简介">
+      <i class="fa fa-chevron-left"></i> React 18 简介
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-前言"><span class="nav-number">1.</span> <span class="nav-text">1. 前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-了解-ObjectID"><span class="nav-number">2.</span> <span class="nav-text">2. 了解 ObjectID</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-操作方法"><span class="nav-number">3.</span> <span class="nav-text">3. 操作方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-基础查询"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 基础查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-级联查询"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 级联查询</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-1-单表聚合"><span class="nav-number">3.2.1.</span> <span class="nav-text">3.2.1 单表聚合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-2-多表联查"><span class="nav-number">3.2.2.</span> <span class="nav-text">3.2.2 多表联查</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-新增操作"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 新增操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-1-save-方法"><span class="nav-number">3.3.1.</span> <span class="nav-text">3.3.1 save 方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-2-insertOne-方法"><span class="nav-number">3.3.2.</span> <span class="nav-text">3.3.2 insertOne 方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-3-insertMany-方法"><span class="nav-number">3.3.3.</span> <span class="nav-text">3.3.3 insertMany 方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-删除操作"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 删除操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-更新操作"><span class="nav-number">3.5.</span> <span class="nav-text">3.5 更新操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-参考文档"><span class="nav-number">4.</span> <span class="nav-text">4. 参考文档</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蔡胤"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">蔡胤</p>
+  <div class="site-description" itemprop="description">Just do IT!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">60</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/kazehaiya" title="GitHub → https://github.com/kazehaiya" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:c763416559@163.com" title="Mail → mailto:c763416559@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/Nora_Monocy" title="Weibo → https://weibo.com/Nora_Monocy" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://liujinkai.com/" title="http://liujinkai.com/" rel="noopener" target="_blank">凯凯刘</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://weekly.75team.com/" title="https://weekly.75team.com/" rel="noopener" target="_blank">奇舞周刊</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://75.team/post/list" title="https://75.team/post/list" rel="noopener" target="_blank">奇舞团博客</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://tech.meituan.com/" title="https://tech.meituan.com/" rel="noopener" target="_blank">美团技术团队</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://tech.youzan.com/" title="https://tech.youzan.com/" rel="noopener" target="_blank">有赞技术团队</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://kalacloud.com" title="https://kalacloud.com" rel="noopener" target="_blank">卡拉云</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn" rel="noopener" target="_blank">京ICP备2020036147号-1 </a>
+      <img src="/images/beian.png" style="display: inline-block;"><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42011702000651" rel="noopener" target="_blank">鄂公网安备 42011702000651 号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-dragon"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">蔡胤</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">97k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:28</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-pjax@0/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : true,
+      notify     : true,
+      appId      : 'GkgJm97N3UFm2mRb1eFcP2dn-gzGzoHsz',
+      appKey     : 'kJ8tYUUkX4ifhWha8rjnxWS8',
+      placeholder: "请不要吝惜你的笔头，来说点什么吧！",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+    </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/Epsilon2.1.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true,"scale":0.5},"react":{"opacity":0.7},"log":false});</script></body>
+</html>

@@ -1291,7 +1291,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #ff42ec;
+  background: #9ce250;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2800,7 +2800,7 @@ ul.breadcrumb li + li:last-child {
   }
 }
 body {
-  background-image: url("/images/blog-background.jpg");
+  background-image: url("https://img.gejiba.com/images/3f3c4892c6dddc1b44172675a3ff9124.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;

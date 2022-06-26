@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"monocy.site","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言2022 年 3 月 29 号，React 18 正式发布了，其实从 React 16 版本开始，React 团队已经开始普及“并发”的概念，在 v18 版本迭代的过程中，也有不少相关的并发特性知识在科普，那么v18 版本到底有哪些知识，这里就给大家介绍一下。">
+<meta name="keywords" content="React">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React 18 简介">
+<meta property="og:url" content="https://monocy.site/2022/06/26/React-18-简介/index.html">
+<meta property="og:site_name" content="沐光">
+<meta property="og:description" content="前言2022 年 3 月 29 号，React 18 正式发布了，其实从 React 16 版本开始，React 团队已经开始普及“并发”的概念，在 v18 版本迭代的过程中，也有不少相关的并发特性知识在科普，那么v18 版本到底有哪些知识，这里就给大家介绍一下。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2022-06-26T10:07:39.600Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="React 18 简介">
+<meta name="twitter:description" content="前言2022 年 3 月 29 号，React 18 正式发布了，其实从 React 16 版本开始，React 团队已经开始普及“并发”的概念，在 v18 版本迭代的过程中，也有不少相关的并发特性知识在科普，那么v18 版本到底有哪些知识，这里就给大家介绍一下。">
+
+<link rel="canonical" href="https://monocy.site/2022/06/26/React-18-简介/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>React 18 简介 | 沐光</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">沐光</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">记录在前端之路的点点滴滴</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">14</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">15</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">60</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/kazehaiya" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://monocy.site/2022/06/26/React-18-简介/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="蔡胤">
+      <meta itemprop="description" content="Just do IT!">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="沐光">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          React 18 简介
+        </h1>
+
+        <div class="post-meta">
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-06-26 18:07:39" itemprop="dateModified" datetime="2022-06-26T18:07:39+08:00">2022-06-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/React/" itemprop="url" rel="index"><span itemprop="name">React</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2022/06/26/React-18-简介/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/06/26/React-18-简介/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>2022 年 3 月 29 号，<code>React 18</code> 正式发布了，其实从 <code>React 16</code> 版本开始，<code>React</code> 团队已经开始普及“并发”的概念，在 <code>v18</code> 版本迭代的过程中，也有不少相关的并发特性知识在科普，那么<code>v18</code> 版本到底有哪些知识，这里就给大家介绍一下。</p>
+<a id="more"></a>
+<h2 id="并发特性（Concurrent-Features）"><a href="#并发特性（Concurrent-Features）" class="headerlink" title="并发特性（Concurrent Features）"></a>并发特性（Concurrent Features）</h2><p>最早此概念受启发于 <code>React Native</code>，因为 <code>JavaScript</code> 是单线程的，而本地平台则是运行在多个线程上的，由于为了良好的移动端的用户体验，<code>React Native</code> 就不得不考虑如何实现“并发调度”特性，这么好的特性如果运用在 <code>Web</code> 上，那么性能岂不会大大提升吗，于是 <code>React</code> 团队便开始结合此开始深入研究网络功能，比如“代码拆分”、“数据获取”、“流服务器渲染”、“服务器组件” 等，最终发现这些能力都是可构建的，因此就设计出了最初版的 <code>Suspense API</code> ，如我们最熟悉的 <code>React.lazy + Suspense</code> 实现组件懒加载。</p>
+<p><img data-src="https://img.gejiba.com/images/fe24c53d813031f9d289bd98089a43a5.png" alt="Concurent Mode"></p>
+<blockquote>
+<p>⚠️ 注：目前 <code>React 18</code> 的新暂时未在 <code>React Native</code> 内实现（技术上的限制）。</p>
+</blockquote>
+<h2 id="React-18-新功能"><a href="#React-18-新功能" class="headerlink" title="React 18 新功能"></a>React 18 新功能</h2><blockquote>
+<p>React 18 中的许多功能都建立在新的并发渲染器（Concurrent 模式）之上，React 在内部以优先队列和多重缓冲等复杂技术，来创建并行机制，让 React 得以实现新功能提升用户体验。</p>
+</blockquote>
+<p><img data-src="https://img.gejiba.com/images/5f3c819e284138311e3c48608bde469f.png" alt="New Feature"></p>
+<ul>
+<li>自动批处理能力；</li>
+<li>支持 Suspense 的流式服务器端渲染；</li>
+<li>新的严格模式（<a href="https://zh-hans.reactjs.org/docs/strict-mode.html" target="_blank" rel="noopener">StrictMode</a>）；</li>
+<li>新的 React Hook API（<code>useId</code>、<code>useTransition</code>、<code>useDeferredValue</code>）；</li>
+<li>服务器组件（Server Components，开发中，不会包含在 React 18 稳定版中 =&gt; <code>Next.js</code>、<code>Hydrogen</code> 已支持）</li>
+</ul>
+<h3 id="启用-Concurrent-模式"><a href="#启用-Concurrent-模式" class="headerlink" title="启用 Concurrent 模式"></a>启用 <code>Concurrent</code> 模式</h3><p>启用 <code>Concurrent</code> 模式比较简单，只需要改造一下 <code>index.tsx</code> 代码，改造结果如下：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"><span class="comment">// Step1: 更改 ReactDom 引用位置</span></span><br><span class="line"><span class="keyword">import</span> ReactDOM <span class="keyword">from</span> <span class="string">'react-dom/client'</span>;</span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">'./App'</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">'antd/dist/antd.css'</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">'./assets/style/index.css'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Step2: 更改 dom 节点的绑定姿势</span></span><br><span class="line"><span class="keyword">const</span> root = ReactDOM.createRoot(<span class="built_in">document</span>.getElementById(<span class="string">'root'</span>));</span><br><span class="line">root.render(&lt;App /&gt;);</span><br></pre></td></tr></table></figure>
+<h2 id="能力介绍"><a href="#能力介绍" class="headerlink" title="能力介绍"></a>能力介绍</h2><h3 id="自动批处理"><a href="#自动批处理" class="headerlink" title="自动批处理"></a>自动批处理</h3><blockquote>
+<p>批处理是 <code>React</code> 将多个状态更新分组到一个重新渲染中以获得更好的性能。如果没有自动批处理，我们只能在 <code>React</code> 事件处理程序中批处理更新。</p>
+</blockquote>
+<p><code>React 18</code> 版本之前，在合成事件之外的原生事件中（例如 <code>setTimeout</code>、<code>onclick</code>、<code>Promise</code>） ，更新状态并不会进行批量处理（合并处理），这意味着在原生事件中多次调用状态更新会造成多次应用的重新渲染，往往我们只需要最后一次即可，在 <code>React 18</code> 版本后优化了这个问题。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123; useState &#125; <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> App = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> [num1, setNum1] = useState(<span class="number">1</span>);</span><br><span class="line">  <span class="keyword">const</span> [num2, setNum2] = useState(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> add = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      setNum1(<span class="function"><span class="params">pre</span> =&gt;</span> pre + <span class="number">1</span>);</span><br><span class="line">      setNum2(<span class="function"><span class="params">pre</span> =&gt;</span> pre + <span class="number">1</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'渲染了'</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;section className=<span class="string">'App'</span>&gt;</span><br><span class="line">      &lt;header className=<span class="string">'App-header'</span>&gt;react <span class="number">18</span>&lt;<span class="regexp">/header&gt;</span></span><br><span class="line"><span class="regexp">      &lt;p&gt;num1 : &#123;num1&#125;&lt;/</span>p&gt;</span><br><span class="line">      &lt;p&gt;num2 : &#123;num2&#125;&lt;<span class="regexp">/p&gt;</span></span><br><span class="line"><span class="regexp">      &lt;button onClick=&#123;add&#125;&gt;+1&lt;/</span>button&gt;</span><br><span class="line">    &lt;<span class="regexp">/section&gt;</span></span><br><span class="line"><span class="regexp">  );</span></span><br><span class="line"><span class="regexp">&#125;;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">export default App;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>17 版本（点击 4 次渲染了 8 次）</li>
+</ul>
+<p><img data-src="https://img.gejiba.com/images/e8ac3bd1b9d83a5f5bd0038d03a97b85.png" alt="React 17 Count"></p>
+<ul>
+<li>18 版本（点击 4 次渲染 4 次）</li>
+</ul>
+<p><img data-src="https://img.gejiba.com/images/75e8c46e8a4ecfd4c7475ab15ea967e3.png" alt="React 18 Count"></p>
+<blockquote>
+<p>内容源自“React 18 之状态批处理”（见底部“参考文章”）</p>
+</blockquote>
+<h3 id="新的严格模式"><a href="#新的严格模式" class="headerlink" title="新的严格模式"></a>新的严格模式</h3><blockquote>
+<p><code>StrictMode</code> 是一个用来突出显示应用程序中潜在问题的工具。与 <code>Fragment</code> 一样，<code>StrictMode</code> 不会渲染任何可见的 <code>UI</code>。它为其后代元素触发额外的检查和警告。</p>
+</blockquote>
+<p>可以为应用程序的任何部分启用严格模式，如：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ExampleApplication</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;Header /&gt;</span><br><span class="line">      &lt;React.StrictMode&gt;</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">          &lt;ComponentOne /&gt;</span><br><span class="line">          &lt;ComponentTwo /&gt;</span><br><span class="line">        &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>React.StrictMode&gt;</span><br><span class="line">      &lt;Footer /&gt;</span><br><span class="line">    &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">  );</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><code>StrictMode</code> 目前有助于：</p>
+<ul>
+<li><a href="https://zh-hans.reactjs.org/docs/strict-mode.html#identifying-unsafe-lifecycles" target="_blank" rel="noopener">识别不安全的生命周期</a></li>
+<li><a href="https://zh-hans.reactjs.org/docs/strict-mode.html#warning-about-legacy-string-ref-api-usage" target="_blank" rel="noopener">关于使用过时字符串 ref API 的警告</a></li>
+<li><a href="https://zh-hans.reactjs.org/docs/strict-mode.html#warning-about-deprecated-finddomnode-usage" target="_blank" rel="noopener">关于使用废弃的 findDOMNode 方法的警告</a></li>
+<li><a href="https://zh-hans.reactjs.org/docs/strict-mode.html#detecting-unexpected-side-effects" target="_blank" rel="noopener">检测意外的副作用</a></li>
+<li><a href="https://zh-hans.reactjs.org/docs/strict-mode.html#detecting-legacy-context-api" target="_blank" rel="noopener">检测过时的 context API</a></li>
+<li><a href="https://zh-hans.reactjs.org/docs/strict-mode.html#detecting-unsafe-effects" target="_blank" rel="noopener">检测不安全的副作用</a></li>
+</ul>
+<p>未来的 React 版本将添加更多额外功能</p>
+<h3 id="Suspense-新功能"><a href="#Suspense-新功能" class="headerlink" title="Suspense 新功能"></a>Suspense 新功能</h3><p>在 <code>React 18</code> 中，服务器添加了对 <code>Suspense</code> 的支持，并使用并发渲染特性扩展了它的功能。如果组件树的一部分尚未准备好显示，<code>Suspense</code> 允许您以声明方式指定其加载状态，流程可如下所示：</p>
+<p><img data-src="https://img.gejiba.com/images/674f42a41b766426ca89bc75b6b4915d.png" alt="Before Ready"></p>
+<p><img data-src="https://img.gejiba.com/images/ebd77a49096465f68e887b0b8376c1b0.png" alt="Ready"></p>
+<h3 id="新的客户端和服务器渲染-API"><a href="#新的客户端和服务器渲染-API" class="headerlink" title="新的客户端和服务器渲染 API"></a>新的客户端和服务器渲染 API</h3><p>在上述 <code>启用 Concurrent 能力</code> 中已经介绍了客户端渲染写法，需要关注的是新 API 的到处地址均为 <code>react-dom/client</code>。</p>
+<p>由于暂未尝试服务端能力，详情可参考 <a href="https://zh-hans.reactjs.org/docs/react-dom-server.html" target="_blank" rel="noopener">React Dom 服务器文档</a>。</p>
+<h3 id="新-Hook"><a href="#新-Hook" class="headerlink" title="新 Hook"></a>新 Hook</h3><h4 id="useId"><a href="#useId" class="headerlink" title="useId"></a>useId</h4><p>其作用就是用于在客户端和服务器上生成唯一 <code>ID</code>。</p>
+<p>在之前的版本中，我们可以使用 <code>React</code> 进行服务端渲染（SSR）。在开发模式上，我们可以在客户端与服务端共享同一个 <code>React</code> 组件。但是，这里就会有一个小问题：如果当前组件已经在服务端渲染过了，但是在客户端我们并没有什么手段知道这个事情，于是客户端还会重新再渲染一次，这样就造成了冗余的渲染。</p>
+<p><img data-src="https://img.gejiba.com/images/7fcf306bfdb1bde0905235f777a6138d.png" alt="SSR Workflow"></p>
+<p>要理解这个背景，我们需要对 SSR 的流程有一个简单的概念。</p>
+<p>在服务端，我们会将 React 组件渲染成为一个字符串，这个过程叫做脱水「<code>dehydrate</code>」。字符串以 <code>html</code> 的形式传送给客户端，作为首屏直出的内容。到了客户端之后，React 还需要对该组件重新激活，用于参与新的渲染更新等过程中，这个过程叫做注水「<code>hydrate</code>」，那么这个过程中，同一个组件在服务端和客户端之间就需要有一个相对稳定的 <code>id</code> 来确定对应的匹配关系。</p>
+<p>但是，<code>React</code> 在后续的更新中，就开始搞事情，客户端渲染有 <code>reconciler</code> ，服务端渲染有 <code>fizz</code>，他们的作用大概相同，那就是根据某种优先级进行任务调度。于是，无论是客户端还是服务端，都可能不会按照稳定的顺序渲染组件了，递增的计数器方案就无法解决问题，而组件的树状结构即使渲染顺序不同，但整体的优先级顺序结构能保持稳定，可以用这种思路来解决重复渲染问题。</p>
+<p><img data-src="https://img.gejiba.com/images/c668ba5941b7808548e3c2053ebbe680.png" alt="Treenode Style"></p>
+<p>在同一个组件中，我们需要多个 id，那么一定不要重复的使用 <code>useId</code>，而是基于一个 id 来创建不同的身份标识</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用姿势</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">NameFields</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> id = useId();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;label htmlFor=&#123;id + <span class="string">'-firstName'</span>&#125;&gt;First Name&lt;<span class="regexp">/label&gt;</span></span><br><span class="line"><span class="regexp">      &lt;div&gt;</span></span><br><span class="line"><span class="regexp">        &lt;input id=&#123;id + '-firstName'&#125; type='text' /</span>&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">      &lt;label htmlFor=&#123;id + '-lastName'&#125;&gt;Last Name&lt;/</span>label&gt;</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;input id=&#123;id + <span class="string">'-lastName'</span>&#125; <span class="keyword">type</span>=<span class="string">'text'</span> /&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    &lt;/</span>div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>内容源自 “React 18 新特性之 useId 详细解读”（见底部参考文章）</p>
+</blockquote>
+<h4 id="useTransition"><a href="#useTransition" class="headerlink" title="useTransition"></a>useTransition</h4><p>【使用场景】</p>
+<p>异步加载数据的过渡状态管控（可以逐步淘汰 <code>const [loading, setLoading] = useState(false)</code>，转而用 <code>useTransition</code> 来管控加载状态）</p>
+<p>【使用方法】</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123; useState, useTransition, useCallback &#125; <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; Card, Input, Spin &#125; <span class="keyword">from</span> <span class="string">'antd'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> UseTransitionDemo = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> [value, setValue] = useState(<span class="string">''</span>);</span><br><span class="line">  <span class="keyword">const</span> [searchQuery, setSearchQuery] = useState([]);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 最迟 3s 会响应一次</span></span><br><span class="line">  <span class="keyword">const</span> [loading, startTransition] = useTransition(&#123;</span><br><span class="line">    timeoutMs: <span class="number">3000</span>,</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> handleChange = useCallback(</span><br><span class="line">    e =&gt; &#123;</span><br><span class="line">      setValue(e.target.value);</span><br><span class="line"></span><br><span class="line">      startTransition(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// 用大量数据来换取过渡耗时（渲染耗时）</span></span><br><span class="line">        setSearchQuery(<span class="built_in">Array</span>(<span class="number">20000</span>).fill(e.target.value));</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;,</span><br><span class="line">    [startTransition],</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;Card title=<span class="string">'useTransition Demo'</span>&gt;</span><br><span class="line">      &lt;Input</span><br><span class="line">        value=&#123;value&#125;</span><br><span class="line">        placeholder=<span class="string">'请输入内容查看变化'</span></span><br><span class="line">        onChange=&#123;handleChange&#125;</span><br><span class="line">        style=&#123;&#123; marginBottom: <span class="string">'12px'</span> &#125;&#125;</span><br><span class="line">      /&gt;</span><br><span class="line"></span><br><span class="line">      &lt;br /&gt;</span><br><span class="line"></span><br><span class="line">      &lt;Spin spinning=&#123;loading&#125;&gt;</span><br><span class="line">        &#123;searchQuery.map(<span class="function">(<span class="params">item, index</span>) =&gt;</span> (</span><br><span class="line">          &lt;p key=&#123;index&#125;&gt;&#123;item&#125;&lt;<span class="regexp">/p&gt;</span></span><br><span class="line"><span class="regexp">        ))&#125;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>Spin&gt;</span><br><span class="line">    &lt;<span class="regexp">/Card&gt;</span></span><br><span class="line"><span class="regexp">  );</span></span><br><span class="line"><span class="regexp">&#125;;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">export default UseTransitionDemo;</span></span><br></pre></td></tr></table></figure>
+<p>【实际演练】</p>
+<p><img data-src="https://img.gejiba.com/images/e2301479d3ffe1d1b9d81ce4fd2f8599.gif" alt="useTransition Demo"></p>
+<h4 id="useDeferredValue"><a href="#useDeferredValue" class="headerlink" title="useDeferredValue"></a>useDeferredValue</h4><p>【使用场景】</p>
+<p>大量数据在页面频繁重绘的情况，当然使用 <code>lodash</code> 的 <code>debounce</code> 也能实现类似的效果，只不过此 <code>API</code> 不用限制死时间，一旦当前的绘制完毕会自动进入下一次处理。</p>
+<p>【使用方法】</p>
+<blockquote>
+<p>⚠️ 注：使用方法比较简单，需要配合 <code>Suspense</code> 和 <code>useMemo</code> 缓存（或手动对比判断）来得到中间加载状态，其中 <code>Suspense</code> 主要用于初始化部分。</p>
+</blockquote>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123; useDeferredValue, useState, Suspense &#125; <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> UseDeferredValueDemo = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> [value, setValue] = useState();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 监听值的变化 (timeoutMs: 最多可延迟的时长，当网络和设备允许时，React 始终会尝试使用较短的延迟，此配置貌似最新版本的 React 将其去掉了)</span></span><br><span class="line">  <span class="keyword">const</span> defferedValue = useDeferredValue(value, &#123; timeoutMs: <span class="number">1000</span> &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 异步内容呈现</span></span><br><span class="line">  <span class="keyword">const</span> defferedContent = useMemo(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;, [defferedValue]);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;&gt;</span><br><span class="line">      &lt;Suspense fallback=<span class="string">'Loading...'</span>&gt;&#123;defferedContent&#125;&lt;<span class="regexp">/Suspense&gt;</span></span><br><span class="line"><span class="regexp">    &lt;/</span>&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> UseDeferredValueDemo;</span><br></pre></td></tr></table></figure>
+<p>【与 debounce 的区别】</p>
+<p><code>debounce</code> 有一个固定的人为延迟（如 80 个项，每项延迟 3ms），所以它总是会延迟，不论我们的电脑有多快。然而，<code>useDeferredValue</code> 的值只会在渲染耗费时间的情况下 “滞后”，<code>React</code> 并不会加入一点多余的延迟。在一个更实际的工作负荷，你可以预期这个滞后会根据用户的设备而不同。在较快的机器上，滞后会更少或者根本不存在，在较慢的机器上，它会变得更明显。但不论哪种情况，应用都会保持可响应。这就是此机制优于 <code>debouncing</code> 或 <code>throttling</code> 的地方，它们总是会引入最小延迟而且不可避免的会在渲染的时候阻塞进程。</p>
+<p>【实际演练】</p>
+<p><img data-src="https://img.gejiba.com/images/fb969a097c210c558b57a78bee3f381a.gif" alt="useDefferedValue Demo"></p>
+<h2 id="未来对服务器端的支持"><a href="#未来对服务器端的支持" class="headerlink" title="未来对服务器端的支持"></a>未来对服务器端的支持</h2><p><img data-src="https://img.gejiba.com/images/6b33c39e79b8fa8d12618b62dda47c4d.png" alt="Suspense Feature"></p>
+<h3 id="原有能力"><a href="#原有能力" class="headerlink" title="原有能力"></a>原有能力</h3><ul>
+<li><code>Suspense</code> + <code>React.lazy</code> 实现代码分割，方便打包工具打包；</li>
+</ul>
+<h3 id="现有能力"><a href="#现有能力" class="headerlink" title="现有能力"></a>现有能力</h3><ul>
+<li>【服务端】流式渲染、唯一 ID（<code>useId</code>）、服务器组件（暂未推出，但 <code>next.js</code> 等部分后端框架已实现）；</li>
+<li>【客户端】异步加载（<code>useTransition</code>、<code>useDeferredValue</code>）；</li>
+</ul>
+<h3 id="未来能力"><a href="#未来能力" class="headerlink" title="未来能力"></a>未来能力</h3><ul>
+<li>异步数据获取能力（不用手动处理 <code>Loading</code>，全交给 <code>Suspense</code>）；</li>
+</ul>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 现有类似 ahook 的写法（自己处理状态）</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> Child = <span class="function">(<span class="params">id: <span class="built_in">number</span></span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> [isLoading, data] = useFetchDate(id);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (isLoading) &#123;</span><br><span class="line">    <span class="keyword">return</span> &lt;Spinner /&gt;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &lt;&gt;The title is: &#123;data?.title || <span class="string">'-'</span>&#125;&lt;<span class="regexp">/&gt;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp">export Parent = () =&gt; &#123;</span></span><br><span class="line"><span class="regexp">  const [id, setId] = useState(0);</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">  return &lt;&gt;</span></span><br><span class="line"><span class="regexp">    &lt;Search onSearch=&#123;setId&#125; /</span>&gt;</span><br><span class="line">  	&lt;Child id=&#123;id&#125; /&gt;</span><br><span class="line">  &lt;<span class="regexp">/&gt;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ 未来写法（由 Suspense 统一接管状态）</span></span><br><span class="line"><span class="regexp">export const Child = (id: number) =&gt; &#123;</span></span><br><span class="line"><span class="regexp">  const [data] = useFetchDate(id);</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">  return &lt;&gt;The title is: &#123;data?.title || '-'&#125;&lt;/</span>&gt;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> Parent = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> [id, setId] = useState(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &lt;&gt;</span><br><span class="line">    &lt;Search onSearch=&#123;setId&#125; /&gt;</span><br><span class="line">    &lt;Suspense fallback=&#123;&lt;Spinner /&gt;&#125;&gt;</span><br><span class="line">    	&lt;Child id=&#123;id&#125; /&gt;</span><br><span class="line">    &lt;<span class="regexp">/Suspense&gt;</span></span><br><span class="line"><span class="regexp">  &lt;/</span>&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>服务器组件推广，减少前端重复性组件成本；</li>
+</ul>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ul>
+<li><a href="https://cloud.tencent.com/developer/article/1546299" target="_blank" rel="noopener">concurrent 模式 API 参考（实验版）</a></li>
+<li><a href="https://www.youtube.com/watch?v=FZ0cG47msEk&amp;list=PLNG_1j3cPCaZZ7etkzWA7JfdmKWT0pMsa" target="_blank" rel="noopener">React 18 Note（视频可从 5:10 开始看）</a></li>
+<li><a href="https://www.youtube.com/watch?v=pj5N-Khihgc&amp;list=PLNG_1j3cPCaZZ7etkzWA7JfdmKWT0pMsa&amp;index=4" target="_blank" rel="noopener">Streaming Server Rendering with Suspense（视频）</a></li>
+<li><a href="https://github.com/reactwg/server-components" target="_blank" rel="noopener">Server-Components（react 团队 github 仓库）</a></li>
+<li><a href="https://blog.csdn.net/m0_58239318/article/details/124170539" target="_blank" rel="noopener">React 18 之状态批处理</a></li>
+<li><a href="https://new.qq.com/omn/20220330/20220330A0668600.html" target="_blank" rel="noopener">React 18 的新改进功能</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/1977997" target="_blank" rel="noopener">React 18 新特性之 useId 详细解读</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/1843055" target="_blank" rel="noopener">给女朋友讲 React18 新特性：Automatic batching</a></li>
+<li><a href="https://blog.csdn.net/weixin_43294560/article/details/121428955" target="_blank" rel="noopener"><code>useTranstion</code> 和 <code>useDeferredValue</code> 原理</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/425009300" target="_blank" rel="noopener">React 18 Concurrent 之 useDeferredValue&lt;译&gt;</a></li>
+<li><a href="https://github.com/reactwg/react-18/discussions/65" target="_blank" rel="noopener">真实世界示例：为慢速渲染添加 <code>startTransition</code></a></li>
+<li><a href="https://blog.csdn.net/u011497228/article/details/123682274" target="_blank" rel="noopener"><code>React 18</code> 新特性 <code>useTransition</code></a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/425007915" target="_blank" rel="noopener">React 18 Concurrent 之 startTransition&lt;译&gt;</a></li>
+<li><a href="https://blog.csdn.net/windfromcn/article/details/119027965" target="_blank" rel="noopener">React 18 New Feature: startTransition</a></li>
+<li><a href="https://www.mybj123.com/14725.html" target="_blank" rel="noopener">React18 引入了新 Hook: useId ，用于生成唯一 id</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>蔡胤
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://monocy.site/2022/06/26/React-18-简介/" title="React 18 简介">https://monocy.site/2022/06/26/React-18-简介/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/React/" rel="tag"><i class="fa fa-tag"></i> React</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/09/09/深入理解-Promise/" rel="prev" title="深入理解 Promise">
+      <i class="fa fa-chevron-left"></i> 深入理解 Promise
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/06/26/typeorm-操作-mongo-的方法小记/" rel="next" title="typeorm 操作 mongo 的方法小记">
+      typeorm 操作 mongo 的方法小记 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#并发特性（Concurrent-Features）"><span class="nav-number">2.</span> <span class="nav-text">并发特性（Concurrent Features）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#React-18-新功能"><span class="nav-number">3.</span> <span class="nav-text">React 18 新功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#启用-Concurrent-模式"><span class="nav-number">3.1.</span> <span class="nav-text">启用 Concurrent 模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#能力介绍"><span class="nav-number">4.</span> <span class="nav-text">能力介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自动批处理"><span class="nav-number">4.1.</span> <span class="nav-text">自动批处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#新的严格模式"><span class="nav-number">4.2.</span> <span class="nav-text">新的严格模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Suspense-新功能"><span class="nav-number">4.3.</span> <span class="nav-text">Suspense 新功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#新的客户端和服务器渲染-API"><span class="nav-number">4.4.</span> <span class="nav-text">新的客户端和服务器渲染 API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#新-Hook"><span class="nav-number">4.5.</span> <span class="nav-text">新 Hook</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#useId"><span class="nav-number">4.5.1.</span> <span class="nav-text">useId</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#useTransition"><span class="nav-number">4.5.2.</span> <span class="nav-text">useTransition</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#useDeferredValue"><span class="nav-number">4.5.3.</span> <span class="nav-text">useDeferredValue</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#未来对服务器端的支持"><span class="nav-number">5.</span> <span class="nav-text">未来对服务器端的支持</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原有能力"><span class="nav-number">5.1.</span> <span class="nav-text">原有能力</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#现有能力"><span class="nav-number">5.2.</span> <span class="nav-text">现有能力</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#未来能力"><span class="nav-number">5.3.</span> <span class="nav-text">未来能力</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文章"><span class="nav-number">6.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蔡胤"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">蔡胤</p>
+  <div class="site-description" itemprop="description">Just do IT!</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">60</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/kazehaiya" title="GitHub → https://github.com/kazehaiya" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:c763416559@163.com" title="Mail → mailto:c763416559@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/Nora_Monocy" title="Weibo → https://weibo.com/Nora_Monocy" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://liujinkai.com/" title="http://liujinkai.com/" rel="noopener" target="_blank">凯凯刘</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://weekly.75team.com/" title="https://weekly.75team.com/" rel="noopener" target="_blank">奇舞周刊</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://75.team/post/list" title="https://75.team/post/list" rel="noopener" target="_blank">奇舞团博客</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://tech.meituan.com/" title="https://tech.meituan.com/" rel="noopener" target="_blank">美团技术团队</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://tech.youzan.com/" title="https://tech.youzan.com/" rel="noopener" target="_blank">有赞技术团队</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://kalacloud.com" title="https://kalacloud.com" rel="noopener" target="_blank">卡拉云</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn" rel="noopener" target="_blank">京ICP备2020036147号-1 </a>
+      <img src="/images/beian.png" style="display: inline-block;"><a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=42011702000651" rel="noopener" target="_blank">鄂公网安备 42011702000651 号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2018 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-dragon"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">蔡胤</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">97k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:28</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-pjax@0/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/medium-zoom@1/dist/medium-zoom.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : true,
+      notify     : true,
+      appId      : 'GkgJm97N3UFm2mRb1eFcP2dn-gzGzoHsz',
+      appKey     : 'kJ8tYUUkX4ifhWha8rjnxWS8',
+      placeholder: "请不要吝惜你的笔头，来说点什么吧！",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+    </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/Epsilon2.1.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true,"scale":0.5},"react":{"opacity":0.7},"log":false});</script></body>
+</html>
