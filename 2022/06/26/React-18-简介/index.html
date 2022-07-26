@@ -17,23 +17,23 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"monocy.site","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"monocy.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="前言2022 年 3 月 29 号，React 18 正式发布了，其实从 React 16 版本开始，React 团队已经开始普及“并发”的概念，在 v18 版本迭代的过程中，也有不少相关的并发特性知识在科普，那么v18 版本到底有哪些知识，这里就给大家介绍一下。">
-<meta name="keywords" content="React">
+<meta name="keywords" content="特性介绍,React">
 <meta property="og:type" content="article">
 <meta property="og:title" content="React 18 简介">
-<meta property="og:url" content="https://monocy.site/2022/06/26/React-18-简介/index.html">
+<meta property="og:url" content="https://monocy.gitee.io/2022/06/26/React-18-简介/index.html">
 <meta property="og:site_name" content="沐光">
 <meta property="og:description" content="前言2022 年 3 月 29 号，React 18 正式发布了，其实从 React 16 版本开始，React 团队已经开始普及“并发”的概念，在 v18 版本迭代的过程中，也有不少相关的并发特性知识在科普，那么v18 版本到底有哪些知识，这里就给大家介绍一下。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2022-06-26T10:07:39.600Z">
+<meta property="og:updated_time" content="2022-07-26T13:09:03.985Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="React 18 简介">
 <meta name="twitter:description" content="前言2022 年 3 月 29 号，React 18 正式发布了，其实从 React 16 版本开始，React 团队已经开始普及“并发”的概念，在 v18 版本迭代的过程中，也有不少相关的并发特性知识在科普，那么v18 版本到底有哪些知识，这里就给大家介绍一下。">
 
-<link rel="canonical" href="https://monocy.site/2022/06/26/React-18-简介/">
+<link rel="canonical" href="https://monocy.gitee.io/2022/06/26/React-18-简介/">
 
 
 <script id="page-configurations">
@@ -125,12 +125,12 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">15</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">31</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">16</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">15</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
@@ -192,7 +192,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://monocy.site/2022/06/26/React-18-简介/">
+    <link itemprop="mainEntityOfPage" href="https://monocy.gitee.io/2022/06/26/React-18-简介/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -214,7 +214,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-06-26 18:07:39" itemprop="dateModified" datetime="2022-06-26T18:07:39+08:00">2022-06-26</time>
+                <time title="修改时间：2022-07-26 21:09:03" itemprop="dateModified" datetime="2022-07-26T21:09:03+08:00">2022-07-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -268,14 +268,14 @@
         <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>2022 年 3 月 29 号，<code>React 18</code> 正式发布了，其实从 <code>React 16</code> 版本开始，<code>React</code> 团队已经开始普及“并发”的概念，在 <code>v18</code> 版本迭代的过程中，也有不少相关的并发特性知识在科普，那么<code>v18</code> 版本到底有哪些知识，这里就给大家介绍一下。</p>
 <a id="more"></a>
 <h2 id="并发特性（Concurrent-Features）"><a href="#并发特性（Concurrent-Features）" class="headerlink" title="并发特性（Concurrent Features）"></a>并发特性（Concurrent Features）</h2><p>最早此概念受启发于 <code>React Native</code>，因为 <code>JavaScript</code> 是单线程的，而本地平台则是运行在多个线程上的，由于为了良好的移动端的用户体验，<code>React Native</code> 就不得不考虑如何实现“并发调度”特性，这么好的特性如果运用在 <code>Web</code> 上，那么性能岂不会大大提升吗，于是 <code>React</code> 团队便开始结合此开始深入研究网络功能，比如“代码拆分”、“数据获取”、“流服务器渲染”、“服务器组件” 等，最终发现这些能力都是可构建的，因此就设计出了最初版的 <code>Suspense API</code> ，如我们最熟悉的 <code>React.lazy + Suspense</code> 实现组件懒加载。</p>
-<p><img data-src="https://img.gejiba.com/images/fe24c53d813031f9d289bd98089a43a5.png" alt="Concurent Mode"></p>
+<p><img data-src="/images/react18/concurrent-mode.png" alt="Concurent Mode"></p>
 <blockquote>
 <p>⚠️ 注：目前 <code>React 18</code> 的新暂时未在 <code>React Native</code> 内实现（技术上的限制）。</p>
 </blockquote>
 <h2 id="React-18-新功能"><a href="#React-18-新功能" class="headerlink" title="React 18 新功能"></a>React 18 新功能</h2><blockquote>
 <p>React 18 中的许多功能都建立在新的并发渲染器（Concurrent 模式）之上，React 在内部以优先队列和多重缓冲等复杂技术，来创建并行机制，让 React 得以实现新功能提升用户体验。</p>
 </blockquote>
-<p><img data-src="https://img.gejiba.com/images/5f3c819e284138311e3c48608bde469f.png" alt="New Feature"></p>
+<p><img data-src="/images/react18/new-feature.png" alt="New Feature"></p>
 <ul>
 <li>自动批处理能力；</li>
 <li>支持 Suspense 的流式服务器端渲染；</li>
@@ -293,11 +293,11 @@
 <ul>
 <li>17 版本（点击 4 次渲染了 8 次）</li>
 </ul>
-<p><img data-src="https://img.gejiba.com/images/e8ac3bd1b9d83a5f5bd0038d03a97b85.png" alt="React 17 Count"></p>
+<p><img data-src="/images/react18/r17-render-count.png" alt="React 17 Count"></p>
 <ul>
 <li>18 版本（点击 4 次渲染 4 次）</li>
 </ul>
-<p><img data-src="https://img.gejiba.com/images/75e8c46e8a4ecfd4c7475ab15ea967e3.png" alt="React 18 Count"></p>
+<p><img data-src="/images/react18/r18-render-count.png" alt="React 18 Count"></p>
 <blockquote>
 <p>内容源自“React 18 之状态批处理”（见底部“参考文章”）</p>
 </blockquote>
@@ -317,17 +317,17 @@
 </ul>
 <p>未来的 React 版本将添加更多额外功能</p>
 <h3 id="Suspense-新功能"><a href="#Suspense-新功能" class="headerlink" title="Suspense 新功能"></a>Suspense 新功能</h3><p>在 <code>React 18</code> 中，服务器添加了对 <code>Suspense</code> 的支持，并使用并发渲染特性扩展了它的功能。如果组件树的一部分尚未准备好显示，<code>Suspense</code> 允许您以声明方式指定其加载状态，流程可如下所示：</p>
-<p><img data-src="https://img.gejiba.com/images/674f42a41b766426ca89bc75b6b4915d.png" alt="Before Ready"></p>
-<p><img data-src="https://img.gejiba.com/images/ebd77a49096465f68e887b0b8376c1b0.png" alt="Ready"></p>
+<p><img data-src="/images/react18/before-ready.png" alt="Before Ready"></p>
+<p><img data-src="/images/react18/is-ready.png" alt="Ready"></p>
 <h3 id="新的客户端和服务器渲染-API"><a href="#新的客户端和服务器渲染-API" class="headerlink" title="新的客户端和服务器渲染 API"></a>新的客户端和服务器渲染 API</h3><p>在上述 <code>启用 Concurrent 能力</code> 中已经介绍了客户端渲染写法，需要关注的是新 API 的到处地址均为 <code>react-dom/client</code>。</p>
 <p>由于暂未尝试服务端能力，详情可参考 <a href="https://zh-hans.reactjs.org/docs/react-dom-server.html" target="_blank" rel="noopener">React Dom 服务器文档</a>。</p>
 <h3 id="新-Hook"><a href="#新-Hook" class="headerlink" title="新 Hook"></a>新 Hook</h3><h4 id="useId"><a href="#useId" class="headerlink" title="useId"></a>useId</h4><p>其作用就是用于在客户端和服务器上生成唯一 <code>ID</code>。</p>
 <p>在之前的版本中，我们可以使用 <code>React</code> 进行服务端渲染（SSR）。在开发模式上，我们可以在客户端与服务端共享同一个 <code>React</code> 组件。但是，这里就会有一个小问题：如果当前组件已经在服务端渲染过了，但是在客户端我们并没有什么手段知道这个事情，于是客户端还会重新再渲染一次，这样就造成了冗余的渲染。</p>
-<p><img data-src="https://img.gejiba.com/images/7fcf306bfdb1bde0905235f777a6138d.png" alt="SSR Workflow"></p>
+<p><img data-src="/images/react18/ssr-workflow.png" alt="SSR Workflow"></p>
 <p>要理解这个背景，我们需要对 SSR 的流程有一个简单的概念。</p>
 <p>在服务端，我们会将 React 组件渲染成为一个字符串，这个过程叫做脱水「<code>dehydrate</code>」。字符串以 <code>html</code> 的形式传送给客户端，作为首屏直出的内容。到了客户端之后，React 还需要对该组件重新激活，用于参与新的渲染更新等过程中，这个过程叫做注水「<code>hydrate</code>」，那么这个过程中，同一个组件在服务端和客户端之间就需要有一个相对稳定的 <code>id</code> 来确定对应的匹配关系。</p>
 <p>但是，<code>React</code> 在后续的更新中，就开始搞事情，客户端渲染有 <code>reconciler</code> ，服务端渲染有 <code>fizz</code>，他们的作用大概相同，那就是根据某种优先级进行任务调度。于是，无论是客户端还是服务端，都可能不会按照稳定的顺序渲染组件了，递增的计数器方案就无法解决问题，而组件的树状结构即使渲染顺序不同，但整体的优先级顺序结构能保持稳定，可以用这种思路来解决重复渲染问题。</p>
-<p><img data-src="https://img.gejiba.com/images/c668ba5941b7808548e3c2053ebbe680.png" alt="Treenode Style"></p>
+<p><img data-src="/images/react18/treenode-style.png" alt="Treenode Style"></p>
 <p>在同一个组件中，我们需要多个 id，那么一定不要重复的使用 <code>useId</code>，而是基于一个 id 来创建不同的身份标识</p>
 <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用姿势</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">NameFields</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> id = useId();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;label htmlFor=&#123;id + <span class="string">'-firstName'</span>&#125;&gt;First Name&lt;<span class="regexp">/label&gt;</span></span><br><span class="line"><span class="regexp">      &lt;div&gt;</span></span><br><span class="line"><span class="regexp">        &lt;input id=&#123;id + '-firstName'&#125; type='text' /</span>&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">      &lt;label htmlFor=&#123;id + '-lastName'&#125;&gt;Last Name&lt;/</span>label&gt;</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;input id=&#123;id + <span class="string">'-lastName'</span>&#125; <span class="keyword">type</span>=<span class="string">'text'</span> /&gt;</span><br><span class="line">      &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">    &lt;/</span>div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
@@ -338,7 +338,7 @@
 <p>【使用方法】</p>
 <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123; useState, useTransition, useCallback &#125; <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; Card, Input, Spin &#125; <span class="keyword">from</span> <span class="string">'antd'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> UseTransitionDemo = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> [value, setValue] = useState(<span class="string">''</span>);</span><br><span class="line">  <span class="keyword">const</span> [searchQuery, setSearchQuery] = useState([]);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 最迟 3s 会响应一次</span></span><br><span class="line">  <span class="keyword">const</span> [loading, startTransition] = useTransition(&#123;</span><br><span class="line">    timeoutMs: <span class="number">3000</span>,</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> handleChange = useCallback(</span><br><span class="line">    e =&gt; &#123;</span><br><span class="line">      setValue(e.target.value);</span><br><span class="line"></span><br><span class="line">      startTransition(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// 用大量数据来换取过渡耗时（渲染耗时）</span></span><br><span class="line">        setSearchQuery(<span class="built_in">Array</span>(<span class="number">20000</span>).fill(e.target.value));</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;,</span><br><span class="line">    [startTransition],</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;Card title=<span class="string">'useTransition Demo'</span>&gt;</span><br><span class="line">      &lt;Input</span><br><span class="line">        value=&#123;value&#125;</span><br><span class="line">        placeholder=<span class="string">'请输入内容查看变化'</span></span><br><span class="line">        onChange=&#123;handleChange&#125;</span><br><span class="line">        style=&#123;&#123; marginBottom: <span class="string">'12px'</span> &#125;&#125;</span><br><span class="line">      /&gt;</span><br><span class="line"></span><br><span class="line">      &lt;br /&gt;</span><br><span class="line"></span><br><span class="line">      &lt;Spin spinning=&#123;loading&#125;&gt;</span><br><span class="line">        &#123;searchQuery.map(<span class="function">(<span class="params">item, index</span>) =&gt;</span> (</span><br><span class="line">          &lt;p key=&#123;index&#125;&gt;&#123;item&#125;&lt;<span class="regexp">/p&gt;</span></span><br><span class="line"><span class="regexp">        ))&#125;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>Spin&gt;</span><br><span class="line">    &lt;<span class="regexp">/Card&gt;</span></span><br><span class="line"><span class="regexp">  );</span></span><br><span class="line"><span class="regexp">&#125;;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">export default UseTransitionDemo;</span></span><br></pre></td></tr></table></figure>
 <p>【实际演练】</p>
-<p><img data-src="https://img.gejiba.com/images/e2301479d3ffe1d1b9d81ce4fd2f8599.gif" alt="useTransition Demo"></p>
+<p><img data-src="/images/react18/useTransition.gif" alt="useTransition Demo"></p>
 <h4 id="useDeferredValue"><a href="#useDeferredValue" class="headerlink" title="useDeferredValue"></a>useDeferredValue</h4><p>【使用场景】</p>
 <p>大量数据在页面频繁重绘的情况，当然使用 <code>lodash</code> 的 <code>debounce</code> 也能实现类似的效果，只不过此 <code>API</code> 不用限制死时间，一旦当前的绘制完毕会自动进入下一次处理。</p>
 <p>【使用方法】</p>
@@ -349,8 +349,8 @@
 <p>【与 debounce 的区别】</p>
 <p><code>debounce</code> 有一个固定的人为延迟（如 80 个项，每项延迟 3ms），所以它总是会延迟，不论我们的电脑有多快。然而，<code>useDeferredValue</code> 的值只会在渲染耗费时间的情况下 “滞后”，<code>React</code> 并不会加入一点多余的延迟。在一个更实际的工作负荷，你可以预期这个滞后会根据用户的设备而不同。在较快的机器上，滞后会更少或者根本不存在，在较慢的机器上，它会变得更明显。但不论哪种情况，应用都会保持可响应。这就是此机制优于 <code>debouncing</code> 或 <code>throttling</code> 的地方，它们总是会引入最小延迟而且不可避免的会在渲染的时候阻塞进程。</p>
 <p>【实际演练】</p>
-<p><img data-src="https://img.gejiba.com/images/fb969a097c210c558b57a78bee3f381a.gif" alt="useDefferedValue Demo"></p>
-<h2 id="未来对服务器端的支持"><a href="#未来对服务器端的支持" class="headerlink" title="未来对服务器端的支持"></a>未来对服务器端的支持</h2><p><img data-src="https://img.gejiba.com/images/6b33c39e79b8fa8d12618b62dda47c4d.png" alt="Suspense Feature"></p>
+<p><img data-src="/images/react18/defferedDemo.gif" alt="useDefferedValue Demo"></p>
+<h2 id="未来对服务器端的支持"><a href="#未来对服务器端的支持" class="headerlink" title="未来对服务器端的支持"></a>未来对服务器端的支持</h2><p><img data-src="/images/react18/suspense-feature.png" alt="Suspense Feature"></p>
 <h3 id="原有能力"><a href="#原有能力" class="headerlink" title="原有能力"></a>原有能力</h3><ul>
 <li><code>Suspense</code> + <code>React.lazy</code> 实现代码分割，方便打包工具打包；</li>
 </ul>
@@ -397,7 +397,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://monocy.site/2022/06/26/React-18-简介/" title="React 18 简介">https://monocy.site/2022/06/26/React-18-简介/</a>
+    <a href="https://monocy.gitee.io/2022/06/26/React-18-简介/" title="React 18 简介">https://monocy.gitee.io/2022/06/26/React-18-简介/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -409,6 +409,7 @@
       <footer class="post-footer">
           
           <div class="post-tags">
+              <a href="/tags/特性介绍/" rel="tag"><i class="fa fa-tag"></i> 特性介绍</a>
               <a href="/tags/React/" rel="tag"><i class="fa fa-tag"></i> React</a>
           </div>
 
@@ -507,13 +508,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

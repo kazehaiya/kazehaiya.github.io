@@ -17,23 +17,23 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"monocy.site","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"monocy.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="1. 前言此篇文章用于记录使用 Typeorm 操作 MongoDB 的方法，方便后续再次使用时有记录总结，防止下次碰到类似问题时有得费心思查询思路。  mongodb 版本：3.7.3 typeorm 版本：0.2.45 @types/mongodb：3.6">
-<meta name="keywords" content="Node">
+<meta name="keywords" content="数据库,Mongo,Typeorm">
 <meta property="og:type" content="article">
 <meta property="og:title" content="typeorm 操作 mongo 的方法小记">
-<meta property="og:url" content="https://monocy.site/2022/06/26/typeorm-操作-mongo-的方法小记/index.html">
+<meta property="og:url" content="https://monocy.gitee.io/2022/06/26/typeorm-操作-mongo-的方法小记/index.html">
 <meta property="og:site_name" content="沐光">
 <meta property="og:description" content="1. 前言此篇文章用于记录使用 Typeorm 操作 MongoDB 的方法，方便后续再次使用时有记录总结，防止下次碰到类似问题时有得费心思查询思路。  mongodb 版本：3.7.3 typeorm 版本：0.2.45 @types/mongodb：3.6">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2022-06-26T10:07:30.138Z">
+<meta property="og:updated_time" content="2022-07-26T13:06:50.730Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="typeorm 操作 mongo 的方法小记">
 <meta name="twitter:description" content="1. 前言此篇文章用于记录使用 Typeorm 操作 MongoDB 的方法，方便后续再次使用时有记录总结，防止下次碰到类似问题时有得费心思查询思路。  mongodb 版本：3.7.3 typeorm 版本：0.2.45 @types/mongodb：3.6">
 
-<link rel="canonical" href="https://monocy.site/2022/06/26/typeorm-操作-mongo-的方法小记/">
+<link rel="canonical" href="https://monocy.gitee.io/2022/06/26/typeorm-操作-mongo-的方法小记/">
 
 
 <script id="page-configurations">
@@ -125,12 +125,12 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">15</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">31</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">16</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">15</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
@@ -192,7 +192,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://monocy.site/2022/06/26/typeorm-操作-mongo-的方法小记/">
+    <link itemprop="mainEntityOfPage" href="https://monocy.gitee.io/2022/06/26/typeorm-操作-mongo-的方法小记/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -214,7 +214,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-06-26 18:07:30" itemprop="dateModified" datetime="2022-06-26T18:07:30+08:00">2022-06-26</time>
+                <time title="修改时间：2022-07-26 21:06:50" itemprop="dateModified" datetime="2022-07-26T21:06:50+08:00">2022-07-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -222,7 +222,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Node/" itemprop="url" rel="index"><span itemprop="name">Node</span></a>
+                  <a href="/categories/数据库/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
                 </span>
             </span>
 
@@ -413,7 +413,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://monocy.site/2022/06/26/typeorm-操作-mongo-的方法小记/" title="typeorm 操作 mongo 的方法小记">https://monocy.site/2022/06/26/typeorm-操作-mongo-的方法小记/</a>
+    <a href="https://monocy.gitee.io/2022/06/26/typeorm-操作-mongo-的方法小记/" title="typeorm 操作 mongo 的方法小记">https://monocy.gitee.io/2022/06/26/typeorm-操作-mongo-的方法小记/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -425,7 +425,9 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/Node/" rel="tag"><i class="fa fa-tag"></i> Node</a>
+              <a href="/tags/数据库/" rel="tag"><i class="fa fa-tag"></i> 数据库</a>
+              <a href="/tags/Mongo/" rel="tag"><i class="fa fa-tag"></i> Mongo</a>
+              <a href="/tags/Typeorm/" rel="tag"><i class="fa fa-tag"></i> Typeorm</a>
           </div>
 
         
@@ -523,13 +525,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

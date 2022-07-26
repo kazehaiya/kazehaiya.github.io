@@ -17,23 +17,23 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"monocy.site","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"monocy.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="前言在巩固继承这部分知识时，突然想到早期分享时同事提出的一些疑问，即实现 JS 继承具体有那些方法。在经过一番调研后，此篇便是我所总结出的比较全面的方法。当然，文中记录的仅是一些基础的继承方法以及它们之间的的区别，以供参考。">
-<meta name="keywords" content="JavaScript">
+<meta name="keywords" content="JavaScript,面试题">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于 JS 中“继承”的写法">
-<meta property="og:url" content="https://monocy.site/2019/06/28/关于-JS-中“继承”的写法/index.html">
+<meta property="og:url" content="https://monocy.gitee.io/2019/06/28/关于-JS-中“继承”的写法/index.html">
 <meta property="og:site_name" content="沐光">
 <meta property="og:description" content="前言在巩固继承这部分知识时，突然想到早期分享时同事提出的一些疑问，即实现 JS 继承具体有那些方法。在经过一番调研后，此篇便是我所总结出的比较全面的方法。当然，文中记录的仅是一些基础的继承方法以及它们之间的的区别，以供参考。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-08-16T09:34:09.000Z">
+<meta property="og:updated_time" content="2022-07-26T13:15:39.718Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于 JS 中“继承”的写法">
 <meta name="twitter:description" content="前言在巩固继承这部分知识时，突然想到早期分享时同事提出的一些疑问，即实现 JS 继承具体有那些方法。在经过一番调研后，此篇便是我所总结出的比较全面的方法。当然，文中记录的仅是一些基础的继承方法以及它们之间的的区别，以供参考。">
 
-<link rel="canonical" href="https://monocy.site/2019/06/28/关于-JS-中“继承”的写法/">
+<link rel="canonical" href="https://monocy.gitee.io/2019/06/28/关于-JS-中“继承”的写法/">
 
 
 <script id="page-configurations">
@@ -125,12 +125,12 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">15</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">31</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">16</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">15</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
@@ -192,7 +192,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://monocy.site/2019/06/28/关于-JS-中“继承”的写法/">
+    <link itemprop="mainEntityOfPage" href="https://monocy.gitee.io/2019/06/28/关于-JS-中“继承”的写法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -214,7 +214,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-16 17:34:09" itemprop="dateModified" datetime="2020-08-16T17:34:09+08:00">2020-08-16</time>
+                <time title="修改时间：2022-07-26 21:15:39" itemprop="dateModified" datetime="2022-07-26T21:15:39+08:00">2022-07-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -222,7 +222,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
+                  <a href="/categories/面试题/" itemprop="url" rel="index"><span itemprop="name">面试题</span></a>
                 </span>
             </span>
 
@@ -269,9 +269,9 @@
 <a id="more"></a>
 <h3 id="（原型）继承"><a href="#（原型）继承" class="headerlink" title="（原型）继承"></a>（原型）继承</h3><p>JavaScript 中有许多模拟类行为的方法，其中“继承”（更贴切的说法是委托）便是其中的一项，没有“继承”机制，JavaScript 中的类就是一个空架子。</p>
 <p>假如我们以此例作为继承的模板，归结下来总共有 5 种继承的写法。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 父类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Father</span>(<span class="params">age</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.age = age;</span><br><span class="line">&#125;</span><br><span class="line">Father.prototype.getAge = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.age;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 子类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Child</span>(<span class="params">age, size</span>) </span>&#123;</span><br><span class="line">    Father.call(<span class="keyword">this</span>, age);</span><br><span class="line">    <span class="keyword">this</span>.size = size;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 继承的实现，看下例 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 实例</span></span><br><span class="line"><span class="keyword">const</span> child = <span class="keyword">new</span> Child(<span class="number">28</span>, <span class="string">'small'</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 父类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Father</span>(<span class="params">age</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.age = age;</span><br><span class="line">&#125;</span><br><span class="line">Father.prototype.getAge = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.age;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 子类</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Child</span>(<span class="params">age, size</span>) </span>&#123;</span><br><span class="line">  Father.call(<span class="keyword">this</span>, age);</span><br><span class="line">  <span class="keyword">this</span>.size = size;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 继承的实现，看下例 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 实例</span></span><br><span class="line"><span class="keyword">const</span> child = <span class="keyword">new</span> Child(<span class="number">28</span>, <span class="string">'small'</span>);</span><br></pre></td></tr></table></figure>
 <h4 id="隐式链接法"><a href="#隐式链接法" class="headerlink" title="隐式链接法"></a>隐式链接法</h4><p>ES6 之前比较非常规的写法是手动更改 <code>__proto__</code> 属性来最简化链式继承。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Child.prototype.__proto__ = Father.prototype</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Child.prototype.__proto__ = Father.prototype;</span><br></pre></td></tr></table></figure>
 <p>优点：操作很简便直接</p>
 <p>缺点：该方法并非标准，并且无法兼容所有浏览器，慎用。</p>
 <h4 id="直接引用法"><a href="#直接引用法" class="headerlink" title="直接引用法"></a>直接引用法</h4><p>直接将子类的 prototype 对象指向父类的 prototype 对象。</p>
@@ -291,11 +291,11 @@
 <p>“寄生组合式继承” 在 ES5 中为最佳写法，如果不考虑其稍微的复杂性。</p>
 </blockquote>
 <h4 id="对象构造法"><a href="#对象构造法" class="headerlink" title="对象构造法"></a>对象构造法</h4><p>通过 <code>Object.create</code> 方法来构造一个合适的关联对象。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Child.prototype = <span class="built_in">Object</span>.create(Father.prototype)</span><br><span class="line"><span class="comment">// Child.prototype.constructor = Chlid;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Child.prototype = <span class="built_in">Object</span>.create(Father.prototype);</span><br><span class="line"><span class="comment">// Child.prototype.constructor = Chlid;</span></span><br></pre></td></tr></table></figure>
 <p>优点：在 ES6 之前的最佳之选，优于实例化方法。</p>
 <p>缺点：与实例化方法基本相同，但没有副作用。此外，其隐式 <code>__proto__</code> 链比实例化方法要多一层，链式查找方法相对会耗时长一点点，基本可忽略。</p>
 <h4 id="设置原型法"><a href="#设置原型法" class="headerlink" title="设置原型法"></a>设置原型法</h4><p>使用 ES6 的原型设置方法，此法在 ES6 环境为最佳之选，没有之一。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span>.setPrototypeOf(Child.prototype, Father.prototype)</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span>.setPrototypeOf(Child.prototype, Father.prototype);</span><br></pre></td></tr></table></figure>
 <p>优点：能覆盖所有需求，清晰易懂，可读性强。</p>
 <p>缺点：性能比 <code>Object.create</code> 稍微差点，如果考虑性能的话可优先使用 <code>Object.create</code> 方法</p>
 <h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><blockquote>
@@ -316,7 +316,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://monocy.site/2019/06/28/关于-JS-中“继承”的写法/" title="关于 JS 中“继承”的写法">https://monocy.site/2019/06/28/关于-JS-中“继承”的写法/</a>
+    <a href="https://monocy.gitee.io/2019/06/28/关于-JS-中“继承”的写法/" title="关于 JS 中“继承”的写法">https://monocy.gitee.io/2019/06/28/关于-JS-中“继承”的写法/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -329,6 +329,7 @@
           
           <div class="post-tags">
               <a href="/tags/JavaScript/" rel="tag"><i class="fa fa-tag"></i> JavaScript</a>
+              <a href="/tags/面试题/" rel="tag"><i class="fa fa-tag"></i> 面试题</a>
           </div>
 
         
@@ -426,13 +427,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

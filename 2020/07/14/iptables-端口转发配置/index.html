@@ -17,14 +17,14 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"monocy.site","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"monocy.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="前言先前转载了一篇 iptables 的使用和配置的文章，但是凡事都得自己动手学习一下才能深入了解，因此本篇用来记录动手操作了一番后的一些配置心得。当然建议大家了解的时候读一读参考文章，特别是 iptables 入门指南 和 iptables 详解，能让你对 iptables 有更深入的理解。">
 <meta name="keywords" content="Linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iptables 端口转发配置">
-<meta property="og:url" content="https://monocy.site/2020/07/14/iptables-端口转发配置/index.html">
+<meta property="og:url" content="https://monocy.gitee.io/2020/07/14/iptables-端口转发配置/index.html">
 <meta property="og:site_name" content="沐光">
 <meta property="og:description" content="前言先前转载了一篇 iptables 的使用和配置的文章，但是凡事都得自己动手学习一下才能深入了解，因此本篇用来记录动手操作了一番后的一些配置心得。当然建议大家了解的时候读一读参考文章，特别是 iptables 入门指南 和 iptables 详解，能让你对 iptables 有更深入的理解。">
 <meta property="og:locale" content="zh-CN">
@@ -33,7 +33,7 @@
 <meta name="twitter:title" content="iptables 端口转发配置">
 <meta name="twitter:description" content="前言先前转载了一篇 iptables 的使用和配置的文章，但是凡事都得自己动手学习一下才能深入了解，因此本篇用来记录动手操作了一番后的一些配置心得。当然建议大家了解的时候读一读参考文章，特别是 iptables 入门指南 和 iptables 详解，能让你对 iptables 有更深入的理解。">
 
-<link rel="canonical" href="https://monocy.site/2020/07/14/iptables-端口转发配置/">
+<link rel="canonical" href="https://monocy.gitee.io/2020/07/14/iptables-端口转发配置/">
 
 
 <script id="page-configurations">
@@ -125,12 +125,12 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">15</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">31</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">16</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">15</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
@@ -192,7 +192,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://monocy.site/2020/07/14/iptables-端口转发配置/">
+    <link itemprop="mainEntityOfPage" href="https://monocy.gitee.io/2020/07/14/iptables-端口转发配置/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -357,7 +357,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://monocy.site/2020/07/14/iptables-端口转发配置/" title="iptables 端口转发配置">https://monocy.site/2020/07/14/iptables-端口转发配置/</a>
+    <a href="https://monocy.gitee.io/2020/07/14/iptables-端口转发配置/" title="iptables 端口转发配置">https://monocy.gitee.io/2020/07/14/iptables-端口转发配置/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -467,13 +467,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

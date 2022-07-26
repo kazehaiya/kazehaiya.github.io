@@ -17,23 +17,23 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"monocy.site","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"monocy.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="前言先前发过一篇对于 shimes-vue-ts 文件的思考，其中有一节写到项目 ts 迁移所遇到的问题和解决方法。因为项目才刚迁移完一部分 ts（用得到的部分），踩坑的过程还在进行中，为了更好的记录 ts 迁移过程中所遇到的问题，还是单独写一篇来做记录吧。此篇便是改进后的问题记录，以及相对详细的解决方法。该篇会持续跟新哦~">
-<meta name="keywords" content="JavaScript">
+<meta name="keywords" content="JavaScript,TypeScript">
 <meta property="og:type" content="article">
 <meta property="og:title" content="项目 ts 迁移的踩坑记录">
-<meta property="og:url" content="https://monocy.site/2019/07/14/项目-ts-迁移的踩坑记录/index.html">
+<meta property="og:url" content="https://monocy.gitee.io/2019/07/14/项目-ts-迁移的踩坑记录/index.html">
 <meta property="og:site_name" content="沐光">
 <meta property="og:description" content="前言先前发过一篇对于 shimes-vue-ts 文件的思考，其中有一节写到项目 ts 迁移所遇到的问题和解决方法。因为项目才刚迁移完一部分 ts（用得到的部分），踩坑的过程还在进行中，为了更好的记录 ts 迁移过程中所遇到的问题，还是单独写一篇来做记录吧。此篇便是改进后的问题记录，以及相对详细的解决方法。该篇会持续跟新哦~">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-08-16T09:34:09.000Z">
+<meta property="og:updated_time" content="2022-07-26T13:13:19.053Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="项目 ts 迁移的踩坑记录">
 <meta name="twitter:description" content="前言先前发过一篇对于 shimes-vue-ts 文件的思考，其中有一节写到项目 ts 迁移所遇到的问题和解决方法。因为项目才刚迁移完一部分 ts（用得到的部分），踩坑的过程还在进行中，为了更好的记录 ts 迁移过程中所遇到的问题，还是单独写一篇来做记录吧。此篇便是改进后的问题记录，以及相对详细的解决方法。该篇会持续跟新哦~">
 
-<link rel="canonical" href="https://monocy.site/2019/07/14/项目-ts-迁移的踩坑记录/">
+<link rel="canonical" href="https://monocy.gitee.io/2019/07/14/项目-ts-迁移的踩坑记录/">
 
 
 <script id="page-configurations">
@@ -125,12 +125,12 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">15</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">31</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">16</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">15</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
@@ -192,7 +192,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://monocy.site/2019/07/14/项目-ts-迁移的踩坑记录/">
+    <link itemprop="mainEntityOfPage" href="https://monocy.gitee.io/2019/07/14/项目-ts-迁移的踩坑记录/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -214,7 +214,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-16 17:34:09" itemprop="dateModified" datetime="2020-08-16T17:34:09+08:00">2020-08-16</time>
+                <time title="修改时间：2022-07-26 21:13:19" itemprop="dateModified" datetime="2022-07-26T21:13:19+08:00">2022-07-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -307,7 +307,7 @@
           </div>
 <h4 id="VS-Code-experimentalDecorators-问题"><a href="#VS-Code-experimentalDecorators-问题" class="headerlink" title="VS Code experimentalDecorators 问题"></a>VS Code experimentalDecorators 问题</h4><p>因为 vue 装饰器写法为实验性特性，可能在未来的发行版中发生变化，因此需要配置此参数来删除警告。直接根据警告来做相应配置，即在 tsconfig.json 内添加属性：</p>
 <figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"experimentalDecorators"</span>: <span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<h4 id="类的静态方法"><a href="#类的静态方法" class="headerlink" title="类的静态方法"></a>类的静态方法</h4><p>关于类一般会采用 abstruct 抽象类来规范方法和属性等类的细节，但是对于“类”中 static 部分无法进行抽象规范，需要在对应<strong>静态方法</strong>部分进行单独处理，对于此部分是否有更好的处理方法存在疑问🤔（如：提取一个 interface 之类的声明）。目前想到的比较靠谱的写法有两个：</p>
+<h4 id="类的静态方法"><a href="#类的静态方法" class="headerlink" title="类的静态方法"></a>类的静态方法</h4><p>关于类一般会采用 abstruct 抽象类来规范方法和属性等类的细节，但是对于“类”中 static 部分无法进行抽象规范，需要在对应<strong>静态方法</strong>部分进行单独处理，对于此部分是否有更好的处理方法存在疑问 🤔（如：提取一个 interface 之类的声明）。目前想到的比较靠谱的写法有两个：</p>
 <h5 id="namespace-写法"><a href="#namespace-写法" class="headerlink" title="namespace 写法"></a>namespace 写法</h5><p>官方文档中也有说过，对于业务内的模块来说，推荐使用 namespace 来做全局命名，因此对于业务内比较通用的公共方法来说，可以使用 namespace 来处理。</p>
 <div class="note info">
             <p>对于多层命名空间的写法，可用别名写法 <code>import NS = FirstNameSpace.SecondNameSpace</code>，然后直接通过 <code>NS.xxx</code> 来直接取对应属性即可。同时区别加载模块时使用的 <code>import someModule = require(&#39;moduleName&#39;)</code>，此处的别名仅仅只是创建一个别名而已，简化代码量。</p>
@@ -346,7 +346,7 @@
 <p>参考 <a href="https://github.com/aws-amplify/docs/issues/273" target="_blank" rel="noopener">issue</a></p>
 </blockquote>
 <h3 id="拓展内容"><a href="#拓展内容" class="headerlink" title="拓展内容"></a>拓展内容</h3><h4 id="namespace"><a href="#namespace" class="headerlink" title="namespace"></a>namespace</h4><p>TS 里的 namespace 主要是解决命名冲突的问题，会在全局生成一个对象，定义在 namespace 内部的类都要通过这个对象的属性访问。对于内部模块来说，尽量使用 namespace 替代 module，可参考 namespace 一节。例如：</p>
-<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> Test &#123;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">const</span> USER_NAME = <span class="string">'test name'</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">namespace</span> Polygons &#123;</span><br><span class="line">    <span class="keyword">export</span> <span class="keyword">class</span> Triangle &#123; &#125;</span><br><span class="line">    <span class="keyword">export</span> <span class="keyword">class</span> Square &#123; &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 取别名</span></span><br><span class="line"><span class="keyword">import</span> polygons = Test.Polygons;</span><br><span class="line"><span class="keyword">const</span> username = Test.username</span><br></pre></td></tr></table></figure>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> Test &#123;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">const</span> USER_NAME = <span class="string">'test name'</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">namespace</span> Polygons &#123;</span><br><span class="line">    <span class="keyword">export</span> <span class="keyword">class</span> Triangle &#123;&#125;</span><br><span class="line">    <span class="keyword">export</span> <span class="keyword">class</span> Square &#123;&#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 取别名</span></span><br><span class="line"><span class="keyword">import</span> polygons = Test.Polygons;</span><br><span class="line"><span class="keyword">const</span> username = Test.username;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>注：import xx = require(‘xx’) 为加载模块的写法，不要与取别名的写法混淆。默认全局环境的 namespace 为 global</p>
 </blockquote>
@@ -371,7 +371,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://monocy.site/2019/07/14/项目-ts-迁移的踩坑记录/" title="项目 ts 迁移的踩坑记录">https://monocy.site/2019/07/14/项目-ts-迁移的踩坑记录/</a>
+    <a href="https://monocy.gitee.io/2019/07/14/项目-ts-迁移的踩坑记录/" title="项目 ts 迁移的踩坑记录">https://monocy.gitee.io/2019/07/14/项目-ts-迁移的踩坑记录/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -384,6 +384,7 @@
           
           <div class="post-tags">
               <a href="/tags/JavaScript/" rel="tag"><i class="fa fa-tag"></i> JavaScript</a>
+              <a href="/tags/TypeScript/" rel="tag"><i class="fa fa-tag"></i> TypeScript</a>
           </div>
 
         
@@ -481,13 +482,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

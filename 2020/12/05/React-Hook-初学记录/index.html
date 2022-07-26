@@ -17,23 +17,23 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"monocy.site","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"monocy.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="前言此篇为我从 Vue 转 React，初学 React Hook 的一些记录，记录一些写法和注意项。">
 <meta name="keywords" content="React">
 <meta property="og:type" content="article">
 <meta property="og:title" content="React Hook 初学记录">
-<meta property="og:url" content="https://monocy.site/2020/12/05/React-Hook-初学记录/index.html">
+<meta property="og:url" content="https://monocy.gitee.io/2020/12/05/React-Hook-初学记录/index.html">
 <meta property="og:site_name" content="沐光">
 <meta property="og:description" content="前言此篇为我从 Vue 转 React，初学 React Hook 的一些记录，记录一些写法和注意项。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-12-05T09:55:32.128Z">
+<meta property="og:updated_time" content="2022-07-26T13:07:52.872Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="React Hook 初学记录">
 <meta name="twitter:description" content="前言此篇为我从 Vue 转 React，初学 React Hook 的一些记录，记录一些写法和注意项。">
 
-<link rel="canonical" href="https://monocy.site/2020/12/05/React-Hook-初学记录/">
+<link rel="canonical" href="https://monocy.gitee.io/2020/12/05/React-Hook-初学记录/">
 
 
 <script id="page-configurations">
@@ -125,12 +125,12 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">15</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">31</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">16</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">15</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
@@ -192,7 +192,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://monocy.site/2020/12/05/React-Hook-初学记录/">
+    <link itemprop="mainEntityOfPage" href="https://monocy.gitee.io/2020/12/05/React-Hook-初学记录/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -214,7 +214,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-12-05 17:55:32" itemprop="dateModified" datetime="2020-12-05T17:55:32+08:00">2020-12-05</time>
+                <time title="修改时间：2022-07-26 21:07:52" itemprop="dateModified" datetime="2022-07-26T21:07:52+08:00">2022-07-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -270,11 +270,11 @@
 <h3 id="useState"><a href="#useState" class="headerlink" title="useState"></a>useState</h3><p>此 hook 相当于 Vue 中 Date 函数返回的对象的值，返回一个数组：</p>
 <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// state: 对应的值</span></span><br><span class="line"><span class="comment">// setState: 更新改值的函数</span></span><br><span class="line"><span class="comment">// initialState: 初始化值</span></span><br><span class="line"><span class="keyword">const</span> [state, setState] = useState(initialState);</span><br></pre></td></tr></table></figure>
 <p><code>useState</code> 的两种写法：</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 对于简单值可直接设置</span></span><br><span class="line">useState(initVal);</span><br><span class="line"><span class="comment">// 对于复杂的操作，可使用函数处理</span></span><br><span class="line">useState(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// initVal 仅在初始化渲染时起作用</span></span><br><span class="line">  <span class="keyword">const</span> initVal = complexFunc(props)</span><br><span class="line">  <span class="keyword">return</span> initVal;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 对于简单值可直接设置</span></span><br><span class="line">useState(initVal);</span><br><span class="line"><span class="comment">// 对于复杂的操作，可使用函数处理</span></span><br><span class="line">useState(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// initVal 仅在初始化渲染时起作用</span></span><br><span class="line">  <span class="keyword">const</span> initVal = complexFunc(props);</span><br><span class="line">  <span class="keyword">return</span> initVal;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <p><code>setState</code> 有两种使用方式：</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 直接设置新值</span></span><br><span class="line">setState(newVal);</span><br><span class="line"><span class="comment">// 基于旧值操作获得新值</span></span><br><span class="line">setState(<span class="function">(<span class="params">preVal</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">return</span> newVal;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 直接设置新值</span></span><br><span class="line">setState(newVal);</span><br><span class="line"><span class="comment">// 基于旧值操作获得新值</span></span><br><span class="line">setState(<span class="function"><span class="params">preVal</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">return</span> newVal;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <h3 id="useEffect"><a href="#useEffect" class="headerlink" title="useEffect"></a>useEffect</h3><p>此 hook 相当于 Vue 的 updated 钩子，其会在<strong>组件渲染到屏幕之后延迟执行（会保证在任何新的渲染前执行）</strong>，也可以配置让其<strong>仅在某些值改变的时候</strong>执行：</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// return 方法用于清楚一些副作用函数（如：removeEventListener）</span></span><br><span class="line"><span class="comment">// 注：不能传入异步函数</span></span><br><span class="line">useEffect(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  someFunc();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    someClearFunc();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在某些值改变的情况下执行</span></span><br><span class="line"><span class="comment">// 注意：没有 someVal 时改 hook 仅会在初始化时执行</span></span><br><span class="line">useEffect(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  someFunc();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    someClearFunc();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, [someVal])</span><br></pre></td></tr></table></figure>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// return 方法用于清楚一些副作用函数（如：removeEventListener）</span></span><br><span class="line"><span class="comment">// 注：不能传入异步函数</span></span><br><span class="line">useEffect(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  someFunc();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    someClearFunc();</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在某些值改变的情况下执行</span></span><br><span class="line"><span class="comment">// 注意：没有 someVal 时改 hook 仅会在初始化时执行</span></span><br><span class="line">useEffect(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  someFunc();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    someClearFunc();</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;, [someVal]);</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>如果需要在所有 DOM 变动之后同步调用 effect，则需要使用到 <code>useLayoutEffect</code>，但推荐一开始时优先使用 <code>useEffect</code> 方法。</p>
 </blockquote>
@@ -282,7 +282,7 @@
 <p>若要从服务端渲染的 HTML 中排除依赖布局 effect 的组件，可以通过使用 <code>showChild &amp;&amp; &lt;Child /&gt;</code> 进行条件渲染，并使用 <code>useEffect(() =&gt; { setShowChild(true); }, [])</code> 延迟展示组件。这样，在客户端渲染完成之前，UI 就不会像之前那样显示错乱了。（如<strong>弹框组件</strong>初始化问题）</p>
 </blockquote>
 <h3 id="useContext"><a href="#useContext" class="headerlink" title="useContext"></a>useContext</h3><p>可以理解为 Vue 的 Provide/Inject 钩子（不是 ProvideReactive/InjectReactive）:</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> MyContext = React.createContext(<span class="comment">/* default value */</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">App</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;MyContext.Provider value=&#123;themes.dark&#125;&gt;</span><br><span class="line">      <span class="comment">// Components</span></span><br><span class="line">    &lt;<span class="regexp">/MyContext.Provider&gt;</span></span><br><span class="line"><span class="regexp">  );</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">useContext(MyContext)</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> MyContext = React.createContext(<span class="comment">/* default value */</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">App</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;MyContext.Provider value=&#123;themes.dark&#125;&gt;<span class="comment">// Components&lt;/MyContext.Provider&gt;</span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">useContext(MyContext);</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>Provider 内如果绑定了 value（即使是 undefined）,<code>default value</code> 也不会生效</p>
 </blockquote>
@@ -291,7 +291,7 @@
 <p>项目开发可能使用的不是很多，不做过多记录</p>
 </blockquote>
 <h3 id="useCallback"><a href="#useCallback" class="headerlink" title="useCallback"></a>useCallback</h3><p>可以理解成 Vue 的 <code>computed</code> 钩子，不过其记录的是函数，使其仅在依赖项变更时才更新函数。当依赖参数不经常变时，可以优化子组件的渲染（返回的是子组件）。</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 依赖项数组不会作为参数传给回调函数</span></span><br><span class="line"><span class="keyword">const</span> memoizedCallback = useCallback(</span><br><span class="line">  () =&gt; &#123; doSomething(a, b); &#125;,</span><br><span class="line">  [a, b],</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 依赖项数组不会作为参数传给回调函数</span></span><br><span class="line"><span class="keyword">const</span> memoizedCallback = useCallback(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  doSomething(a, b);</span><br><span class="line">&#125;, [a, b]);</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>此 hook <code>useCallback(fn, deps)</code> 相当于 <code>useMemo(() =&gt; fn, deps)</code>。<br><strong>注：滥用的话不仅不会提升性能，反而会降低性能。</strong></p>
 </blockquote>
@@ -303,7 +303,7 @@
 <h3 id="useRef"><a href="#useRef" class="headerlink" title="useRef"></a>useRef</h3><p>可以理解成 Vue 的 <code>Ref</code> 钩子，但是其不仅仅局限于保存 DOM 节点，其 <code>.current</code> 属性中可以保存一个可变值。</p>
 <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> refContainer = useRef(initialValue);</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p> <code>useRef()</code> 和自建一个 <code>{current: ...}</code> 对象的唯一区别是，<code>useRef</code> 会在每次渲染时返回同一个 ref 对象。<br><strong>注：</strong> 当 ref 对象内容发生变化时，<code>useRef</code> 并<em>不会</em>通知你。变更 <code>.current</code> 属性不会引发组件重新渲染。</p>
+<p><code>useRef()</code> 和自建一个 <code>{current: ...}</code> 对象的唯一区别是，<code>useRef</code> 会在每次渲染时返回同一个 ref 对象。<br><strong>注：</strong> 当 ref 对象内容发生变化时，<code>useRef</code> 并<em>不会</em>通知你。变更 <code>.current</code> 属性不会引发组件重新渲染。</p>
 </blockquote>
 <h3 id="useImperativeHandle"><a href="#useImperativeHandle" class="headerlink" title="useImperativeHandle"></a>useImperativeHandle</h3><p>增强版 <code>useRef</code>，可以自定义设置在使用 <code>ref</code> 时需要暴露给父组件的实例值，且<code>useImperativeHandle</code> 应当与 <code>forwardRef</code> 一起使用：</p>
 <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 基本方法</span></span><br><span class="line">useImperativeHandle(ref, createHandle, [deps]);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 实例</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">FancyInput</span>(<span class="params">props, ref</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> inputRef = useRef();</span><br><span class="line">  useImperativeHandle(ref, <span class="function"><span class="params">()</span> =&gt;</span> (&#123;</span><br><span class="line">    focus: <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      inputRef.current.focus();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;));</span><br><span class="line">  <span class="keyword">return</span> &lt;input ref=&#123;inputRef&#125; ... /&gt;;</span><br><span class="line">&#125;</span><br><span class="line">FancyInput = forwardRef(FancyInput);</span><br></pre></td></tr></table></figure>
@@ -337,7 +337,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://monocy.site/2020/12/05/React-Hook-初学记录/" title="React Hook 初学记录">https://monocy.site/2020/12/05/React-Hook-初学记录/</a>
+    <a href="https://monocy.gitee.io/2020/12/05/React-Hook-初学记录/" title="React Hook 初学记录">https://monocy.gitee.io/2020/12/05/React-Hook-初学记录/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -447,13 +447,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

@@ -17,23 +17,23 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"monocy.site","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"monocy.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":true,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":true,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":false,"top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="前言JS 内最为诟病的便是其隐式类型转换问题，对于初学者来说，其复杂的规则以及诡异的结果很容易一头雾水。这难道表明 JS 不是很好吗？其实不然，隐式的转换带给我们的是代码的简介度，在合适的时机使用，同样会带来优质的 coding 体验。本文就来梳理一下 JS 类型转化规则，方便大家理解。  本篇参考文章 《你所不知道的 JavaScript 中篇》 第四章">
-<meta name="keywords" content="JavaScript">
+<meta name="keywords" content="JavaScript,面试题">
 <meta property="og:type" content="article">
 <meta property="og:title" content="记 JS 的类型转换">
-<meta property="og:url" content="https://monocy.site/2019/07/16/记-JS-的类型转换/index.html">
+<meta property="og:url" content="https://monocy.gitee.io/2019/07/16/记-JS-的类型转换/index.html">
 <meta property="og:site_name" content="沐光">
 <meta property="og:description" content="前言JS 内最为诟病的便是其隐式类型转换问题，对于初学者来说，其复杂的规则以及诡异的结果很容易一头雾水。这难道表明 JS 不是很好吗？其实不然，隐式的转换带给我们的是代码的简介度，在合适的时机使用，同样会带来优质的 coding 体验。本文就来梳理一下 JS 类型转化规则，方便大家理解。  本篇参考文章 《你所不知道的 JavaScript 中篇》 第四章">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-08-16T09:34:09.000Z">
+<meta property="og:updated_time" content="2022-07-26T13:15:27.289Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记 JS 的类型转换">
 <meta name="twitter:description" content="前言JS 内最为诟病的便是其隐式类型转换问题，对于初学者来说，其复杂的规则以及诡异的结果很容易一头雾水。这难道表明 JS 不是很好吗？其实不然，隐式的转换带给我们的是代码的简介度，在合适的时机使用，同样会带来优质的 coding 体验。本文就来梳理一下 JS 类型转化规则，方便大家理解。  本篇参考文章 《你所不知道的 JavaScript 中篇》 第四章">
 
-<link rel="canonical" href="https://monocy.site/2019/07/16/记-JS-的类型转换/">
+<link rel="canonical" href="https://monocy.gitee.io/2019/07/16/记-JS-的类型转换/">
 
 
 <script id="page-configurations">
@@ -125,12 +125,12 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">15</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">31</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">16</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">15</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
@@ -192,7 +192,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://monocy.site/2019/07/16/记-JS-的类型转换/">
+    <link itemprop="mainEntityOfPage" href="https://monocy.gitee.io/2019/07/16/记-JS-的类型转换/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -214,7 +214,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-16 17:34:09" itemprop="dateModified" datetime="2020-08-16T17:34:09+08:00">2020-08-16</time>
+                <time title="修改时间：2022-07-26 21:15:27" itemprop="dateModified" datetime="2022-07-26T21:15:27+08:00">2022-07-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -222,7 +222,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
+                  <a href="/categories/面试题/" itemprop="url" rel="index"><span itemprop="name">面试题</span></a>
                 </span>
             </span>
 
@@ -273,24 +273,24 @@
 <h3 id="总体转换规则"><a href="#总体转换规则" class="headerlink" title="总体转换规则"></a>总体转换规则</h3><p>文档内介绍的比较清除，此处为了更好的展示效果，仅引用一下截取自 Alex Dorey 的 GithubIO 的一张图：</p>
 <p><img data-src="/images/type-equal.png" alt="JavaScript 中的相等比较"></p>
 <p>仔细理解一下，对于 JS 中很多相等比较的奇妙结果便都能解释了。比如：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"0"</span> == <span class="literal">false</span>;  <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'0'</span> == <span class="literal">false</span>; <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
 <p>当 string 与 boolean 类型比较时，会优先将 boolean 转化为 number，因此我们得到中间步骤为：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Step 1</span></span><br><span class="line"><span class="string">"0"</span> == <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Step 1</span></span><br><span class="line"><span class="string">'0'</span> == <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
 <p>然后 string 比较 number 时，此时会优先将 string 转化为 number，因此我们得到</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Step 2</span></span><br><span class="line"><span class="number">0</span> == <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Step 2</span></span><br><span class="line"><span class="number">0</span> == <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
 <p>最终的结果显而易见，那就是 true 了。</p>
 <h3 id="极端情况"><a href="#极端情况" class="headerlink" title="极端情况"></a>极端情况</h3><p>当然我们不排除有些难以理解的极端情况，以下列举一个 Case：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[] == ![]  <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[] == ![]; <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
 <p>分析一下，由于 <code>!</code> 的存在，我们优先进行显示转换，于是有：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Step 1</span></span><br><span class="line">[] == !<span class="built_in">Boolean</span>([])</span><br><span class="line"><span class="comment">// Step 2</span></span><br><span class="line">[] == !<span class="literal">true</span></span><br><span class="line"><span class="comment">// Step 3</span></span><br><span class="line">[] == <span class="literal">false</span></span><br></pre></td></tr></table></figure>
 <p>然后对象与 boolean 类型比较时，我们需要调用对象的 [[DefaultValue]] 方法（toString/valueOf），因此我们得到</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// Step 4</span><br><span class="line">[].toString() == false</span><br><span class="line">// Step 5</span><br><span class="line">&apos;&apos; == false</span><br></pre></td></tr></table></figure>
 <p>这一步又回到了 string 与 boolean 的比较了，很明显最终的结果为 true。</p>
 <p>此外，还有部分比较难以理解的，这里就稍微列举一下：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 数组单个值的解析</span></span><br><span class="line"><span class="string">''</span> == [<span class="literal">null</span>]</span><br><span class="line"><span class="string">''</span> == [<span class="literal">null</span>].toString()</span><br><span class="line"><span class="string">''</span> == <span class="string">''</span>  <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 对象的解析</span></span><br><span class="line"><span class="number">0</span> == &#123;&#125;</span><br><span class="line"><span class="number">0</span> == ToString(&#123;&#125;) <span class="comment">// 调用自身 __proto__ 上的 toString 方法</span></span><br><span class="line"><span class="number">0</span> == <span class="string">'[Object object]'</span>  <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 数组单个值的解析</span></span><br><span class="line"><span class="string">''</span> == [<span class="literal">null</span>];</span><br><span class="line"><span class="string">''</span> == [<span class="literal">null</span>].toString();</span><br><span class="line"><span class="string">''</span> == <span class="string">''</span>; <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 对象的解析</span></span><br><span class="line"><span class="number">0</span> == &#123;&#125;;</span><br><span class="line"><span class="number">0</span> == ToString(&#123;&#125;); <span class="comment">// 调用自身 __proto__ 上的 toString 方法</span></span><br><span class="line"><span class="number">0</span> == <span class="string">'[Object object]'</span>; <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
 <h3 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h3><p>隐式类型转换相关的还有逻辑运算符，但是 JS 中的逻辑运算符又和其它强类型语言（如 C）的逻辑运算符不同，其返回值并非 boolean 类型。我们看个例子：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> a = <span class="number">4</span>;</span><br><span class="line"><span class="keyword">const</span> b = <span class="string">"a"</span>;</span><br><span class="line"><span class="keyword">const</span> c = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">a || b  <span class="comment">// 4</span></span><br><span class="line">a &amp;&amp; b  <span class="comment">// "a"</span></span><br><span class="line"></span><br><span class="line">c || b  <span class="comment">// "a"</span></span><br><span class="line">c &amp;&amp; b  <span class="comment">// null</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> a = <span class="number">4</span>;</span><br><span class="line"><span class="keyword">const</span> b = <span class="string">'a'</span>;</span><br><span class="line"><span class="keyword">const</span> c = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">a || b; <span class="comment">// 4</span></span><br><span class="line">a &amp;&amp; b; <span class="comment">// "a"</span></span><br><span class="line"></span><br><span class="line">c || b; <span class="comment">// "a"</span></span><br><span class="line">c &amp;&amp; b; <span class="comment">// null</span></span><br></pre></td></tr></table></figure>
 <p>可见，|| 和 &amp;&amp; 首先会对<strong>第一个操作数（a 和 c）</strong>执行条件判断，如果其不是布尔值就进行 <code>toBoolean</code> 强制类型转换，然后再执行条件判断。</p>
 <p><strong>其规律为：</strong></p>
 <p>对于 || 来说，如果条件判断的结果为 true 就返回第一个操作数（a 和 c）的值，否则返回第二个操作数（b）的值。</p>
@@ -302,8 +302,8 @@
 <div class="note info">
             <p>&amp;&amp; 和 || 运算符的返回值并不一定是布尔类型，而是两个操作数其中一个的值。 —— ES5 规范 11.11 节</p>
           </div>
-<h3 id="代码块"><a href="#代码块" class="headerlink" title="代码块"></a>代码块</h3><p>我们知道，在 JS 中 { /<em> … </em>/ } 表明这是一个对象，但是我们常常忘了它还能表示为代码块，比如 while / if 后面的大括号。然而这和 JS 类型转换有什么关系呢，我们看看下例：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[] + &#123;&#125;  <span class="comment">// [object Object]</span></span><br><span class="line">&#123;&#125; + []  <span class="comment">// 0</span></span><br></pre></td></tr></table></figure>
+<h3 id="代码块"><a href="#代码块" class="headerlink" title="代码块"></a>代码块</h3><p>我们知道，在 JS 中 { /_ … _/ } 表明这是一个对象，但是我们常常忘了它还能表示为代码块，比如 while / if 后面的大括号。然而这和 JS 类型转换有什么关系呢，我们看看下例：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[] + &#123;&#125;; <span class="comment">// [object Object]</span></span><br><span class="line">&#123;</span><br><span class="line">&#125;</span><br><span class="line">+[]; <span class="comment">// 0</span></span><br></pre></td></tr></table></figure>
 <p>那么问题来了，仅仅调换了一个位置，为什么结果会相差这么多？</p>
 <p>分析一下，在第一个例子中，{} 是在 + 运算符表达式中，词法分析将 {} 解析为第二个参数，因此经过隐式转换，{} 会被转换成 ‘[object Object]’，空数组就不用多解释了，所对应的结果也就如上了。</p>
 <p>然而第二个却有些不同。我们知道 {} 作为空代码块是不执行任何操作的，且不用带 ; 结尾，所以在此处是不存在语法问题的。因此自左向右来看，词法分析将此分解为 {} 与 +[] 两部分，前者作为空代码块执行，无任何副作用，后者强制转换结果就是 0 了。</p>
@@ -328,7 +328,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://monocy.site/2019/07/16/记-JS-的类型转换/" title="记 JS 的类型转换">https://monocy.site/2019/07/16/记-JS-的类型转换/</a>
+    <a href="https://monocy.gitee.io/2019/07/16/记-JS-的类型转换/" title="记 JS 的类型转换">https://monocy.gitee.io/2019/07/16/记-JS-的类型转换/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -341,6 +341,7 @@
           
           <div class="post-tags">
               <a href="/tags/JavaScript/" rel="tag"><i class="fa fa-tag"></i> JavaScript</a>
+              <a href="/tags/面试题/" rel="tag"><i class="fa fa-tag"></i> 面试题</a>
           </div>
 
         
@@ -438,13 +439,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
